@@ -3,9 +3,20 @@ import { InvoiceTable } from "@/components/invoices/InvoiceTable";
 import { AddInvoiceDialog } from "@/components/invoices/AddInvoiceDialog";
 import { useInvoiceStore } from "@/hooks/useInvoiceStore";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loader2 } from "lucide-react";
 
 export default function Invoices() {
-  const { clients, invoices, addInvoice, markAsPaid, sendReminder } = useInvoiceStore();
+  const { clients, invoices, loading, addInvoice, markAsPaid, sendReminder } = useInvoiceStore();
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </Layout>
+    );
+  }
 
   const allInvoices = invoices;
   const pendingInvoices = invoices.filter((i) => i.status === "pending");

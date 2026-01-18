@@ -1,11 +1,11 @@
 import { Layout } from "@/components/layout/Layout";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { InvoiceTable } from "@/components/invoices/InvoiceTable";
-import { FileText, AlertCircle, DollarSign, Clock } from "lucide-react";
+import { FileText, AlertCircle, DollarSign, Clock, Loader2 } from "lucide-react";
 import { useInvoiceStore } from "@/hooks/useInvoiceStore";
 
 export default function Dashboard() {
-  const { invoices, stats, markAsPaid, sendReminder } = useInvoiceStore();
+  const { invoices, stats, loading, markAsPaid, sendReminder } = useInvoiceStore();
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -17,6 +17,16 @@ export default function Dashboard() {
   };
 
   const unpaidInvoices = invoices.filter((i) => i.status !== "paid");
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>

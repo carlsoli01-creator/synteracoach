@@ -2,9 +2,20 @@ import { Layout } from "@/components/layout/Layout";
 import { ClientCard } from "@/components/clients/ClientCard";
 import { AddClientDialog } from "@/components/clients/AddClientDialog";
 import { useInvoiceStore } from "@/hooks/useInvoiceStore";
+import { Loader2 } from "lucide-react";
 
 export default function Clients() {
-  const { clients, addClient } = useInvoiceStore();
+  const { clients, loading, addClient } = useInvoiceStore();
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
