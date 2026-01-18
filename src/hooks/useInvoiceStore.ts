@@ -201,31 +201,41 @@ export function useInvoiceStore() {
       const invoice = invoices.find((i) => i.id === invoiceId);
       if (!invoice) return;
 
-      const { error } = await supabase
-        .from("invoices")
-        .update({
-          reminders_sent: invoice.remindersSent + 1,
-          last_reminder_at: new Date().toISOString(),
-        })
-        .eq("id", invoiceId);
+      toast.loading("Sending reminder email...", { id: "reminder" });
 
-      if (error) {
-        toast.error("Failed to send reminder");
-        return;
+      try {
+        const { data, error } = await supabase.functions.invoke("send-reminder", {
+          body: { invoiceId },
+        });
+
+        if (error) {
+          console.error("Edge function error:", error);
+          toast.error("Failed to send reminder email", { id: "reminder" });
+          return;
+        }
+
+        if (data?.error) {
+          console.error("Reminder error:", data.error);
+          toast.error(data.error, { id: "reminder" });
+          return;
+        }
+
+        setInvoices((prev) =>
+          prev.map((inv) =>
+            inv.id === invoiceId
+              ? {
+                  ...inv,
+                  remindersSent: inv.remindersSent + 1,
+                  lastReminderAt: new Date(),
+                }
+              : inv
+          )
+        );
+        toast.success(`Reminder email sent to ${invoice.clientEmail}`, { id: "reminder" });
+      } catch (err: any) {
+        console.error("Failed to send reminder:", err);
+        toast.error("Failed to send reminder email", { id: "reminder" });
       }
-
-      setInvoices((prev) =>
-        prev.map((inv) =>
-          inv.id === invoiceId
-            ? {
-                ...inv,
-                remindersSent: inv.remindersSent + 1,
-                lastReminderAt: new Date(),
-              }
-            : inv
-        )
-      );
-      toast.success("Payment reminder sent");
     },
     [invoices]
   );
