@@ -167,7 +167,13 @@ serve(async (req: Request): Promise<Response> => {
       html: emailHtml,
     });
 
-    console.log("Email sent successfully:", emailResponse);
+    // Resend returns { data, error } – it does NOT throw automatically.
+    if (emailResponse.error) {
+      console.error("Resend error:", emailResponse.error);
+      throw new Error(emailResponse.error.message);
+    }
+
+    console.log("Email sent successfully:", emailResponse.data);
 
     // Update invoice reminder count
     const { error: updateError } = await supabase
