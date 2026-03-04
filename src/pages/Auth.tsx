@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Send, Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 // Validation schemas
@@ -143,11 +143,11 @@ export default function Auth() {
       <Card className="w-full max-w-md shadow-card">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl gradient-primary">
-            <Send className="h-6 w-6 text-primary-foreground" />
+            <span className="text-2xl">🎙</span>
           </div>
-          <CardTitle className="text-2xl font-semibold">PayRemind</CardTitle>
+          <CardTitle className="text-2xl font-semibold">Negotium</CardTitle>
           <CardDescription>
-            Automate payment reminders for your invoices
+            AI-powered voice coaching for confident negotiations
           </CardDescription>
         </CardHeader>
         <CardContent>
