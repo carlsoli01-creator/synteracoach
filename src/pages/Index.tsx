@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const DURATION = 20;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
@@ -381,6 +382,9 @@ export default function Negotium() {
   const volumeRef = useRef<number[]>([]);
   const silenceRef = useRef(0);
   const framesRef = useRef(0);
+  const transcriptRef = useRef("");
+  const recognitionRef = useRef<any>(null);
+  const recordingStartRef = useRef<number>(0);
 
   const ringOffset = CIRCUMFERENCE * (timeLeft / DURATION);
   const isDark = theme === "dark";
@@ -407,109 +411,82 @@ export default function Negotium() {
     } catch (_) {}
   }, []);
 
-  const analyzeVoice = useCallback(() => {
+  const analyzeVoice = useCallback(async () => {
     const vols = volumeRef.current;
     const avgVol = vols.reduce((a, b) => a + b, 0) / (vols.length || 1);
     const silRatio = silenceRef.current / (framesRef.current || 1);
     const volVar = getVariance(vols);
-    const pace = silRatio < 0.08 ? 52 : silRatio < 0.25 ? 91 : silRatio < 0.42 ? 72 : 36;
-    const conf = avgVol > 20 ? 89 : avgVol > 12 ? 72 : avgVol > 6 ? 52 : 28;
-    const clar = Math.min(
-      95,
-      Math.max(20, Math.round(42 + (1 - Math.min(volVar / 100, 1)) * 48 + (avgVol > 10 ? 10 : 0))),
-    );
-    const overall = Math.round((pace + conf + clar) / 3);
-    setMetrics({ pace, conf, clar, overall });
+    const durationSeconds = Math.round((Date.now() - recordingStartRef.current) / 1000);
+    const transcript = transcriptRef.current.trim();
 
-    const tags = [];
-    let overallTxt, paceTxt, toneTxt, strengthTxt, recTxt;
+    // Stop speech recognition
+    try { recognitionRef.current?.stop(); } catch (_) {}
 
-    if (overall >= 80) {
-      overallTxt =
-        "Exceptional vocal presence. You project composed authority that commands respect in any negotiation. Your voice is working for you.";
-      tags.push({ label: "High Authority", t: "pos" });
-    } else if (overall >= 60) {
-      overallTxt =
-        "Solid foundation with targeted room to grow. Refining a few patterns will unlock significantly more persuasive power.";
-      tags.push({ label: "Developing", t: "warn" });
-    } else {
-      overallTxt =
-        "Your voice is not yet an asset in negotiation. The patterns detected signal uncertainty — but this is entirely fixable with consistent practice.";
-      tags.push({ label: "Needs Training", t: "neg" });
+    if (!transcript || transcript.length < 5) {
+      // Fallback: no transcript detected
+      setMicError("Could not detect speech. Please speak clearly and try again. Make sure your browser supports speech recognition.");
+      setPhase("idle");
+      return;
     }
 
-    if (pace >= 80) {
-      paceTxt =
-        "Ideal rhythm. Your deliberate pauses create tension and emphasize key points — a hallmark of skilled negotiators.";
-      tags.push({ label: "Ideal Pace", t: "pos" });
-    } else if (silRatio < 0.1) {
-      paceTxt =
-        "Speaking too rapidly. Fast delivery signals anxiety and overwhelms listeners. Slow down — each pause is leverage.";
-      tags.push({ label: "Too Fast", t: "neg" });
-    } else if (silRatio >= 0.42) {
-      paceTxt = "Excessive silence is breaking your flow and projecting hesitation. Practice purposeful pauses only.";
-      tags.push({ label: "Too Many Gaps", t: "warn" });
-    } else {
-      paceTxt = "Functional but uneven pace. Build consistency — a steady rhythm projects control.";
-      tags.push({ label: "Uneven Pace", t: "warn" });
-    }
+    setPhase("analyzing");
 
-    if (conf >= 75) {
-      toneTxt = "Strong vocal projection. Your volume and resonance signal conviction — the other party will feel it.";
-      tags.push({ label: "Confident", t: "pos" });
-    } else if (conf >= 50) {
-      toneTxt =
-        "Moderate projection. Push slightly louder, drop your register, and avoid upward inflection at sentence ends.";
-      tags.push({ label: "Moderate Tone", t: "warn" });
-    } else {
-      toneTxt = "Low projection detected. Quiet speech reads as low conviction. Practice speaking from your diaphragm.";
-      tags.push({ label: "Low Projection", t: "neg" });
-    }
+    try {
+      const { data, error } = await supabase.functions.invoke("analyze-voice", {
+        body: {
+          transcript,
+          audioMetrics: {
+            averageVolume: avgVol,
+            silenceRatio: silRatio,
+            volumeVariance: volVar,
+            totalFrames: framesRef.current,
+            durationSeconds,
+          },
+        },
+      });
 
-    strengthTxt =
-      clar >= 75
-        ? "Consistent vocal energy throughout. Great control."
-        : clar >= 50
-          ? "Some volume drops mid-speech. Maintain energy on key words."
-          : "Significant inconsistency. Focus on sustaining energy throughout.";
-    if (clar >= 75) tags.push({ label: "Clear Delivery", t: "pos" });
-    else if (clar >= 50) tags.push({ label: "Variable Clarity", t: "warn" });
-    else tags.push({ label: "Inconsistent", t: "neg" });
-
-    recTxt =
-      overall >= 80
-        ? "Practice under pressure: record yourself in mock high-stakes scenarios. Test how well this holds under stress."
-        : overall >= 60
-          ? "Try the 'anchor and pause' drill: state your point, pause two full beats, hold silence. Return daily."
-          : "Start with volume and pacing drills. Read aloud at 70% max volume daily, pausing after every sentence.";
-
-    setFeedback({ overallTxt, paceTxt, toneTxt, strengthTxt, recTxt, tags });
-
-    const tagLabels = tags.map((t) => t.label);
-    const pickTips = (bank) => {
-      const picks = [];
-      if (tagLabels.includes("Too Fast") || pace < 60) picks.push(bank.find((t) => /pace|pause/i.test(t)));
-      if (tagLabels.includes("Too Many Gaps")) picks.push(bank.find((t) => /silence|pause/i.test(t)));
-      if (tagLabels.includes("Low Projection") || conf < 50)
-        picks.push(bank.find((t) => /volume|resonance|diaphragm/i.test(t)));
-      if (tagLabels.includes("Inconsistent") || clar < 55) picks.push(bank.find((t) => /chunk|clar|energy/i.test(t)));
-      if (tagLabels.includes("High Authority")) picks.push(bank.find((t) => /anchor|leverage|offer/i.test(t)));
-      for (let i = 0; i < bank.length && picks.filter(Boolean).length < 6; i++) {
-        if (!picks.includes(bank[i])) picks.push(bank[i]);
+      if (error) {
+        console.error("AI analysis error:", error);
+        setMicError("AI analysis failed. Please try again.");
+        setPhase("idle");
+        return;
       }
-      return picks.filter(Boolean).slice(0, 6);
-    };
-    setRecNegTips(pickTips(NEGOTIATION_TIPS));
-    setRecCommTips(pickTips(COMMUNICATION_TIPS));
-    setHistory((h) => [
-      { overall, pace, conf, clar, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) },
-      ...h.slice(0, 9),
-    ]);
-    setPhase("done");
+
+      if (data?.error) {
+        setMicError(data.error);
+        setPhase("idle");
+        return;
+      }
+
+      const { scores, analysis, tags, negotiationTips, communicationTips } = data;
+
+      setMetrics({ pace: scores.pace, conf: scores.confidence, clar: scores.clarity, overall: scores.overall });
+      setFeedback({
+        overallTxt: analysis.overall,
+        paceTxt: analysis.pace,
+        toneTxt: analysis.tone,
+        strengthTxt: analysis.strength,
+        recTxt: analysis.recommendation,
+        tags: tags.map((t: any) => ({ label: t.label, t: t.type })),
+        transcript,
+      });
+      setRecNegTips(negotiationTips || []);
+      setRecCommTips(communicationTips || []);
+      setHistory((h: any) => [
+        { overall: scores.overall, pace: scores.pace, conf: scores.confidence, clar: scores.clarity, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) },
+        ...h.slice(0, 9),
+      ]);
+      setPhase("done");
+    } catch (err: any) {
+      console.error("Analysis failed:", err);
+      setMicError("Analysis failed. Please try again.");
+      setPhase("idle");
+    }
   }, []);
 
   const startRecording = useCallback(async () => {
     setMicError("");
+    transcriptRef.current = "";
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const audioCtx = new AudioContext();
@@ -521,6 +498,33 @@ export default function Negotium() {
       volumeRef.current = [];
       silenceRef.current = 0;
       framesRef.current = 0;
+      recordingStartRef.current = Date.now();
+
+      // Start Web Speech API recognition
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
+        let finalTranscript = "";
+        recognition.onresult = (event: any) => {
+          let interim = "";
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript + " ";
+            } else {
+              interim += event.results[i][0].transcript;
+            }
+          }
+          transcriptRef.current = finalTranscript + interim;
+        };
+        recognition.onerror = (e: any) => {
+          console.warn("Speech recognition error:", e.error);
+        };
+        recognition.start();
+        recognitionRef.current = recognition;
+      }
 
       const mr = new MediaRecorder(stream);
       mediaRecorderRef.current = mr;
@@ -552,24 +556,23 @@ export default function Negotium() {
           if (timerRef.current) clearInterval(timerRef.current);
           if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
           mr.stop();
-          try {
-            stream.getTracks().forEach((tr) => tr.stop());
-          } catch (_) {}
-          try {
-            audioCtx.close();
-          } catch (_) {}
-          setPhase("analyzing");
+          try { stream.getTracks().forEach((tr) => tr.stop()); } catch (_) {}
+          try { audioCtx.close(); } catch (_) {}
+          try { recognitionRef.current?.stop(); } catch (_) {}
           setWaveData(new Array(80).fill(0.5));
-          setTimeout(analyzeVoice, 1800);
+          // Small delay for final speech recognition results
+          setTimeout(() => analyzeVoice(), 1500);
         }
       }, 1000);
-    } catch (e) {
+    } catch (e: any) {
       setMicError(e?.message || "Microphone access denied. Please allow mic access in your browser and try again.");
     }
   }, [analyzeVoice]);
 
   const reset = useCallback(() => {
     stopAll();
+    try { recognitionRef.current?.stop(); } catch (_) {}
+    transcriptRef.current = "";
     setPhase("idle");
     setTimeLeft(DURATION);
     setMetrics(null);
@@ -866,7 +869,7 @@ export default function Negotium() {
               </div>
             )}
 
-            <VoiceMicControl onStart={startRecording} onStop={reset} onStopEarly={() => { stopAll(); setPhase("analyzing"); setWaveData(new Array(80).fill(0.5)); setTimeout(analyzeVoice, 1800); }} phase={phase} />
+            <VoiceMicControl onStart={startRecording} onStop={reset} onStopEarly={() => { stopAll(); setWaveData(new Array(80).fill(0.5)); setTimeout(() => analyzeVoice(), 1500); }} phase={phase} />
             {micError && (
               <div style={{ textAlign: "center", fontSize: 11, color: "#c04a2a", marginBottom: 16, lineHeight: 1.6 }}>
                 {micError}
@@ -874,7 +877,7 @@ export default function Negotium() {
             )}
             {phase === "analyzing" && (
               <div style={{ textAlign: "center", fontSize: 11, color: c.muted, marginBottom: 24 }}>
-                ⏳ Analyzing vocal patterns...
+                ⏳ AI is analyzing your speech patterns and transcript...
               </div>
             )}
 
@@ -920,6 +923,24 @@ export default function Negotium() {
                     </span>
                   ))}
                 </div>
+
+                {feedback.transcript && (
+                  <div
+                    style={{
+                      marginBottom: 10,
+                      background: c.card,
+                      border: `1px solid ${c.border}`,
+                      borderRadius: 10,
+                      padding: "14px 16px",
+                      boxShadow: "0 4px 12px rgba(16,24,40,0.04)",
+                    }}
+                  >
+                    <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 6 }}>
+                      Your Speech (Transcript)
+                    </div>
+                    <div style={{ fontSize: 13, lineHeight: 1.8, color: c.text, fontStyle: "italic" }}>"{feedback.transcript}"</div>
+                  </div>
+                )}
 
                 {[
                   { title: "Overall", text: feedback.overallTxt },
