@@ -142,6 +142,51 @@ export type Database = {
         }
         Relationships: []
       }
+      voice_sessions: {
+        Row: {
+          clarity_score: number
+          communication_tips: string[] | null
+          confidence_score: number
+          created_at: string
+          duration_seconds: number | null
+          feedback: Json | null
+          id: string
+          negotiation_tips: string[] | null
+          overall_score: number
+          pace_score: number
+          transcript: string | null
+          user_id: string
+        }
+        Insert: {
+          clarity_score: number
+          communication_tips?: string[] | null
+          confidence_score: number
+          created_at?: string
+          duration_seconds?: number | null
+          feedback?: Json | null
+          id?: string
+          negotiation_tips?: string[] | null
+          overall_score: number
+          pace_score: number
+          transcript?: string | null
+          user_id: string
+        }
+        Update: {
+          clarity_score?: number
+          communication_tips?: string[] | null
+          confidence_score?: number
+          created_at?: string
+          duration_seconds?: number | null
+          feedback?: Json | null
+          id?: string
+          negotiation_tips?: string[] | null
+          overall_score?: number
+          pace_score?: number
+          transcript?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
