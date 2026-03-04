@@ -1,5 +1,6 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const DURATION = 20;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
@@ -48,9 +49,19 @@ function ScoreRing({ score, label, color }) {
 }
 
 function HistoryCard({ entry, index }) {
-  const grade = entry.overall >= 80 ? "A" : entry.overall >= 65 ? "B" : entry.overall >= 50 ? "C" : "D";
+  const score = entry.overall_score ?? entry.overall;
+  const pace = entry.pace_score ?? entry.pace;
+  const conf = entry.confidence_score ?? entry.conf;
+  const clar = entry.clarity_score ?? entry.clar;
+  const time = entry.created_at
+    ? new Date(entry.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    : entry.time;
+  const date = entry.created_at
+    ? new Date(entry.created_at).toLocaleDateString([], { month: "short", day: "numeric" })
+    : "";
+  const grade = score >= 80 ? "A" : score >= 65 ? "B" : score >= 50 ? "C" : "D";
   const gradeColor =
-    entry.overall >= 80 ? "#4a8c5c" : entry.overall >= 65 ? "#6b7280" : entry.overall >= 50 ? "#c97a2a" : "#c04a2a";
+    score >= 80 ? "#4a8c5c" : score >= 65 ? "#6b7280" : score >= 50 ? "#c97a2a" : "#c04a2a";
   return (
     <div
       style={{
@@ -67,17 +78,24 @@ function HistoryCard({ entry, index }) {
       <div style={{ fontSize: 28, color: gradeColor, fontWeight: "bold", minWidth: 24 }}>{grade}</div>
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: 11, color: "#0b0b0b", marginBottom: 4 }}>
-          Session #{index + 1} — Score {entry.overall}/100
+          Session #{index + 1} — Score {score}/100
         </div>
         <div style={{ display: "flex", gap: 12 }}>
-          {["pace", "conf", "clar"].map((k) => (
+          {[
+            { k: "pace", v: pace },
+            { k: "conf", v: conf },
+            { k: "clar", v: clar },
+          ].map(({ k, v }) => (
             <div key={k} style={{ fontSize: 9, color: "#9aa0a6", letterSpacing: "0.1em" }}>
-              {k.toUpperCase()} <span style={{ color: "#6b7280" }}>{entry[k]}%</span>
+              {k.toUpperCase()} <span style={{ color: "#6b7280" }}>{v}%</span>
             </div>
           ))}
         </div>
       </div>
-      <div style={{ fontSize: 9, color: "#9aa0a6" }}>{entry.time}</div>
+      <div style={{ fontSize: 9, color: "#9aa0a6", textAlign: "right" }}>
+        {date && <div>{date}</div>}
+        <div>{time}</div>
+      </div>
     </div>
   );
 }
@@ -360,11 +378,26 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: { onStart: () 
 }
 
 export default function Negotium() {
+  const { user } = useAuth();
   const [phase, setPhase] = useState("idle");
   const [timeLeft, setTimeLeft] = useState(DURATION);
   const [metrics, setMetrics] = useState(null);
   const [feedback, setFeedback] = useState(null);
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState<any[]>([]);
+
+  // Load session history from database
+  useEffect(() => {
+    if (!user) return;
+    const loadHistory = async () => {
+      const { data } = await (supabase as any)
+        .from("voice_sessions")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (data) setHistory(data);
+    };
+    loadHistory();
+  }, [user]);
   const [tab, setTab] = useState("analysis");
   const [waveData, setWaveData] = useState(new Array(80).fill(0.5));
   const [micError, setMicError] = useState("");
@@ -472,10 +505,29 @@ export default function Negotium() {
       });
       setRecNegTips(negotiationTips || []);
       setRecCommTips(communicationTips || []);
-      setHistory((h: any) => [
-        { overall: scores.overall, pace: scores.pace, conf: scores.confidence, clar: scores.clarity, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) },
-        ...h.slice(0, 9),
-      ]);
+
+      // Save session to database
+      const sessionRow = {
+        user_id: user?.id,
+        overall_score: scores.overall,
+        pace_score: scores.pace,
+        confidence_score: scores.confidence,
+        clarity_score: scores.clarity,
+        transcript,
+        feedback: { analysis, tags },
+        negotiation_tips: negotiationTips || [],
+        communication_tips: communicationTips || [],
+        duration_seconds: durationSeconds,
+      };
+      const { data: inserted } = await (supabase as any)
+        .from("voice_sessions")
+        .insert(sessionRow)
+        .select()
+        .single();
+
+      if (inserted) {
+        setHistory((h: any) => [inserted, ...h.slice(0, 19)]);
+      }
       setPhase("done");
     } catch (err: any) {
       console.error("Analysis failed:", err);
