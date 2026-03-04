@@ -253,7 +253,7 @@ function OnboardingQuiz({ onFinish }) {
             </button>
           ))}
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <button
             onClick={() => setStep((s) => Math.max(s - 1, 0))}
             disabled={step === 0}
@@ -268,6 +268,21 @@ function OnboardingQuiz({ onFinish }) {
             }}
           >
             Back
+          </button>
+          <button
+            onClick={() => onFinish({ neg: NEGOTIATION_TIPS.slice(0, 6), comm: COMMUNICATION_TIPS.slice(0, 6) })}
+            style={{
+              padding: "10px 18px",
+              borderRadius: 8,
+              border: "none",
+              background: "transparent",
+              cursor: "pointer",
+              color: "#9aa0a6",
+              fontSize: 12,
+              textDecoration: "underline",
+            }}
+          >
+            Skip quiz →
           </button>
           {step < QUIZ_QUESTIONS.length - 1 ? (
             <button
