@@ -162,7 +162,7 @@ const QUIZ_QUESTIONS = [
 
 function OnboardingQuiz({ onFinish }) {
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const q = QUIZ_QUESTIONS[step];
 
   const handleFinish = () => {
@@ -289,37 +289,56 @@ function OnboardingQuiz({ onFinish }) {
   );
 }
 
-function VoiceMicControl({ onStart, onStop, phase }) {
+function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: { onStart: () => void; onStop: () => void; onStopEarly: () => void; phase: string }) {
   const isRecording = phase === "recording";
   const isAnalyzing = phase === "analyzing";
   return (
     <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 16 }}>
-      <button
-        onClick={!isRecording && !isAnalyzing ? onStart : undefined}
-        disabled={isAnalyzing}
-        style={{
-          fontSize: 14,
-          letterSpacing: "0.1em",
-          padding: "14px 36px",
-          border: "none",
-          cursor: isRecording || isAnalyzing ? "not-allowed" : "pointer",
-          background: isRecording ? "#c04a2a" : "linear-gradient(90deg,#111827,#1f2937)",
-          color: "#fff",
-          fontWeight: 700,
-          borderRadius: 8,
-          opacity: isAnalyzing ? 0.6 : 1,
-          transition: "all 0.2s",
-          boxShadow: isRecording ? "0 0 0 4px rgba(192,74,42,0.2)" : "0 4px 14px rgba(16,24,40,0.18)",
-        }}
-      >
-        {phase === "idle"
-          ? "🎙 START RECORDING"
-          : phase === "recording"
-            ? "● RECORDING..."
+      {isRecording ? (
+        <button
+          onClick={onStopEarly}
+          style={{
+            fontSize: 14,
+            letterSpacing: "0.1em",
+            padding: "14px 36px",
+            border: "none",
+            cursor: "pointer",
+            background: "#c04a2a",
+            color: "#fff",
+            fontWeight: 700,
+            borderRadius: 8,
+            transition: "all 0.2s",
+            boxShadow: "0 0 0 4px rgba(192,74,42,0.2)",
+          }}
+        >
+          ⏹ STOP RECORDING
+        </button>
+      ) : (
+        <button
+          onClick={!isAnalyzing ? onStart : undefined}
+          disabled={isAnalyzing}
+          style={{
+            fontSize: 14,
+            letterSpacing: "0.1em",
+            padding: "14px 36px",
+            border: "none",
+            cursor: isAnalyzing ? "not-allowed" : "pointer",
+            background: "linear-gradient(90deg,#111827,#1f2937)",
+            color: "#fff",
+            fontWeight: 700,
+            borderRadius: 8,
+            opacity: isAnalyzing ? 0.6 : 1,
+            transition: "all 0.2s",
+            boxShadow: "0 4px 14px rgba(16,24,40,0.18)",
+          }}
+        >
+          {phase === "idle"
+            ? "🎙 START RECORDING"
             : phase === "analyzing"
               ? "⏳ ANALYZING..."
               : "🎙 RECORD AGAIN"}
-      </button>
+        </button>
+      )}
       <button
         onClick={onStop}
         style={{
@@ -354,12 +373,12 @@ export default function Negotium() {
   const [recNegTips, setRecNegTips] = useState([]);
   const [recCommTips, setRecCommTips] = useState([]);
 
-  const analyserRef = useRef();
-  const animFrameRef = useRef();
-  const timerRef = useRef();
-  const mediaRecorderRef = useRef();
-  const audioCtxRef = useRef();
-  const volumeRef = useRef([]);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const animFrameRef = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const volumeRef = useRef<number[]>([]);
   const silenceRef = useRef(0);
   const framesRef = useRef(0);
 
@@ -377,11 +396,11 @@ export default function Negotium() {
   };
 
   const stopAll = useCallback(() => {
-    clearInterval(timerRef.current);
-    cancelAnimationFrame(animFrameRef.current);
-    if (mediaRecorderRef.current?.state !== "inactive") {
-      mediaRecorderRef.current?.stop();
-      mediaRecorderRef.current?.stream?.getTracks().forEach((t) => t.stop());
+    if (timerRef.current) clearInterval(timerRef.current);
+    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
+      mediaRecorderRef.current.stream?.getTracks().forEach((t) => t.stop());
     }
     try {
       audioCtxRef.current?.close();
@@ -493,7 +512,7 @@ export default function Negotium() {
     setMicError("");
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const audioCtx = new AudioContext();
       const analyser = audioCtx.createAnalyser();
       analyser.fftSize = 1024;
       audioCtx.createMediaStreamSource(stream).connect(analyser);
@@ -530,8 +549,8 @@ export default function Negotium() {
         t--;
         setTimeLeft(t);
         if (t <= 0) {
-          clearInterval(timerRef.current);
-          cancelAnimationFrame(animFrameRef.current);
+          if (timerRef.current) clearInterval(timerRef.current);
+          if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
           mr.stop();
           try {
             stream.getTracks().forEach((tr) => tr.stop());
@@ -626,11 +645,11 @@ export default function Negotium() {
                 ["compact", "Compact"],
               ],
             ],
-          ].map(([, val, setter, opts]) => (
+          ].map(([label, val, setter, opts]: any) => (
             <select
-              key={val}
+              key={label}
               value={val}
-              onChange={(e) => setter(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setter(e.target.value)}
               style={{
                 padding: "6px 10px",
                 borderRadius: 6,
@@ -641,9 +660,9 @@ export default function Negotium() {
                 cursor: "pointer",
               }}
             >
-              {opts.map(([v, label]) => (
+              {opts.map(([v, optLabel]: [string, string]) => (
                 <option key={v} value={v}>
-                  {label}
+                  {optLabel}
                 </option>
               ))}
             </select>
@@ -847,7 +866,7 @@ export default function Negotium() {
               </div>
             )}
 
-            <VoiceMicControl onStart={startRecording} onStop={reset} phase={phase} />
+            <VoiceMicControl onStart={startRecording} onStop={reset} onStopEarly={() => { stopAll(); setPhase("analyzing"); setWaveData(new Array(80).fill(0.5)); setTimeout(analyzeVoice, 1800); }} phase={phase} />
             {micError && (
               <div style={{ textAlign: "center", fontSize: 11, color: "#c04a2a", marginBottom: 16, lineHeight: 1.6 }}>
                 {micError}
