@@ -294,32 +294,38 @@ function OnboardingQuiz({ onFinish }: { onFinish: (result: { neg: string[]; comm
           </button>
           {step < QUIZ_QUESTIONS.length - 1 ? (
             <button
-              onClick={() => setStep((s) => s + 1)}
+              onClick={() => answers[q.id] && setStep((s) => s + 1)}
+              disabled={!answers[q.id]}
               style={{
                 padding: "10px 22px",
                 borderRadius: 8,
                 border: "none",
-                background: "linear-gradient(90deg,#111827,#1f2937)",
+                background: answers[q.id] ? "linear-gradient(90deg,#111827,#1f2937)" : "#d1d5db",
                 color: "#fff",
-                cursor: "pointer",
+                cursor: answers[q.id] ? "pointer" : "not-allowed",
                 fontSize: 13,
                 fontWeight: 600,
+                opacity: answers[q.id] ? 1 : 0.6,
+                transition: "all 0.2s",
               }}
             >
               Next
             </button>
           ) : (
             <button
-              onClick={handleFinish}
+              onClick={() => answers[q.id] && handleFinish()}
+              disabled={!answers[q.id]}
               style={{
                 padding: "10px 22px",
                 borderRadius: 8,
                 border: "none",
-                background: "linear-gradient(90deg,#111827,#1f2937)",
+                background: answers[q.id] ? "linear-gradient(90deg,#111827,#1f2937)" : "#d1d5db",
                 color: "#fff",
-                cursor: "pointer",
+                cursor: answers[q.id] ? "pointer" : "not-allowed",
                 fontSize: 13,
                 fontWeight: 600,
+                opacity: answers[q.id] ? 1 : 0.6,
+                transition: "all 0.2s",
               }}
             >
               Finish & Start
