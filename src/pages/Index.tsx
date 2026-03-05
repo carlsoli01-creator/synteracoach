@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import ProgressDashboard from "@/components/voice/ProgressDashboard";
 import StreakBadges from "@/components/voice/StreakBadges";
 import PracticeScenarios from "@/components/voice/PracticeScenarios";
+import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
 
 const DURATION_OPTIONS = [
 { label: "10s", value: 10 },
@@ -435,6 +436,8 @@ export default function Negotium() {
   const [recCommTips, setRecCommTips] = useState<string[]>([]);
   const [userSubtitle, setUserSubtitle] = useState("Voice Intelligence Platform");
   const [heroFocus, setHeroFocus] = useState("Be Analyzed.");
+  const [isPremium] = useState(() => localStorage.getItem("clarium_premium") === "true");
+  const [showPricing, setShowPricing] = useState(false);
 
   // Check if quiz was already completed
   const [quizVisible, setQuizVisible] = useState(() => {
@@ -1091,7 +1094,11 @@ export default function Negotium() {
           }
 
             {phase === "done" && metrics && feedback &&
-          <div style={{ animation: "fadeUp 0.5s ease", marginTop: 16 }}>
+          <div style={{ animation: "fadeUp 0.5s ease", marginTop: 16, position: "relative" }}>
+                {!isPremium && history.length <= 1 && (
+                  <PaywallCTA onUpgrade={() => setShowPricing(true)} />
+                )}
+                <div style={!isPremium && history.length <= 1 ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" as const } : {}}>
                 <div
               style={{
                 display: "flex",
@@ -1349,8 +1356,19 @@ export default function Negotium() {
                     </div>
                   </div>
             )}
+              </div>{/* end blur wrapper */}
               </div>
           }
+          {showPricing && (
+            <PricingModal
+              onClose={() => setShowPricing(false)}
+              onSubscribe={() => {
+                // Stripe not connected yet — placeholder
+                alert("Stripe integration coming soon! You'll be redirected to checkout.");
+                setShowPricing(false);
+              }}
+            />
+          )}
           </>
         }
 
