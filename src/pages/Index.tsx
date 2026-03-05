@@ -1339,26 +1339,32 @@ export default function Negotium() {
                 >
                   Progress Chart
                 </div>
-                <div style={{ display: "flex", gap: 2, height: 60, alignItems: "flex-end" }}>
-                  {[...history].reverse().map((h, i) => {
+                {(() => {
+                  const points = [...history].reverse().map((h, i) => {
                     const score = h.overall_score ?? h.overall ?? 0;
-                    return (
-                    <div
-                      key={i}
-                      title={`Session ${i + 1}: ${score}/100`}
-                      style={{
-                        flex: 1,
-                        background: score >= 80 ? "#4a8c5c" : score >= 60 ? "#6b7280" : "#c04a2a",
-                        height: `${score}%`,
-                        borderRadius: "2px 2px 0 0",
-                        minWidth: 8,
-                        transition: "height 0.3s ease",
-                      }}
-                    />
-                  )})}
-                </div>
+                    return { score, i };
+                  });
+                  const w = 600, h = 80, pad = 20;
+                  const xStep = points.length > 1 ? (w - pad * 2) / (points.length - 1) : 0;
+                  const pathD = points.map((p, idx) => {
+                    const x = pad + idx * xStep;
+                    const y = h - pad - ((p.score / 100) * (h - pad * 2));
+                    return `${idx === 0 ? "M" : "L"}${x},${y}`;
+                  }).join(" ");
+                  return (
+                    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: 100 }}>
+                      <line x1={pad} y1={h - pad} x2={w - pad} y2={h - pad} stroke={c.border} strokeWidth={1} />
+                      <path d={pathD} fill="none" stroke="#6b7280" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                      {points.map((p, idx) => {
+                        const x = pad + idx * xStep;
+                        const y = h - pad - ((p.score / 100) * (h - pad * 2));
+                        return <circle key={idx} cx={x} cy={y} r={3} fill={p.score >= 80 ? "#4a8c5c" : p.score >= 60 ? "#6b7280" : "#c04a2a"} />;
+                      })}
+                    </svg>
+                  );
+                })()}
                 <div style={{ fontSize: 9, color: c.muted, marginTop: 6 }}>
-                  Each bar = one session (oldest → newest)
+                  Session scores over time (oldest → newest)
                 </div>
               </div>
             )}
