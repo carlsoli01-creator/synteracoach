@@ -433,6 +433,8 @@ export default function Negotium() {
   const transcriptRef = useRef("");
   const recognitionRef = useRef<any>(null);
   const recordingStartRef = useRef<number>(0);
+  const [livePace, setLivePace] = useState(0);
+  const [liveEnergy, setLiveEnergy] = useState(0);
 
   const ringOffset = CIRCUMFERENCE * (timeLeft / DURATION);
   const isDark = theme === "dark";
@@ -508,7 +510,12 @@ export default function Negotium() {
 
       const { scores, analysis, tags, negotiationTips, communicationTips } = data;
 
-      setMetrics({ pace: scores.pace, conf: scores.confidence, clar: scores.clarity, overall: scores.overall });
+      // Compute final measured pace & energy from raw audio data
+      const finalWpm = durationSeconds > 0 ? (transcript.trim().split(/\s+/).filter(Boolean).length / durationSeconds) * 60 : 0;
+      const measuredPace = Math.min(100, Math.round((finalWpm / 160) * 100));
+      const measuredEnergy = Math.min(100, Math.round(avgVol * 3.5));
+
+      setMetrics({ pace: scores.pace, conf: scores.confidence, clar: scores.clarity, overall: scores.overall, measuredPace, measuredEnergy, wpm: Math.round(finalWpm), avgVol: Math.round(avgVol) });
       setFeedback({
         overallTxt: analysis.overall,
         paceTxt: analysis.pace,
@@ -611,6 +618,20 @@ export default function Negotium() {
         volumeRef.current.push(avg);
         if (avg < 3) silenceRef.current++;
         framesRef.current++;
+
+        // Real-time energy: rolling average of last 30 frames, normalized to 0-100
+        const recent = volumeRef.current.slice(-30);
+        const recentAvg = recent.reduce((a, b) => a + b, 0) / recent.length;
+        setLiveEnergy(Math.min(100, Math.round(recentAvg * 3.5)));
+
+        // Real-time pace: words per minute from transcript / elapsed time
+        const elapsedSec = (Date.now() - recordingStartRef.current) / 1000;
+        const wordCount = transcriptRef.current.trim().split(/\s+/).filter(Boolean).length;
+        const wpm = elapsedSec > 1 ? (wordCount / elapsedSec) * 60 : 0;
+        // Map WPM to 0-100: 0wpm=0, 130wpm=75 (ideal ~130-160), 200+=100, <80=low
+        const paceScore = Math.min(100, Math.round((wpm / 160) * 100));
+        setLivePace(paceScore);
+
         animFrameRef.current = requestAnimationFrame(animate);
       };
       animate();
@@ -896,8 +917,8 @@ export default function Negotium() {
 
             {phase === "recording" && (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 24 }}>
-                {["Volume", "Pace", "Energy"].map((label, i) => {
-                  const val = i === 0 ? Math.min(100, (volumeRef.current.slice(-1)[0] || 0) * 4) : i === 1 ? 70 : 60;
+              {["Volume", "Pace", "Energy"].map((label, i) => {
+                  const val = i === 0 ? Math.min(100, (volumeRef.current.slice(-1)[0] || 0) * 4) : i === 1 ? livePace : liveEnergy;
                   return (
                     <div
                       key={label}
@@ -970,6 +991,37 @@ export default function Negotium() {
                   <ScoreRing score={metrics.pace} label="Pace" color="#6b7280" />
                   <ScoreRing score={metrics.conf} label="Confidence" color="#6b7280" />
                   <ScoreRing score={metrics.clar} label="Clarity" color="#6b7280" />
+                </div>
+
+                {/* Measured Pace & Energy Bars */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 12,
+                    marginBottom: 20,
+                    background: c.card,
+                    border: `1px solid ${c.border}`,
+                    borderRadius: 10,
+                    padding: "16px",
+                    boxShadow: "0 4px 12px rgba(16,24,40,0.04)",
+                  }}
+                >
+                  {[
+                    { label: "Measured Pace", value: metrics.measuredPace, detail: `${metrics.wpm} WPM`, ideal: "120–160 WPM ideal", color: metrics.measuredPace >= 50 && metrics.measuredPace <= 85 ? "#4a8c5c" : metrics.measuredPace > 85 ? "#c97a2a" : "#c04a2a" },
+                    { label: "Measured Energy", value: metrics.measuredEnergy, detail: `Avg vol: ${metrics.avgVol}`, ideal: "Consistent energy = authority", color: metrics.measuredEnergy >= 40 ? "#4a8c5c" : metrics.measuredEnergy >= 20 ? "#c97a2a" : "#c04a2a" },
+                  ].map(({ label, value, detail, ideal, color }) => (
+                    <div key={label}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
+                        <span style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase" }}>{label}</span>
+                        <span style={{ fontSize: 18, fontWeight: 800, color }}>{value}</span>
+                      </div>
+                      <div style={{ height: 6, background: c.border, borderRadius: 3, marginBottom: 6 }}>
+                        <div style={{ height: "100%", width: `${value}%`, background: color, borderRadius: 3, transition: "width 0.5s ease" }} />
+                      </div>
+                      <div style={{ fontSize: 10, color: c.muted }}>{detail} · <span style={{ fontStyle: "italic" }}>{ideal}</span></div>
+                    </div>
+                  ))}
                 </div>
 
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 20 }}>
