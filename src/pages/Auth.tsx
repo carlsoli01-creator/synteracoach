@@ -126,7 +126,7 @@ export default function Auth() {
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div style={{ fontSize: 28, fontWeight: 800, color: "#0b0b0b", letterSpacing: "0.05em", marginBottom: 4 }}>
-            NEGOTIUM
+            CLARIUM
           </div>
           <div style={{ fontSize: 12, color: "#9aa0a6", letterSpacing: "0.12em" }}>
             Voice Intelligence Platform

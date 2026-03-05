@@ -799,7 +799,7 @@ export default function Negotium() {
         }}>
         
         <div>
-          <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>NEGOTIUM</div>
+          <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>CLARIUM</div>
           <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>{userSubtitle}</div>
         </div>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
