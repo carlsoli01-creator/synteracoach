@@ -185,9 +185,30 @@ Provide your detailed analysis as JSON.`;
     let parsed;
     try {
       parsed = JSON.parse(jsonStr);
-    } catch {
-      console.error("Failed to parse AI response:", content);
-      throw new Error("Failed to parse AI analysis");
+    } catch (e1) {
+      // Attempt to repair common AI JSON corruption
+      try {
+        // Remove stray characters before opening braces of objects in arrays
+        let repaired = jsonStr
+          .replace(/,\s*\n\s*[a-zA-Z]\s+"name"/g, ',\n    {"name"')  // fix stray char before "name"
+          .replace(/}\s*,\s*\n\s*[a-zA-Z]\s+\{/g, '},\n    {');       // fix stray char before {
+        parsed = JSON.parse(repaired);
+      } catch (e2) {
+        // Last resort: try to extract just the valid JSON object
+        try {
+          const firstBrace = jsonStr.indexOf('{');
+          const lastBrace = jsonStr.lastIndexOf('}');
+          if (firstBrace !== -1 && lastBrace !== -1) {
+            const subset = jsonStr.substring(firstBrace, lastBrace + 1);
+            parsed = JSON.parse(subset);
+          } else {
+            throw e2;
+          }
+        } catch {
+          console.error("Failed to parse AI response:", content);
+          throw new Error("Failed to parse AI analysis");
+        }
+      }
     }
 
     return new Response(JSON.stringify(parsed), {
