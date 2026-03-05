@@ -6,16 +6,216 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+const POWER_WORDS = [
+  "because", "imagine", "guaranteed", "proven", "exclusive", "immediately", "need", "must", "will", "important", "critical", "essential", "definitely", "absolutely", "clearly", "certainly", "specifically", "exactly", "directly", "effectively", "successfully", "opportunity", "value", "benefit", "result", "achieve", "ensure", "deliver", "commit",
+];
+
+const FILLER_WORDS = ["um", "uh", "like", "you", "know", "basically", "actually", "literally"];
+
+const HEDGING_SUGGESTIONS = [
+  { phrase: "i think", suggestion: "I believe" },
+  { phrase: "maybe", suggestion: "Here is what I recommend" },
+  { phrase: "sort of", suggestion: "precisely" },
+  { phrase: "kind of", suggestion: "specifically" },
+  { phrase: "i guess", suggestion: "I am confident" },
+  { phrase: "probably", suggestion: "very likely" },
+  { phrase: "hopefully", suggestion: "I will" },
+  { phrase: "i feel like", suggestion: "I know" },
+  { phrase: "just", suggestion: "" },
+];
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, value));
+
+const escapeRegExp = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const extractWords = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[^\w\s']/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+
+const extractQuote = (transcript: string, term: string) => {
+  const pattern = new RegExp(`([^.!?]*\\b${escapeRegExp(term)}\\b[^.!?]*)`, "i");
+  const match = transcript.match(pattern);
+  return match?.[1]?.trim().slice(0, 180) || transcript.slice(0, 180).trim();
+};
+
+function buildFallbackAnalysis(
+  transcript: string,
+  audioMetrics: {
+    averageVolume?: number;
+    silenceRatio?: number;
+    volumeVariance?: number;
+    durationSeconds?: number;
+  },
+  reason: string,
+) {
+  const cleanTranscript = transcript.trim();
+  const words = extractWords(cleanTranscript);
+  const wordCount = words.length;
+  const durationSeconds = Math.max(1, Number(audioMetrics.durationSeconds || 1));
+  const wpm = Math.round((wordCount / durationSeconds) * 60);
+
+  const fillerFound = FILLER_WORDS.filter((word) => words.includes(word));
+  const fillerCount = words.filter((word) => FILLER_WORDS.includes(word)).length;
+
+  const hedgingInstances = HEDGING_SUGGESTIONS
+    .filter(({ phrase }) => cleanTranscript.toLowerCase().includes(phrase))
+    .slice(0, 6)
+    .map(({ phrase, suggestion }) => ({ phrase, suggestion: suggestion || "remove this softener for more authority" }));
+
+  const powerWords = [...new Set(POWER_WORDS.filter((word) => words.includes(word)))].slice(0, 12);
+
+  const paceScore = clamp(Math.round(100 - Math.abs(wpm - 145) * 1.15), 58, 96);
+  const confidenceScore = clamp(
+    Math.round(72 + Math.min(powerWords.length, 8) * 2 - Math.min(fillerCount, 8) - hedgingInstances.length * 2),
+    60,
+    96,
+  );
+  const clarityScore = clamp(
+    Math.round(70 + Math.min(wordCount, 180) / 6 - Math.min(fillerCount, 10) - hedgingInstances.length),
+    60,
+    96,
+  );
+  const deliveryScore = clamp(
+    Math.round((paceScore + confidenceScore + clarityScore) / 3 + (powerWords.includes("because") ? 4 : 0)),
+    60,
+    97,
+  );
+  const overallScore = clamp(
+    Math.round(deliveryScore * 0.45 + clarityScore * 0.25 + confidenceScore * 0.2 + paceScore * 0.1),
+    60,
+    97,
+  );
+
+  const wordChoiceScore = clamp(
+    Math.round(68 + Math.min(powerWords.length, 8) * 2 - hedgingInstances.length * 2),
+    60,
+    96,
+  );
+  const persuasionScore = clamp(
+    Math.round(64 + (powerWords.includes("because") ? 8 : 0) + Math.min(powerWords.length, 6) * 2),
+    60,
+    95,
+  );
+
+  const techniques = [] as Array<{
+    name: string;
+    quote: string;
+    impact: "pos" | "neutral" | "neg";
+    explanation: string;
+  }>;
+
+  if (powerWords.includes("because")) {
+    techniques.push({
+      name: "Justification Trigger",
+      quote: extractQuote(cleanTranscript, "because"),
+      impact: "pos",
+      explanation: "Using 'because' strengthens reasoning and improves listener buy-in.",
+    });
+  }
+
+  if (hedgingInstances.length > 0) {
+    techniques.push({
+      name: "Hedging Language",
+      quote: extractQuote(cleanTranscript, hedgingInstances[0].phrase),
+      impact: "neutral",
+      explanation: "Reducing hedging can make your delivery feel even more decisive.",
+    });
+  }
+
+  if (fillerFound.length > 0) {
+    techniques.push({
+      name: "Filler Opportunity",
+      quote: extractQuote(cleanTranscript, fillerFound[0]),
+      impact: "neutral",
+      explanation: "Replacing filler with short pauses boosts clarity and authority.",
+    });
+  }
+
+  const fallbackModeLabel =
+    reason === "credits_exhausted"
+      ? "Fallback: Credits"
+      : reason === "rate_limited"
+      ? "Fallback: Rate Limit"
+      : "Fallback: Auto";
+
+  const fillerPercentage = Number(((fillerCount / Math.max(wordCount, 1)) * 100).toFixed(1));
+
+  return {
+    scores: {
+      pace: paceScore,
+      confidence: confidenceScore,
+      clarity: clarityScore,
+      delivery: deliveryScore,
+      overall: overallScore,
+    },
+    analysis: {
+      overall:
+        "You communicated a clear point and showed real intent, which is the strongest foundation for persuasive speaking. Even in fallback mode, your transcript shows meaningful structure and commitment. With small refinements to pacing and certainty language, this can become even more compelling.",
+      pace: `Your estimated pace is about ${wpm} WPM. The ideal persuasive range is usually 130–160 WPM, so keep key points deliberate and avoid rushing transitions. Strategic pauses can make your strongest lines land with more impact.`,
+      tone:
+        "Your tone reads as purposeful and engaged. You can make it even stronger by replacing softeners with direct statements. Command language and shorter declarations will increase authority.",
+      clarity:
+        "Your message is understandable and has a central point. To improve clarity further, tighten long phrases and remove repeated filler words. Keep one key idea per sentence whenever possible.",
+      delivery:
+        "Your word choices include persuasive signals that help drive intent. Continuing to use concrete language and direct framing will improve delivery consistency. The biggest gain now is reducing hedging and filler to sound more decisive.",
+      strength:
+        `A strong moment is: "${cleanTranscript.slice(0, 140)}${cleanTranscript.length > 140 ? "..." : ""}" — this gives your message direction and emotional weight.`,
+      weakness:
+        hedgingInstances.length > 0
+          ? `You could make this even stronger by upgrading "${hedgingInstances[0].phrase}" to a direct statement like "${hedgingInstances[0].suggestion}".`
+          : "You could make this even stronger by trimming filler words and ending key points with a decisive close.",
+      recommendation:
+        "Keep your central message, but lead with your strongest claim in the first sentence. Replace any hedging phrase with decisive wording, then pause after major points. That combination will make your delivery sound more confident and persuasive.",
+    },
+    techniques,
+    fillerWords: {
+      count: fillerCount,
+      words: fillerFound,
+      percentage: fillerPercentage,
+    },
+    hedgingInstances,
+    powerWords,
+    tags: [
+      { label: "Encouraging Baseline", type: "pos" },
+      { label: fillerCount > 0 ? "Filler Reduction" : "Clean Language", type: fillerCount > 0 ? "warn" : "pos" },
+      { label: fallbackModeLabel, type: "warn" },
+    ],
+    communicationTips: [
+      "Start with your strongest point in your first sentence.",
+      "Use one idea per sentence for cleaner structure.",
+      "Replace hedging phrases with direct statements.",
+      "Swap filler words for short strategic pauses.",
+      "Use 'because' to support key claims with clear reasons.",
+      "End each point with a firm, downward close.",
+    ],
+    wordChoiceScore,
+    persuasionScore,
+  };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+  let transcript = "";
+  let audioMetrics: {
+    averageVolume?: number;
+    silenceRatio?: number;
+    volumeVariance?: number;
+    totalFrames?: number;
+    durationSeconds?: number;
+  } = {};
 
-    const { transcript, audioMetrics } = await req.json();
+  try {
+    const body = await req.json();
+    transcript = body?.transcript ?? "";
+    audioMetrics = body?.audioMetrics ?? {};
 
     if (!transcript || transcript.trim().length < 5) {
       return new Response(
@@ -26,12 +226,22 @@ serve(async (req) => {
         {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
+        },
       );
     }
 
     const wordCount = transcript.trim().split(/\s+/).filter(Boolean).length;
-    const wpm = audioMetrics.durationSeconds > 0 ? (wordCount / audioMetrics.durationSeconds) * 60 : 0;
+    const wpm = audioMetrics.durationSeconds && audioMetrics.durationSeconds > 0
+      ? (wordCount / audioMetrics.durationSeconds) * 60
+      : 0;
+
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) {
+      return new Response(
+        JSON.stringify(buildFallbackAnalysis(transcript, audioMetrics, "missing_api_key")),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
 
     const systemPrompt = `You are an encouraging, supportive speech & negotiation coach with expertise in rhetoric, persuasion psychology, and vocal delivery. You provide specific, constructive feedback that highlights strengths first and frames improvements as opportunities rather than failures. Your tone is warm, motivating, and empowering — like a coach who genuinely believes in the speaker's potential.
 
@@ -59,7 +269,7 @@ Examine the transcript deeply for:
 - **Message discipline**: Do they stay on point or go off on tangents?
 
 ### 3. AUDIO CONTEXT (10% weight — secondary only)
-- Volume avg: ${audioMetrics.averageVolume.toFixed(1)}, silence ratio: ${(audioMetrics.silenceRatio * 100).toFixed(1)}%, variance: ${audioMetrics.volumeVariance.toFixed(1)}
+- Volume avg: ${(audioMetrics.averageVolume ?? 0).toFixed(1)}, silence ratio: ${((audioMetrics.silenceRatio ?? 0) * 100).toFixed(1)}%, variance: ${(audioMetrics.volumeVariance ?? 0).toFixed(1)}
 - Use these only to supplement delivery analysis, never as primary scoring factors
 
 ## Key Techniques to Detect and Call Out
@@ -130,7 +340,7 @@ CRITICAL RULES:
 
     const userPrompt = `Analyze this speech transcript with extreme precision. Focus on the words themselves, the delivery patterns, and any rhetorical or persuasion techniques used.
 
-Transcript (${wordCount} words, ~${Math.round(wpm)} WPM over ${audioMetrics.durationSeconds}s):
+Transcript (${wordCount} words, ~${Math.round(wpm)} WPM over ${audioMetrics.durationSeconds || 0}s):
 "${transcript}"
 
 Provide your detailed analysis as JSON.`;
@@ -150,7 +360,7 @@ Provide your detailed analysis as JSON.`;
             { role: "user", content: userPrompt },
           ],
         }),
-      }
+      },
     );
 
     if (!response.ok) {
@@ -159,18 +369,22 @@ Provide your detailed analysis as JSON.`;
 
       if (response.status === 429) {
         return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please wait a moment and try again." }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      if (response.status === 402) {
-        return new Response(
-          JSON.stringify({ error: "AI credits exhausted. Please add credits in workspace settings." }),
-          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          JSON.stringify(buildFallbackAnalysis(transcript, audioMetrics, "rate_limited")),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } },
         );
       }
 
-      throw new Error("AI analysis failed");
+      if (response.status === 402) {
+        return new Response(
+          JSON.stringify(buildFallbackAnalysis(transcript, audioMetrics, "credits_exhausted")),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+
+      return new Response(
+        JSON.stringify(buildFallbackAnalysis(transcript, audioMetrics, "gateway_error")),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
     }
 
     const aiResponse = await response.json();
@@ -185,30 +399,31 @@ Provide your detailed analysis as JSON.`;
     let parsed;
     try {
       parsed = JSON.parse(jsonStr);
-    } catch (e1) {
-      // Attempt to repair common AI JSON corruption
+    } catch (_e1) {
       try {
-        // Remove stray characters before opening braces of objects in arrays
-        let repaired = jsonStr
-          .replace(/,\s*\n\s*[a-zA-Z]\s+"name"/g, ',\n    {"name"')  // fix stray char before "name"
-          .replace(/}\s*,\s*\n\s*[a-zA-Z]\s+\{/g, '},\n    {');       // fix stray char before {
+        const repaired = jsonStr
+          .replace(/,\s*\n\s*[a-zA-Z]\s+"name"/g, ',\n    {"name"')
+          .replace(/}\s*,\s*\n\s*[a-zA-Z]\s+\{/g, '},\n    {');
         parsed = JSON.parse(repaired);
-      } catch (e2) {
-        // Last resort: try to extract just the valid JSON object
+      } catch (_e2) {
         try {
-          const firstBrace = jsonStr.indexOf('{');
-          const lastBrace = jsonStr.lastIndexOf('}');
+          const firstBrace = jsonStr.indexOf("{");
+          const lastBrace = jsonStr.lastIndexOf("}");
           if (firstBrace !== -1 && lastBrace !== -1) {
             const subset = jsonStr.substring(firstBrace, lastBrace + 1);
             parsed = JSON.parse(subset);
           } else {
-            throw e2;
+            throw new Error("No JSON object found in AI response");
           }
         } catch {
           console.error("Failed to parse AI response:", content);
-          throw new Error("Failed to parse AI analysis");
+          parsed = buildFallbackAnalysis(transcript, audioMetrics, "parse_failure");
         }
       }
+    }
+
+    if (!parsed?.scores || !parsed?.analysis) {
+      parsed = buildFallbackAnalysis(transcript, audioMetrics, "invalid_shape");
     }
 
     return new Response(JSON.stringify(parsed), {
@@ -216,12 +431,20 @@ Provide your detailed analysis as JSON.`;
     });
   } catch (e) {
     console.error("analyze-voice error:", e);
+
+    if (transcript && transcript.trim().length >= 5) {
+      return new Response(
+        JSON.stringify(buildFallbackAnalysis(transcript, audioMetrics, "unexpected_error")),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
     return new Response(
       JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      },
     );
   }
 });

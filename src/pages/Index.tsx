@@ -467,6 +467,8 @@ export default function Negotium() {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animFrameRef = useRef<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const analysisTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isAnalyzingRef = useRef(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const volumeRef = useRef<number[]>([]);
@@ -494,6 +496,10 @@ export default function Negotium() {
   const stopAll = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    if (analysisTimeoutRef.current) {
+      clearTimeout(analysisTimeoutRef.current);
+      analysisTimeoutRef.current = null;
+    }
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
       mediaRecorderRef.current.stop();
       mediaRecorderRef.current.stream?.getTracks().forEach((t) => t.stop());
@@ -504,6 +510,9 @@ export default function Negotium() {
   }, []);
 
   const analyzeVoice = useCallback(async () => {
+    if (isAnalyzingRef.current) return;
+    isAnalyzingRef.current = true;
+
     const vols = volumeRef.current;
     const avgVol = vols.reduce((a, b) => a + b, 0) / (vols.length || 1);
     const silRatio = silenceRef.current / (framesRef.current || 1);
@@ -515,9 +524,9 @@ export default function Negotium() {
     try {recognitionRef.current?.stop();} catch (_) {}
 
     if (!transcript || transcript.length < 5) {
-      // Fallback: no transcript detected
       setMicError("Could not detect speech. Please speak clearly and try again. Make sure your browser supports speech recognition.");
       setPhase("idle");
+      isAnalyzingRef.current = false;
       return;
     }
 
@@ -539,7 +548,24 @@ export default function Negotium() {
 
       if (error) {
         console.error("AI analysis error:", error);
-        setMicError("AI analysis failed. Please try again.");
+
+        let errorMessage = "AI analysis failed. Please try again.";
+        const responseContext = (error as any)?.context;
+        if (responseContext && typeof responseContext.text === "function") {
+          const responseText = await responseContext.text();
+          try {
+            const parsed = JSON.parse(responseText);
+            if (parsed?.error) errorMessage = parsed.error;
+          } catch {
+            if (responseText?.trim()) errorMessage = responseText;
+          }
+        }
+
+        if ((error as any)?.message?.includes("402")) {
+          errorMessage = "AI credits are exhausted. Please add credits in workspace settings.";
+        }
+
+        setMicError(errorMessage);
         setPhase("idle");
         return;
       }
@@ -550,7 +576,7 @@ export default function Negotium() {
         return;
       }
 
-      const { scores, analysis, tags, communicationTips, techniques, fillerWords, hedgingInstances, powerWords, wordChoiceScore, structureScore, persuasionScore } = data;
+      const { scores, analysis, tags, communicationTips, techniques, fillerWords, hedgingInstances, powerWords, wordChoiceScore, persuasionScore } = data;
 
       // Compute final measured pace from raw audio data
       const finalWpm = durationSeconds > 0 ? transcript.trim().split(/\s+/).filter(Boolean).length / durationSeconds * 60 : 0;
@@ -607,8 +633,21 @@ export default function Negotium() {
       console.error("Analysis failed:", err);
       setMicError("Analysis failed. Please try again.");
       setPhase("idle");
+    } finally {
+      if (analysisTimeoutRef.current) {
+        clearTimeout(analysisTimeoutRef.current);
+        analysisTimeoutRef.current = null;
+      }
+      isAnalyzingRef.current = false;
     }
-  }, []);
+  }, [user?.id]);
+
+  const scheduleAnalyze = useCallback(() => {
+    if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
+    analysisTimeoutRef.current = setTimeout(() => {
+      void analyzeVoice();
+    }, 1500);
+  }, [analyzeVoice]);
 
   const startRecording = useCallback(async () => {
     setMicError("");
@@ -701,13 +740,13 @@ export default function Negotium() {
           try {recognitionRef.current?.stop();} catch (_) {}
           setWaveData(new Array(80).fill(0.5));
           // Small delay for final speech recognition results
-          setTimeout(() => analyzeVoice(), 1500);
+          scheduleAnalyze();
         }
       }, 1000);
     } catch (e: any) {
       setMicError(e?.message || "Microphone access denied. Please allow mic access in your browser and try again.");
     }
-  }, [analyzeVoice, selectedDuration]);
+  }, [scheduleAnalyze, selectedDuration]);
 
   const reset = useCallback(() => {
     stopAll();
@@ -1039,7 +1078,7 @@ export default function Negotium() {
               </div>
           }
 
-            <VoiceMicControl onStart={startRecording} onStop={reset} onStopEarly={() => {stopAll();setWaveData(new Array(80).fill(0.5));setTimeout(() => analyzeVoice(), 1500);}} phase={phase} />
+            <VoiceMicControl onStart={startRecording} onStop={reset} onStopEarly={() => {if (phase !== "recording") return;stopAll();setWaveData(new Array(80).fill(0.5));setPhase("analyzing");scheduleAnalyze();}} phase={phase} />
             {micError &&
           <div style={{ textAlign: "center", fontSize: 11, color: "#c04a2a", marginBottom: 16, lineHeight: 1.6 }}>
                 {micError}
