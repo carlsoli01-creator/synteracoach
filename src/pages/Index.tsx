@@ -179,27 +179,50 @@ const QUIZ_QUESTIONS = [
   },
 ];
 
-function OnboardingQuiz({ onFinish }) {
+function derivePersonalization(answers: Record<string, string>) {
+  const picksNeg: string[] = [];
+  const picksComm: string[] = [];
+  if (answers.goal?.includes("Pace")) { picksComm.push(COMMUNICATION_TIPS[6]); picksNeg.push(NEGOTIATION_TIPS[0]); }
+  if (answers.goal?.includes("Tone")) { picksComm.push(COMMUNICATION_TIPS[0]); picksNeg.push(NEGOTIATION_TIPS[1]); }
+  if (answers.goal?.includes("Clarity")) { picksComm.push(COMMUNICATION_TIPS[2]); picksNeg.push(NEGOTIATION_TIPS[3]); }
+  if (answers.goal?.includes("Confidence")) { picksComm.push(COMMUNICATION_TIPS[5]); picksNeg.push(NEGOTIATION_TIPS[8]); }
+  if (answers.goal?.includes("Conciseness")) { picksComm.push(COMMUNICATION_TIPS[12]); picksNeg.push(NEGOTIATION_TIPS[15]); }
+  if (answers.filler?.includes("Very") || answers.filler?.includes("Sometimes")) picksComm.push(COMMUNICATION_TIPS[16]);
+  if (answers.nerves?.includes("Always") || answers.nerves?.includes("Often")) picksComm.push(COMMUNICATION_TIPS[10]);
+  for (let i = 0; picksNeg.length < 4; i++) picksNeg.push(NEGOTIATION_TIPS[i % NEGOTIATION_TIPS.length]);
+  for (let i = 0; picksComm.length < 4; i++) picksComm.push(COMMUNICATION_TIPS[i % COMMUNICATION_TIPS.length]);
+
+  // Personalized subtitle based on goal
+  const goalMap: Record<string, string> = {
+    "Pace": "Optimized for pace & rhythm mastery",
+    "Tone/Authority": "Tuned for tone & authority building",
+    "Clarity": "Focused on crystal-clear delivery",
+    "Confidence": "Designed to build vocal confidence",
+    "Conciseness": "Streamlined for concise impact",
+  };
+  const subtitle = goalMap[answers.goal] || "Voice Intelligence Platform";
+
+  // Focus area for hero text
+  const focusMap: Record<string, string> = {
+    "Close deals": "Close Deals.",
+    "Appear confident": "Command the Room.",
+    "Be concise": "Say More with Less.",
+    "Be persuasive": "Persuade with Precision.",
+    "Improve clarity": "Speak with Clarity.",
+  };
+  const heroFocus = focusMap[answers.goalType] || "Be Analyzed.";
+
+  return { neg: picksNeg.slice(0, 6), comm: picksComm.slice(0, 6), subtitle, heroFocus };
+}
+
+function OnboardingQuiz({ onFinish }: { onFinish: (result: { neg: string[]; comm: string[]; answers: Record<string, string> }) => void }) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const q = QUIZ_QUESTIONS[step];
 
   const handleFinish = () => {
-    const picksNeg = [];
-    const picksComm = [];
-    if (answers.goal?.includes("Pace")) {
-      picksComm.push(COMMUNICATION_TIPS[6]);
-      picksNeg.push(NEGOTIATION_TIPS[0]);
-    }
-    if (answers.goal?.includes("Tone")) {
-      picksComm.push(COMMUNICATION_TIPS[0]);
-      picksNeg.push(NEGOTIATION_TIPS[1]);
-    }
-    if (answers.filler?.includes("Very") || answers.filler?.includes("Sometimes"))
-      picksComm.push(COMMUNICATION_TIPS[16]);
-    for (let i = 0; picksNeg.length < 4; i++) picksNeg.push(NEGOTIATION_TIPS[i % NEGOTIATION_TIPS.length]);
-    for (let i = 0; picksComm.length < 4; i++) picksComm.push(COMMUNICATION_TIPS[i % COMMUNICATION_TIPS.length]);
-    onFinish({ neg: picksNeg.slice(0, 6), comm: picksComm.slice(0, 6) });
+    const { neg, comm } = derivePersonalization(answers);
+    onFinish({ neg, comm, answers });
   };
 
   return (
@@ -268,21 +291,6 @@ function OnboardingQuiz({ onFinish }) {
             }}
           >
             Back
-          </button>
-          <button
-            onClick={() => onFinish({ neg: NEGOTIATION_TIPS.slice(0, 6), comm: COMMUNICATION_TIPS.slice(0, 6) })}
-            style={{
-              padding: "10px 18px",
-              borderRadius: 8,
-              border: "none",
-              background: "transparent",
-              cursor: "pointer",
-              color: "#9aa0a6",
-              fontSize: 12,
-              textDecoration: "underline",
-            }}
-          >
-            Skip quiz →
           </button>
           {step < QUIZ_QUESTIONS.length - 1 ? (
             <button
@@ -418,9 +426,39 @@ export default function Negotium() {
   const [micError, setMicError] = useState("");
   const [theme, setTheme] = useState("light");
   const [spacingMode, setSpacingMode] = useState("airy");
-  const [quizVisible, setQuizVisible] = useState(true);
-  const [recNegTips, setRecNegTips] = useState([]);
-  const [recCommTips, setRecCommTips] = useState([]);
+  const [recNegTips, setRecNegTips] = useState<string[]>([]);
+  const [recCommTips, setRecCommTips] = useState<string[]>([]);
+  const [userSubtitle, setUserSubtitle] = useState("Voice Intelligence Platform");
+  const [heroFocus, setHeroFocus] = useState("Be Analyzed.");
+
+  // Check if quiz was already completed
+  const [quizVisible, setQuizVisible] = useState(() => {
+    try {
+      const saved = localStorage.getItem("negotium_quiz");
+      if (saved) {
+        const { answers } = JSON.parse(saved);
+        const p = derivePersonalization(answers);
+        // We'll set these in an effect to avoid calling setState during init
+        return false;
+      }
+    } catch (_) {}
+    return true;
+  });
+
+  // Load saved personalization on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("negotium_quiz");
+      if (saved) {
+        const { answers } = JSON.parse(saved);
+        const p = derivePersonalization(answers);
+        setRecNegTips(p.neg);
+        setRecCommTips(p.comm);
+        setUserSubtitle(p.subtitle);
+        setHeroFocus(p.heroFocus);
+      }
+    } catch (_) {}
+  }, []);
 
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animFrameRef = useRef<number | null>(null);
@@ -685,9 +723,13 @@ export default function Negotium() {
     >
       {quizVisible && (
         <OnboardingQuiz
-          onFinish={({ neg, comm }) => {
+          onFinish={({ neg, comm, answers }) => {
+            localStorage.setItem("negotium_quiz", JSON.stringify({ answers }));
+            const p = derivePersonalization(answers);
             setRecNegTips(neg);
             setRecCommTips(comm);
+            setUserSubtitle(p.subtitle);
+            setHeroFocus(p.heroFocus);
             setQuizVisible(false);
           }}
         />
@@ -706,7 +748,7 @@ export default function Negotium() {
       >
         <div>
           <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>NEGOTIUM</div>
-          <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>Voice Intelligence Platform</div>
+          <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>{userSubtitle}</div>
         </div>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           {avgHistory !== null && (
@@ -815,7 +857,7 @@ export default function Negotium() {
                   marginBottom: 8,
                 }}
               >
-                Speak. <em style={{ color: "#6b7280" }}>Be Analyzed.</em>
+                Speak. <em style={{ color: "#6b7280" }}>{heroFocus}</em>
               </div>
               <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase" }}>
                 20 seconds · pace · tone · confidence · clarity
