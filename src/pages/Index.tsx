@@ -1,6 +1,9 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import ProgressDashboard from "@/components/voice/ProgressDashboard";
+import StreakBadges from "@/components/voice/StreakBadges";
+import PracticeScenarios from "@/components/voice/PracticeScenarios";
 
 const DURATION_OPTIONS = [
 { label: "10s", value: 10 },
@@ -829,26 +832,27 @@ export default function Negotium() {
 
       {/* Tabs */}
       <div style={{ display: "flex", borderBottom: `1px solid ${c.border}`, background: c.panel }}>
-        {["analysis", "history", "tips"].map((t) =>
+        {["analysis", "scenarios", "progress", "badges", "history", "tips"].map((t) =>
         <button
           key={t}
           onClick={() => setTab(t)}
           style={{
             flex: 1,
-            padding: "14px",
+            padding: "14px 8px",
             background: "none",
             border: "none",
             borderBottom: tab === t ? "2px solid #6b7280" : "2px solid transparent",
             color: tab === t ? c.text : c.muted,
             cursor: "pointer",
-            fontSize: 11,
-            letterSpacing: "0.2em",
+            fontSize: 10,
+            letterSpacing: "0.15em",
             textTransform: "uppercase",
             fontWeight: tab === t ? 700 : 400,
-            transition: "all 0.2s"
+            transition: "all 0.2s",
+            whiteSpace: "nowrap",
           }}>
           
-            {t === "analysis" ? "🎙 Analysis" : t === "history" ? "📊 History" : "💡 Tips"}
+            {t === "analysis" ? "🎙 Analysis" : t === "scenarios" ? "🎯 Practice" : t === "progress" ? "📊 Progress" : t === "badges" ? "🏆 Badges" : t === "history" ? "📋 History" : "💡 Tips"}
           </button>
         )}
       </div>
@@ -1387,6 +1391,24 @@ export default function Negotium() {
               </div>
           }
           </div>
+        }
+
+        {/* ── SCENARIOS TAB ── */}
+        {tab === "scenarios" &&
+          <PracticeScenarios
+            onSelectScenario={() => setTab("analysis")}
+            colors={c}
+          />
+        }
+
+        {/* ── PROGRESS TAB ── */}
+        {tab === "progress" &&
+          <ProgressDashboard history={history} colors={c} />
+        }
+
+        {/* ── BADGES TAB ── */}
+        {tab === "badges" &&
+          <StreakBadges history={history} colors={c} />
         }
 
         {/* ── TIPS TAB ── */}
