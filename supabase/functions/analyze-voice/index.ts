@@ -112,8 +112,7 @@ Return ONLY raw JSON (no markdown, no code blocks):
   "tags": [
     {"label": "<short label>", "type": "pos|warn|neg"}
   ],
-  "negotiationTips": ["<tip 1>", "<tip 2>", "<tip 3>"],
-  "communicationTips": ["<tip 1>", "<tip 2>", "<tip 3>"],
+  "communicationTips": ["<tip 1>", "<tip 2>", "<tip 3>", "<tip 4>", "<tip 5>", "<tip 6>"],
   "wordChoiceScore": <0-100>,
   "persuasionScore": <0-100>
 }

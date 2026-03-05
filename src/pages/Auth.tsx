@@ -147,7 +147,7 @@ export default function Auth() {
           </div>
           <CardTitle className="text-2xl font-semibold">Negotium</CardTitle>
           <CardDescription>
-            AI-powered voice coaching for confident negotiations
+            AI-powered voice coaching for confident communication
           </CardDescription>
         </CardHeader>
         <CardContent>
