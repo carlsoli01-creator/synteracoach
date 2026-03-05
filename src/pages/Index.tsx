@@ -552,22 +552,33 @@ export default function Negotium() {
         return;
       }
 
-      const { scores, analysis, tags, negotiationTips, communicationTips } = data;
+      const { scores, analysis, tags, negotiationTips, communicationTips, techniques, fillerWords, hedgingInstances, powerWords, wordChoiceScore, structureScore, persuasionScore } = data;
 
-      // Compute final measured pace & energy from raw audio data
+      // Compute final measured pace from raw audio data
       const finalWpm = durationSeconds > 0 ? (transcript.trim().split(/\s+/).filter(Boolean).length / durationSeconds) * 60 : 0;
       const measuredPace = Math.min(100, Math.round((finalWpm / 160) * 100));
-      const measuredEnergy = Math.min(100, Math.round(avgVol * 3.5));
 
-      setMetrics({ pace: scores.pace, conf: scores.confidence, clar: scores.clarity, overall: scores.overall, measuredPace, measuredEnergy, wpm: Math.round(finalWpm), avgVol: Math.round(avgVol) });
+      setMetrics({
+        pace: scores.pace, conf: scores.confidence, clar: scores.clarity,
+        delivery: scores.delivery || scores.overall, overall: scores.overall,
+        measuredPace, wpm: Math.round(finalWpm),
+        wordChoice: wordChoiceScore || 0, structure: structureScore || 0, persuasion: persuasionScore || 0,
+      });
       setFeedback({
         overallTxt: analysis.overall,
         paceTxt: analysis.pace,
         toneTxt: analysis.tone,
+        deliveryTxt: analysis.delivery || "",
         strengthTxt: analysis.strength,
+        weaknessTxt: analysis.weakness || "",
         recTxt: analysis.recommendation,
-        tags: tags.map((t: any) => ({ label: t.label, t: t.type })),
+        clarityTxt: analysis.clarity || "",
+        tags: (tags || []).map((t: any) => ({ label: t.label, t: t.type })),
         transcript,
+        techniques: techniques || [],
+        fillerWords: fillerWords || { count: 0, words: [], percentage: 0 },
+        hedgingInstances: hedgingInstances || [],
+        powerWords: powerWords || [],
       });
       setRecNegTips(negotiationTips || []);
       setRecCommTips(communicationTips || []);
@@ -714,7 +725,7 @@ export default function Negotium() {
   }, [stopAll]);
 
   const tagColor = (t) => (t === "pos" ? "#4a8c5c" : t === "warn" ? "#c97a2a" : "#c04a2a");
-  const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + b.overall, 0) / history.length) : null;
+  const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
   const gap = spacingMode === "compact" ? 20 : 36;
 
   return (
@@ -1036,16 +1047,17 @@ export default function Negotium() {
                     label="Overall"
                     color={metrics.overall >= 80 ? "#4a8c5c" : metrics.overall >= 60 ? "#6b7280" : "#c04a2a"}
                   />
+                  <ScoreRing score={metrics.delivery} label="Delivery" color="#6b7280" />
                   <ScoreRing score={metrics.pace} label="Pace" color="#6b7280" />
                   <ScoreRing score={metrics.conf} label="Confidence" color="#6b7280" />
                   <ScoreRing score={metrics.clar} label="Clarity" color="#6b7280" />
                 </div>
 
-                {/* Measured Pace & Energy Bars */}
+                {/* Delivery Breakdown Scores */}
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
+                    gridTemplateColumns: "repeat(3, 1fr)",
                     gap: 12,
                     marginBottom: 20,
                     background: c.card,
@@ -1056,20 +1068,41 @@ export default function Negotium() {
                   }}
                 >
                   {[
-                    { label: "Measured Pace", value: metrics.measuredPace, detail: `${metrics.wpm} WPM`, ideal: "120–160 WPM ideal", color: metrics.measuredPace >= 50 && metrics.measuredPace <= 85 ? "#4a8c5c" : metrics.measuredPace > 85 ? "#c97a2a" : "#c04a2a" },
-                    { label: "Measured Energy", value: metrics.measuredEnergy, detail: `Avg vol: ${metrics.avgVol}`, ideal: "Consistent energy = authority", color: metrics.measuredEnergy >= 40 ? "#4a8c5c" : metrics.measuredEnergy >= 20 ? "#c97a2a" : "#c04a2a" },
-                  ].map(({ label, value, detail, ideal, color }) => (
+                    { label: "Word Choice", value: metrics.wordChoice, color: metrics.wordChoice >= 70 ? "#4a8c5c" : metrics.wordChoice >= 45 ? "#c97a2a" : "#c04a2a" },
+                    { label: "Structure", value: metrics.structure, color: metrics.structure >= 70 ? "#4a8c5c" : metrics.structure >= 45 ? "#c97a2a" : "#c04a2a" },
+                    { label: "Persuasion", value: metrics.persuasion, color: metrics.persuasion >= 70 ? "#4a8c5c" : metrics.persuasion >= 45 ? "#c97a2a" : "#c04a2a" },
+                  ].map(({ label, value, color }) => (
                     <div key={label}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
                         <span style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase" }}>{label}</span>
                         <span style={{ fontSize: 18, fontWeight: 800, color }}>{value}</span>
                       </div>
-                      <div style={{ height: 6, background: c.border, borderRadius: 3, marginBottom: 6 }}>
+                      <div style={{ height: 6, background: c.border, borderRadius: 3 }}>
                         <div style={{ height: "100%", width: `${value}%`, background: color, borderRadius: 3, transition: "width 0.5s ease" }} />
                       </div>
-                      <div style={{ fontSize: 10, color: c.muted }}>{detail} · <span style={{ fontStyle: "italic" }}>{ideal}</span></div>
                     </div>
                   ))}
+                </div>
+
+                {/* Measured Pace */}
+                <div
+                  style={{
+                    marginBottom: 20,
+                    background: c.card,
+                    border: `1px solid ${c.border}`,
+                    borderRadius: 10,
+                    padding: "16px",
+                    boxShadow: "0 4px 12px rgba(16,24,40,0.04)",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
+                    <span style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase" }}>Measured Pace</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: c.text }}>{metrics.wpm} WPM</span>
+                  </div>
+                  <div style={{ height: 6, background: c.border, borderRadius: 3, marginBottom: 6 }}>
+                    <div style={{ height: "100%", width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "#4a8c5c" : "#c97a2a", borderRadius: 3, transition: "width 0.5s ease" }} />
+                  </div>
+                  <div style={{ fontSize: 10, color: c.muted }}>Ideal negotiation pace: 130–160 WPM</div>
                 </div>
 
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 20 }}>
@@ -1110,12 +1143,15 @@ export default function Negotium() {
                 )}
 
                 {[
-                  { title: "Overall", text: feedback.overallTxt },
+                  { title: "Overall Assessment", text: feedback.overallTxt },
+                  { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
                   { title: "Pace & Rhythm", text: feedback.paceTxt },
                   { title: "Tone & Authority", text: feedback.toneTxt },
-                  { title: "Vocal Consistency", text: feedback.strengthTxt },
-                  { title: "Recommendation", text: feedback.recTxt },
-                ].map(({ title, text }) => (
+                  { title: "Clarity & Structure", text: feedback.clarityTxt },
+                  { title: "💪 Key Strength", text: feedback.strengthTxt },
+                  { title: "⚠️ Key Weakness", text: feedback.weaknessTxt },
+                  { title: "🎯 Recommendation", text: feedback.recTxt },
+                ].filter(({ text }) => text).map(({ title, text }) => (
                   <div
                     key={title}
                     style={{
@@ -1127,20 +1163,95 @@ export default function Negotium() {
                       boxShadow: "0 4px 12px rgba(16,24,40,0.04)",
                     }}
                   >
-                    <div
-                      style={{
-                        fontSize: 9,
-                        letterSpacing: "0.25em",
-                        color: c.muted,
-                        textTransform: "uppercase",
-                        marginBottom: 6,
-                      }}
-                    >
-                      {title}
-                    </div>
+                    <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 6 }}>{title}</div>
                     <div style={{ fontSize: 13, lineHeight: 1.8, color: c.text }}>{text}</div>
                   </div>
                 ))}
+
+                {/* Techniques Detected */}
+                {feedback.techniques?.length > 0 && (
+                  <div style={{ marginBottom: 16 }}>
+                    <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 8 }}>
+                      Techniques Detected ({feedback.techniques.length})
+                    </div>
+                    <div style={{ display: "grid", gap: 8 }}>
+                      {feedback.techniques.map((t: any, i: number) => (
+                        <div
+                          key={i}
+                          style={{
+                            background: c.card,
+                            border: `1px solid ${t.impact === "pos" ? "#4a8c5c" : t.impact === "neg" ? "#c04a2a" : c.border}`,
+                            borderRadius: 8,
+                            padding: "10px 12px",
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                            <span style={{ fontSize: 11, fontWeight: 700, color: c.text }}>{t.name}</span>
+                            <span style={{ fontSize: 9, padding: "2px 8px", borderRadius: 4, background: t.impact === "pos" ? "#e8f5e9" : t.impact === "neg" ? "#fbe9e7" : "#f5f5f5", color: t.impact === "pos" ? "#4a8c5c" : t.impact === "neg" ? "#c04a2a" : "#6b7280" }}>
+                              {t.impact === "pos" ? "EFFECTIVE" : t.impact === "neg" ? "NEEDS WORK" : "NEUTRAL"}
+                            </span>
+                          </div>
+                          <div style={{ fontSize: 12, fontStyle: "italic", color: "#6b7280", marginBottom: 4 }}>"{t.quote}"</div>
+                          <div style={{ fontSize: 11, color: c.text, lineHeight: 1.5 }}>{t.explanation}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Filler Words & Hedging */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+                  {/* Filler Words */}
+                  <div style={{ background: c.card, border: `1px solid ${c.border}`, borderRadius: 10, padding: "14px 16px" }}>
+                    <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 6 }}>Filler Words</div>
+                    <div style={{ fontSize: 28, fontWeight: 800, color: feedback.fillerWords?.count === 0 ? "#4a8c5c" : feedback.fillerWords?.count <= 3 ? "#c97a2a" : "#c04a2a", marginBottom: 4 }}>
+                      {feedback.fillerWords?.count || 0}
+                    </div>
+                    <div style={{ fontSize: 10, color: c.muted }}>
+                      {feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}
+                    </div>
+                    {feedback.fillerWords?.words?.length > 0 && (
+                      <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
+                        {feedback.fillerWords.words.map((w: string, i: number) => (
+                          <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#fbe9e7", color: "#c04a2a", borderRadius: 3 }}>{w}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Power Words */}
+                  <div style={{ background: c.card, border: `1px solid ${c.border}`, borderRadius: 10, padding: "14px 16px" }}>
+                    <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 6 }}>Power Words Used</div>
+                    <div style={{ fontSize: 28, fontWeight: 800, color: (feedback.powerWords?.length || 0) >= 3 ? "#4a8c5c" : (feedback.powerWords?.length || 0) >= 1 ? "#c97a2a" : "#c04a2a", marginBottom: 4 }}>
+                      {feedback.powerWords?.length || 0}
+                    </div>
+                    {feedback.powerWords?.length > 0 && (
+                      <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
+                        {feedback.powerWords.map((w: string, i: number) => (
+                          <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#e8f5e9", color: "#4a8c5c", borderRadius: 3 }}>{w}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Hedging Instances */}
+                {feedback.hedgingInstances?.length > 0 && (
+                  <div style={{ marginBottom: 16, background: c.card, border: `1px solid ${c.border}`, borderRadius: 10, padding: "14px 16px" }}>
+                    <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 8 }}>
+                      Hedging Language → Stronger Alternatives
+                    </div>
+                    <div style={{ display: "grid", gap: 6 }}>
+                      {feedback.hedgingInstances.map((h: any, i: number) => (
+                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
+                          <span style={{ color: "#c04a2a", textDecoration: "line-through" }}>"{h.phrase}"</span>
+                          <span style={{ color: c.muted }}>→</span>
+                          <span style={{ color: "#4a8c5c", fontWeight: 600 }}>"{h.suggestion}"</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {[
                   { label: "Recommended Negotiation Tips", tips: recNegTips },
@@ -1230,18 +1341,22 @@ export default function Negotium() {
                   Progress Chart
                 </div>
                 <div style={{ display: "flex", gap: 2, height: 60, alignItems: "flex-end" }}>
-                  {[...history].reverse().map((h, i) => (
+                  {[...history].reverse().map((h, i) => {
+                    const score = h.overall_score ?? h.overall ?? 0;
+                    return (
                     <div
                       key={i}
+                      title={`Session ${i + 1}: ${score}/100`}
                       style={{
                         flex: 1,
-                        background: h.overall >= 80 ? "#4a8c5c" : h.overall >= 60 ? "#6b7280" : "#c04a2a",
-                        height: `${h.overall}%`,
+                        background: score >= 80 ? "#4a8c5c" : score >= 60 ? "#6b7280" : "#c04a2a",
+                        height: `${score}%`,
                         borderRadius: "2px 2px 0 0",
                         minWidth: 8,
+                        transition: "height 0.3s ease",
                       }}
                     />
-                  ))}
+                  )})}
                 </div>
                 <div style={{ fontSize: 9, color: c.muted, marginTop: 6 }}>
                   Each bar = one session (oldest → newest)
