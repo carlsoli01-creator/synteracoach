@@ -2,7 +2,15 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-const DURATION = 20;
+const DURATION_OPTIONS = [
+  { label: "10s", value: 10 },
+  { label: "30s", value: 30 },
+  { label: "45s", value: 45 },
+  { label: "1m", value: 60 },
+  { label: "1m 30s", value: 90 },
+  { label: "2m", value: 120 },
+];
+const DEFAULT_DURATION = 30;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
 
 function getVariance(arr) {
@@ -409,7 +417,8 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: { onStart: () 
 export default function Negotium() {
   const { user } = useAuth();
   const [phase, setPhase] = useState("idle");
-  const [timeLeft, setTimeLeft] = useState(DURATION);
+  const [selectedDuration, setSelectedDuration] = useState(DEFAULT_DURATION);
+  const [timeLeft, setTimeLeft] = useState(DEFAULT_DURATION);
   const [metrics, setMetrics] = useState(null);
   const [feedback, setFeedback] = useState(null);
   const [history, setHistory] = useState<any[]>([]);
@@ -480,7 +489,7 @@ export default function Negotium() {
   const [livePace, setLivePace] = useState(0);
   const [liveEnergy, setLiveEnergy] = useState(0);
 
-  const ringOffset = CIRCUMFERENCE * (timeLeft / DURATION);
+  const ringOffset = CIRCUMFERENCE * (timeLeft / selectedDuration);
   const isDark = theme === "dark";
   const c = {
     bg: isDark ? "#070707" : "#f7f7f8",
@@ -659,7 +668,7 @@ export default function Negotium() {
       mediaRecorderRef.current = mr;
       mr.start();
       setPhase("recording");
-      setTimeLeft(DURATION);
+      setTimeLeft(selectedDuration);
       setMetrics(null);
       setFeedback(null);
 
@@ -691,7 +700,7 @@ export default function Negotium() {
       };
       animate();
 
-      let t = DURATION;
+      let t = selectedDuration;
       timerRef.current = setInterval(() => {
         t--;
         setTimeLeft(t);
@@ -710,19 +719,19 @@ export default function Negotium() {
     } catch (e: any) {
       setMicError(e?.message || "Microphone access denied. Please allow mic access in your browser and try again.");
     }
-  }, [analyzeVoice]);
+  }, [analyzeVoice, selectedDuration]);
 
   const reset = useCallback(() => {
     stopAll();
     try { recognitionRef.current?.stop(); } catch (_) {}
     transcriptRef.current = "";
     setPhase("idle");
-    setTimeLeft(DURATION);
+    setTimeLeft(selectedDuration);
     setMetrics(null);
     setFeedback(null);
     setWaveData(new Array(80).fill(0.5));
     setMicError("");
-  }, [stopAll]);
+  }, [stopAll, selectedDuration]);
 
   const tagColor = (t) => (t === "pos" ? "#4a8c5c" : t === "warn" ? "#c97a2a" : "#c04a2a");
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
@@ -1013,6 +1022,32 @@ export default function Negotium() {
                     </div>
                   );
                 })}
+              </div>
+            )}
+
+            {phase === "idle" && (
+              <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+                {DURATION_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => { setSelectedDuration(opt.value); setTimeLeft(opt.value); }}
+                    style={{
+                      padding: "8px 16px",
+                      fontSize: 13,
+                      fontWeight: selectedDuration === opt.value ? 700 : 500,
+                      letterSpacing: "0.02em",
+                      background: selectedDuration === opt.value ? c.text : "transparent",
+                      color: selectedDuration === opt.value ? c.bg : c.muted,
+                      border: `1.5px solid ${selectedDuration === opt.value ? c.text : c.border}`,
+                      borderRadius: 8,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      minWidth: 56,
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
               </div>
             )}
 
