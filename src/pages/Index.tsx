@@ -108,29 +108,6 @@ function HistoryCard({ entry, index }) {
 
 }
 
-const NEGOTIATION_TIPS = [
-"Pause strategically after key offers to create leverage.",
-"Anchor your first offer confidently and without apology.",
-"Use downward inflection to signal finality and conviction.",
-"Break complex proposals into small, digestible chunks.",
-"Mirror the other party's tempo briefly to build rapport.",
-"Use silence as a tool — let the other side fill it.",
-"Start important sentences with an anchor word (e.g., 'Consider').",
-"Practice 'offer, pause, and hold' drills regularly.",
-"Label emotions neutrally to defuse tension (e.g., 'I hear concern').",
-"Slow your delivery on the concession — make it deliberate.",
-"Keep your pitch steady when presenting numbers.",
-"Use micro-pauses (250–400ms) to sound deliberate, not hesitant.",
-"Reframe the discussion with a single decisive sentence.",
-"Ask calibrated questions to extract information ('How would you...?').",
-"Summarize agreements before moving on to new points.",
-"Use consistent terminology to reduce ambiguity.",
-"Avoid filler words when making the ask — pause instead.",
-"Practice mock negotiations under a time constraint.",
-"Record and compare your delivery across sessions.",
-"End offers with a downward tone to close space for rebuttal."];
-
-
 const COMMUNICATION_TIPS = [
 "Speak from your diaphragm for fuller resonance.",
 "Warm up your voice with lip trills and humming.",
@@ -151,7 +128,20 @@ const COMMUNICATION_TIPS = [
 "Monitor and reduce filler words like 'um' and 'like'.",
 "Practice sustaining consistent speaking energy for 60s stretches.",
 "Use shorter opening sentences to establish clarity.",
-"End with a clear, downward-inflected close to each idea."];
+"End with a clear, downward-inflected close to each idea.",
+"Pause strategically after key points to create impact.",
+"Use downward inflection to signal finality and conviction.",
+"Break complex ideas into small, digestible chunks.",
+"Mirror the other person's tempo briefly to build rapport.",
+"Use silence as a tool — let the other person fill it.",
+"Start important sentences with an anchor word (e.g., 'Consider').",
+"Label emotions neutrally to defuse tension (e.g., 'I hear concern').",
+"Keep your pitch steady when presenting key information.",
+"Use micro-pauses (250–400ms) to sound deliberate, not hesitant.",
+"Ask calibrated questions to engage listeners ('How would you...?').",
+"Summarize key points before moving on to new ideas.",
+"Use consistent terminology to reduce ambiguity.",
+"Record and compare your delivery across sessions."];
 
 
 const QUIZ_QUESTIONS = [
@@ -172,7 +162,7 @@ const QUIZ_QUESTIONS = [
 },
 {
   id: "nerves",
-  q: "Do you feel nervous when speaking in negotiations?",
+  q: "Do you feel nervous when speaking publicly?",
   options: ["Always", "Often", "Sometimes", "Rarely", "Never"]
 },
 {
@@ -188,17 +178,15 @@ const QUIZ_QUESTIONS = [
 
 
 function derivePersonalization(answers: Record<string, string>) {
-  const picksNeg: string[] = [];
   const picksComm: string[] = [];
-  if (answers.goal?.includes("Pace")) {picksComm.push(COMMUNICATION_TIPS[6]);picksNeg.push(NEGOTIATION_TIPS[0]);}
-  if (answers.goal?.includes("Tone")) {picksComm.push(COMMUNICATION_TIPS[0]);picksNeg.push(NEGOTIATION_TIPS[1]);}
-  if (answers.goal?.includes("Clarity")) {picksComm.push(COMMUNICATION_TIPS[2]);picksNeg.push(NEGOTIATION_TIPS[3]);}
-  if (answers.goal?.includes("Confidence")) {picksComm.push(COMMUNICATION_TIPS[5]);picksNeg.push(NEGOTIATION_TIPS[8]);}
-  if (answers.goal?.includes("Conciseness")) {picksComm.push(COMMUNICATION_TIPS[12]);picksNeg.push(NEGOTIATION_TIPS[15]);}
+  if (answers.goal?.includes("Pace")) picksComm.push(COMMUNICATION_TIPS[6], COMMUNICATION_TIPS[20]);
+  if (answers.goal?.includes("Tone")) picksComm.push(COMMUNICATION_TIPS[0], COMMUNICATION_TIPS[21]);
+  if (answers.goal?.includes("Clarity")) picksComm.push(COMMUNICATION_TIPS[2], COMMUNICATION_TIPS[22]);
+  if (answers.goal?.includes("Confidence")) picksComm.push(COMMUNICATION_TIPS[5], COMMUNICATION_TIPS[28]);
+  if (answers.goal?.includes("Conciseness")) picksComm.push(COMMUNICATION_TIPS[12], COMMUNICATION_TIPS[31]);
   if (answers.filler?.includes("Very") || answers.filler?.includes("Sometimes")) picksComm.push(COMMUNICATION_TIPS[16]);
   if (answers.nerves?.includes("Always") || answers.nerves?.includes("Often")) picksComm.push(COMMUNICATION_TIPS[10]);
-  for (let i = 0; picksNeg.length < 4; i++) picksNeg.push(NEGOTIATION_TIPS[i % NEGOTIATION_TIPS.length]);
-  for (let i = 0; picksComm.length < 4; i++) picksComm.push(COMMUNICATION_TIPS[i % COMMUNICATION_TIPS.length]);
+  for (let i = 0; picksComm.length < 6; i++) picksComm.push(COMMUNICATION_TIPS[i % COMMUNICATION_TIPS.length]);
 
   // Personalized subtitle based on goal
   const goalMap: Record<string, string> = {
@@ -220,7 +208,7 @@ function derivePersonalization(answers: Record<string, string>) {
   };
   const heroFocus = focusMap[answers.goalType] || "Be Analyzed.";
 
-  return { neg: picksNeg.slice(0, 6), comm: picksComm.slice(0, 6), subtitle, heroFocus };
+  return { neg: [], comm: picksComm.slice(0, 6), subtitle, heroFocus };
 }
 
 function OnboardingQuiz({ onFinish }: {onFinish: (result: {neg: string[];comm: string[];answers: Record<string, string>;}) => void;}) {
@@ -441,7 +429,6 @@ export default function Negotium() {
   const [micError, setMicError] = useState("");
   const [theme, setTheme] = useState("light");
   const [spacingMode, setSpacingMode] = useState("airy");
-  const [recNegTips, setRecNegTips] = useState<string[]>([]);
   const [recCommTips, setRecCommTips] = useState<string[]>([]);
   const [userSubtitle, setUserSubtitle] = useState("Voice Intelligence Platform");
   const [heroFocus, setHeroFocus] = useState("Be Analyzed.");
@@ -467,8 +454,7 @@ export default function Negotium() {
       if (saved) {
         const { answers } = JSON.parse(saved);
         const p = derivePersonalization(answers);
-        setRecNegTips(p.neg);
-        setRecCommTips(p.comm);
+        setRecCommTips([...new Set([...(p.comm || [])].slice(0, 6))]);
         setUserSubtitle(p.subtitle);
         setHeroFocus(p.heroFocus);
       }
@@ -561,7 +547,7 @@ export default function Negotium() {
         return;
       }
 
-      const { scores, analysis, tags, negotiationTips, communicationTips, techniques, fillerWords, hedgingInstances, powerWords, wordChoiceScore, structureScore, persuasionScore } = data;
+      const { scores, analysis, tags, communicationTips, techniques, fillerWords, hedgingInstances, powerWords, wordChoiceScore, structureScore, persuasionScore } = data;
 
       // Compute final measured pace from raw audio data
       const finalWpm = durationSeconds > 0 ? transcript.trim().split(/\s+/).filter(Boolean).length / durationSeconds * 60 : 0;
@@ -589,7 +575,6 @@ export default function Negotium() {
         hedgingInstances: hedgingInstances || [],
         powerWords: powerWords || []
       });
-      setRecNegTips(negotiationTips || []);
       setRecCommTips(communicationTips || []);
 
       // Save session to database
@@ -601,7 +586,7 @@ export default function Negotium() {
         clarity_score: scores.clarity,
         transcript,
         feedback: { analysis, tags },
-        negotiation_tips: negotiationTips || [],
+        negotiation_tips: [],
         communication_tips: communicationTips || [],
         duration_seconds: durationSeconds
       };
@@ -752,8 +737,7 @@ export default function Negotium() {
         onFinish={({ neg, comm, answers }) => {
           localStorage.setItem("negotium_quiz", JSON.stringify({ answers }));
           const p = derivePersonalization(answers);
-          setRecNegTips(neg);
-          setRecCommTips(comm);
+          setRecCommTips([...new Set([...(neg || []), ...(comm || [])].slice(0, 6))]);
           setUserSubtitle(p.subtitle);
           setHeroFocus(p.heroFocus);
           setQuizVisible(false);
@@ -1136,7 +1120,7 @@ export default function Negotium() {
                   <div style={{ height: 6, background: c.border, borderRadius: 3, marginBottom: 6 }}>
                     <div style={{ height: "100%", width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "#4a8c5c" : "#c97a2a", borderRadius: 3, transition: "width 0.5s ease" }} />
                   </div>
-                  <div style={{ fontSize: 10, color: c.muted }}>Ideal negotiation pace: 130–160 WPM</div>
+                  <div style={{ fontSize: 10, color: c.muted }}>Ideal speaking pace: 130–160 WPM</div>
                 </div>
 
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 20 }}>
@@ -1288,7 +1272,6 @@ export default function Negotium() {
             }
 
                 {[
-            { label: "Recommended Negotiation Tips", tips: recNegTips },
             { label: "Recommended Communication Tips", tips: recCommTips }].
             map(({ label, tips }) =>
             <div key={label} style={{ marginTop: 16 }}>
@@ -1410,7 +1393,6 @@ export default function Negotium() {
         {tab === "tips" &&
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {[
-          { label: "Negotiation Tips", tips: NEGOTIATION_TIPS },
           { label: "Communication Tips", tips: COMMUNICATION_TIPS }].
           map(({ label, tips }) =>
           <div key={label}>
