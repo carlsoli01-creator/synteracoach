@@ -115,7 +115,6 @@ Return ONLY raw JSON (no markdown, no code blocks):
   "negotiationTips": ["<tip 1>", "<tip 2>", "<tip 3>"],
   "communicationTips": ["<tip 1>", "<tip 2>", "<tip 3>"],
   "wordChoiceScore": <0-100>,
-  "structureScore": <0-100>,
   "persuasionScore": <0-100>
 }
 
@@ -125,7 +124,9 @@ CRITICAL RULES:
 - If they hedged or used filler, show the exact instance and provide the stronger alternative.
 - Scores should reflect the WORDS and DELIVERY, not just volume.
 - A quiet speaker with perfect word choice should score higher than a loud speaker with weak language.
-- Be specific. "Good job" is unacceptable. "Your use of tricolon in 'we build, we deliver, we succeed' creates memorable rhythm" is the standard.`;
+- Be specific. "Good job" is unacceptable. "Your use of tricolon in 'we build, we deliver, we succeed' creates memorable rhythm" is the standard.
+- SCORING GUIDELINES: Be GENEROUS with scores. Casual everyday speech should score 50-65. Anyone making an effort to speak clearly and purposefully should score 65-80. Only truly poor, incoherent speech should score below 40. Award points liberally for power words — common persuasive words like "need", "important", "will", "must", "clearly", "definitely", "absolutely" all count. For wordChoiceScore, any clear and intentional language scores 60+. For persuasionScore, any speech with a clear point or ask scores 55+. Recognize ANY persuasion attempt generously.
+- Power words should include a BROAD list: "because", "imagine", "guaranteed", "proven", "exclusive", "immediately", "need", "must", "will", "important", "critical", "essential", "definitely", "absolutely", "clearly", "certainly", "actually", "specifically", "exactly", "directly", "effectively", "successfully", "opportunity", "value", "benefit", "result", "achieve", "ensure", "deliver", "commit".`;
 
     const userPrompt = `Analyze this speech transcript with extreme precision. Focus on the words themselves, the delivery patterns, and any rhetorical or persuasion techniques used.
 

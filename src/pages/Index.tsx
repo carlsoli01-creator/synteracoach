@@ -562,7 +562,7 @@ export default function Negotium() {
         pace: scores.pace, conf: scores.confidence, clar: scores.clarity,
         delivery: scores.delivery || scores.overall, overall: scores.overall,
         measuredPace, wpm: Math.round(finalWpm),
-        wordChoice: wordChoiceScore || 0, structure: structureScore || 0, persuasion: persuasionScore || 0,
+        wordChoice: wordChoiceScore || 0, persuasion: persuasionScore || 0,
       });
       setFeedback({
         overallTxt: analysis.overall,
@@ -1057,7 +1057,7 @@ export default function Negotium() {
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gridTemplateColumns: "repeat(2, 1fr)",
                     gap: 12,
                     marginBottom: 20,
                     background: c.card,
@@ -1068,9 +1068,8 @@ export default function Negotium() {
                   }}
                 >
                   {[
-                    { label: "Word Choice", value: metrics.wordChoice, color: metrics.wordChoice >= 70 ? "#4a8c5c" : metrics.wordChoice >= 45 ? "#c97a2a" : "#c04a2a" },
-                    { label: "Structure", value: metrics.structure, color: metrics.structure >= 70 ? "#4a8c5c" : metrics.structure >= 45 ? "#c97a2a" : "#c04a2a" },
-                    { label: "Persuasion", value: metrics.persuasion, color: metrics.persuasion >= 70 ? "#4a8c5c" : metrics.persuasion >= 45 ? "#c97a2a" : "#c04a2a" },
+                    { label: "Word Choice", value: metrics.wordChoice, color: metrics.wordChoice >= 55 ? "#4a8c5c" : metrics.wordChoice >= 30 ? "#c97a2a" : "#c04a2a" },
+                    { label: "Persuasion", value: metrics.persuasion, color: metrics.persuasion >= 55 ? "#4a8c5c" : metrics.persuasion >= 30 ? "#c97a2a" : "#c04a2a" },
                   ].map(({ label, value, color }) => (
                     <div key={label}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
@@ -1222,7 +1221,7 @@ export default function Negotium() {
                   {/* Power Words */}
                   <div style={{ background: c.card, border: `1px solid ${c.border}`, borderRadius: 10, padding: "14px 16px" }}>
                     <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 6 }}>Power Words Used</div>
-                    <div style={{ fontSize: 28, fontWeight: 800, color: (feedback.powerWords?.length || 0) >= 3 ? "#4a8c5c" : (feedback.powerWords?.length || 0) >= 1 ? "#c97a2a" : "#c04a2a", marginBottom: 4 }}>
+                    <div style={{ fontSize: 28, fontWeight: 800, color: (feedback.powerWords?.length || 0) >= 1 ? "#4a8c5c" : "#c97a2a", marginBottom: 4 }}>
                       {feedback.powerWords?.length || 0}
                     </div>
                     {feedback.powerWords?.length > 0 && (
