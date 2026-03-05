@@ -3,13 +3,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
 const DURATION_OPTIONS = [
-  { label: "10s", value: 10 },
-  { label: "30s", value: 30 },
-  { label: "45s", value: 45 },
-  { label: "1m", value: 60 },
-  { label: "1m 30s", value: 90 },
-  { label: "2m", value: 120 },
-];
+{ label: "10s", value: 10 },
+{ label: "30s", value: 30 },
+{ label: "45s", value: 45 },
+{ label: "1m", value: 60 },
+{ label: "1m 30s", value: 90 },
+{ label: "2m", value: 120 }];
+
 const DEFAULT_DURATION = 30;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
 
@@ -37,8 +37,8 @@ function ScoreRing({ score, label, color }) {
           strokeLinecap="round"
           strokeDasharray={circ}
           strokeDashoffset={offset}
-          style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s ease" }}
-        />
+          style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s ease" }} />
+        
         <text
           x={36}
           y={40}
@@ -46,14 +46,14 @@ function ScoreRing({ score, label, color }) {
           fill="#0b0b0b"
           fontSize={14}
           fontFamily="Inter, sans-serif"
-          fontWeight="bold"
-        >
+          fontWeight="bold">
+          
           {score}
         </text>
       </svg>
       <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#9aa0a6" }}>{label}</span>
-    </div>
-  );
+    </div>);
+
 }
 
 function HistoryCard({ entry, index }) {
@@ -61,15 +61,15 @@ function HistoryCard({ entry, index }) {
   const pace = entry.pace_score ?? entry.pace;
   const conf = entry.confidence_score ?? entry.conf;
   const clar = entry.clarity_score ?? entry.clar;
-  const time = entry.created_at
-    ? new Date(entry.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    : entry.time;
-  const date = entry.created_at
-    ? new Date(entry.created_at).toLocaleDateString([], { month: "short", day: "numeric" })
-    : "";
+  const time = entry.created_at ?
+  new Date(entry.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) :
+  entry.time;
+  const date = entry.created_at ?
+  new Date(entry.created_at).toLocaleDateString([], { month: "short", day: "numeric" }) :
+  "";
   const grade = score >= 80 ? "A" : score >= 65 ? "B" : score >= 50 ? "C" : "D";
   const gradeColor =
-    score >= 80 ? "#4a8c5c" : score >= 65 ? "#6b7280" : score >= 50 ? "#c97a2a" : "#c04a2a";
+  score >= 80 ? "#4a8c5c" : score >= 65 ? "#6b7280" : score >= 50 ? "#c97a2a" : "#c04a2a";
   return (
     <div
       style={{
@@ -80,9 +80,9 @@ function HistoryCard({ entry, index }) {
         display: "flex",
         alignItems: "center",
         gap: 16,
-        boxShadow: "0 6px 24px rgba(16,24,40,0.06)",
-      }}
-    >
+        boxShadow: "0 6px 24px rgba(16,24,40,0.06)"
+      }}>
+      
       <div style={{ fontSize: 28, color: gradeColor, fontWeight: "bold", minWidth: 24 }}>{grade}</div>
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: 11, color: "#0b0b0b", marginBottom: 4 }}>
@@ -90,111 +90,111 @@ function HistoryCard({ entry, index }) {
         </div>
         <div style={{ display: "flex", gap: 12 }}>
           {[
-            { k: "pace", v: pace },
-            { k: "conf", v: conf },
-            { k: "clar", v: clar },
-          ].map(({ k, v }) => (
-            <div key={k} style={{ fontSize: 9, color: "#9aa0a6", letterSpacing: "0.1em" }}>
+          { k: "pace", v: pace },
+          { k: "conf", v: conf },
+          { k: "clar", v: clar }].
+          map(({ k, v }) =>
+          <div key={k} style={{ fontSize: 9, color: "#9aa0a6", letterSpacing: "0.1em" }}>
               {k.toUpperCase()} <span style={{ color: "#6b7280" }}>{v}%</span>
             </div>
-          ))}
+          )}
         </div>
       </div>
       <div style={{ fontSize: 9, color: "#9aa0a6", textAlign: "right" }}>
         {date && <div>{date}</div>}
         <div>{time}</div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 const NEGOTIATION_TIPS = [
-  "Pause strategically after key offers to create leverage.",
-  "Anchor your first offer confidently and without apology.",
-  "Use downward inflection to signal finality and conviction.",
-  "Break complex proposals into small, digestible chunks.",
-  "Mirror the other party's tempo briefly to build rapport.",
-  "Use silence as a tool — let the other side fill it.",
-  "Start important sentences with an anchor word (e.g., 'Consider').",
-  "Practice 'offer, pause, and hold' drills regularly.",
-  "Label emotions neutrally to defuse tension (e.g., 'I hear concern').",
-  "Slow your delivery on the concession — make it deliberate.",
-  "Keep your pitch steady when presenting numbers.",
-  "Use micro-pauses (250–400ms) to sound deliberate, not hesitant.",
-  "Reframe the discussion with a single decisive sentence.",
-  "Ask calibrated questions to extract information ('How would you...?').",
-  "Summarize agreements before moving on to new points.",
-  "Use consistent terminology to reduce ambiguity.",
-  "Avoid filler words when making the ask — pause instead.",
-  "Practice mock negotiations under a time constraint.",
-  "Record and compare your delivery across sessions.",
-  "End offers with a downward tone to close space for rebuttal.",
-];
+"Pause strategically after key offers to create leverage.",
+"Anchor your first offer confidently and without apology.",
+"Use downward inflection to signal finality and conviction.",
+"Break complex proposals into small, digestible chunks.",
+"Mirror the other party's tempo briefly to build rapport.",
+"Use silence as a tool — let the other side fill it.",
+"Start important sentences with an anchor word (e.g., 'Consider').",
+"Practice 'offer, pause, and hold' drills regularly.",
+"Label emotions neutrally to defuse tension (e.g., 'I hear concern').",
+"Slow your delivery on the concession — make it deliberate.",
+"Keep your pitch steady when presenting numbers.",
+"Use micro-pauses (250–400ms) to sound deliberate, not hesitant.",
+"Reframe the discussion with a single decisive sentence.",
+"Ask calibrated questions to extract information ('How would you...?').",
+"Summarize agreements before moving on to new points.",
+"Use consistent terminology to reduce ambiguity.",
+"Avoid filler words when making the ask — pause instead.",
+"Practice mock negotiations under a time constraint.",
+"Record and compare your delivery across sessions.",
+"End offers with a downward tone to close space for rebuttal."];
+
 
 const COMMUNICATION_TIPS = [
-  "Speak from your diaphragm for fuller resonance.",
-  "Warm up your voice with lip trills and humming.",
-  "Chunk long sentences into shorter, clearer phrases.",
-  "Place stress on the key word to change emphasis.",
-  "Breathe at punctuation to maintain phrasing.",
-  "Maintain a steady volume to project confidence.",
-  "Use deliberate pacing: aim for clarity over speed.",
-  "Reduce upward inflection to avoid sounding unsure.",
-  "Record yourself and note where volume drops occur.",
-  "Practice reading aloud with exaggerated stress patterns.",
-  "Use pauses to allow listeners to process key points.",
-  "Avoid trailing questions at the end of statements.",
-  "Keep sentences active and concise.",
-  "Use vocal variety to keep attention on important words.",
-  "Slow down slightly when delivering the main point.",
-  "Match the listener's speaking pace to build rapport.",
-  "Monitor and reduce filler words like 'um' and 'like'.",
-  "Practice sustaining consistent speaking energy for 60s stretches.",
-  "Use shorter opening sentences to establish clarity.",
-  "End with a clear, downward-inflected close to each idea.",
-];
+"Speak from your diaphragm for fuller resonance.",
+"Warm up your voice with lip trills and humming.",
+"Chunk long sentences into shorter, clearer phrases.",
+"Place stress on the key word to change emphasis.",
+"Breathe at punctuation to maintain phrasing.",
+"Maintain a steady volume to project confidence.",
+"Use deliberate pacing: aim for clarity over speed.",
+"Reduce upward inflection to avoid sounding unsure.",
+"Record yourself and note where volume drops occur.",
+"Practice reading aloud with exaggerated stress patterns.",
+"Use pauses to allow listeners to process key points.",
+"Avoid trailing questions at the end of statements.",
+"Keep sentences active and concise.",
+"Use vocal variety to keep attention on important words.",
+"Slow down slightly when delivering the main point.",
+"Match the listener's speaking pace to build rapport.",
+"Monitor and reduce filler words like 'um' and 'like'.",
+"Practice sustaining consistent speaking energy for 60s stretches.",
+"Use shorter opening sentences to establish clarity.",
+"End with a clear, downward-inflected close to each idea."];
+
 
 const QUIZ_QUESTIONS = [
-  {
-    id: "goal",
-    q: "What do you most want to improve?",
-    options: ["Pace", "Tone/Authority", "Clarity", "Confidence", "Conciseness"],
-  },
-  {
-    id: "experience",
-    q: "How often do you practice speaking exercises?",
-    options: ["Daily", "Weekly", "Monthly", "Rarely", "Never"],
-  },
-  {
-    id: "audience",
-    q: "Who is your most common audience?",
-    options: ["One person", "Small team", "Large group", "Clients/Customers", "Remote calls"],
-  },
-  {
-    id: "nerves",
-    q: "Do you feel nervous when speaking in negotiations?",
-    options: ["Always", "Often", "Sometimes", "Rarely", "Never"],
-  },
-  {
-    id: "filler",
-    q: "Do you use filler words (um/like) often?",
-    options: ["Very often", "Sometimes", "Occasionally", "Rarely", "Never"],
-  },
-  {
-    id: "goalType",
-    q: "Which result matters most?",
-    options: ["Close deals", "Appear confident", "Be concise", "Be persuasive", "Improve clarity"],
-  },
-];
+{
+  id: "goal",
+  q: "What do you most want to improve?",
+  options: ["Pace", "Tone/Authority", "Clarity", "Confidence", "Conciseness"]
+},
+{
+  id: "experience",
+  q: "How often do you practice speaking exercises?",
+  options: ["Daily", "Weekly", "Monthly", "Rarely", "Never"]
+},
+{
+  id: "audience",
+  q: "Who is your most common audience?",
+  options: ["One person", "Small team", "Large group", "Clients/Customers", "Remote calls"]
+},
+{
+  id: "nerves",
+  q: "Do you feel nervous when speaking in negotiations?",
+  options: ["Always", "Often", "Sometimes", "Rarely", "Never"]
+},
+{
+  id: "filler",
+  q: "Do you use filler words (um/like) often?",
+  options: ["Very often", "Sometimes", "Occasionally", "Rarely", "Never"]
+},
+{
+  id: "goalType",
+  q: "Which result matters most?",
+  options: ["Close deals", "Appear confident", "Be concise", "Be persuasive", "Improve clarity"]
+}];
+
 
 function derivePersonalization(answers: Record<string, string>) {
   const picksNeg: string[] = [];
   const picksComm: string[] = [];
-  if (answers.goal?.includes("Pace")) { picksComm.push(COMMUNICATION_TIPS[6]); picksNeg.push(NEGOTIATION_TIPS[0]); }
-  if (answers.goal?.includes("Tone")) { picksComm.push(COMMUNICATION_TIPS[0]); picksNeg.push(NEGOTIATION_TIPS[1]); }
-  if (answers.goal?.includes("Clarity")) { picksComm.push(COMMUNICATION_TIPS[2]); picksNeg.push(NEGOTIATION_TIPS[3]); }
-  if (answers.goal?.includes("Confidence")) { picksComm.push(COMMUNICATION_TIPS[5]); picksNeg.push(NEGOTIATION_TIPS[8]); }
-  if (answers.goal?.includes("Conciseness")) { picksComm.push(COMMUNICATION_TIPS[12]); picksNeg.push(NEGOTIATION_TIPS[15]); }
+  if (answers.goal?.includes("Pace")) {picksComm.push(COMMUNICATION_TIPS[6]);picksNeg.push(NEGOTIATION_TIPS[0]);}
+  if (answers.goal?.includes("Tone")) {picksComm.push(COMMUNICATION_TIPS[0]);picksNeg.push(NEGOTIATION_TIPS[1]);}
+  if (answers.goal?.includes("Clarity")) {picksComm.push(COMMUNICATION_TIPS[2]);picksNeg.push(NEGOTIATION_TIPS[3]);}
+  if (answers.goal?.includes("Confidence")) {picksComm.push(COMMUNICATION_TIPS[5]);picksNeg.push(NEGOTIATION_TIPS[8]);}
+  if (answers.goal?.includes("Conciseness")) {picksComm.push(COMMUNICATION_TIPS[12]);picksNeg.push(NEGOTIATION_TIPS[15]);}
   if (answers.filler?.includes("Very") || answers.filler?.includes("Sometimes")) picksComm.push(COMMUNICATION_TIPS[16]);
   if (answers.nerves?.includes("Always") || answers.nerves?.includes("Often")) picksComm.push(COMMUNICATION_TIPS[10]);
   for (let i = 0; picksNeg.length < 4; i++) picksNeg.push(NEGOTIATION_TIPS[i % NEGOTIATION_TIPS.length]);
@@ -206,7 +206,7 @@ function derivePersonalization(answers: Record<string, string>) {
     "Tone/Authority": "Tuned for tone & authority building",
     "Clarity": "Focused on crystal-clear delivery",
     "Confidence": "Designed to build vocal confidence",
-    "Conciseness": "Streamlined for concise impact",
+    "Conciseness": "Streamlined for concise impact"
   };
   const subtitle = goalMap[answers.goal] || "Voice Intelligence Platform";
 
@@ -216,14 +216,14 @@ function derivePersonalization(answers: Record<string, string>) {
     "Appear confident": "Command the Room.",
     "Be concise": "Say More with Less.",
     "Be persuasive": "Persuade with Precision.",
-    "Improve clarity": "Speak with Clarity.",
+    "Improve clarity": "Speak with Clarity."
   };
   const heroFocus = focusMap[answers.goalType] || "Be Analyzed.";
 
   return { neg: picksNeg.slice(0, 6), comm: picksComm.slice(0, 6), subtitle, heroFocus };
 }
 
-function OnboardingQuiz({ onFinish }: { onFinish: (result: { neg: string[]; comm: string[]; answers: Record<string, string> }) => void }) {
+function OnboardingQuiz({ onFinish }: {onFinish: (result: {neg: string[];comm: string[];answers: Record<string, string>;}) => void;}) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const q = QUIZ_QUESTIONS[step];
@@ -242,9 +242,9 @@ function OnboardingQuiz({ onFinish }: { onFinish: (result: { neg: string[]; comm
         alignItems: "center",
         justifyContent: "center",
         background: "rgba(2,6,23,0.5)",
-        zIndex: 60,
-      }}
-    >
+        zIndex: 60
+      }}>
+      
       <div
         style={{
           width: "min(540px, 92vw)",
@@ -252,9 +252,9 @@ function OnboardingQuiz({ onFinish }: { onFinish: (result: { neg: string[]; comm
           border: "1px solid #e6e6e6",
           borderRadius: 14,
           padding: 28,
-          boxShadow: "0 24px 64px rgba(16,24,40,0.18)",
-        }}
-      >
+          boxShadow: "0 24px 64px rgba(16,24,40,0.18)"
+        }}>
+        
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
           <div style={{ fontSize: 18, fontWeight: 800, color: "#0b0b0b" }}>Welcome — Quick Setup</div>
           <div style={{ fontSize: 12, color: "#9aa0a6" }}>
@@ -263,26 +263,26 @@ function OnboardingQuiz({ onFinish }: { onFinish: (result: { neg: string[]; comm
         </div>
         <div style={{ fontSize: 14, color: "#0b0b0b", marginBottom: 12, fontWeight: 500 }}>{q.q}</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
-          {q.options.map((opt) => (
-            <button
-              key={opt}
-              onClick={() => setAnswers((a) => ({ ...a, [q.id]: opt }))}
-              style={{
-                textAlign: "left",
-                padding: "10px 14px",
-                borderRadius: 8,
-                cursor: "pointer",
-                border: answers[q.id] === opt ? "2px solid #6b7280" : "1px solid #e6e6e6",
-                background: answers[q.id] === opt ? "#f4f4f5" : "#fff",
-                fontWeight: answers[q.id] === opt ? 600 : 400,
-                fontSize: 13,
-                color: "#0b0b0b",
-                transition: "all .15s",
-              }}
-            >
+          {q.options.map((opt) =>
+          <button
+            key={opt}
+            onClick={() => setAnswers((a) => ({ ...a, [q.id]: opt }))}
+            style={{
+              textAlign: "left",
+              padding: "10px 14px",
+              borderRadius: 8,
+              cursor: "pointer",
+              border: answers[q.id] === opt ? "2px solid #6b7280" : "1px solid #e6e6e6",
+              background: answers[q.id] === opt ? "#f4f4f5" : "#fff",
+              fontWeight: answers[q.id] === opt ? 600 : 400,
+              fontSize: 13,
+              color: "#0b0b0b",
+              transition: "all .15s"
+            }}>
+            
               {opt}
             </button>
-          ))}
+          )}
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <button
@@ -295,106 +295,106 @@ function OnboardingQuiz({ onFinish }: { onFinish: (result: { neg: string[]; comm
               background: "transparent",
               cursor: step === 0 ? "not-allowed" : "pointer",
               color: "#9aa0a6",
-              fontSize: 13,
-            }}
-          >
+              fontSize: 13
+            }}>
+            
             Back
           </button>
-          {step < QUIZ_QUESTIONS.length - 1 ? (
-            <button
-              onClick={() => answers[q.id] && setStep((s) => s + 1)}
-              disabled={!answers[q.id]}
-              style={{
-                padding: "10px 22px",
-                borderRadius: 8,
-                border: "none",
-                background: answers[q.id] ? "linear-gradient(90deg,#111827,#1f2937)" : "#d1d5db",
-                color: "#fff",
-                cursor: answers[q.id] ? "pointer" : "not-allowed",
-                fontSize: 13,
-                fontWeight: 600,
-                opacity: answers[q.id] ? 1 : 0.6,
-                transition: "all 0.2s",
-              }}
-            >
+          {step < QUIZ_QUESTIONS.length - 1 ?
+          <button
+            onClick={() => answers[q.id] && setStep((s) => s + 1)}
+            disabled={!answers[q.id]}
+            style={{
+              padding: "10px 22px",
+              borderRadius: 8,
+              border: "none",
+              background: answers[q.id] ? "linear-gradient(90deg,#111827,#1f2937)" : "#d1d5db",
+              color: "#fff",
+              cursor: answers[q.id] ? "pointer" : "not-allowed",
+              fontSize: 13,
+              fontWeight: 600,
+              opacity: answers[q.id] ? 1 : 0.6,
+              transition: "all 0.2s"
+            }}>
+            
               Next
-            </button>
-          ) : (
-            <button
-              onClick={() => answers[q.id] && handleFinish()}
-              disabled={!answers[q.id]}
-              style={{
-                padding: "10px 22px",
-                borderRadius: 8,
-                border: "none",
-                background: answers[q.id] ? "linear-gradient(90deg,#111827,#1f2937)" : "#d1d5db",
-                color: "#fff",
-                cursor: answers[q.id] ? "pointer" : "not-allowed",
-                fontSize: 13,
-                fontWeight: 600,
-                opacity: answers[q.id] ? 1 : 0.6,
-                transition: "all 0.2s",
-              }}
-            >
+            </button> :
+
+          <button
+            onClick={() => answers[q.id] && handleFinish()}
+            disabled={!answers[q.id]}
+            style={{
+              padding: "10px 22px",
+              borderRadius: 8,
+              border: "none",
+              background: answers[q.id] ? "linear-gradient(90deg,#111827,#1f2937)" : "#d1d5db",
+              color: "#fff",
+              cursor: answers[q.id] ? "pointer" : "not-allowed",
+              fontSize: 13,
+              fontWeight: 600,
+              opacity: answers[q.id] ? 1 : 0.6,
+              transition: "all 0.2s"
+            }}>
+            
               Finish & Start
             </button>
-          )}
+          }
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
-function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: { onStart: () => void; onStop: () => void; onStopEarly: () => void; phase: string }) {
+function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: {onStart: () => void;onStop: () => void;onStopEarly: () => void;phase: string;}) {
   const isRecording = phase === "recording";
   const isAnalyzing = phase === "analyzing";
   return (
     <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 16 }}>
-      {isRecording ? (
-        <button
-          onClick={onStopEarly}
-          style={{
-            fontSize: 14,
-            letterSpacing: "0.1em",
-            padding: "14px 36px",
-            border: "none",
-            cursor: "pointer",
-            background: "#c04a2a",
-            color: "#fff",
-            fontWeight: 700,
-            borderRadius: 8,
-            transition: "all 0.2s",
-            boxShadow: "0 0 0 4px rgba(192,74,42,0.2)",
-          }}
-        >
+      {isRecording ?
+      <button
+        onClick={onStopEarly}
+        style={{
+          fontSize: 14,
+          letterSpacing: "0.1em",
+          padding: "14px 36px",
+          border: "none",
+          cursor: "pointer",
+          background: "#c04a2a",
+          color: "#fff",
+          fontWeight: 700,
+          borderRadius: 8,
+          transition: "all 0.2s",
+          boxShadow: "0 0 0 4px rgba(192,74,42,0.2)"
+        }}>
+        
           ⏹ STOP RECORDING
+        </button> :
+
+      <button
+        onClick={!isAnalyzing ? onStart : undefined}
+        disabled={isAnalyzing}
+        style={{
+          fontSize: 14,
+          letterSpacing: "0.1em",
+          padding: "14px 36px",
+          border: "none",
+          cursor: isAnalyzing ? "not-allowed" : "pointer",
+          background: "linear-gradient(90deg,#111827,#1f2937)",
+          color: "#fff",
+          fontWeight: 700,
+          borderRadius: 8,
+          opacity: isAnalyzing ? 0.6 : 1,
+          transition: "all 0.2s",
+          boxShadow: "0 4px 14px rgba(16,24,40,0.18)"
+        }}>
+        
+          {phase === "idle" ?
+        "🎙 START RECORDING" :
+        phase === "analyzing" ?
+        "⏳ ANALYZING..." :
+        "🎙 RECORD AGAIN"}
         </button>
-      ) : (
-        <button
-          onClick={!isAnalyzing ? onStart : undefined}
-          disabled={isAnalyzing}
-          style={{
-            fontSize: 14,
-            letterSpacing: "0.1em",
-            padding: "14px 36px",
-            border: "none",
-            cursor: isAnalyzing ? "not-allowed" : "pointer",
-            background: "linear-gradient(90deg,#111827,#1f2937)",
-            color: "#fff",
-            fontWeight: 700,
-            borderRadius: 8,
-            opacity: isAnalyzing ? 0.6 : 1,
-            transition: "all 0.2s",
-            boxShadow: "0 4px 14px rgba(16,24,40,0.18)",
-          }}
-        >
-          {phase === "idle"
-            ? "🎙 START RECORDING"
-            : phase === "analyzing"
-              ? "⏳ ANALYZING..."
-              : "🎙 RECORD AGAIN"}
-        </button>
-      )}
+      }
       <button
         onClick={onStop}
         style={{
@@ -405,13 +405,13 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: { onStart: () 
           color: "#9aa0a6",
           cursor: "pointer",
           transition: "all 0.2s",
-          borderRadius: 8,
-        }}
-      >
+          borderRadius: 8
+        }}>
+        
         Reset
       </button>
-    </div>
-  );
+    </div>);
+
 }
 
 export default function Negotium() {
@@ -427,11 +427,11 @@ export default function Negotium() {
   useEffect(() => {
     if (!user) return;
     const loadHistory = async () => {
-      const { data } = await (supabase as any)
-        .from("voice_sessions")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(20);
+      const { data } = await (supabase as any).
+      from("voice_sessions").
+      select("*").
+      order("created_at", { ascending: false }).
+      limit(20);
       if (data) setHistory(data);
     };
     loadHistory();
@@ -499,7 +499,7 @@ export default function Negotium() {
     muted: "#9aa0a6",
     card: isDark ? "#0f0f0f" : "#ffffff",
     waveBg: isDark ? "#0d0d0b" : "#f4f4f5",
-    waveEmpty: isDark ? "#2a2a26" : "#e0e0e0",
+    waveEmpty: isDark ? "#2a2a26" : "#e0e0e0"
   };
 
   const stopAll = useCallback(() => {
@@ -523,7 +523,7 @@ export default function Negotium() {
     const transcript = transcriptRef.current.trim();
 
     // Stop speech recognition
-    try { recognitionRef.current?.stop(); } catch (_) {}
+    try {recognitionRef.current?.stop();} catch (_) {}
 
     if (!transcript || transcript.length < 5) {
       // Fallback: no transcript detected
@@ -543,9 +543,9 @@ export default function Negotium() {
             silenceRatio: silRatio,
             volumeVariance: volVar,
             totalFrames: framesRef.current,
-            durationSeconds,
-          },
-        },
+            durationSeconds
+          }
+        }
       });
 
       if (error) {
@@ -564,14 +564,14 @@ export default function Negotium() {
       const { scores, analysis, tags, negotiationTips, communicationTips, techniques, fillerWords, hedgingInstances, powerWords, wordChoiceScore, structureScore, persuasionScore } = data;
 
       // Compute final measured pace from raw audio data
-      const finalWpm = durationSeconds > 0 ? (transcript.trim().split(/\s+/).filter(Boolean).length / durationSeconds) * 60 : 0;
-      const measuredPace = Math.min(100, Math.round((finalWpm / 160) * 100));
+      const finalWpm = durationSeconds > 0 ? transcript.trim().split(/\s+/).filter(Boolean).length / durationSeconds * 60 : 0;
+      const measuredPace = Math.min(100, Math.round(finalWpm / 160 * 100));
 
       setMetrics({
         pace: scores.pace, conf: scores.confidence, clar: scores.clarity,
         delivery: scores.delivery || scores.overall, overall: scores.overall,
         measuredPace, wpm: Math.round(finalWpm),
-        wordChoice: wordChoiceScore || 0, persuasion: persuasionScore || 0,
+        wordChoice: wordChoiceScore || 0, persuasion: persuasionScore || 0
       });
       setFeedback({
         overallTxt: analysis.overall,
@@ -587,7 +587,7 @@ export default function Negotium() {
         techniques: techniques || [],
         fillerWords: fillerWords || { count: 0, words: [], percentage: 0 },
         hedgingInstances: hedgingInstances || [],
-        powerWords: powerWords || [],
+        powerWords: powerWords || []
       });
       setRecNegTips(negotiationTips || []);
       setRecCommTips(communicationTips || []);
@@ -603,13 +603,13 @@ export default function Negotium() {
         feedback: { analysis, tags },
         negotiation_tips: negotiationTips || [],
         communication_tips: communicationTips || [],
-        duration_seconds: durationSeconds,
+        duration_seconds: durationSeconds
       };
-      const { data: inserted } = await (supabase as any)
-        .from("voice_sessions")
-        .insert(sessionRow)
-        .select()
-        .single();
+      const { data: inserted } = await (supabase as any).
+      from("voice_sessions").
+      insert(sessionRow).
+      select().
+      single();
 
       if (inserted) {
         setHistory((h: any) => [inserted, ...h.slice(0, 19)]);
@@ -675,7 +675,7 @@ export default function Negotium() {
       const animate = () => {
         const data = new Uint8Array(analyser.fftSize);
         analyser.getByteTimeDomainData(data);
-        setWaveData(Array.from({ length: 80 }, (_, i) => data[Math.floor((i / 80) * data.length)] / 255));
+        setWaveData(Array.from({ length: 80 }, (_, i) => data[Math.floor(i / 80 * data.length)] / 255));
         let sum = 0;
         for (let i = 0; i < data.length; i++) sum += Math.abs(data[i] - 128);
         const avg = sum / data.length;
@@ -691,9 +691,9 @@ export default function Negotium() {
         // Real-time pace: words per minute from transcript / elapsed time
         const elapsedSec = (Date.now() - recordingStartRef.current) / 1000;
         const wordCount = transcriptRef.current.trim().split(/\s+/).filter(Boolean).length;
-        const wpm = elapsedSec > 1 ? (wordCount / elapsedSec) * 60 : 0;
+        const wpm = elapsedSec > 1 ? wordCount / elapsedSec * 60 : 0;
         // Map WPM to 0-100: 0wpm=0, 130wpm=75 (ideal ~130-160), 200+=100, <80=low
-        const paceScore = Math.min(100, Math.round((wpm / 160) * 100));
+        const paceScore = Math.min(100, Math.round(wpm / 160 * 100));
         setLivePace(paceScore);
 
         animFrameRef.current = requestAnimationFrame(animate);
@@ -708,9 +708,9 @@ export default function Negotium() {
           if (timerRef.current) clearInterval(timerRef.current);
           if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
           mr.stop();
-          try { stream.getTracks().forEach((tr) => tr.stop()); } catch (_) {}
-          try { audioCtx.close(); } catch (_) {}
-          try { recognitionRef.current?.stop(); } catch (_) {}
+          try {stream.getTracks().forEach((tr) => tr.stop());} catch (_) {}
+          try {audioCtx.close();} catch (_) {}
+          try {recognitionRef.current?.stop();} catch (_) {}
           setWaveData(new Array(80).fill(0.5));
           // Small delay for final speech recognition results
           setTimeout(() => analyzeVoice(), 1500);
@@ -723,7 +723,7 @@ export default function Negotium() {
 
   const reset = useCallback(() => {
     stopAll();
-    try { recognitionRef.current?.stop(); } catch (_) {}
+    try {recognitionRef.current?.stop();} catch (_) {}
     transcriptRef.current = "";
     setPhase("idle");
     setTimeLeft(selectedDuration);
@@ -733,7 +733,7 @@ export default function Negotium() {
     setMicError("");
   }, [stopAll, selectedDuration]);
 
-  const tagColor = (t) => (t === "pos" ? "#4a8c5c" : t === "warn" ? "#c97a2a" : "#c04a2a");
+  const tagColor = (t) => t === "pos" ? "#4a8c5c" : t === "warn" ? "#c97a2a" : "#c04a2a";
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
   const gap = spacingMode === "compact" ? 20 : 36;
 
@@ -744,22 +744,22 @@ export default function Negotium() {
         background: c.bg,
         color: c.text,
         fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
-        paddingBottom: 80,
-      }}
-    >
-      {quizVisible && (
-        <OnboardingQuiz
-          onFinish={({ neg, comm, answers }) => {
-            localStorage.setItem("negotium_quiz", JSON.stringify({ answers }));
-            const p = derivePersonalization(answers);
-            setRecNegTips(neg);
-            setRecCommTips(comm);
-            setUserSubtitle(p.subtitle);
-            setHeroFocus(p.heroFocus);
-            setQuizVisible(false);
-          }}
-        />
-      )}
+        paddingBottom: 80
+      }}>
+      
+      {quizVisible &&
+      <OnboardingQuiz
+        onFinish={({ neg, comm, answers }) => {
+          localStorage.setItem("negotium_quiz", JSON.stringify({ answers }));
+          const p = derivePersonalization(answers);
+          setRecNegTips(neg);
+          setRecCommTips(comm);
+          setUserSubtitle(p.subtitle);
+          setHeroFocus(p.heroFocus);
+          setQuizVisible(false);
+        }} />
+
+      }
 
       {/* Header */}
       <div
@@ -769,63 +769,63 @@ export default function Negotium() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          background: c.panel,
-        }}
-      >
+          background: c.panel
+        }}>
+        
         <div>
           <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>NEGOTIUM</div>
           <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>{userSubtitle}</div>
         </div>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          {avgHistory !== null && (
-            <div style={{ textAlign: "right", marginRight: 4 }}>
+          {avgHistory !== null &&
+          <div style={{ textAlign: "right", marginRight: 4 }}>
               <div style={{ fontSize: 9, color: c.muted, letterSpacing: "0.2em", textTransform: "uppercase" }}>
                 Avg Score
               </div>
               <div style={{ fontSize: 22, fontWeight: 800, color: c.text }}>{avgHistory}</div>
             </div>
-          )}
+          }
           {[
-            [
-              "theme",
-              theme,
-              setTheme,
-              [
-                ["light", "☀️ Light"],
-                ["dark", "🌙 Dark"],
-              ],
-            ],
-            [
-              "spacing",
-              spacingMode,
-              setSpacingMode,
-              [
-                ["airy", "Airy"],
-                ["compact", "Compact"],
-              ],
-            ],
-          ].map(([label, val, setter, opts]: any) => (
-            <select
-              key={label}
-              value={val}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setter(e.target.value)}
-              style={{
-                padding: "6px 10px",
-                borderRadius: 6,
-                border: `1px solid ${c.border}`,
-                background: c.panel,
-                color: c.text,
-                fontSize: 12,
-                cursor: "pointer",
-              }}
-            >
-              {opts.map(([v, optLabel]: [string, string]) => (
-                <option key={v} value={v}>
+          [
+          "theme",
+          theme,
+          setTheme,
+          [
+          ["light", "☀️ Light"],
+          ["dark", "🌙 Dark"]]],
+
+
+          [
+          "spacing",
+          spacingMode,
+          setSpacingMode,
+          [
+          ["airy", "Airy"],
+          ["compact", "Compact"]]]].
+
+
+          map(([label, val, setter, opts]: any) =>
+          <select
+            key={label}
+            value={val}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setter(e.target.value)}
+            style={{
+              padding: "6px 10px",
+              borderRadius: 6,
+              border: `1px solid ${c.border}`,
+              background: c.panel,
+              color: c.text,
+              fontSize: 12,
+              cursor: "pointer"
+            }}>
+            
+              {opts.map(([v, optLabel]: [string, string]) =>
+            <option key={v} value={v}>
                   {optLabel}
                 </option>
-              ))}
+            )}
             </select>
-          ))}
+          )}
           <button
             onClick={() => setQuizVisible(true)}
             style={{
@@ -835,9 +835,9 @@ export default function Negotium() {
               background: "none",
               color: c.muted,
               fontSize: 12,
-              cursor: "pointer",
-            }}
-          >
+              cursor: "pointer"
+            }}>
+            
             ⚙ Setup
           </button>
         </div>
@@ -845,89 +845,89 @@ export default function Negotium() {
 
       {/* Tabs */}
       <div style={{ display: "flex", borderBottom: `1px solid ${c.border}`, background: c.panel }}>
-        {["analysis", "history", "tips"].map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              flex: 1,
-              padding: "14px",
-              background: "none",
-              border: "none",
-              borderBottom: tab === t ? "2px solid #6b7280" : "2px solid transparent",
-              color: tab === t ? c.text : c.muted,
-              cursor: "pointer",
-              fontSize: 11,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              fontWeight: tab === t ? 700 : 400,
-              transition: "all 0.2s",
-            }}
-          >
+        {["analysis", "history", "tips"].map((t) =>
+        <button
+          key={t}
+          onClick={() => setTab(t)}
+          style={{
+            flex: 1,
+            padding: "14px",
+            background: "none",
+            border: "none",
+            borderBottom: tab === t ? "2px solid #6b7280" : "2px solid transparent",
+            color: tab === t ? c.text : c.muted,
+            cursor: "pointer",
+            fontSize: 11,
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            fontWeight: tab === t ? 700 : 400,
+            transition: "all 0.2s"
+          }}>
+          
             {t === "analysis" ? "🎙 Analysis" : t === "history" ? "📊 History" : "💡 Tips"}
           </button>
-        ))}
+        )}
       </div>
 
       <div style={{ maxWidth: 860, margin: "0 auto", padding: `${gap}px 20px` }}>
         {/* ── ANALYSIS TAB ── */}
-        {tab === "analysis" && (
-          <>
+        {tab === "analysis" &&
+        <>
             <div style={{ textAlign: "center", marginBottom: gap }}>
               <div
-                style={{
-                  fontFamily: "Georgia, serif",
-                  fontSize: "clamp(1.4rem,4vw,2.4rem)",
-                  color: c.text,
-                  lineHeight: 1.2,
-                  marginBottom: 8,
-                }}
-              >
+              style={{
+                fontFamily: "Georgia, serif",
+                fontSize: "clamp(1.4rem,4vw,2.4rem)",
+                color: c.text,
+                lineHeight: 1.2,
+                marginBottom: 8
+              }}>
+              
                 Speak. <em style={{ color: "#6b7280" }}>{heroFocus}</em>
               </div>
-              <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase" }}>
-                20 seconds · pace · tone · confidence · clarity
-              </div>
+              <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase" }}>PACE · TONE · CONFIDENCE · CLARITY
+
+            </div>
             </div>
 
             {/* Waveform */}
             <div style={{ marginBottom: gap }}>
               <div
-                style={{
-                  fontSize: 9,
-                  letterSpacing: "0.25em",
-                  color: c.muted,
-                  textTransform: "uppercase",
-                  marginBottom: 8,
-                }}
-              >
+              style={{
+                fontSize: 9,
+                letterSpacing: "0.25em",
+                color: c.muted,
+                textTransform: "uppercase",
+                marginBottom: 8
+              }}>
+              
                 Live Waveform
               </div>
               <div
+              style={{
+                height: 80,
+                background: c.waveBg,
+                border: `1px solid ${c.border}`,
+                borderRadius: 8,
+                display: "flex",
+                alignItems: "center",
+                padding: "0 8px",
+                gap: 2
+              }}>
+              
+                {waveData.map((v, i) =>
+              <div
+                key={i}
                 style={{
-                  height: 80,
-                  background: c.waveBg,
-                  border: `1px solid ${c.border}`,
-                  borderRadius: 8,
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "0 8px",
-                  gap: 2,
-                }}
-              >
-                {waveData.map((v, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      flex: 1,
-                      background: phase === "recording" ? "#6b7280" : c.waveEmpty,
-                      height: `${Math.max(4, Math.abs(v - 0.5) * 160)}px`,
-                      borderRadius: 2,
-                      transition: "height 0.05s, background 0.3s",
-                      opacity: phase === "recording" ? 0.5 + Math.abs(v - 0.5) : 0.5,
-                    }}
-                  />
-                ))}
+                  flex: 1,
+                  background: phase === "recording" ? "#6b7280" : c.waveEmpty,
+                  height: `${Math.max(4, Math.abs(v - 0.5) * 160)}px`,
+                  borderRadius: 2,
+                  transition: "height 0.05s, background 0.3s",
+                  opacity: phase === "recording" ? 0.5 + Math.abs(v - 0.5) : 0.5
+                }} />
+
+              )}
               </div>
             </div>
 
@@ -937,151 +937,151 @@ export default function Negotium() {
                 <svg width={160} height={160} viewBox="0 0 160 160">
                   <circle cx={80} cy={80} r={70} fill="none" stroke={c.border} strokeWidth={6} />
                   <circle
-                    cx={80}
-                    cy={80}
-                    r={70}
-                    fill="none"
-                    stroke={timeLeft <= 5 ? "#c04a2a" : "#6b7280"}
-                    strokeWidth={6}
-                    strokeLinecap="round"
-                    strokeDasharray={CIRCUMFERENCE}
-                    strokeDashoffset={ringOffset}
-                    style={{
-                      transform: "rotate(-90deg)",
-                      transformOrigin: "center",
-                      transition: "stroke-dashoffset 0.9s linear, stroke 0.3s",
-                    }}
-                  />
+                  cx={80}
+                  cy={80}
+                  r={70}
+                  fill="none"
+                  stroke={timeLeft <= 5 ? "#c04a2a" : "#6b7280"}
+                  strokeWidth={6}
+                  strokeLinecap="round"
+                  strokeDasharray={CIRCUMFERENCE}
+                  strokeDashoffset={ringOffset}
+                  style={{
+                    transform: "rotate(-90deg)",
+                    transformOrigin: "center",
+                    transition: "stroke-dashoffset 0.9s linear, stroke 0.3s"
+                  }} />
+                
                 </svg>
                 <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                
                   <div style={{ fontSize: 48, fontWeight: 800, color: c.text, lineHeight: 1 }}>{timeLeft}</div>
                   <div style={{ fontSize: 9, letterSpacing: "0.3em", color: c.muted, textTransform: "uppercase" }}>
                     seconds
                   </div>
-                  {phase === "recording" && (
-                    <div
-                      style={{
-                        marginTop: 6,
-                        width: 8,
-                        height: 8,
-                        borderRadius: "50%",
-                        background: "#c04a2a",
-                        animation: "pulse 1s infinite",
-                      }}
-                    />
-                  )}
+                  {phase === "recording" &&
+                <div
+                  style={{
+                    marginTop: 6,
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    background: "#c04a2a",
+                    animation: "pulse 1s infinite"
+                  }} />
+
+                }
                 </div>
               </div>
             </div>
 
-            {phase === "recording" && (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 24 }}>
+            {phase === "recording" &&
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 24 }}>
               {["Volume", "Pace", "Energy"].map((label, i) => {
-                  const val = i === 0 ? Math.min(100, (volumeRef.current.slice(-1)[0] || 0) * 4) : i === 1 ? livePace : liveEnergy;
-                  return (
-                    <div
-                      key={label}
-                      style={{
-                        background: c.card,
-                        border: `1px solid ${c.border}`,
-                        padding: "10px 12px",
-                        borderRadius: 8,
-                      }}
-                    >
+              const val = i === 0 ? Math.min(100, (volumeRef.current.slice(-1)[0] || 0) * 4) : i === 1 ? livePace : liveEnergy;
+              return (
+                <div
+                  key={label}
+                  style={{
+                    background: c.card,
+                    border: `1px solid ${c.border}`,
+                    padding: "10px 12px",
+                    borderRadius: 8
+                  }}>
+                  
                       <div
-                        style={{
-                          fontSize: 9,
-                          letterSpacing: "0.2em",
-                          color: c.muted,
-                          textTransform: "uppercase",
-                          marginBottom: 6,
-                        }}
-                      >
+                    style={{
+                      fontSize: 9,
+                      letterSpacing: "0.2em",
+                      color: c.muted,
+                      textTransform: "uppercase",
+                      marginBottom: 6
+                    }}>
+                    
                         {label}
                       </div>
                       <div style={{ height: 3, background: c.border, borderRadius: 2 }}>
                         <div
-                          style={{
-                            height: "100%",
-                            width: val + "%",
-                            background: "#6b7280",
-                            borderRadius: 2,
-                            transition: "width 0.1s",
-                          }}
-                        />
+                      style={{
+                        height: "100%",
+                        width: val + "%",
+                        background: "#6b7280",
+                        borderRadius: 2,
+                        transition: "width 0.1s"
+                      }} />
+                    
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                    </div>);
 
-            {phase === "idle" && (
-              <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
-                {DURATION_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => { setSelectedDuration(opt.value); setTimeLeft(opt.value); }}
-                    style={{
-                      padding: "8px 16px",
-                      fontSize: 13,
-                      fontWeight: selectedDuration === opt.value ? 700 : 500,
-                      letterSpacing: "0.02em",
-                      background: selectedDuration === opt.value ? c.text : "transparent",
-                      color: selectedDuration === opt.value ? c.bg : c.muted,
-                      border: `1.5px solid ${selectedDuration === opt.value ? c.text : c.border}`,
-                      borderRadius: 8,
-                      cursor: "pointer",
-                      transition: "all 0.2s ease",
-                      minWidth: 56,
-                    }}
-                  >
+            })}
+              </div>
+          }
+
+            {phase === "idle" &&
+          <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+                {DURATION_OPTIONS.map((opt) =>
+            <button
+              key={opt.value}
+              onClick={() => {setSelectedDuration(opt.value);setTimeLeft(opt.value);}}
+              style={{
+                padding: "8px 16px",
+                fontSize: 13,
+                fontWeight: selectedDuration === opt.value ? 700 : 500,
+                letterSpacing: "0.02em",
+                background: selectedDuration === opt.value ? c.text : "transparent",
+                color: selectedDuration === opt.value ? c.bg : c.muted,
+                border: `1.5px solid ${selectedDuration === opt.value ? c.text : c.border}`,
+                borderRadius: 8,
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                minWidth: 56
+              }}>
+              
                     {opt.label}
                   </button>
-                ))}
-              </div>
             )}
+              </div>
+          }
 
-            <VoiceMicControl onStart={startRecording} onStop={reset} onStopEarly={() => { stopAll(); setWaveData(new Array(80).fill(0.5)); setTimeout(() => analyzeVoice(), 1500); }} phase={phase} />
-            {micError && (
-              <div style={{ textAlign: "center", fontSize: 11, color: "#c04a2a", marginBottom: 16, lineHeight: 1.6 }}>
+            <VoiceMicControl onStart={startRecording} onStop={reset} onStopEarly={() => {stopAll();setWaveData(new Array(80).fill(0.5));setTimeout(() => analyzeVoice(), 1500);}} phase={phase} />
+            {micError &&
+          <div style={{ textAlign: "center", fontSize: 11, color: "#c04a2a", marginBottom: 16, lineHeight: 1.6 }}>
                 {micError}
               </div>
-            )}
-            {phase === "analyzing" && (
-              <div style={{ textAlign: "center", fontSize: 11, color: c.muted, marginBottom: 24 }}>
+          }
+            {phase === "analyzing" &&
+          <div style={{ textAlign: "center", fontSize: 11, color: c.muted, marginBottom: 24 }}>
                 ⏳ AI is analyzing your speech patterns and transcript...
               </div>
-            )}
+          }
 
-            {phase === "done" && metrics && feedback && (
-              <div style={{ animation: "fadeUp 0.5s ease", marginTop: 16 }}>
+            {phase === "done" && metrics && feedback &&
+          <div style={{ animation: "fadeUp 0.5s ease", marginTop: 16 }}>
                 <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    marginBottom: 24,
-                    background: c.card,
-                    border: `1px solid ${c.border}`,
-                    borderRadius: 10,
-                    padding: "20px 10px",
-                    boxShadow: "0 6px 24px rgba(16,24,40,0.06)",
-                  }}
-                >
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginBottom: 24,
+                background: c.card,
+                border: `1px solid ${c.border}`,
+                borderRadius: 10,
+                padding: "20px 10px",
+                boxShadow: "0 6px 24px rgba(16,24,40,0.06)"
+              }}>
+              
                   <ScoreRing
-                    score={metrics.overall}
-                    label="Overall"
-                    color={metrics.overall >= 80 ? "#4a8c5c" : metrics.overall >= 60 ? "#6b7280" : "#c04a2a"}
-                  />
+                score={metrics.overall}
+                label="Overall"
+                color={metrics.overall >= 80 ? "#4a8c5c" : metrics.overall >= 60 ? "#6b7280" : "#c04a2a"} />
+              
                   <ScoreRing score={metrics.delivery} label="Delivery" color="#6b7280" />
                   <ScoreRing score={metrics.pace} label="Pace" color="#6b7280" />
                   <ScoreRing score={metrics.conf} label="Confidence" color="#6b7280" />
@@ -1090,23 +1090,23 @@ export default function Negotium() {
 
                 {/* Delivery Breakdown Scores */}
                 <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(2, 1fr)",
-                    gap: 12,
-                    marginBottom: 20,
-                    background: c.card,
-                    border: `1px solid ${c.border}`,
-                    borderRadius: 10,
-                    padding: "16px",
-                    boxShadow: "0 4px 12px rgba(16,24,40,0.04)",
-                  }}
-                >
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: 12,
+                marginBottom: 20,
+                background: c.card,
+                border: `1px solid ${c.border}`,
+                borderRadius: 10,
+                padding: "16px",
+                boxShadow: "0 4px 12px rgba(16,24,40,0.04)"
+              }}>
+              
                   {[
-                    { label: "Word Choice", value: metrics.wordChoice, color: metrics.wordChoice >= 55 ? "#4a8c5c" : metrics.wordChoice >= 30 ? "#c97a2a" : "#c04a2a" },
-                    { label: "Persuasion", value: metrics.persuasion, color: metrics.persuasion >= 55 ? "#4a8c5c" : metrics.persuasion >= 30 ? "#c97a2a" : "#c04a2a" },
-                  ].map(({ label, value, color }) => (
-                    <div key={label}>
+              { label: "Word Choice", value: metrics.wordChoice, color: metrics.wordChoice >= 55 ? "#4a8c5c" : metrics.wordChoice >= 30 ? "#c97a2a" : "#c04a2a" },
+              { label: "Persuasion", value: metrics.persuasion, color: metrics.persuasion >= 55 ? "#4a8c5c" : metrics.persuasion >= 30 ? "#c97a2a" : "#c04a2a" }].
+              map(({ label, value, color }) =>
+              <div key={label}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
                         <span style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase" }}>{label}</span>
                         <span style={{ fontSize: 18, fontWeight: 800, color }}>{value}</span>
@@ -1115,20 +1115,20 @@ export default function Negotium() {
                         <div style={{ height: "100%", width: `${value}%`, background: color, borderRadius: 3, transition: "width 0.5s ease" }} />
                       </div>
                     </div>
-                  ))}
+              )}
                 </div>
 
                 {/* Measured Pace */}
                 <div
-                  style={{
-                    marginBottom: 20,
-                    background: c.card,
-                    border: `1px solid ${c.border}`,
-                    borderRadius: 10,
-                    padding: "16px",
-                    boxShadow: "0 4px 12px rgba(16,24,40,0.04)",
-                  }}
-                >
+              style={{
+                marginBottom: 20,
+                background: c.card,
+                border: `1px solid ${c.border}`,
+                borderRadius: 10,
+                padding: "16px",
+                boxShadow: "0 4px 12px rgba(16,24,40,0.04)"
+              }}>
+              
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
                     <span style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase" }}>Measured Pace</span>
                     <span style={{ fontSize: 14, fontWeight: 700, color: c.text }}>{metrics.wpm} WPM</span>
@@ -1140,85 +1140,85 @@ export default function Negotium() {
                 </div>
 
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 20 }}>
-                  {feedback.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      style={{
-                        fontSize: 9,
-                        letterSpacing: "0.15em",
-                        textTransform: "uppercase",
-                        padding: "4px 10px",
-                        border: `1px solid ${tagColor(tag.t)}`,
-                        color: tagColor(tag.t),
-                        borderRadius: 4,
-                      }}
-                    >
+                  {feedback.tags.map((tag, i) =>
+              <span
+                key={i}
+                style={{
+                  fontSize: 9,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  padding: "4px 10px",
+                  border: `1px solid ${tagColor(tag.t)}`,
+                  color: tagColor(tag.t),
+                  borderRadius: 4
+                }}>
+                
                       {tag.label}
                     </span>
-                  ))}
+              )}
                 </div>
 
-                {feedback.transcript && (
-                  <div
-                    style={{
-                      marginBottom: 10,
-                      background: c.card,
-                      border: `1px solid ${c.border}`,
-                      borderRadius: 10,
-                      padding: "14px 16px",
-                      boxShadow: "0 4px 12px rgba(16,24,40,0.04)",
-                    }}
-                  >
+                {feedback.transcript &&
+            <div
+              style={{
+                marginBottom: 10,
+                background: c.card,
+                border: `1px solid ${c.border}`,
+                borderRadius: 10,
+                padding: "14px 16px",
+                boxShadow: "0 4px 12px rgba(16,24,40,0.04)"
+              }}>
+              
                     <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 6 }}>
                       Your Speech (Transcript)
                     </div>
                     <div style={{ fontSize: 13, lineHeight: 1.8, color: c.text, fontStyle: "italic" }}>"{feedback.transcript}"</div>
                   </div>
-                )}
+            }
 
                 {[
-                  { title: "Overall Assessment", text: feedback.overallTxt },
-                  { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
-                  { title: "Pace & Rhythm", text: feedback.paceTxt },
-                  { title: "Tone & Authority", text: feedback.toneTxt },
-                  { title: "Clarity & Structure", text: feedback.clarityTxt },
-                  { title: "💪 Key Strength", text: feedback.strengthTxt },
-                  { title: "⚠️ Key Weakness", text: feedback.weaknessTxt },
-                  { title: "🎯 Recommendation", text: feedback.recTxt },
-                ].filter(({ text }) => text).map(({ title, text }) => (
-                  <div
-                    key={title}
-                    style={{
-                      marginBottom: 10,
-                      background: c.card,
-                      border: `1px solid ${c.border}`,
-                      borderRadius: 10,
-                      padding: "14px 16px",
-                      boxShadow: "0 4px 12px rgba(16,24,40,0.04)",
-                    }}
-                  >
+            { title: "Overall Assessment", text: feedback.overallTxt },
+            { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
+            { title: "Pace & Rhythm", text: feedback.paceTxt },
+            { title: "Tone & Authority", text: feedback.toneTxt },
+            { title: "Clarity & Structure", text: feedback.clarityTxt },
+            { title: "💪 Key Strength", text: feedback.strengthTxt },
+            { title: "⚠️ Key Weakness", text: feedback.weaknessTxt },
+            { title: "🎯 Recommendation", text: feedback.recTxt }].
+            filter(({ text }) => text).map(({ title, text }) =>
+            <div
+              key={title}
+              style={{
+                marginBottom: 10,
+                background: c.card,
+                border: `1px solid ${c.border}`,
+                borderRadius: 10,
+                padding: "14px 16px",
+                boxShadow: "0 4px 12px rgba(16,24,40,0.04)"
+              }}>
+              
                     <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 6 }}>{title}</div>
                     <div style={{ fontSize: 13, lineHeight: 1.8, color: c.text }}>{text}</div>
                   </div>
-                ))}
+            )}
 
                 {/* Techniques Detected */}
-                {feedback.techniques?.length > 0 && (
-                  <div style={{ marginBottom: 16 }}>
+                {feedback.techniques?.length > 0 &&
+            <div style={{ marginBottom: 16 }}>
                     <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 8 }}>
                       Techniques Detected ({feedback.techniques.length})
                     </div>
                     <div style={{ display: "grid", gap: 8 }}>
-                      {feedback.techniques.map((t: any, i: number) => (
-                        <div
-                          key={i}
-                          style={{
-                            background: c.card,
-                            border: `1px solid ${t.impact === "pos" ? "#4a8c5c" : t.impact === "neg" ? "#c04a2a" : c.border}`,
-                            borderRadius: 8,
-                            padding: "10px 12px",
-                          }}
-                        >
+                      {feedback.techniques.map((t: any, i: number) =>
+                <div
+                  key={i}
+                  style={{
+                    background: c.card,
+                    border: `1px solid ${t.impact === "pos" ? "#4a8c5c" : t.impact === "neg" ? "#c04a2a" : c.border}`,
+                    borderRadius: 8,
+                    padding: "10px 12px"
+                  }}>
+                  
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
                             <span style={{ fontSize: 11, fontWeight: 700, color: c.text }}>{t.name}</span>
                             <span style={{ fontSize: 9, padding: "2px 8px", borderRadius: 4, background: t.impact === "pos" ? "#e8f5e9" : t.impact === "neg" ? "#fbe9e7" : "#f5f5f5", color: t.impact === "pos" ? "#4a8c5c" : t.impact === "neg" ? "#c04a2a" : "#6b7280" }}>
@@ -1228,10 +1228,10 @@ export default function Negotium() {
                           <div style={{ fontSize: 12, fontStyle: "italic", color: "#6b7280", marginBottom: 4 }}>"{t.quote}"</div>
                           <div style={{ fontSize: 11, color: c.text, lineHeight: 1.5 }}>{t.explanation}</div>
                         </div>
-                      ))}
+                )}
                     </div>
                   </div>
-                )}
+            }
 
                 {/* Filler Words & Hedging */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
@@ -1244,13 +1244,13 @@ export default function Negotium() {
                     <div style={{ fontSize: 10, color: c.muted }}>
                       {feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}
                     </div>
-                    {feedback.fillerWords?.words?.length > 0 && (
-                      <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
-                        {feedback.fillerWords.words.map((w: string, i: number) => (
-                          <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#fbe9e7", color: "#c04a2a", borderRadius: 3 }}>{w}</span>
-                        ))}
+                    {feedback.fillerWords?.words?.length > 0 &&
+                <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
+                        {feedback.fillerWords.words.map((w: string, i: number) =>
+                  <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#fbe9e7", color: "#c04a2a", borderRadius: 3 }}>{w}</span>
+                  )}
                       </div>
-                    )}
+                }
                   </div>
 
                   {/* Power Words */}
@@ -1259,188 +1259,188 @@ export default function Negotium() {
                     <div style={{ fontSize: 28, fontWeight: 800, color: (feedback.powerWords?.length || 0) >= 1 ? "#4a8c5c" : "#c97a2a", marginBottom: 4 }}>
                       {feedback.powerWords?.length || 0}
                     </div>
-                    {feedback.powerWords?.length > 0 && (
-                      <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
-                        {feedback.powerWords.map((w: string, i: number) => (
-                          <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#e8f5e9", color: "#4a8c5c", borderRadius: 3 }}>{w}</span>
-                        ))}
+                    {feedback.powerWords?.length > 0 &&
+                <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
+                        {feedback.powerWords.map((w: string, i: number) =>
+                  <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#e8f5e9", color: "#4a8c5c", borderRadius: 3 }}>{w}</span>
+                  )}
                       </div>
-                    )}
+                }
                   </div>
                 </div>
 
                 {/* Hedging Instances */}
-                {feedback.hedgingInstances?.length > 0 && (
-                  <div style={{ marginBottom: 16, background: c.card, border: `1px solid ${c.border}`, borderRadius: 10, padding: "14px 16px" }}>
+                {feedback.hedgingInstances?.length > 0 &&
+            <div style={{ marginBottom: 16, background: c.card, border: `1px solid ${c.border}`, borderRadius: 10, padding: "14px 16px" }}>
                     <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 8 }}>
                       Hedging Language → Stronger Alternatives
                     </div>
                     <div style={{ display: "grid", gap: 6 }}>
-                      {feedback.hedgingInstances.map((h: any, i: number) => (
-                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
+                      {feedback.hedgingInstances.map((h: any, i: number) =>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
                           <span style={{ color: "#c04a2a", textDecoration: "line-through" }}>"{h.phrase}"</span>
                           <span style={{ color: c.muted }}>→</span>
                           <span style={{ color: "#4a8c5c", fontWeight: 600 }}>"{h.suggestion}"</span>
                         </div>
-                      ))}
+                )}
                     </div>
                   </div>
-                )}
+            }
 
                 {[
-                  { label: "Recommended Negotiation Tips", tips: recNegTips },
-                  { label: "Recommended Communication Tips", tips: recCommTips },
-                ].map(({ label, tips }) => (
-                  <div key={label} style={{ marginTop: 16 }}>
+            { label: "Recommended Negotiation Tips", tips: recNegTips },
+            { label: "Recommended Communication Tips", tips: recCommTips }].
+            map(({ label, tips }) =>
+            <div key={label} style={{ marginTop: 16 }}>
                     <div
-                      style={{
-                        fontSize: 9,
-                        letterSpacing: "0.25em",
-                        color: c.muted,
-                        textTransform: "uppercase",
-                        marginBottom: 8,
-                      }}
-                    >
+                style={{
+                  fontSize: 9,
+                  letterSpacing: "0.25em",
+                  color: c.muted,
+                  textTransform: "uppercase",
+                  marginBottom: 8
+                }}>
+                
                       {label}
                     </div>
                     <div style={{ display: "grid", gap: 8 }}>
-                      {tips.map((t, i) => (
-                        <div
-                          key={i}
-                          style={{
-                            background: c.card,
-                            border: `1px solid ${c.border}`,
-                            borderRadius: 8,
-                            padding: "10px 12px",
-                            fontSize: 12,
-                            color: c.text,
-                            lineHeight: 1.6,
-                          }}
-                        >
+                      {tips.map((t, i) =>
+                <div
+                  key={i}
+                  style={{
+                    background: c.card,
+                    border: `1px solid ${c.border}`,
+                    borderRadius: 8,
+                    padding: "10px 12px",
+                    fontSize: 12,
+                    color: c.text,
+                    lineHeight: 1.6
+                  }}>
+                  
                           💬 {t}
                         </div>
-                      ))}
+                )}
                     </div>
                   </div>
-                ))}
-              </div>
             )}
+              </div>
+          }
           </>
-        )}
+        }
 
         {/* ── HISTORY TAB ── */}
-        {tab === "history" && (
-          <div>
+        {tab === "history" &&
+        <div>
             <div
+            style={{
+              fontSize: 9,
+              letterSpacing: "0.25em",
+              color: c.muted,
+              textTransform: "uppercase",
+              marginBottom: 16
+            }}>
+            
+              Session History ({history.length} sessions)
+            </div>
+            {history.length === 0 ?
+          <div style={{ textAlign: "center", color: c.muted, fontSize: 13, padding: "60px 0" }}>
+                No sessions yet. Record your first session to see history.
+              </div> :
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {history.map((entry, i) =>
+            <HistoryCard key={i} entry={entry} index={history.length - 1 - i} />
+            )}
+              </div>
+          }
+            {history.length > 1 &&
+          <div
+            style={{
+              marginTop: 20,
+              background: c.card,
+              border: `1px solid ${c.border}`,
+              borderRadius: 10,
+              padding: 16
+            }}>
+            
+                <div
               style={{
                 fontSize: 9,
                 letterSpacing: "0.25em",
                 color: c.muted,
                 textTransform: "uppercase",
-                marginBottom: 16,
-              }}
-            >
-              Session History ({history.length} sessions)
-            </div>
-            {history.length === 0 ? (
-              <div style={{ textAlign: "center", color: c.muted, fontSize: 13, padding: "60px 0" }}>
-                No sessions yet. Record your first session to see history.
-              </div>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {history.map((entry, i) => (
-                  <HistoryCard key={i} entry={entry} index={history.length - 1 - i} />
-                ))}
-              </div>
-            )}
-            {history.length > 1 && (
-              <div
-                style={{
-                  marginTop: 20,
-                  background: c.card,
-                  border: `1px solid ${c.border}`,
-                  borderRadius: 10,
-                  padding: 16,
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: 9,
-                    letterSpacing: "0.25em",
-                    color: c.muted,
-                    textTransform: "uppercase",
-                    marginBottom: 10,
-                  }}
-                >
+                marginBottom: 10
+              }}>
+              
                   Progress Chart
                 </div>
                 {(() => {
-                  const points = [...history].reverse().map((h, i) => {
-                    const score = h.overall_score ?? h.overall ?? 0;
-                    return { score, i };
-                  });
-                  const w = 600, h = 80, pad = 20;
-                  const xStep = points.length > 1 ? (w - pad * 2) / (points.length - 1) : 0;
-                  const pathD = points.map((p, idx) => {
-                    const x = pad + idx * xStep;
-                    const y = h - pad - ((p.score / 100) * (h - pad * 2));
-                    return `${idx === 0 ? "M" : "L"}${x},${y}`;
-                  }).join(" ");
-                  return (
-                    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: 100 }}>
+              const points = [...history].reverse().map((h, i) => {
+                const score = h.overall_score ?? h.overall ?? 0;
+                return { score, i };
+              });
+              const w = 600,h = 80,pad = 20;
+              const xStep = points.length > 1 ? (w - pad * 2) / (points.length - 1) : 0;
+              const pathD = points.map((p, idx) => {
+                const x = pad + idx * xStep;
+                const y = h - pad - p.score / 100 * (h - pad * 2);
+                return `${idx === 0 ? "M" : "L"}${x},${y}`;
+              }).join(" ");
+              return (
+                <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: 100 }}>
                       <line x1={pad} y1={h - pad} x2={w - pad} y2={h - pad} stroke={c.border} strokeWidth={1} />
                       <path d={pathD} fill="none" stroke="#6b7280" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
                       {points.map((p, idx) => {
-                        const x = pad + idx * xStep;
-                        const y = h - pad - ((p.score / 100) * (h - pad * 2));
-                        return <circle key={idx} cx={x} cy={y} r={3} fill={p.score >= 80 ? "#4a8c5c" : p.score >= 60 ? "#6b7280" : "#c04a2a"} />;
-                      })}
-                    </svg>
-                  );
-                })()}
+                    const x = pad + idx * xStep;
+                    const y = h - pad - p.score / 100 * (h - pad * 2);
+                    return <circle key={idx} cx={x} cy={y} r={3} fill={p.score >= 80 ? "#4a8c5c" : p.score >= 60 ? "#6b7280" : "#c04a2a"} />;
+                  })}
+                    </svg>);
+
+            })()}
                 <div style={{ fontSize: 9, color: c.muted, marginTop: 6 }}>
                   Session scores over time (oldest → newest)
                 </div>
               </div>
-            )}
+          }
           </div>
-        )}
+        }
 
         {/* ── TIPS TAB ── */}
-        {tab === "tips" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        {tab === "tips" &&
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {[
-              { label: "Negotiation Tips", tips: NEGOTIATION_TIPS },
-              { label: "Communication Tips", tips: COMMUNICATION_TIPS },
-            ].map(({ label, tips }) => (
-              <div key={label}>
+          { label: "Negotiation Tips", tips: NEGOTIATION_TIPS },
+          { label: "Communication Tips", tips: COMMUNICATION_TIPS }].
+          map(({ label, tips }) =>
+          <div key={label}>
                 <div style={{ fontSize: 13, color: "#6b7280", fontWeight: 700, marginBottom: 10 }}>
                   {label} ({tips.length})
                 </div>
                 <div style={{ display: "grid", gap: 8 }}>
-                  {tips.map((tip, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        background: c.card,
-                        border: `1px solid ${c.border}`,
-                        borderRadius: 8,
-                        padding: "12px 14px",
-                        fontSize: 13,
-                        color: c.text,
-                        lineHeight: 1.6,
-                        boxShadow: "0 2px 8px rgba(16,24,40,0.04)",
-                      }}
-                    >
+                  {tips.map((tip, i) =>
+              <div
+                key={i}
+                style={{
+                  background: c.card,
+                  border: `1px solid ${c.border}`,
+                  borderRadius: 8,
+                  padding: "12px 14px",
+                  fontSize: 13,
+                  color: c.text,
+                  lineHeight: 1.6,
+                  boxShadow: "0 2px 8px rgba(16,24,40,0.04)"
+                }}>
+                
                       <span style={{ color: "#6b7280", marginRight: 8, fontWeight: 700 }}>{i + 1}.</span>
                       {tip}
                     </div>
-                  ))}
+              )}
                 </div>
               </div>
-            ))}
+          )}
           </div>
-        )}
+        }
       </div>
 
       <style>{`
@@ -1448,6 +1448,6 @@ export default function Negotium() {
         @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
         * { box-sizing: border-box; }
       `}</style>
-    </div>
-  );
+    </div>);
+
 }
