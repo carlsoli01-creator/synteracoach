@@ -936,7 +936,7 @@ export default function Negotium() {
             whiteSpace: "nowrap",
           }}>
           
-            {t === "analysis" ? "🎙 Analysis" : t === "scenarios" ? "🎯 Practice" : t === "progress" ? "📊 Progress" : t === "badges" ? "🏆 Badges" : t === "history" ? "📋 History" : "💡 Tips"}
+            {t === "analysis" ? "🎙 Analysis" : t === "scenarios" ? "🎯 Practice" : t === "progress" ? "📊 Progress" : t === "badges" ? "🏆 Badges" : "📋 History"}
           </button>
         )}
       </div>
