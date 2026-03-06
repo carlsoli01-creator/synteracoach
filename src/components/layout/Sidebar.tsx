@@ -8,14 +8,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  DropdownMenuTrigger } from
+"@/components/ui/dropdown-menu";
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-  { icon: Users, label: "Clients", path: "/clients" },
-  { icon: FileText, label: "Invoices", path: "/invoices" },
-];
+{ icon: LayoutDashboard, label: "Dashboard", path: "/" },
+{ icon: Users, label: "Clients", path: "/clients" },
+{ icon: FileText, label: "Invoices", path: "/invoices" }];
+
 
 export function Sidebar() {
   const location = useLocation();
@@ -35,7 +35,7 @@ export function Sidebar() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary">
             <Send className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="text-lg font-semibold text-foreground">PayRemind</span>
+          <span className="font-semibold text-foreground text-2xl font-mono">​CLARIUM</span>
         </div>
 
         {/* Navigation */}
@@ -48,15 +48,15 @@ export function Sidebar() {
                 to={item.path}
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                )}
-              >
+                  isActive ?
+                  "bg-sidebar-accent text-sidebar-accent-foreground" :
+                  "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                )}>
+                
                 <item.icon className="h-5 w-5" />
                 {item.label}
-              </Link>
-            );
+              </Link>);
+
           })}
         </nav>
 
@@ -89,6 +89,6 @@ export function Sidebar() {
           </DropdownMenu>
         </div>
       </div>
-    </aside>
-  );
+    </aside>);
+
 }
