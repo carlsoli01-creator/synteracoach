@@ -438,6 +438,24 @@ export default function Negotium() {
   const [isPremium] = useState(() => localStorage.getItem("clarium_premium") === "true");
   const [showPricing, setShowPricing] = useState(false);
 
+  // Compute which categories have been completed today from history
+  const completedCategoriesToday = useMemo(() => {
+    const todayStr = new Date().toLocaleDateString();
+    const todaySessions = history.filter(s => {
+      if (!s.created_at) return false;
+      return new Date(s.created_at).toLocaleDateString() === todayStr;
+    });
+    // Check category from feedback JSON
+    const cats: string[] = [];
+    todaySessions.forEach(s => {
+      const fb = s.feedback as any;
+      if (fb?.scenario_category && !cats.includes(fb.scenario_category)) {
+        cats.push(fb.scenario_category);
+      }
+    });
+    return cats;
+  }, [history]);
+
   // Check if quiz was already completed
   const [quizVisible, setQuizVisible] = useState(() => {
     try {
