@@ -11,8 +11,7 @@ const DURATION_OPTIONS = [
 { label: "30s", value: 30 },
 { label: "45s", value: 45 },
 { label: "1m", value: 60 },
-{ label: "1m 30s", value: 90 },
-{ label: "2m", value: 120 }];
+];
 
 const DEFAULT_DURATION = 30;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
