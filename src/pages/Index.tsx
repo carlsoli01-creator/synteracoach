@@ -428,7 +428,7 @@ export default function Negotium() {
   const [recCommTips, setRecCommTips] = useState<string[]>([]);
   const [userSubtitle, setUserSubtitle] = useState("Voice Intelligence Platform");
   const [heroFocus, setHeroFocus] = useState("Be Analyzed.");
-  const [isPremium] = useState(() => localStorage.getItem("clarium_premium") === "true");
+  const [isPremium, setIsPremium] = useState(() => localStorage.getItem("clarium_premium") === "true");
   const [showPricing, setShowPricing] = useState(false);
 
   // Compute which categories have been completed today from history
