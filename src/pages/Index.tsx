@@ -1495,7 +1495,12 @@ export default function Negotium() {
         {/* ── SCENARIOS TAB ── */}
         {tab === "scenarios" &&
           <PracticeScenarios
-            onSelectScenario={() => setTab("analysis")}
+            onSelectScenario={(scenario) => {
+              // Store selected scenario category for session tracking
+              localStorage.setItem("clarium_active_scenario_category", scenario.category);
+              setTab("analysis");
+            }}
+            completedCategoriesToday={completedCategoriesToday}
             colors={c}
           />
         }
