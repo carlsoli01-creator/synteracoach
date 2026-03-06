@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useAuth } from "@/contexts/AuthContext";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, Mic } from "lucide-react";
 import { toast } from "sonner";
 
 const emailSchema = z.string().trim().email("Please enter a valid email address").max(255);
@@ -78,29 +78,28 @@ export default function Auth() {
     if (error) {
       toast.error(error.message.includes("User already registered") ? "An account with this email already exists." : error.message);
     } else {
-      toast.success("Account created successfully!");
-      navigate("/");
+      toast.success("Check your email to verify your account!");
     }
   };
 
   if (loading) {
     return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f7f7f8" }}>
-        <Loader2 className="h-8 w-8 animate-spin" style={{ color: "#6b7280" }} />
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#0b0b0b" }}>
+        <Loader2 className="h-8 w-8 animate-spin" style={{ color: "#9aa0a6" }} />
       </div>
     );
   }
 
   const inputStyle = (hasError?: boolean): React.CSSProperties => ({
     width: "100%",
-    padding: "12px 14px",
+    padding: "13px 16px",
     fontSize: 14,
-    border: `1px solid ${hasError ? "#c04a2a" : "#e6e6e6"}`,
-    borderRadius: 8,
-    background: "#ffffff",
-    color: "#0b0b0b",
+    border: `1px solid ${hasError ? "#c04a2a" : "rgba(255,255,255,0.08)"}`,
+    borderRadius: 10,
+    background: "rgba(255,255,255,0.04)",
+    color: "#f0f0f0",
     outline: "none",
-    transition: "border-color 0.2s",
+    transition: "border-color 0.2s, background 0.2s",
     fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
   });
 
@@ -108,47 +107,123 @@ export default function Auth() {
     <div style={{
       minHeight: "100vh",
       display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      background: "#f7f7f8",
       fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
-      padding: 20,
     }}>
+      {/* Left panel — branding */}
       <div style={{
-        width: "100%",
-        maxWidth: 400,
-        background: "#ffffff",
-        borderRadius: 14,
-        border: "1px solid #e6e6e6",
-        padding: "40px 32px",
-        boxShadow: "0 4px 24px rgba(16,24,40,0.06)",
+        flex: 1,
+        background: "linear-gradient(160deg, #0b0b0b 0%, #1a1a2e 50%, #0b0b0b 100%)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 48,
+        position: "relative",
+        overflow: "hidden",
       }}>
-        {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{ fontSize: 28, fontWeight: 800, color: "#0b0b0b", letterSpacing: "0.05em", marginBottom: 4 }}>
+        {/* Subtle grid overlay */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0)",
+          backgroundSize: "32px 32px",
+        }} />
+
+        <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 380 }}>
+          {/* Logo mark */}
+          <div style={{
+            width: 64,
+            height: 64,
+            borderRadius: 16,
+            background: "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))",
+            border: "1px solid rgba(255,255,255,0.06)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 28px",
+          }}>
+            <Mic size={28} style={{ color: "rgba(255,255,255,0.7)" }} />
+          </div>
+
+          <div style={{
+            fontSize: 36,
+            fontWeight: 800,
+            color: "#ffffff",
+            letterSpacing: "0.08em",
+            marginBottom: 12,
+          }}>
             CLARIUM
           </div>
-          <div style={{ fontSize: 12, color: "#9aa0a6", letterSpacing: "0.12em" }}>
-            Voice Intelligence Platform
+
+          <div style={{
+            fontSize: 15,
+            color: "rgba(255,255,255,0.45)",
+            lineHeight: 1.7,
+            marginBottom: 40,
+          }}>
+            AI-powered voice coaching that tells you the truth about how you speak — and shows you how to improve.
+          </div>
+
+          {/* Feature bullets */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 14, textAlign: "left" }}>
+            {[
+              { icon: "🎯", text: "Honest scoring — no inflated grades" },
+              { icon: "🧠", text: "Deep analysis of pace, clarity & confidence" },
+              { icon: "📈", text: "Track your progress over time" },
+            ].map((f, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ fontSize: 16 }}>{f.icon}</span>
+                <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>{f.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Right panel — form */}
+      <div style={{
+        width: 460,
+        minWidth: 400,
+        background: "#111114",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "48px 44px",
+        borderLeft: "1px solid rgba(255,255,255,0.04)",
+      }}>
+        <div style={{ marginBottom: 36 }}>
+          <div style={{
+            fontSize: 22,
+            fontWeight: 700,
+            color: "#f0f0f0",
+            marginBottom: 6,
+          }}>
+            {tab === "login" ? "Welcome back" : "Get started"}
+          </div>
+          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)" }}>
+            {tab === "login"
+              ? "Sign in to continue your voice training"
+              : "Create your account and start improving today"
+            }
           </div>
         </div>
 
         {/* Tabs */}
-        <div style={{ display: "flex", marginBottom: 28, borderBottom: "1px solid #e6e6e6" }}>
+        <div style={{ display: "flex", marginBottom: 28, gap: 4, background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: 4 }}>
           {(["login", "signup"] as const).map(t => (
             <button
               key={t}
               onClick={() => setTab(t)}
               style={{
                 flex: 1,
-                padding: "12px 0",
-                background: "none",
+                padding: "10px 0",
+                background: tab === t ? "rgba(255,255,255,0.08)" : "transparent",
                 border: "none",
-                borderBottom: tab === t ? "2px solid #0b0b0b" : "2px solid transparent",
-                color: tab === t ? "#0b0b0b" : "#9aa0a6",
-                fontSize: 11,
-                fontWeight: tab === t ? 700 : 400,
-                letterSpacing: "0.2em",
+                borderRadius: 8,
+                color: tab === t ? "#f0f0f0" : "rgba(255,255,255,0.3)",
+                fontSize: 12,
+                fontWeight: tab === t ? 600 : 400,
+                letterSpacing: "0.12em",
                 textTransform: "uppercase",
                 cursor: "pointer",
                 transition: "all 0.2s",
@@ -162,9 +237,9 @@ export default function Auth() {
 
         {/* Login Form */}
         {tab === "login" && (
-          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
             <div>
-              <label style={{ fontSize: 11, fontWeight: 600, color: "#6b7280", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6, display: "block" }}>
+              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
                 Email
               </label>
               <input
@@ -179,7 +254,7 @@ export default function Auth() {
             </div>
 
             <div>
-              <label style={{ fontSize: 11, fontWeight: 600, color: "#6b7280", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6, display: "block" }}>
+              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
                 Password
               </label>
               <div style={{ position: "relative" }}>
@@ -189,12 +264,12 @@ export default function Auth() {
                   value={loginPassword}
                   onChange={e => setLoginPassword(e.target.value)}
                   disabled={isSubmitting}
-                  style={{ ...inputStyle(!!loginErrors.password), paddingRight: 40 }}
+                  style={{ ...inputStyle(!!loginErrors.password), paddingRight: 44 }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#9aa0a6", cursor: "pointer" }}
+                  style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer" }}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -207,37 +282,37 @@ export default function Auth() {
               disabled={isSubmitting}
               style={{
                 width: "100%",
-                padding: 14,
-                background: "#0b0b0b",
-                color: "#f7f7f8",
+                padding: 15,
+                background: "linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%)",
+                color: "#0b0b0b",
                 border: "none",
-                borderRadius: 8,
-                fontSize: 12,
+                borderRadius: 10,
+                fontSize: 13,
                 fontWeight: 700,
-                letterSpacing: "0.15em",
+                letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 cursor: isSubmitting ? "not-allowed" : "pointer",
                 opacity: isSubmitting ? 0.6 : 1,
-                transition: "opacity 0.2s",
+                transition: "opacity 0.2s, transform 0.1s",
                 fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
                 marginTop: 8,
               }}
             >
-              {isSubmitting ? "Signing in..." : "Sign In"}
+              {isSubmitting ? "Signing in..." : "Sign In →"}
             </button>
           </form>
         )}
 
         {/* Signup Form */}
         {tab === "signup" && (
-          <form onSubmit={handleSignup} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <form onSubmit={handleSignup} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
             <div>
-              <label style={{ fontSize: 11, fontWeight: 600, color: "#6b7280", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6, display: "block" }}>
+              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
                 Full Name
               </label>
               <input
                 type="text"
-                placeholder="John Doe"
+                placeholder="Jane Smith"
                 value={signupName}
                 onChange={e => setSignupName(e.target.value)}
                 disabled={isSubmitting}
@@ -247,7 +322,7 @@ export default function Auth() {
             </div>
 
             <div>
-              <label style={{ fontSize: 11, fontWeight: 600, color: "#6b7280", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6, display: "block" }}>
+              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
                 Email
               </label>
               <input
@@ -262,7 +337,7 @@ export default function Auth() {
             </div>
 
             <div>
-              <label style={{ fontSize: 11, fontWeight: 600, color: "#6b7280", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6, display: "block" }}>
+              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
                 Password
               </label>
               <div style={{ position: "relative" }}>
@@ -272,12 +347,12 @@ export default function Auth() {
                   value={signupPassword}
                   onChange={e => setSignupPassword(e.target.value)}
                   disabled={isSubmitting}
-                  style={{ ...inputStyle(!!signupErrors.password), paddingRight: 40 }}
+                  style={{ ...inputStyle(!!signupErrors.password), paddingRight: 44 }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#9aa0a6", cursor: "pointer" }}
+                  style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer" }}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -286,7 +361,7 @@ export default function Auth() {
             </div>
 
             <div>
-              <label style={{ fontSize: 11, fontWeight: 600, color: "#6b7280", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6, display: "block" }}>
+              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
                 Confirm Password
               </label>
               <input
@@ -305,26 +380,31 @@ export default function Auth() {
               disabled={isSubmitting}
               style={{
                 width: "100%",
-                padding: 14,
-                background: "#0b0b0b",
-                color: "#f7f7f8",
+                padding: 15,
+                background: "linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%)",
+                color: "#0b0b0b",
                 border: "none",
-                borderRadius: 8,
-                fontSize: 12,
+                borderRadius: 10,
+                fontSize: 13,
                 fontWeight: 700,
-                letterSpacing: "0.15em",
+                letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 cursor: isSubmitting ? "not-allowed" : "pointer",
                 opacity: isSubmitting ? 0.6 : 1,
-                transition: "opacity 0.2s",
+                transition: "opacity 0.2s, transform 0.1s",
                 fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
                 marginTop: 8,
               }}
             >
-              {isSubmitting ? "Creating account..." : "Create Account"}
+              {isSubmitting ? "Creating account..." : "Create Account →"}
             </button>
           </form>
         )}
+
+        {/* Footer */}
+        <div style={{ marginTop: 32, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
+          By continuing, you agree to Clarium's Terms of Service
+        </div>
       </div>
     </div>
   );
