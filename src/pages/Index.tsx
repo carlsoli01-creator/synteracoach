@@ -945,6 +945,29 @@ export default function Negotium() {
         {/* ── ANALYSIS TAB ── */}
         {tab === "analysis" &&
         <>
+            {/* Tip of the Day */}
+            <div
+              style={{
+                background: isDark ? "rgba(107,114,128,0.08)" : "rgba(107,114,128,0.06)",
+                border: `1px solid ${c.border}`,
+                borderRadius: 10,
+                padding: "16px 20px",
+                marginBottom: gap,
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 12,
+              }}>
+              <span style={{ fontSize: 22, lineHeight: 1 }}>💡</span>
+              <div>
+                <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: c.muted, marginBottom: 4, fontWeight: 700 }}>
+                  Tip of the Day
+                </div>
+                <div style={{ fontSize: 13, color: c.text, lineHeight: 1.6 }}>
+                  {COMMUNICATION_TIPS[Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % COMMUNICATION_TIPS.length]}
+                </div>
+              </div>
+            </div>
+
             <div style={{ textAlign: "center", marginBottom: gap }}>
               <div
               style={{
