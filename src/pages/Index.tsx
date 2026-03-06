@@ -1537,41 +1537,6 @@ export default function Negotium() {
         {tab === "badges" &&
           <StreakBadges history={history} colors={c} />
         }
-
-        {/* ── TIPS TAB ── */}
-        {tab === "tips" &&
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            {[
-          { label: "Communication Tips", tips: COMMUNICATION_TIPS }].
-          map(({ label, tips }) =>
-          <div key={label}>
-                <div style={{ fontSize: 13, color: "#6b7280", fontWeight: 700, marginBottom: 10 }}>
-                  {label} ({tips.length})
-                </div>
-                <div style={{ display: "grid", gap: 8 }}>
-                  {tips.map((tip, i) =>
-              <div
-                key={i}
-                style={{
-                  background: c.card,
-                  border: `1px solid ${c.border}`,
-                  borderRadius: 8,
-                  padding: "12px 14px",
-                  fontSize: 13,
-                  color: c.text,
-                  lineHeight: 1.6,
-                  boxShadow: "0 2px 8px rgba(16,24,40,0.04)"
-                }}>
-                
-                      <span style={{ color: "#6b7280", marginRight: 8, fontWeight: 700 }}>{i + 1}.</span>
-                      {tip}
-                    </div>
-              )}
-                </div>
-              </div>
-          )}
-          </div>
-        }
       </div>
 
       <style>{`
