@@ -406,7 +406,7 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: {onStart: () =
 }
 
 export default function Negotium() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [phase, setPhase] = useState("idle");
   const [selectedDuration, setSelectedDuration] = useState(DEFAULT_DURATION);
   const [timeLeft, setTimeLeft] = useState(DEFAULT_DURATION);
@@ -865,8 +865,33 @@ export default function Negotium() {
               fontSize: 12,
               cursor: "pointer"
             }}>
-            
             ⚙ Setup
+          </button>
+          <button
+            onClick={() => window.location.href = "/profile"}
+            style={{
+              padding: "6px 12px",
+              borderRadius: 6,
+              border: `1px solid ${c.border}`,
+              background: "none",
+              color: c.muted,
+              fontSize: 12,
+              cursor: "pointer"
+            }}>
+            👤 Profile
+          </button>
+          <button
+            onClick={signOut}
+            style={{
+              padding: "6px 12px",
+              borderRadius: 6,
+              border: `1px solid ${c.border}`,
+              background: "none",
+              color: c.muted,
+              fontSize: 12,
+              cursor: "pointer"
+            }}>
+            Sign Out
           </button>
         </div>
       </div>
