@@ -980,9 +980,8 @@ export default function Negotium() {
               
                 Speak. <em style={{ color: "#6b7280" }}>{heroFocus}</em>
               </div>
-              <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase" }}>PACE · TONE · CONFIDENCE · CLARITY
-
-            </div>
+              <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase" }}>PACE · TONE · CONFIDENCE · CLARITY</div>
+              <div style={{ fontSize: 10, color: c.muted, marginTop: 6, fontStyle: "italic", letterSpacing: "0.01em" }}>🎙️ Use a microphone for best results</div>
             </div>
 
             {/* Waveform */}
