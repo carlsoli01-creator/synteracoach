@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import ProgressDashboard from "@/components/voice/ProgressDashboard";
@@ -438,6 +438,24 @@ export default function Negotium() {
   const [isPremium] = useState(() => localStorage.getItem("clarium_premium") === "true");
   const [showPricing, setShowPricing] = useState(false);
 
+  // Compute which categories have been completed today from history
+  const completedCategoriesToday = useMemo(() => {
+    const todayStr = new Date().toLocaleDateString();
+    const todaySessions = history.filter(s => {
+      if (!s.created_at) return false;
+      return new Date(s.created_at).toLocaleDateString() === todayStr;
+    });
+    // Check category from feedback JSON
+    const cats: string[] = [];
+    todaySessions.forEach(s => {
+      const fb = s.feedback as any;
+      if (fb?.scenario_category && !cats.includes(fb.scenario_category)) {
+        cats.push(fb.scenario_category);
+      }
+    });
+    return cats;
+  }, [history]);
+
   // Check if quiz was already completed
   const [quizVisible, setQuizVisible] = useState(() => {
     try {
@@ -616,7 +634,7 @@ export default function Negotium() {
         confidence_score: scores.confidence,
         clarity_score: scores.clarity,
         transcript,
-        feedback: { analysis, tags },
+        feedback: { analysis, tags, scenario_category: localStorage.getItem("clarium_active_scenario_category") || null },
         negotiation_tips: [],
         communication_tips: communicationTips || [],
         duration_seconds: durationSeconds
@@ -1477,7 +1495,12 @@ export default function Negotium() {
         {/* ── SCENARIOS TAB ── */}
         {tab === "scenarios" &&
           <PracticeScenarios
-            onSelectScenario={() => setTab("analysis")}
+            onSelectScenario={(scenario) => {
+              // Store selected scenario category for session tracking
+              localStorage.setItem("clarium_active_scenario_category", scenario.category);
+              setTab("analysis");
+            }}
+            completedCategoriesToday={completedCategoriesToday}
             colors={c}
           />
         }

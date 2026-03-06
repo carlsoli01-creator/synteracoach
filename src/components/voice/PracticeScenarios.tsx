@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 interface Props {
-  onSelectScenario: (scenario: { title: string; prompt: string }) => void;
+  onSelectScenario: (scenario: { title: string; prompt: string; category: string }) => void;
+  completedCategoriesToday?: string[];
   colors: {
     bg: string;
     panel: string;
@@ -26,7 +27,7 @@ const SCENARIOS = [
       {
         title: "Client Pitch",
         prompt: "You're pitching your product to a potential client. They currently use a competitor's solution and are skeptical about switching. Convince them why your solution is worth their time and investment.",
-        duration: "1m – 2m",
+        duration: "1m",
         difficulty: "Hard",
       },
       {
@@ -56,7 +57,7 @@ const SCENARIOS = [
       {
         title: "Vision Statement",
         prompt: "You're the new team lead. Introduce yourself and share your vision for the team's direction over the next quarter. Inspire confidence and set clear expectations.",
-        duration: "1m – 1m 30s",
+        duration: "1m",
         difficulty: "Easy",
       },
     ],
@@ -87,13 +88,29 @@ const SCENARIOS = [
   },
 ];
 
+function getDayIndex() {
+  const now = new Date();
+  // Days since epoch — rotates scenarios daily
+  return Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
+}
+
 const diffColor = (d: string) =>
   d === "Easy" ? "#4a8c5c" : d === "Medium" ? "#e8a838" : "#c04a2a";
 
-export default function PracticeScenarios({ onSelectScenario, colors: c }: Props) {
-  const [activeScenario, setActiveScenario] = useState<{ title: string; prompt: string } | null>(null);
+export default function PracticeScenarios({ onSelectScenario, completedCategoriesToday = [], colors: c }: Props) {
+  const [activeScenario, setActiveScenario] = useState<{ title: string; prompt: string; category: string } | null>(null);
+
+  const todaysScenarios = useMemo(() => {
+    const dayIdx = getDayIndex();
+    return SCENARIOS.map(cat => {
+      const item = cat.items[dayIdx % cat.items.length];
+      return { ...cat, todayItem: item };
+    });
+  }, []);
 
   if (activeScenario) {
+    const isCategoryDone = completedCategoriesToday.includes(activeScenario.category);
+
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         <button
@@ -117,7 +134,7 @@ export default function PracticeScenarios({ onSelectScenario, colors: c }: Props
           padding: 28,
         }}>
           <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 8 }}>
-            Scenario
+            Today's Scenario
           </div>
           <div style={{ fontSize: 18, fontWeight: 700, color: c.text, marginBottom: 16 }}>
             {activeScenario.title}
@@ -135,30 +152,48 @@ export default function PracticeScenarios({ onSelectScenario, colors: c }: Props
           }}>
             "{activeScenario.prompt}"
           </div>
-          <div style={{ fontSize: 11, color: c.muted, marginBottom: 20 }}>
-            Read the scenario above, then switch to the Analysis tab and record your response.
-          </div>
-          <button
-            onClick={() => {
-              onSelectScenario(activeScenario);
-              setActiveScenario(null);
-            }}
-            style={{
-              width: "100%",
-              padding: "14px",
-              background: c.text,
-              color: c.bg,
-              border: "none",
+          {isCategoryDone ? (
+            <div style={{
+              textAlign: "center",
+              padding: "16px",
+              background: c.bg,
               borderRadius: 8,
-              fontSize: 13,
-              fontWeight: 700,
-              cursor: "pointer",
-              letterSpacing: "0.1em",
-              transition: "opacity 0.2s",
-            }}
-          >
-            🎙 GO TO RECORDING
-          </button>
+              border: `1px solid ${c.border}`,
+            }}>
+              <div style={{ fontSize: 24, marginBottom: 8 }}>✅</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: c.text }}>Completed for today</div>
+              <div style={{ fontSize: 11, color: c.muted, marginTop: 4 }}>
+                Come back tomorrow for a new {activeScenario.category} scenario
+              </div>
+            </div>
+          ) : (
+            <>
+              <div style={{ fontSize: 11, color: c.muted, marginBottom: 20 }}>
+                Read the scenario above, then record your response. One attempt per category per day.
+              </div>
+              <button
+                onClick={() => {
+                  onSelectScenario(activeScenario);
+                  setActiveScenario(null);
+                }}
+                style={{
+                  width: "100%",
+                  padding: "14px",
+                  background: c.text,
+                  color: c.bg,
+                  border: "none",
+                  borderRadius: 8,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  letterSpacing: "0.1em",
+                  transition: "opacity 0.2s",
+                }}
+              >
+                🎙 GO TO RECORDING
+              </button>
+            </>
+          )}
         </div>
       </div>
     );
@@ -167,66 +202,70 @@ export default function PracticeScenarios({ onSelectScenario, colors: c }: Props
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       <div style={{ textAlign: "center", marginBottom: 4 }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: c.text }}>Choose a scenario to practice</div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: c.text }}>Today's Practice Scenarios</div>
         <div style={{ fontSize: 11, color: c.muted, marginTop: 4 }}>
-          Read the prompt, then record your response for AI feedback
+          One scenario per category each day · New scenarios rotate daily
         </div>
       </div>
 
-      {SCENARIOS.map(cat => (
-        <div key={cat.category}>
-          <div style={{
-            fontSize: 9,
-            letterSpacing: "0.25em",
-            color: c.muted,
-            textTransform: "uppercase",
-            marginBottom: 10,
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-          }}>
-            <span>{cat.icon}</span> {cat.category}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {cat.items.map(item => (
-              <button
-                key={item.title}
-                onClick={() => setActiveScenario({ title: item.title, prompt: item.prompt })}
-                style={{
-                  background: c.card,
-                  border: `1px solid ${c.border}`,
-                  borderRadius: 10,
-                  padding: "14px 16px",
-                  textAlign: "left",
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: c.text, marginBottom: 3 }}>
-                    {item.title}
-                  </div>
-                  <div style={{ fontSize: 10, color: c.muted }}>
-                    {item.duration}
-                  </div>
+      {todaysScenarios.map(cat => {
+        const item = cat.todayItem;
+        const done = completedCategoriesToday.includes(cat.category);
+
+        return (
+          <div key={cat.category}>
+            <div style={{
+              fontSize: 9,
+              letterSpacing: "0.25em",
+              color: c.muted,
+              textTransform: "uppercase",
+              marginBottom: 10,
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+            }}>
+              <span>{cat.icon}</span> {cat.category}
+              {done && <span style={{ color: "#4a8c5c", fontSize: 10, marginLeft: 4 }}>✅ Done</span>}
+            </div>
+            <button
+              onClick={() => setActiveScenario({ title: item.title, prompt: item.prompt, category: cat.category })}
+              style={{
+                width: "100%",
+                background: done ? c.bg : c.card,
+                border: `1px solid ${c.border}`,
+                borderRadius: 10,
+                padding: "14px 16px",
+                textAlign: "left",
+                cursor: "pointer",
+                transition: "all 0.2s",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                opacity: done ? 0.6 : 1,
+              }}
+            >
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: c.text, marginBottom: 3 }}>
+                  {item.title}
+                  {done && <span style={{ fontSize: 10, color: c.muted, fontWeight: 400, marginLeft: 8 }}>completed</span>}
                 </div>
-                <div style={{
-                  fontSize: 9,
-                  fontWeight: 700,
-                  color: diffColor(item.difficulty),
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                }}>
-                  {item.difficulty}
+                <div style={{ fontSize: 10, color: c.muted }}>
+                  {item.duration}
                 </div>
-              </button>
-            ))}
+              </div>
+              <div style={{
+                fontSize: 9,
+                fontWeight: 700,
+                color: diffColor(item.difficulty),
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}>
+                {item.difficulty}
+              </div>
+            </button>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
