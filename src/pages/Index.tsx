@@ -6,14 +6,7 @@ import StreakBadges from "@/components/voice/StreakBadges";
 import PracticeScenarios from "@/components/voice/PracticeScenarios";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
 
-const DURATION_OPTIONS = [
-{ label: "10s", value: 10 },
-{ label: "30s", value: 30 },
-{ label: "45s", value: 45 },
-{ label: "1m", value: 60 },
-];
-
-const DEFAULT_DURATION = 30;
+const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
 
 function getVariance(arr) {
