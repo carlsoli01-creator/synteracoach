@@ -6,14 +6,7 @@ import StreakBadges from "@/components/voice/StreakBadges";
 import PracticeScenarios from "@/components/voice/PracticeScenarios";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
 
-const DURATION_OPTIONS = [
-{ label: "10s", value: 10 },
-{ label: "30s", value: 30 },
-{ label: "45s", value: 45 },
-{ label: "1m", value: 60 },
-];
-
-const DEFAULT_DURATION = 30;
+const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
 
 function getVariance(arr) {
@@ -1120,28 +1113,21 @@ export default function Negotium() {
           }
 
             {phase === "idle" &&
-          <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
-                {DURATION_OPTIONS.map((opt) =>
-            <button
-              key={opt.value}
-              onClick={() => {setSelectedDuration(opt.value);setTimeLeft(opt.value);}}
-              style={{
-                padding: "8px 16px",
-                fontSize: 13,
-                fontWeight: selectedDuration === opt.value ? 700 : 500,
-                letterSpacing: "0.02em",
-                background: selectedDuration === opt.value ? c.text : "transparent",
-                color: selectedDuration === opt.value ? c.bg : c.muted,
-                border: `1.5px solid ${selectedDuration === opt.value ? c.text : c.border}`,
-                borderRadius: 8,
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-                minWidth: 56
-              }}>
-              
-                    {opt.label}
-                  </button>
-            )}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, marginBottom: 20, width: "100%", maxWidth: 280, margin: "0 auto 20px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", width: "100%", fontSize: 11, color: c.muted }}>
+                  <span>5s</span>
+                  <span style={{ fontWeight: 700, color: c.text, fontSize: 13 }}>{selectedDuration}s</span>
+                  <span>30s</span>
+                </div>
+                <input
+                  type="range"
+                  min={5}
+                  max={30}
+                  step={1}
+                  value={selectedDuration}
+                  onChange={(e) => { const v = Number(e.target.value); setSelectedDuration(v); setTimeLeft(v); }}
+                  style={{ width: "100%", accentColor: c.text, cursor: "pointer" }}
+                />
               </div>
           }
 
