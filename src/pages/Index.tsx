@@ -916,7 +916,7 @@ export default function Negotium() {
 
       {/* Tabs */}
       <div style={{ display: "flex", borderBottom: `1px solid ${c.border}`, background: c.panel }}>
-        {["analysis", "scenarios", "progress", "badges", "history", "tips"].map((t) =>
+        {["analysis", "scenarios", "progress", "badges", "history"].map((t) =>
         <button
           key={t}
           onClick={() => setTab(t)}
