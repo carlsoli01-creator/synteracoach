@@ -1413,8 +1413,8 @@ export default function Negotium() {
             <PricingModal
               onClose={() => setShowPricing(false)}
               onSubscribe={() => {
-                // Stripe not connected yet — placeholder
-                alert("Stripe integration coming soon! You'll be redirected to checkout.");
+                localStorage.setItem("clarium_premium", "true");
+                setIsPremium(true);
                 setShowPricing(false);
               }}
             />
