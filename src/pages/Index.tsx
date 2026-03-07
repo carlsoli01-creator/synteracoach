@@ -1117,12 +1117,12 @@ export default function Negotium() {
                 <div style={{ display: "flex", justifyContent: "space-between", width: "100%", fontSize: 11, color: c.muted }}>
                   <span>5s</span>
                   <span style={{ fontWeight: 700, color: c.text, fontSize: 13 }}>{selectedDuration}s</span>
-                  <span>30s</span>
+                  <span>45s</span>
                 </div>
                 <input
                   type="range"
                   min={5}
-                  max={30}
+                  max={45}
                   step={1}
                   value={selectedDuration}
                   onChange={(e) => { const v = Number(e.target.value); setSelectedDuration(v); setTimeLeft(v); }}
