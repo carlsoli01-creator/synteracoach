@@ -678,30 +678,63 @@ export default function Negotium() {
       framesRef.current = 0;
       recordingStartRef.current = Date.now();
 
-      // Start Web Speech API recognition
+      // Start Web Speech API recognition with enhanced settings
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
         recognition.lang = "en-US";
+        recognition.maxAlternatives = 3;
         let finalTranscript = "";
+        let isRecognitionActive = true;
+
         recognition.onresult = (event: any) => {
           let interim = "";
           for (let i = event.resultIndex; i < event.results.length; i++) {
             if (event.results[i].isFinal) {
-              finalTranscript += event.results[i][0].transcript + " ";
+              // Pick the highest confidence alternative
+              let bestAlt = event.results[i][0];
+              for (let j = 1; j < event.results[i].length; j++) {
+                if (event.results[i][j].confidence > bestAlt.confidence) {
+                  bestAlt = event.results[i][j];
+                }
+              }
+              finalTranscript += bestAlt.transcript + " ";
             } else {
               interim += event.results[i][0].transcript;
             }
           }
           transcriptRef.current = finalTranscript + interim;
         };
+
         recognition.onerror = (e: any) => {
           console.warn("Speech recognition error:", e.error);
+          // Auto-restart on recoverable errors
+          if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) {
+            try {
+              setTimeout(() => {
+                if (isRecognitionActive) recognition.start();
+              }, 300);
+            } catch (_) {}
+          }
         };
+
+        // Auto-restart when recognition ends unexpectedly during recording
+        recognition.onend = () => {
+          if (isRecognitionActive) {
+            try {
+              setTimeout(() => {
+                if (isRecognitionActive) recognition.start();
+              }, 200);
+            } catch (_) {}
+          }
+        };
+
         recognition.start();
         recognitionRef.current = recognition;
+        // Attach a cleanup flag so we can stop auto-restart
+        (recognitionRef.current as any)._stopAutoRestart = () => { isRecognitionActive = false; };
       }
 
       const mr = new MediaRecorder(stream);
