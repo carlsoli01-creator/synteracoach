@@ -533,8 +533,9 @@ export default function Negotium() {
     const durationSeconds = Math.round((Date.now() - recordingStartRef.current) / 1000);
     const transcript = transcriptRef.current.trim();
 
-    // Stop speech recognition
-    try {recognitionRef.current?.stop();} catch (_) {}
+    // Stop speech recognition and auto-restart
+    try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
+    try { recognitionRef.current?.stop(); } catch (_) {}
 
     if (!transcript || transcript.length < 5) {
       setMicError("Could not detect speech. Please speak clearly and try again. Make sure your browser supports speech recognition.");
