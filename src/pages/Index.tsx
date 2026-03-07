@@ -533,8 +533,9 @@ export default function Negotium() {
     const durationSeconds = Math.round((Date.now() - recordingStartRef.current) / 1000);
     const transcript = transcriptRef.current.trim();
 
-    // Stop speech recognition
-    try {recognitionRef.current?.stop();} catch (_) {}
+    // Stop speech recognition and auto-restart
+    try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
+    try { recognitionRef.current?.stop(); } catch (_) {}
 
     if (!transcript || transcript.length < 5) {
       setMicError("Could not detect speech. Please speak clearly and try again. Make sure your browser supports speech recognition.");
@@ -678,30 +679,63 @@ export default function Negotium() {
       framesRef.current = 0;
       recordingStartRef.current = Date.now();
 
-      // Start Web Speech API recognition
+      // Start Web Speech API recognition with enhanced settings
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
         recognition.lang = "en-US";
+        recognition.maxAlternatives = 3;
         let finalTranscript = "";
+        let isRecognitionActive = true;
+
         recognition.onresult = (event: any) => {
           let interim = "";
           for (let i = event.resultIndex; i < event.results.length; i++) {
             if (event.results[i].isFinal) {
-              finalTranscript += event.results[i][0].transcript + " ";
+              // Pick the highest confidence alternative
+              let bestAlt = event.results[i][0];
+              for (let j = 1; j < event.results[i].length; j++) {
+                if (event.results[i][j].confidence > bestAlt.confidence) {
+                  bestAlt = event.results[i][j];
+                }
+              }
+              finalTranscript += bestAlt.transcript + " ";
             } else {
               interim += event.results[i][0].transcript;
             }
           }
           transcriptRef.current = finalTranscript + interim;
         };
+
         recognition.onerror = (e: any) => {
           console.warn("Speech recognition error:", e.error);
+          // Auto-restart on recoverable errors
+          if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) {
+            try {
+              setTimeout(() => {
+                if (isRecognitionActive) recognition.start();
+              }, 300);
+            } catch (_) {}
+          }
         };
+
+        // Auto-restart when recognition ends unexpectedly during recording
+        recognition.onend = () => {
+          if (isRecognitionActive) {
+            try {
+              setTimeout(() => {
+                if (isRecognitionActive) recognition.start();
+              }, 200);
+            } catch (_) {}
+          }
+        };
+
         recognition.start();
         recognitionRef.current = recognition;
+        // Attach a cleanup flag so we can stop auto-restart
+        (recognitionRef.current as any)._stopAutoRestart = () => { isRecognitionActive = false; };
       }
 
       const mr = new MediaRecorder(stream);
@@ -750,6 +784,7 @@ export default function Negotium() {
           mr.stop();
           try {stream.getTracks().forEach((tr) => tr.stop());} catch (_) {}
           try {audioCtx.close();} catch (_) {}
+          try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
           try {recognitionRef.current?.stop();} catch (_) {}
           setWaveData(new Array(80).fill(0.5));
           // Small delay for final speech recognition results
@@ -763,7 +798,8 @@ export default function Negotium() {
 
   const reset = useCallback(() => {
     stopAll();
-    try {recognitionRef.current?.stop();} catch (_) {}
+    try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
+    try { recognitionRef.current?.stop(); } catch (_) {}
     transcriptRef.current = "";
     setPhase("idle");
     setTimeLeft(selectedDuration);
@@ -1117,12 +1153,12 @@ export default function Negotium() {
                 <div style={{ display: "flex", justifyContent: "space-between", width: "100%", fontSize: 11, color: c.muted }}>
                   <span>5s</span>
                   <span style={{ fontWeight: 700, color: c.text, fontSize: 13 }}>{selectedDuration}s</span>
-                  <span>30s</span>
+                  <span>45s</span>
                 </div>
                 <input
                   type="range"
                   min={5}
-                  max={30}
+                  max={45}
                   step={1}
                   value={selectedDuration}
                   onChange={(e) => { const v = Number(e.target.value); setSelectedDuration(v); setTimeLeft(v); }}
