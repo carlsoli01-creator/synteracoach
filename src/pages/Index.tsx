@@ -784,6 +784,7 @@ export default function Negotium() {
           mr.stop();
           try {stream.getTracks().forEach((tr) => tr.stop());} catch (_) {}
           try {audioCtx.close();} catch (_) {}
+          try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
           try {recognitionRef.current?.stop();} catch (_) {}
           setWaveData(new Array(80).fill(0.5));
           // Small delay for final speech recognition results
