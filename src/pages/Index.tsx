@@ -797,7 +797,8 @@ export default function Negotium() {
 
   const reset = useCallback(() => {
     stopAll();
-    try {recognitionRef.current?.stop();} catch (_) {}
+    try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
+    try { recognitionRef.current?.stop(); } catch (_) {}
     transcriptRef.current = "";
     setPhase("idle");
     setTimeLeft(selectedDuration);
