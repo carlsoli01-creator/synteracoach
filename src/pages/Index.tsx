@@ -1443,38 +1443,6 @@ export default function Negotium() {
           </div>
         }
 
-        {/* ── SCENARIOS TAB ── */}
-        {tab === "scenarios" &&
-          <div style={{ textAlign: "center", padding: "60px 0" }}>
-            <div style={{ fontSize: 13, color: c.muted, marginBottom: 16 }}>Scenarios have moved to their own pages!</div>
-            <button
-              onClick={() => window.location.href = "/scenarios"}
-              style={{
-                padding: "14px 28px",
-                background: "linear-gradient(90deg,#111827,#1f2937)",
-                color: "#fff",
-                border: "none",
-                borderRadius: 8,
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: "pointer",
-                letterSpacing: "0.1em",
-              }}
-            >
-              🎯 GO TO PRACTICE SCENARIOS
-            </button>
-          </div>
-        }
-
-        {/* ── PROGRESS TAB ── */}
-        {tab === "progress" &&
-          <ProgressDashboard history={history} colors={c} />
-        }
-
-        {/* ── BADGES TAB ── */}
-        {tab === "badges" &&
-          <StreakBadges history={history} colors={c} />
-        }
       </div>
 
       <style>{`
