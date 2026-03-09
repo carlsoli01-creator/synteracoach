@@ -494,14 +494,14 @@ export default function Negotium() {
   const ringOffset = CIRCUMFERENCE * (timeLeft / selectedDuration);
   const isDark = theme === "dark";
   const c = {
-    bg: isDark ? "#070707" : "#f7f7f8",
-    panel: isDark ? "#0b0b0b" : "#ffffff",
-    border: isDark ? "#1e1e1e" : "#e6e6e6",
-    text: isDark ? "#e8e0d0" : "#0b0b0b",
-    muted: "#9aa0a6",
-    card: isDark ? "#0f0f0f" : "#ffffff",
-    waveBg: isDark ? "#0d0d0b" : "#f4f4f5",
-    waveEmpty: isDark ? "#2a2a26" : "#e0e0e0"
+    bg: isDark ? "#070707" : "#0b0b0b",
+    panel: isDark ? "#0b0b0b" : "#111111",
+    border: isDark ? "#1e1e1e" : "#222222",
+    text: isDark ? "#e8e0d0" : "#e8e0d0",
+    muted: isDark ? "#9aa0a6" : "#8a8f96",
+    card: isDark ? "#0f0f0f" : "#161616",
+    waveBg: isDark ? "#0d0d0b" : "#111111",
+    waveEmpty: isDark ? "#2a2a26" : "#333333"
   };
 
   const stopAll = useCallback(() => {
@@ -868,23 +868,23 @@ export default function Negotium() {
         </div>
       </div>
 
-      {/* Tip of the Day — outside main content */}
+      {/* Tip of the Day — separated from main content */}
       {tab === "analysis" && (
         <div style={{
           maxWidth: 860,
           margin: "0 auto",
-          padding: `${gap}px 20px 0`,
+          padding: `${gap + 8}px 20px 0`,
         }}>
           <div
             style={{
-              background: isDark ? "rgba(107,114,128,0.05)" : "rgba(107,114,128,0.04)",
+              background: "rgba(255,255,255,0.03)",
               border: `1px dashed ${c.border}`,
               borderRadius: 12,
-              padding: "18px 22px",
+              padding: "20px 24px",
               display: "flex",
               alignItems: "flex-start",
               gap: 14,
-              marginBottom: 0,
+              marginBottom: gap + 12,
             }}>
             <span style={{ fontSize: 22, lineHeight: 1 }}>💡</span>
             <div>
@@ -896,6 +896,8 @@ export default function Negotium() {
               </div>
             </div>
           </div>
+          {/* Divider */}
+          <div style={{ height: 1, background: c.border, marginBottom: gap }} />
         </div>
       )}
 
