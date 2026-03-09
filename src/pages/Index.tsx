@@ -1538,15 +1538,25 @@ export default function Negotium() {
 
         {/* ── SCENARIOS TAB ── */}
         {tab === "scenarios" &&
-          <PracticeScenarios
-            onSelectScenario={(scenario) => {
-              // Store selected scenario category for session tracking
-              localStorage.setItem("syntera_active_scenario_category", scenario.category);
-              setTab("analysis");
-            }}
-            completedCategoriesToday={completedCategoriesToday}
-            colors={c}
-          />
+          <div style={{ textAlign: "center", padding: "60px 0" }}>
+            <div style={{ fontSize: 13, color: c.muted, marginBottom: 16 }}>Scenarios have moved to their own pages!</div>
+            <button
+              onClick={() => window.location.href = "/scenarios"}
+              style={{
+                padding: "14px 28px",
+                background: "linear-gradient(90deg,#111827,#1f2937)",
+                color: "#fff",
+                border: "none",
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: "pointer",
+                letterSpacing: "0.1em",
+              }}
+            >
+              🎯 GO TO PRACTICE SCENARIOS
+            </button>
+          </div>
         }
 
         {/* ── PROGRESS TAB ── */}
