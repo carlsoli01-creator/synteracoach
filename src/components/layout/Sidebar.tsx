@@ -35,7 +35,7 @@ export function Sidebar() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary">
             <Send className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="font-semibold text-foreground text-2xl font-mono">​CLARIUM</span>
+          <span className="font-semibold text-foreground text-2xl font-mono">​SYNTERA</span>
         </div>
 
         {/* Navigation */}

@@ -428,7 +428,7 @@ export default function Negotium() {
   const [recCommTips, setRecCommTips] = useState<string[]>([]);
   const [userSubtitle, setUserSubtitle] = useState("Voice Intelligence Platform");
   const [heroFocus, setHeroFocus] = useState("Be Analyzed.");
-  const [isPremium, setIsPremium] = useState(() => localStorage.getItem("clarium_premium") === "true");
+  const [isPremium, setIsPremium] = useState(() => localStorage.getItem("syntera_premium") === "true");
   const [showPricing, setShowPricing] = useState(false);
 
   // Compute which categories have been completed today from history
@@ -628,7 +628,7 @@ export default function Negotium() {
         confidence_score: scores.confidence,
         clarity_score: scores.clarity,
         transcript,
-        feedback: { analysis, tags, scenario_category: localStorage.getItem("clarium_active_scenario_category") || null },
+        feedback: { analysis, tags, scenario_category: localStorage.getItem("syntera_active_scenario_category") || null },
         negotiation_tips: [],
         communication_tips: communicationTips || [],
         duration_seconds: durationSeconds
@@ -848,7 +848,7 @@ export default function Negotium() {
         }}>
         
         <div>
-          <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>CLARIUM</div>
+          <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>SYNTERA</div>
           <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>{userSubtitle}</div>
         </div>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
@@ -1449,7 +1449,7 @@ export default function Negotium() {
             <PricingModal
               onClose={() => setShowPricing(false)}
               onSubscribe={() => {
-                localStorage.setItem("clarium_premium", "true");
+                localStorage.setItem("syntera_premium", "true");
                 setIsPremium(true);
                 setShowPricing(false);
               }}
@@ -1541,7 +1541,7 @@ export default function Negotium() {
           <PracticeScenarios
             onSelectScenario={(scenario) => {
               // Store selected scenario category for session tracking
-              localStorage.setItem("clarium_active_scenario_category", scenario.category);
+              localStorage.setItem("syntera_active_scenario_category", scenario.category);
               setTab("analysis");
             }}
             completedCategoriesToday={completedCategoriesToday}
