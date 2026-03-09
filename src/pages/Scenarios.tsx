@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenarios";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect } from "react";
+import AppDrawer from "@/components/layout/AppDrawer";
 
 export default function Scenarios() {
   const navigate = useNavigate();
