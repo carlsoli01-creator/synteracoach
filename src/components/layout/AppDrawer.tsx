@@ -59,7 +59,7 @@ export default function AppDrawer({ theme: themeProp, setTheme: setThemeProp, sp
         aria-label="Open menu"
       >
         {[0, 1, 2].map((i) => (
-          <div key={i} style={{ width: 16, height: 1.5, background: textColor, borderRadius: 1 }} />
+          <div key={i} style={{ width: 16, height: 1.5, background: "#fff", borderRadius: 1 }} />
         ))}
       </button>
 
