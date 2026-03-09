@@ -1449,7 +1449,7 @@ export default function Negotium() {
             <PricingModal
               onClose={() => setShowPricing(false)}
               onSubscribe={() => {
-                localStorage.setItem("clarium_premium", "true");
+                localStorage.setItem("syntera_premium", "true");
                 setIsPremium(true);
                 setShowPricing(false);
               }}
