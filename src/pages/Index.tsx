@@ -834,138 +834,38 @@ export default function Negotium() {
 
       }
 
+      <AppDrawer
+        theme={theme}
+        setTheme={setTheme}
+        spacingMode={spacingMode}
+        setSpacingMode={setSpacingMode}
+        onOpenSetup={() => setQuizVisible(true)}
+      />
+
       {/* Header */}
       <div
         style={{
-          padding: "24px 28px",
+          padding: "24px 28px 24px 60px",
           borderBottom: `1px solid ${c.border}`,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           background: c.panel
         }}>
-        
         <div>
           <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>SYNTERA</div>
           <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>{userSubtitle}</div>
         </div>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           {avgHistory !== null &&
-          <div style={{ textAlign: "right", marginRight: 4 }}>
+          <div style={{ textAlign: "right" }}>
               <div style={{ fontSize: 9, color: c.muted, letterSpacing: "0.2em", textTransform: "uppercase" }}>
                 Avg Score
               </div>
               <div style={{ fontSize: 22, fontWeight: 800, color: c.text }}>{avgHistory}</div>
             </div>
           }
-          {[
-          [
-          "theme",
-          theme,
-          setTheme,
-          [
-          ["light", "☀️ Light"],
-          ["dark", "🌙 Dark"]]],
-
-
-          [
-          "spacing",
-          spacingMode,
-          setSpacingMode,
-          [
-          ["airy", "Airy"],
-          ["compact", "Compact"]]]].
-
-
-          map(([label, val, setter, opts]: any) =>
-          <select
-            key={label}
-            value={val}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setter(e.target.value)}
-            style={{
-              padding: "6px 10px",
-              borderRadius: 6,
-              border: `1px solid ${c.border}`,
-              background: c.panel,
-              color: c.text,
-              fontSize: 12,
-              cursor: "pointer"
-            }}>
-            
-              {opts.map(([v, optLabel]: [string, string]) =>
-            <option key={v} value={v}>
-                  {optLabel}
-                </option>
-            )}
-            </select>
-          )}
-          <button
-            onClick={() => setQuizVisible(true)}
-            style={{
-              padding: "6px 12px",
-              borderRadius: 6,
-              border: `1px solid ${c.border}`,
-              background: "none",
-              color: c.muted,
-              fontSize: 12,
-              cursor: "pointer"
-            }}>
-            ⚙ Setup
-          </button>
-          <button
-            onClick={() => window.location.href = "/profile"}
-            style={{
-              padding: "6px 12px",
-              borderRadius: 6,
-              border: `1px solid ${c.border}`,
-              background: "none",
-              color: c.muted,
-              fontSize: 12,
-              cursor: "pointer"
-            }}>
-            👤 Profile
-          </button>
-          <button
-            onClick={signOut}
-            style={{
-              padding: "6px 12px",
-              borderRadius: 6,
-              border: `1px solid ${c.border}`,
-              background: "none",
-              color: c.muted,
-              fontSize: 12,
-              cursor: "pointer"
-            }}>
-            Sign Out
-          </button>
         </div>
-      </div>
-
-      {/* Tabs */}
-      <div style={{ display: "flex", borderBottom: `1px solid ${c.border}`, background: c.panel }}>
-        {["analysis", "scenarios", "progress", "badges", "history"].map((t) =>
-        <button
-          key={t}
-          onClick={() => setTab(t)}
-          style={{
-            flex: 1,
-            padding: "14px 8px",
-            background: "none",
-            border: "none",
-            borderBottom: tab === t ? "2px solid #6b7280" : "2px solid transparent",
-            color: tab === t ? c.text : c.muted,
-            cursor: "pointer",
-            fontSize: 10,
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            fontWeight: tab === t ? 700 : 400,
-            transition: "all 0.2s",
-            whiteSpace: "nowrap",
-          }}>
-          
-            {t === "analysis" ? "🎙 Analysis" : t === "scenarios" ? "🎯 Practice" : t === "progress" ? "📊 Progress" : t === "badges" ? "🏆 Badges" : "📋 History"}
-          </button>
-        )}
       </div>
 
       {/* Tip of the Day — outside main content */}
