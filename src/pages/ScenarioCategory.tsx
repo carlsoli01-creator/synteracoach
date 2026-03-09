@@ -63,8 +63,9 @@ export default function ScenarioCategory() {
       fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
       paddingBottom: 80,
     }}>
+      <AppDrawer />
       {/* Back nav */}
-      <div style={{ padding: "20px 28px 0" }}>
+      <div style={{ padding: "20px 28px 0 60px" }}>
         <button
           onClick={() => navigate("/scenarios")}
           style={{

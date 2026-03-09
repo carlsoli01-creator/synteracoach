@@ -28,7 +28,8 @@ export default function Progress() {
 
   return (
     <div style={{ minHeight: "100vh", background: c.bg, fontFamily: "Inter, sans-serif", paddingBottom: 80 }}>
-      <div style={{ padding: "40px 28px 24px", textAlign: "center" }}>
+      <AppDrawer />
+      <div style={{ padding: "40px 28px 24px 60px", textAlign: "center" }}>
         <div style={{ fontSize: 28, fontWeight: 800, color: c.text, marginBottom: 8 }}>📊 Progress</div>
         <div style={{ fontSize: 13, color: c.muted }}>Track your improvement over time</div>
       </div>

@@ -38,9 +38,10 @@ export default function Scenarios() {
       fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
       paddingBottom: 80,
     }}>
+      <AppDrawer />
       {/* Header */}
       <div style={{
-        padding: "40px 28px 24px",
+        padding: "40px 28px 24px 60px",
         textAlign: "center",
       }}>
         <div style={{ fontSize: 28, fontWeight: 800, color: "#0b0b0b", letterSpacing: "0.03em", marginBottom: 8 }}>
