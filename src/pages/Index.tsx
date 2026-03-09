@@ -628,7 +628,7 @@ export default function Negotium() {
         confidence_score: scores.confidence,
         clarity_score: scores.clarity,
         transcript,
-        feedback: { analysis, tags, scenario_category: localStorage.getItem("clarium_active_scenario_category") || null },
+        feedback: { analysis, tags, scenario_category: localStorage.getItem("syntera_active_scenario_category") || null },
         negotiation_tips: [],
         communication_tips: communicationTips || [],
         duration_seconds: durationSeconds
