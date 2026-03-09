@@ -230,11 +230,6 @@ serve(async (req) => {
       );
     }
 
-    const wordCount = transcript.trim().split(/\s+/).filter(Boolean).length;
-    const wpm = audioMetrics.durationSeconds && audioMetrics.durationSeconds > 0
-      ? (wordCount / audioMetrics.durationSeconds) * 60
-      : 0;
-
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       return new Response(
@@ -242,6 +237,63 @@ serve(async (req) => {
         { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
+
+    // Step 1: AI-powered transcript cleanup for much higher accuracy
+    console.log("Raw transcript:", transcript);
+    try {
+      const cleanupResponse = await fetch(
+        "https://ai.gateway.lovable.dev/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-2.5-flash",
+            messages: [
+              {
+                role: "system",
+                content: `You are a speech transcript correction engine. Your ONLY job is to fix a raw speech-to-text transcript that may contain errors from browser-based speech recognition.
+
+Rules:
+- Fix misheard words, broken grammar, and nonsensical phrases caused by speech recognition errors
+- Reconstruct what the speaker ACTUALLY said based on context clues
+- Fix word boundaries (e.g. "I scream" vs "ice cream", "new direction" vs "nude erection")
+- Fix homophones chosen incorrectly (e.g. "their/there/they're", "your/you're")
+- Remove duplicate words/phrases caused by recognition restarts
+- Preserve the speaker's actual vocabulary level and style — do NOT upgrade their language
+- Do NOT add words or ideas the speaker didn't say
+- Do NOT rephrase or restructure sentences — keep the original word order
+- Do NOT fix intentional informal speech patterns (contractions, slang they clearly meant)
+- If a section is genuinely unintelligible, keep the closest approximation
+- Return ONLY the corrected transcript text, nothing else — no explanations, no quotes, no labels`
+              },
+              {
+                role: "user",
+                content: `Raw speech-to-text transcript to correct:\n\n${transcript}`
+              },
+            ],
+          }),
+        },
+      );
+
+      if (cleanupResponse.ok) {
+        const cleanupResult = await cleanupResponse.json();
+        const cleaned = cleanupResult.choices?.[0]?.message?.content?.trim();
+        if (cleaned && cleaned.length >= 5) {
+          console.log("Cleaned transcript:", cleaned);
+          transcript = cleaned;
+        }
+      }
+    } catch (cleanupErr) {
+      console.warn("Transcript cleanup failed, using raw transcript:", cleanupErr);
+    }
+
+    const wordCount = transcript.trim().split(/\s+/).filter(Boolean).length;
+    const wpm = audioMetrics.durationSeconds && audioMetrics.durationSeconds > 0
+      ? (wordCount / audioMetrics.durationSeconds) * 60
+      : 0;
 
     const systemPrompt = `You are a confident, supportive speech & negotiation coach with expertise in rhetoric, persuasion psychology, and vocal delivery. You provide honest, specific feedback that leads with strengths before addressing areas for improvement. Your tone is warm but direct — like a skilled mentor who genuinely wants speakers to succeed and knows exactly how to help them get there. You balance genuine praise with constructive, actionable critique.
 
