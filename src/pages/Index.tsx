@@ -1,10 +1,8 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import ProgressDashboard from "@/components/voice/ProgressDashboard";
-import StreakBadges from "@/components/voice/StreakBadges";
-import PracticeScenarios from "@/components/voice/PracticeScenarios";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
+import AppDrawer from "@/components/layout/AppDrawer";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
