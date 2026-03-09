@@ -868,23 +868,23 @@ export default function Negotium() {
         </div>
       </div>
 
-      {/* Tip of the Day — outside main content */}
+      {/* Tip of the Day — separated from main content */}
       {tab === "analysis" && (
         <div style={{
           maxWidth: 860,
           margin: "0 auto",
-          padding: `${gap}px 20px 0`,
+          padding: `${gap + 8}px 20px 0`,
         }}>
           <div
             style={{
-              background: isDark ? "rgba(107,114,128,0.05)" : "rgba(107,114,128,0.04)",
+              background: "rgba(255,255,255,0.03)",
               border: `1px dashed ${c.border}`,
               borderRadius: 12,
-              padding: "18px 22px",
+              padding: "20px 24px",
               display: "flex",
               alignItems: "flex-start",
               gap: 14,
-              marginBottom: 0,
+              marginBottom: gap + 12,
             }}>
             <span style={{ fontSize: 22, lineHeight: 1 }}>💡</span>
             <div>
@@ -896,6 +896,8 @@ export default function Negotium() {
               </div>
             </div>
           </div>
+          {/* Divider */}
+          <div style={{ height: 1, background: c.border, marginBottom: gap }} />
         </div>
       )}
 
