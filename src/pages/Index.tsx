@@ -418,7 +418,7 @@ export default function Negotium() {
     };
     loadHistory();
   }, [user]);
-  const [tab, setTab] = useState("analysis");
+  const [tab] = useState("analysis");
   const [waveData, setWaveData] = useState(new Array(80).fill(0.5));
   const [micError, setMicError] = useState("");
   const [theme, setTheme] = useState("light");
