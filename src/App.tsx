@@ -10,6 +10,8 @@ import Auth from "./pages/Auth";
 import Clients from "./pages/Clients";
 import Invoices from "./pages/Invoices";
 import Profile from "./pages/Profile";
+import Scenarios from "./pages/Scenarios";
+import ScenarioCategory from "./pages/ScenarioCategory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
