@@ -57,6 +57,22 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/scenarios"
+              element={
+                <ProtectedRoute>
+                  <Scenarios />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/scenarios/:slug"
+              element={
+                <ProtectedRoute>
+                  <ScenarioCategory />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
