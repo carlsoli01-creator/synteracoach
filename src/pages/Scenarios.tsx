@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenarios";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect } from "react";
+import AppDrawer from "@/components/layout/AppDrawer";
 
 export default function Scenarios() {
   const navigate = useNavigate();
@@ -38,9 +38,10 @@ export default function Scenarios() {
       fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
       paddingBottom: 80,
     }}>
+      <AppDrawer />
       {/* Header */}
       <div style={{
-        padding: "40px 28px 24px",
+        padding: "40px 28px 24px 60px",
         textAlign: "center",
       }}>
         <div style={{ fontSize: 28, fontWeight: 800, color: "#0b0b0b", letterSpacing: "0.03em", marginBottom: 8 }}>

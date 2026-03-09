@@ -1,10 +1,8 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import ProgressDashboard from "@/components/voice/ProgressDashboard";
-import StreakBadges from "@/components/voice/StreakBadges";
-import PracticeScenarios from "@/components/voice/PracticeScenarios";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
+import AppDrawer from "@/components/layout/AppDrawer";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
@@ -420,7 +418,7 @@ export default function Negotium() {
     };
     loadHistory();
   }, [user]);
-  const [tab, setTab] = useState("analysis");
+  const [tab] = useState("analysis");
   const [waveData, setWaveData] = useState(new Array(80).fill(0.5));
   const [micError, setMicError] = useState("");
   const [theme, setTheme] = useState("light");
@@ -836,138 +834,38 @@ export default function Negotium() {
 
       }
 
+      <AppDrawer
+        theme={theme}
+        setTheme={setTheme}
+        spacingMode={spacingMode}
+        setSpacingMode={setSpacingMode}
+        onOpenSetup={() => setQuizVisible(true)}
+      />
+
       {/* Header */}
       <div
         style={{
-          padding: "24px 28px",
+          padding: "24px 28px 24px 60px",
           borderBottom: `1px solid ${c.border}`,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           background: c.panel
         }}>
-        
         <div>
           <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>SYNTERA</div>
           <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>{userSubtitle}</div>
         </div>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           {avgHistory !== null &&
-          <div style={{ textAlign: "right", marginRight: 4 }}>
+          <div style={{ textAlign: "right" }}>
               <div style={{ fontSize: 9, color: c.muted, letterSpacing: "0.2em", textTransform: "uppercase" }}>
                 Avg Score
               </div>
               <div style={{ fontSize: 22, fontWeight: 800, color: c.text }}>{avgHistory}</div>
             </div>
           }
-          {[
-          [
-          "theme",
-          theme,
-          setTheme,
-          [
-          ["light", "☀️ Light"],
-          ["dark", "🌙 Dark"]]],
-
-
-          [
-          "spacing",
-          spacingMode,
-          setSpacingMode,
-          [
-          ["airy", "Airy"],
-          ["compact", "Compact"]]]].
-
-
-          map(([label, val, setter, opts]: any) =>
-          <select
-            key={label}
-            value={val}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setter(e.target.value)}
-            style={{
-              padding: "6px 10px",
-              borderRadius: 6,
-              border: `1px solid ${c.border}`,
-              background: c.panel,
-              color: c.text,
-              fontSize: 12,
-              cursor: "pointer"
-            }}>
-            
-              {opts.map(([v, optLabel]: [string, string]) =>
-            <option key={v} value={v}>
-                  {optLabel}
-                </option>
-            )}
-            </select>
-          )}
-          <button
-            onClick={() => setQuizVisible(true)}
-            style={{
-              padding: "6px 12px",
-              borderRadius: 6,
-              border: `1px solid ${c.border}`,
-              background: "none",
-              color: c.muted,
-              fontSize: 12,
-              cursor: "pointer"
-            }}>
-            ⚙ Setup
-          </button>
-          <button
-            onClick={() => window.location.href = "/profile"}
-            style={{
-              padding: "6px 12px",
-              borderRadius: 6,
-              border: `1px solid ${c.border}`,
-              background: "none",
-              color: c.muted,
-              fontSize: 12,
-              cursor: "pointer"
-            }}>
-            👤 Profile
-          </button>
-          <button
-            onClick={signOut}
-            style={{
-              padding: "6px 12px",
-              borderRadius: 6,
-              border: `1px solid ${c.border}`,
-              background: "none",
-              color: c.muted,
-              fontSize: 12,
-              cursor: "pointer"
-            }}>
-            Sign Out
-          </button>
         </div>
-      </div>
-
-      {/* Tabs */}
-      <div style={{ display: "flex", borderBottom: `1px solid ${c.border}`, background: c.panel }}>
-        {["analysis", "scenarios", "progress", "badges", "history"].map((t) =>
-        <button
-          key={t}
-          onClick={() => setTab(t)}
-          style={{
-            flex: 1,
-            padding: "14px 8px",
-            background: "none",
-            border: "none",
-            borderBottom: tab === t ? "2px solid #6b7280" : "2px solid transparent",
-            color: tab === t ? c.text : c.muted,
-            cursor: "pointer",
-            fontSize: 10,
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            fontWeight: tab === t ? 700 : 400,
-            transition: "all 0.2s",
-            whiteSpace: "nowrap",
-          }}>
-          
-            {t === "analysis" ? "🎙 Analysis" : t === "scenarios" ? "🎯 Practice" : t === "progress" ? "📊 Progress" : t === "badges" ? "🏆 Badges" : "📋 History"}
-          </button>
-        )}
       </div>
 
       {/* Tip of the Day — outside main content */}
@@ -1467,116 +1365,7 @@ export default function Negotium() {
           </>
         }
 
-        {/* ── HISTORY TAB ── */}
-        {tab === "history" &&
-        <div>
-            <div
-            style={{
-              fontSize: 9,
-              letterSpacing: "0.25em",
-              color: c.muted,
-              textTransform: "uppercase",
-              marginBottom: 16
-            }}>
-            
-              Session History ({history.length} sessions)
-            </div>
-            {history.length === 0 ?
-          <div style={{ textAlign: "center", color: c.muted, fontSize: 13, padding: "60px 0" }}>
-                No sessions yet. Record your first session to see history.
-              </div> :
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {history.map((entry, i) =>
-            <HistoryCard key={i} entry={entry} index={history.length - 1 - i} />
-            )}
-              </div>
-          }
-            {history.length > 1 &&
-          <div
-            style={{
-              marginTop: 20,
-              background: c.card,
-              border: `1px solid ${c.border}`,
-              borderRadius: 10,
-              padding: 16
-            }}>
-            
-                <div
-              style={{
-                fontSize: 9,
-                letterSpacing: "0.25em",
-                color: c.muted,
-                textTransform: "uppercase",
-                marginBottom: 10
-              }}>
-              
-                  Progress Chart
-                </div>
-                {(() => {
-              const points = [...history].reverse().map((h, i) => {
-                const score = h.overall_score ?? h.overall ?? 0;
-                return { score, i };
-              });
-              const w = 600,h = 80,pad = 20;
-              const xStep = points.length > 1 ? (w - pad * 2) / (points.length - 1) : 0;
-              const pathD = points.map((p, idx) => {
-                const x = pad + idx * xStep;
-                const y = h - pad - p.score / 100 * (h - pad * 2);
-                return `${idx === 0 ? "M" : "L"}${x},${y}`;
-              }).join(" ");
-              return (
-                <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: 100 }}>
-                      <line x1={pad} y1={h - pad} x2={w - pad} y2={h - pad} stroke={c.border} strokeWidth={1} />
-                      <path d={pathD} fill="none" stroke="#6b7280" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                      {points.map((p, idx) => {
-                    const x = pad + idx * xStep;
-                    const y = h - pad - p.score / 100 * (h - pad * 2);
-                    return <circle key={idx} cx={x} cy={y} r={3} fill={p.score >= 80 ? "#4a8c5c" : p.score >= 60 ? "#6b7280" : "#c04a2a"} />;
-                  })}
-                    </svg>);
-
-            })()}
-                <div style={{ fontSize: 9, color: c.muted, marginTop: 6 }}>
-                  Session scores over time (oldest → newest)
-                </div>
-              </div>
-          }
-          </div>
-        }
-
-        {/* ── SCENARIOS TAB ── */}
-        {tab === "scenarios" &&
-          <div style={{ textAlign: "center", padding: "60px 0" }}>
-            <div style={{ fontSize: 13, color: c.muted, marginBottom: 16 }}>Scenarios have moved to their own pages!</div>
-            <button
-              onClick={() => window.location.href = "/scenarios"}
-              style={{
-                padding: "14px 28px",
-                background: "linear-gradient(90deg,#111827,#1f2937)",
-                color: "#fff",
-                border: "none",
-                borderRadius: 8,
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: "pointer",
-                letterSpacing: "0.1em",
-              }}
-            >
-              🎯 GO TO PRACTICE SCENARIOS
-            </button>
-          </div>
-        }
-
-        {/* ── PROGRESS TAB ── */}
-        {tab === "progress" &&
-          <ProgressDashboard history={history} colors={c} />
-        }
-
-        {/* ── BADGES TAB ── */}
-        {tab === "badges" &&
-          <StreakBadges history={history} colors={c} />
-        }
       </div>
 
       <style>{`

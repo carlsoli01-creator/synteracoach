@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenarios";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import AppDrawer from "@/components/layout/AppDrawer";
 
 export default function ScenarioCategory() {
   const { slug } = useParams<{ slug: string }>();
@@ -62,8 +63,9 @@ export default function ScenarioCategory() {
       fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
       paddingBottom: 80,
     }}>
+      <AppDrawer />
       {/* Back nav */}
-      <div style={{ padding: "20px 28px 0" }}>
+      <div style={{ padding: "20px 28px 0 60px" }}>
         <button
           onClick={() => navigate("/scenarios")}
           style={{
