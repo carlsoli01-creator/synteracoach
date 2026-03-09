@@ -152,7 +152,7 @@ export default function Auth() {
             letterSpacing: "0.08em",
             marginBottom: 12,
           }}>
-            CLARIUM
+            SYNTERA
           </div>
 
           <div style={{
