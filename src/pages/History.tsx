@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import AppDrawer from "@/components/layout/AppDrawer";
 
 function HistoryCard({ entry, index }: { entry: any; index: number }) {
   const score = entry.overall_score ?? entry.overall;
