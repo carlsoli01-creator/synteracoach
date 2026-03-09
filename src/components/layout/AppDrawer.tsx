@@ -45,21 +45,21 @@ export default function AppDrawer({ theme: themeProp, setTheme: setThemeProp, sp
         onClick={() => setOpen(true)}
         style={{
           position: "fixed",
-          top: 18,
-          left: 18,
+          top: 28,
+          left: 20,
           zIndex: 100,
           background: "none",
           border: "none",
           cursor: "pointer",
-          padding: 8,
+          padding: 6,
           display: "flex",
           flexDirection: "column",
-          gap: 4,
+          gap: 3,
         }}
         aria-label="Open menu"
       >
         {[0, 1, 2].map((i) => (
-          <div key={i} style={{ width: 22, height: 2, background: textColor, borderRadius: 1 }} />
+          <div key={i} style={{ width: 16, height: 1.5, background: textColor, borderRadius: 1 }} />
         ))}
       </button>
 
