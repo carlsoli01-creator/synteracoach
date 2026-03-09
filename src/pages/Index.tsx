@@ -1107,9 +1107,9 @@ export default function Negotium() {
             </div>
 
             {phase === "recording" &&
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 24 }}>
-              {["Volume", "Pace", "Energy"].map((label, i) => {
-              const val = i === 0 ? Math.min(100, (volumeRef.current.slice(-1)[0] || 0) * 4) : i === 1 ? livePace : liveEnergy;
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8, marginBottom: 24 }}>
+              {["Pace", "Energy"].map((label, i) => {
+              const val = i === 0 ? livePace : liveEnergy;
               return (
                 <div
                   key={label}
