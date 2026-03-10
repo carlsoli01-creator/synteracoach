@@ -531,11 +531,14 @@ export default function Negotium() {
     const durationSeconds = Math.round((Date.now() - recordingStartRef.current) / 1000);
     const transcript = transcriptRef.current.trim();
 
+    console.log("[DEBUG] Recording finished", { durationSeconds, transcriptLength: transcript.length, transcript: transcript.slice(0, 100) });
+
     // Stop speech recognition and auto-restart
     try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
     try { recognitionRef.current?.stop(); } catch (_) {}
 
     if (!transcript || transcript.length < 5) {
+      console.warn("[DEBUG] Transcript too short, aborting analysis");
       setMicError("Could not detect speech. Please speak clearly and try again. Make sure your browser supports speech recognition.");
       setPhase("idle");
       isAnalyzingRef.current = false;
@@ -543,6 +546,7 @@ export default function Negotium() {
     }
 
     setPhase("analyzing");
+    console.log("[DEBUG] Sending transcript to edge function for analysis...", { wordCount: transcript.split(/\s+/).length });
 
     try {
       const { data, error } = await supabase.functions.invoke("analyze-voice", {
