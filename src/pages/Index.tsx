@@ -952,7 +952,7 @@ export default function Negotium() {
                 key={i}
                 style={{
                   flex: 1,
-                  background: phase === "recording" ? "#ffffff" : "rgba(255,255,255,0.3)",
+                  background: phase === "recording" ? (isDark ? "#ffffff" : "#1a1a1a") : c.waveEmpty,
                   height: `${Math.max(4, Math.abs(v - 0.5) * 160)}px`,
                   borderRadius: 2,
                   transition: "height 0.05s, background 0.3s",
