@@ -562,8 +562,10 @@ export default function Negotium() {
         }
       });
 
+      console.log("[DEBUG] Edge function response received", { hasError: !!error, hasData: !!data });
+
       if (error) {
-        console.error("AI analysis error:", error);
+        console.error("[DEBUG] AI analysis error:", error);
 
         let errorMessage = "AI analysis failed. Please try again.";
         const responseContext = (error as any)?.context;
@@ -587,11 +589,13 @@ export default function Negotium() {
       }
 
       if (data?.error) {
+        console.warn("[DEBUG] Analysis returned error in data:", data.error);
         setMicError(data.error);
         setPhase("idle");
         return;
       }
 
+      console.log("[DEBUG] Analysis successful, scores:", data?.scores);
       const { scores, analysis, tags, communicationTips, techniques, fillerWords, hedgingInstances, powerWords, wordChoiceScore, persuasionScore } = data;
 
       // Compute final measured pace from raw audio data
