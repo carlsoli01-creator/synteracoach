@@ -494,14 +494,14 @@ export default function Negotium() {
   const ringOffset = CIRCUMFERENCE * (timeLeft / selectedDuration);
   const isDark = theme === "dark";
   const c = {
-    bg: isDark ? "#070707" : "#0b0b0b",
-    panel: isDark ? "#0b0b0b" : "#111111",
-    border: isDark ? "#1e1e1e" : "#222222",
-    text: isDark ? "#e8e0d0" : "#e8e0d0",
-    muted: isDark ? "#9aa0a6" : "#8a8f96",
-    card: isDark ? "#0f0f0f" : "#161616",
-    waveBg: isDark ? "#0d0d0b" : "#111111",
-    waveEmpty: isDark ? "#2a2a26" : "#333333"
+    bg: isDark ? "#070707" : "#ffffff",
+    panel: isDark ? "#0b0b0b" : "#f5f5f5",
+    border: isDark ? "#1e1e1e" : "#e0e0e0",
+    text: isDark ? "#e8e0d0" : "#1a1a1a",
+    muted: isDark ? "#9aa0a6" : "#6b7280",
+    card: isDark ? "#0f0f0f" : "#ffffff",
+    waveBg: isDark ? "#0d0d0b" : "#f0f0f0",
+    waveEmpty: isDark ? "#2a2a26" : "#d0d0d0"
   };
 
   const stopAll = useCallback(() => {
