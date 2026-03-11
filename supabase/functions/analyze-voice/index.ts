@@ -69,25 +69,25 @@ function buildFallbackAnalysis(
 
   const powerWords = [...new Set(POWER_WORDS.filter((word) => words.includes(word)))].slice(0, 12);
 
-  const paceScore = clamp(Math.round(100 - Math.abs(wpm - 145) * 1.15), 58, 96);
+  const paceScore = clamp(Math.round(100 - Math.abs(wpm - 145) * 1.15), 10, 96);
   const confidenceScore = clamp(
-    Math.round(72 + Math.min(powerWords.length, 8) * 2 - Math.min(fillerCount, 8) - hedgingInstances.length * 2),
-    60,
+    Math.round(30 + Math.min(wordCount, 60) * 0.5 + Math.min(powerWords.length, 8) * 3 - Math.min(fillerCount, 8) * 2 - hedgingInstances.length * 3),
+    10,
     96,
   );
   const clarityScore = clamp(
-    Math.round(70 + Math.min(wordCount, 180) / 6 - Math.min(fillerCount, 10) - hedgingInstances.length),
-    60,
+    Math.round(25 + Math.min(wordCount, 180) / 4 - Math.min(fillerCount, 10) * 2 - hedgingInstances.length * 2),
+    10,
     96,
   );
   const deliveryScore = clamp(
     Math.round((paceScore + confidenceScore + clarityScore) / 3 + (powerWords.includes("because") ? 4 : 0)),
-    60,
+    10,
     97,
   );
   const overallScore = clamp(
     Math.round(deliveryScore * 0.45 + clarityScore * 0.25 + confidenceScore * 0.2 + paceScore * 0.1),
-    60,
+    10,
     97,
   );
 
