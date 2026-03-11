@@ -109,6 +109,8 @@ export function PricingModal({
   onSubscribe: () => void;
 }) {
   const [hoveredPlan, setHoveredPlan] = useState<"free" | "premium" | null>(null);
+  const [showBetaPopup, setShowBetaPopup] = useState(false);
+  const handlePlanClick = () => setShowBetaPopup(true);
 
   return (
     <div
@@ -299,7 +301,7 @@ export function PricingModal({
               ))}
             </div>
             <button
-              onClick={onSubscribe}
+              onClick={handlePlanClick}
               style={{
                 marginTop: 20,
                 width: "100%",
@@ -323,6 +325,37 @@ export function PricingModal({
           </div>
         </div>
       </div>
+
+      {/* Beta popup */}
+      {showBetaPopup && (
+        <div onClick={() => { setShowBetaPopup(false); onSubscribe(); }} style={{
+          position: "fixed", inset: 0, zIndex: 200,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)",
+        }}>
+          <div onClick={(e) => e.stopPropagation()} style={{
+            background: "#fff", border: "1px solid #e6e6e6", borderRadius: 16,
+            padding: "40px 32px", textAlign: "center", maxWidth: 400, width: "90vw",
+            boxShadow: "0 24px 64px rgba(16,24,40,0.22)",
+          }}>
+            <div style={{ fontSize: 40, marginBottom: 16 }}>🎉</div>
+            <div style={{ fontSize: 20, fontWeight: 900, color: "#0b0b0b", marginBottom: 12, lineHeight: 1.3 }}>
+              Welcome to the Beta!
+            </div>
+            <div style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.7, marginBottom: 28 }}>
+              This is a beta test application — you will be receiving the <span style={{ color: "#0b0b0b", fontWeight: 700 }}>Elite Tier</span> subscription for free.
+            </div>
+            <button onClick={() => { setShowBetaPopup(false); onSubscribe(); }} style={{
+              padding: "14px 40px", fontSize: 14, fontWeight: 800,
+              background: "linear-gradient(135deg, #111827, #1f2937)", color: "#fff",
+              border: "none", borderRadius: 10, cursor: "pointer", letterSpacing: "0.04em",
+              boxShadow: "0 6px 20px rgba(16,24,40,0.2)",
+            }}>
+              Continue →
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
