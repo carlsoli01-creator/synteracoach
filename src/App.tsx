@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import PageTransition from "@/components/layout/PageTransition";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
@@ -24,17 +25,19 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <Routes>
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-            <Route path="/scenarios" element={<ProtectedRoute><Scenarios /></ProtectedRoute>} />
-            <Route path="/scenarios/:slug" element={<ProtectedRoute><ScenarioCategory /></ProtectedRoute>} />
-            <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
-            <Route path="/badges" element={<ProtectedRoute><Badges /></ProtectedRoute>} />
-            <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <PageTransition>
+            <Routes>
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+              <Route path="/scenarios" element={<ProtectedRoute><Scenarios /></ProtectedRoute>} />
+              <Route path="/scenarios/:slug" element={<ProtectedRoute><ScenarioCategory /></ProtectedRoute>} />
+              <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
+              <Route path="/badges" element={<ProtectedRoute><Badges /></ProtectedRoute>} />
+              <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </PageTransition>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

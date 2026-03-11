@@ -69,36 +69,36 @@ function buildFallbackAnalysis(
 
   const powerWords = [...new Set(POWER_WORDS.filter((word) => words.includes(word)))].slice(0, 12);
 
-  const paceScore = clamp(Math.round(100 - Math.abs(wpm - 145) * 1.15), 58, 96);
+  const paceScore = clamp(Math.round(100 - Math.abs(wpm - 145) * 1.15), 10, 96);
   const confidenceScore = clamp(
-    Math.round(72 + Math.min(powerWords.length, 8) * 2 - Math.min(fillerCount, 8) - hedgingInstances.length * 2),
-    60,
+    Math.round(30 + Math.min(wordCount, 60) * 0.5 + Math.min(powerWords.length, 8) * 3 - Math.min(fillerCount, 8) * 2 - hedgingInstances.length * 3),
+    10,
     96,
   );
   const clarityScore = clamp(
-    Math.round(70 + Math.min(wordCount, 180) / 6 - Math.min(fillerCount, 10) - hedgingInstances.length),
-    60,
+    Math.round(25 + Math.min(wordCount, 180) / 4 - Math.min(fillerCount, 10) * 2 - hedgingInstances.length * 2),
+    10,
     96,
   );
   const deliveryScore = clamp(
     Math.round((paceScore + confidenceScore + clarityScore) / 3 + (powerWords.includes("because") ? 4 : 0)),
-    60,
+    10,
     97,
   );
   const overallScore = clamp(
     Math.round(deliveryScore * 0.45 + clarityScore * 0.25 + confidenceScore * 0.2 + paceScore * 0.1),
-    60,
+    10,
     97,
   );
 
   const wordChoiceScore = clamp(
-    Math.round(68 + Math.min(powerWords.length, 8) * 2 - hedgingInstances.length * 2),
-    60,
+    Math.round(25 + Math.min(wordCount, 60) * 0.4 + Math.min(powerWords.length, 8) * 3 - hedgingInstances.length * 3),
+    10,
     96,
   );
   const persuasionScore = clamp(
-    Math.round(64 + (powerWords.includes("because") ? 8 : 0) + Math.min(powerWords.length, 6) * 2),
-    60,
+    Math.round(20 + (powerWords.includes("because") ? 10 : 0) + Math.min(powerWords.length, 6) * 3 + Math.min(wordCount, 80) * 0.3),
+    10,
     95,
   );
 
@@ -387,7 +387,7 @@ CRITICAL RULES:
 - A quiet speaker with perfect word choice should score higher than a loud speaker with weak language.
 - Be specific and direct. "Your phrase '...' worked because..." or "Your phrase '...' fell flat because..." — don't dance around problems.
 - TONE: Lead with genuine strengths, then address areas for growth constructively. Frame weaknesses as specific opportunities with clear solutions — be honest but encouraging. Speakers improve fastest when they feel capable AND know exactly what to work on.
-- SCORING GUIDELINES: Be ENCOURAGING and FAIR. Casual unfocused speech should score 55-65. Average effort with some clarity scores 65-78. Good speakers with clear structure score 78-88. Exceptional speakers score 88-96. Give credit generously where it's earned — most people are better than they think. For wordChoiceScore, vague language scores 50-62, clear language 62-75, precise and powerful language 78+. For persuasionScore, no clear argument scores 45-58, a basic point scores 58-72, well-structured persuasion 75+.
+- SCORING GUIDELINES: Use the FULL 0-100 range. Be brutally honest. If someone mumbles 3 words quietly over 30 seconds, that's a 10-20. If someone rambles with tons of filler and no structure, that's 25-40. Casual unfocused speech with some effort scores 40-55. Average delivery with decent clarity scores 55-70. Good speakers with clear structure and intent score 70-82. Strong speakers with rhetorical skill score 82-90. Exceptional, polished delivery with powerful techniques scores 90-97. Don't be afraid to give very low scores for genuinely poor delivery, and don't hold back high scores for genuinely excellent speech. The score should MEAN something. For wordChoiceScore: vague/empty language 15-40, generic language 40-60, clear language 60-78, precise and powerful language 78-95. For persuasionScore: no argument at all 10-30, weak scattered argument 30-50, a basic point 50-68, well-structured persuasion 68-85, masterful persuasion 85-97.
 - SHORT RECORDINGS (under 10 seconds): Do NOT penalize for incomplete thoughts, unfinished sentences, or lack of a full argument structure. Short recordings are practice snippets — judge them on the QUALITY of the words spoken, not on whether the speaker completed a full idea. Focus on word choice, confidence of delivery, and any techniques used in the brief window. A strong 5-second clip with decisive language should score well.
 - Power words should include a BROAD list: "because", "imagine", "guaranteed", "proven", "exclusive", "immediately", "need", "must", "will", "important", "critical", "essential", "definitely", "absolutely", "clearly", "certainly", "actually", "specifically", "exactly", "directly", "effectively", "successfully", "opportunity", "value", "benefit", "result", "achieve", "ensure", "deliver", "commit".`;
 
