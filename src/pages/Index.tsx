@@ -458,15 +458,13 @@ export default function Negotium() {
   // Check if quiz was already completed
   const [quizVisible, setQuizVisible] = useState(() => {
     if (localStorage.getItem("syntera_premium") === "true") return false;
+    // Quiz is shown AFTER intro — so don't auto-show it here
+    // It will be triggered when intro completes
     try {
       const saved = localStorage.getItem("negotium_quiz");
-      if (saved) {
-        const { answers } = JSON.parse(saved);
-        const p = derivePersonalization(answers);
-        return false;
-      }
+      if (saved) return false;
     } catch (_) {}
-    return true;
+    return false; // Don't show quiz on load — intro triggers it
   });
 
   // Show tip popup randomly after quiz completion (5-15s delay)
