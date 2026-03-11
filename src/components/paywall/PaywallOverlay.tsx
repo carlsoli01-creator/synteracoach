@@ -109,6 +109,8 @@ export function PricingModal({
   onSubscribe: () => void;
 }) {
   const [hoveredPlan, setHoveredPlan] = useState<"free" | "premium" | null>(null);
+  const [showBetaPopup, setShowBetaPopup] = useState(false);
+  const handlePlanClick = () => setShowBetaPopup(true);
 
   return (
     <div
