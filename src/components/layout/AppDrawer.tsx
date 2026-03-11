@@ -40,13 +40,11 @@ export default function AppDrawer({ theme: themeProp, setTheme: setThemeProp, sp
 
   return (
     <>
-      {/* Hamburger Button */}
+      {/* Hamburger Button - positioned inside the top bar flow */}
       <button
         onClick={() => setOpen(true)}
         style={{
-          position: "fixed",
-          top: 28,
-          left: 20,
+          position: "relative",
           zIndex: 100,
           background: "none",
           border: "none",
