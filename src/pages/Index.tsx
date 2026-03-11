@@ -967,20 +967,22 @@ export default function Negotium() {
         {tab === "analysis" &&
         <>
 
-            <div style={{ textAlign: "center", marginBottom: gap }}>
+            <div style={{ textAlign: "center", marginBottom: gap + 16, paddingTop: 12 }}>
               <div
               style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "clamp(1.4rem,4vw,2.4rem)",
+                fontFamily: "'Inter', system-ui, sans-serif",
+                fontSize: "clamp(1.6rem,5vw,3rem)",
                 color: c.text,
-                lineHeight: 1.2,
-                marginBottom: 8
+                lineHeight: 1.1,
+                marginBottom: 0,
+                fontWeight: 900,
+                letterSpacing: "-0.03em",
               }}>
               
-                Speak. <em style={{ color: "#6b7280" }}>{heroFocus}</em>
+                Speak. <span style={{ color: c.text, opacity: 0.35 }}>{heroFocus}</span>
               </div>
-              <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase" }}>PACE · TONE · CONFIDENCE · CLARITY</div>
-              <div style={{ fontSize: 10, color: c.muted, marginTop: 6, fontStyle: "italic", letterSpacing: "0.01em" }}>🎙️ Use a microphone for best results</div>
+              <div style={{ fontSize: 10, letterSpacing: "0.5em", color: c.muted, textTransform: "uppercase", marginTop: 20 }}>PACE · TONE · CONFIDENCE · CLARITY</div>
+              <div style={{ fontSize: 11, color: c.muted, marginTop: 14, fontStyle: "italic", letterSpacing: "0.04em", opacity: 0.7 }}>🎙️ Use a microphone for best results</div>
             </div>
 
             {/* Waveform */}
