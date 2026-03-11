@@ -180,18 +180,19 @@ export default function Auth() {
             ))}
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Right panel — form */}
       <div style={{
-        width: 460,
-        minWidth: 400,
+        width: isMobile ? "100%" : 460,
+        minWidth: isMobile ? undefined : 400,
+        flex: isMobile ? 1 : undefined,
         background: "#111114",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: "48px 44px",
-        borderLeft: "1px solid rgba(255,255,255,0.04)",
+        padding: isMobile ? "32px 24px" : "48px 44px",
+        borderLeft: isMobile ? "none" : "1px solid rgba(255,255,255,0.04)",
       }}>
         <div style={{ marginBottom: 36 }}>
           <div style={{
