@@ -929,7 +929,7 @@ export default function Negotium() {
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <AppDrawer
             theme={theme}
-            setTheme={setTheme}
+            setTheme={(t) => { setTheme(t); localStorage.setItem("syntera_theme", t); }}
             spacingMode={spacingMode}
             setSpacingMode={setSpacingMode}
             onOpenSetup={() => setQuizVisible(true)} />
