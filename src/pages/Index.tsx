@@ -916,14 +916,6 @@ export default function Negotium() {
         }} />
       }
 
-      <AppDrawer
-        theme={theme}
-        setTheme={setTheme}
-        spacingMode={spacingMode}
-        setSpacingMode={setSpacingMode}
-        onOpenSetup={() => setQuizVisible(true)} />
-      
-
       {/* Header */}
       <div
         style={{
@@ -935,7 +927,12 @@ export default function Negotium() {
           background: c.panel
         }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          {/* Hamburger in top bar - handled by AppDrawer's button */}
+          <AppDrawer
+            theme={theme}
+            setTheme={setTheme}
+            spacingMode={spacingMode}
+            setSpacingMode={setSpacingMode}
+            onOpenSetup={() => setQuizVisible(true)} />
           <div>
             <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>SYNTERA</div>
             <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>{userSubtitle}</div>
