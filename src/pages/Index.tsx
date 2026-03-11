@@ -834,7 +834,7 @@ export default function Negotium() {
     } catch (e: any) {
       setMicError(e?.message || "Microphone access denied. Please allow mic access in your browser and try again.");
     }
-  }, [scheduleAnalyze, selectedDuration]);
+  }, [scheduleAnalyze, selectedDuration, isPremium, todaySessionCount]);
 
   const reset = useCallback(() => {
     stopAll();
