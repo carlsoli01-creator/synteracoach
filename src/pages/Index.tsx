@@ -428,6 +428,8 @@ export default function Negotium() {
   const [heroFocus, setHeroFocus] = useState("Be Analyzed.");
   const [isPremium, setIsPremium] = useState(() => localStorage.getItem("syntera_premium") === "true");
   const [showPricing, setShowPricing] = useState(false);
+  const [showTipPopup, setShowTipPopup] = useState(false);
+  const [tipText, setTipText] = useState("");
 
   // Compute which categories have been completed today from history
   const completedCategoriesToday = useMemo(() => {
