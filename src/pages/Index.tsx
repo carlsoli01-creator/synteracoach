@@ -693,7 +693,17 @@ export default function Negotium() {
     }, 1500);
   }, [analyzeVoice]);
 
+  const todaySessionCount = useMemo(() => {
+    const todayStr = new Date().toLocaleDateString();
+    return history.filter((s) => s.created_at && new Date(s.created_at).toLocaleDateString() === todayStr).length;
+  }, [history]);
+
   const startRecording = useCallback(async () => {
+    // Free tier: 1 recording per day
+    if (!isPremium && todaySessionCount >= 1) {
+      setShowPricing(true);
+      return;
+    }
     setMicError("");
     transcriptRef.current = "";
     try {
