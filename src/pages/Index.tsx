@@ -862,8 +862,40 @@ export default function Negotium() {
           setUserSubtitle(p.subtitle);
           setHeroFocus(p.heroFocus);
           setQuizVisible(false);
+          // Show intro if not seen yet
+          if (!localStorage.getItem("syntera_intro_done")) {
+            setShowIntro(true);
+          }
         }} />
+      }
 
+      {!quizVisible && showIntro && !isPremium &&
+        <IntroExperience
+          onComplete={() => {
+            localStorage.setItem("syntera_intro_done", "true");
+            setShowIntro(false);
+          }}
+          onForcePaywall={() => {
+            setShowForcedPaywall(true);
+          }}
+        />
+      }
+
+      {showForcedPaywall && !isPremium &&
+        <ForcedPaywall
+          onSubscribe={() => {
+            localStorage.setItem("syntera_premium", "true");
+            setIsPremium(true);
+            setShowForcedPaywall(false);
+            localStorage.setItem("syntera_intro_done", "true");
+            setShowIntro(false);
+          }}
+          onSkip={() => {
+            setShowForcedPaywall(false);
+            localStorage.setItem("syntera_intro_done", "true");
+            setShowIntro(false);
+          }}
+        />
       }
 
       <AppDrawer
