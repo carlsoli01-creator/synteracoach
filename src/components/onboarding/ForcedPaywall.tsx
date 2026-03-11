@@ -300,6 +300,37 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
           ★★★★★ Trusted by 2,000+ speakers improving daily
         </div>
       </div>
+
+      {/* Beta popup */}
+      {showBetaPopup && (
+        <div onClick={() => { setShowBetaPopup(false); onSubscribe(); }} style={{
+          position: "fixed", inset: 0, zIndex: 200,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)",
+        }}>
+          <div onClick={(e) => e.stopPropagation()} style={{
+            background: "#111", border: "1px solid #333", borderRadius: 16,
+            padding: "40px 32px", textAlign: "center", maxWidth: 400, width: "90vw",
+            boxShadow: "0 24px 64px rgba(0,0,0,0.5)",
+          }}>
+            <div style={{ fontSize: 40, marginBottom: 16 }}>🎉</div>
+            <div style={{ fontSize: 20, fontWeight: 900, color: "#fff", marginBottom: 12, lineHeight: 1.3 }}>
+              Welcome to the Beta!
+            </div>
+            <div style={{ fontSize: 14, color: "#aaa", lineHeight: 1.7, marginBottom: 28 }}>
+              This is a beta test application — you will be receiving the <span style={{ color: "#fff", fontWeight: 700 }}>Elite Tier</span> subscription for free.
+            </div>
+            <button onClick={() => { setShowBetaPopup(false); onSubscribe(); }} style={{
+              padding: "14px 40px", fontSize: 14, fontWeight: 800,
+              background: "#fff", color: "#000", border: "none", borderRadius: 10,
+              cursor: "pointer", letterSpacing: "0.04em",
+              boxShadow: "0 0 30px rgba(255,255,255,0.1)",
+            }}>
+              Continue →
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
