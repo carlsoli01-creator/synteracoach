@@ -25,6 +25,7 @@ interface IntroExperienceProps {
 export default function IntroExperience({ onComplete, onForcePaywall }: IntroExperienceProps) {
   const [step, setStep] = useState(0);
   const [testPhase, setTestPhase] = useState<"idle" | "recording" | "done">("idle");
+  const [transitioning, setTransitioning] = useState(false);
   const [waveData, setWaveData] = useState(new Array(40).fill(0.5));
   const [timeLeft, setTimeLeft] = useState(10);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -45,7 +46,17 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
   useEffect(() => () => cleanup(), [cleanup]);
 
+  const goNext = useCallback(() => {
+    setTransitioning(true);
+    setTimeout(() => {
+      setStep((s) => s + 1);
+      setTransitioning(false);
+    }, 400);
+  }, []);
+
   const startTest = useCallback(async () => {
+    setTransitioning(true);
+    setTimeout(() => setTransitioning(false), 400);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const audioCtx = new AudioContext();
@@ -75,8 +86,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
         setTimeLeft(t);
         if (t <= 0) {
           cleanup();
-          setWaveData(new Array(40).fill(0.5));
-          setTestPhase("done");
+          setTransitioning(true);
+          setTimeout(() => {
+            setWaveData(new Array(40).fill(0.5));
+            setTestPhase("done");
+            setTransitioning(false);
+          }, 400);
         }
       }, 1000);
     } catch (_) {
@@ -87,8 +102,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
   const stopEarly = useCallback(() => {
     cleanup();
-    setWaveData(new Array(40).fill(0.5));
-    setTestPhase("done");
+    setTransitioning(true);
+    setTimeout(() => {
+      setWaveData(new Array(40).fill(0.5));
+      setTestPhase("done");
+      setTransitioning(false);
+    }, 400);
   }, [cleanup]);
 
   // When test is done, show paywall after a brief moment
@@ -114,7 +133,9 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
           width: "min(520px, 92vw)",
           padding: "60px 40px",
           textAlign: "center",
-          animation: "fadeUp 0.5s ease",
+          opacity: transitioning ? 0 : 1,
+          transform: transitioning ? "translateY(16px)" : "translateY(0)",
+          transition: "opacity 0.4s ease, transform 0.4s ease",
         }}>
           <div style={{ fontSize: 56, marginBottom: 24 }}>{s.emoji}</div>
           <div style={{
@@ -138,7 +159,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
             {s.body}
           </div>
           <button
-            onClick={() => setStep(step + 1)}
+            onClick={goNext}
             style={{
               padding: "16px 48px", fontSize: 14, fontWeight: 800,
               letterSpacing: "0.06em",
@@ -178,7 +199,9 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
         width: "min(520px, 92vw)",
         padding: "60px 40px",
         textAlign: "center",
-        animation: "fadeUp 0.5s ease",
+        opacity: transitioning ? 0 : 1,
+        transform: transitioning ? "translateY(16px)" : "translateY(0)",
+        transition: "opacity 0.4s ease, transform 0.4s ease",
       }}>
         {testPhase === "idle" && (
           <>

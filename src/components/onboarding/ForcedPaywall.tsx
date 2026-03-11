@@ -46,6 +46,12 @@ interface ForcedPaywallProps {
 
 export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProps) {
   const [hoveredPlan, setHoveredPlan] = useState<"free" | "pro" | "elite" | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  // Fade in on mount
+  useState(() => {
+    requestAnimationFrame(() => setVisible(true));
+  });
 
   const FeatureList = ({ features }: { features: { text: string; included: boolean }[] }) => (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -77,7 +83,9 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
       position: "fixed", inset: 0, zIndex: 80,
       display: "flex", alignItems: "center", justifyContent: "center",
       background: "#000",
-      animation: "fadeUp 0.4s ease",
+      opacity: visible ? 1 : 0,
+      transform: visible ? "translateY(0)" : "translateY(20px)",
+      transition: "opacity 0.6s ease, transform 0.6s ease",
     }}>
       <div style={{
         width: "min(1080px, 96vw)",
