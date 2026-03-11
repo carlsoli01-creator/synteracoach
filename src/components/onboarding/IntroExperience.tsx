@@ -86,8 +86,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
         setTimeLeft(t);
         if (t <= 0) {
           cleanup();
-          setWaveData(new Array(40).fill(0.5));
-          setTestPhase("done");
+          setTransitioning(true);
+          setTimeout(() => {
+            setWaveData(new Array(40).fill(0.5));
+            setTestPhase("done");
+            setTransitioning(false);
+          }, 400);
         }
       }, 1000);
     } catch (_) {
