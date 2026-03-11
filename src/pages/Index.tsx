@@ -861,27 +861,16 @@ export default function Negotium() {
         paddingBottom: 80
       }}>
       
-      {quizVisible &&
-      <OnboardingQuiz
-        onFinish={({ neg, comm, answers }) => {
-          localStorage.setItem("negotium_quiz", JSON.stringify({ answers }));
-          const p = derivePersonalization(answers);
-          setRecCommTips([...new Set([...(neg || []), ...(comm || [])].slice(0, 6))]);
-          setUserSubtitle(p.subtitle);
-          setHeroFocus(p.heroFocus);
-          setQuizVisible(false);
-          // Show intro if not seen yet
-          if (!localStorage.getItem("syntera_intro_done")) {
-            setShowIntro(true);
-          }
-        }} />
-      }
-
-      {!quizVisible && showIntro && !isPremium &&
+      {/* Intro shows FIRST (before quiz) */}
+      {showIntro && !isPremium &&
         <IntroExperience
           onComplete={() => {
             localStorage.setItem("syntera_intro_done", "true");
             setShowIntro(false);
+            // After intro, show quiz if not done yet
+            if (!localStorage.getItem("negotium_quiz")) {
+              setQuizVisible(true);
+            }
           }}
           onForcePaywall={() => {
             setShowForcedPaywall(true);
@@ -897,13 +886,34 @@ export default function Negotium() {
             setShowForcedPaywall(false);
             localStorage.setItem("syntera_intro_done", "true");
             setShowIntro(false);
+            // After paying, show quiz if not done
+            if (!localStorage.getItem("negotium_quiz")) {
+              setQuizVisible(true);
+            }
           }}
           onSkip={() => {
             setShowForcedPaywall(false);
             localStorage.setItem("syntera_intro_done", "true");
             setShowIntro(false);
+            // After skipping paywall, show quiz
+            if (!localStorage.getItem("negotium_quiz")) {
+              setQuizVisible(true);
+            }
           }}
         />
+      }
+
+      {/* Quiz shows AFTER intro */}
+      {!showIntro && !showForcedPaywall && quizVisible &&
+      <OnboardingQuiz
+        onFinish={({ neg, comm, answers }) => {
+          localStorage.setItem("negotium_quiz", JSON.stringify({ answers }));
+          const p = derivePersonalization(answers);
+          setRecCommTips([...new Set([...(neg || []), ...(comm || [])].slice(0, 6))]);
+          setUserSubtitle(p.subtitle);
+          setHeroFocus(p.heroFocus);
+          setQuizVisible(false);
+        }} />
       }
 
       <AppDrawer
