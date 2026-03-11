@@ -81,14 +81,13 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
     const volVar = vols.length ? vols.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / vols.length : 0;
 
     if (!transcript || transcript.length < 3) {
-      // Not enough speech — show generic low result
       setAnalysisResult({
-        scores: { overall: 15, pace: 12, confidence: 18, clarity: 14, delivery: 16 },
+        scores: { overall: 10, pace: 8, confidence: 10, clarity: 12, delivery: 10 },
         analysis: {
-          overall: "We couldn't detect enough speech to provide a meaningful analysis. Try speaking more clearly next time.",
-          strength: "You showed up and tried — that's the first step.",
-          weakness: "We need more words to analyze your delivery patterns.",
-          recommendation: "Speak for at least 5 seconds with clear, audible words for best results.",
+          overall: "We detected almost no speech. In any real conversation, silence signals disengagement or lack of preparation. This needs serious work.",
+          strength: "You attempted the exercise — but showing up alone doesn't count for much.",
+          weakness: "Without audible, clear words, there is literally nothing to coach. This is a 10/100.",
+          recommendation: "Speak clearly into the mic for at least 5 seconds. Even a single confident sentence would score dramatically higher than silence.",
         },
         fillerWords: { count: 0, words: [] },
         powerWords: [],
@@ -114,12 +113,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
       if (error || data?.error) {
         setAnalysisResult({
-          scores: { overall: 50, pace: 50, confidence: 50, clarity: 50, delivery: 50 },
+          scores: { overall: 35, pace: 30, confidence: 32, clarity: 38, delivery: 34 },
           analysis: {
-            overall: "We had trouble analyzing your speech this time. Don't worry — the full app experience will work better.",
-            strength: "You completed the test recording successfully.",
-            weakness: "Analysis was limited due to a processing issue.",
-            recommendation: "Try again in the main app for a full breakdown.",
+            overall: "Analysis hit a processing issue, but based on what we captured — there's work to do. Most first recordings are rough.",
+            strength: "You completed the recording, which puts you ahead of people who never try.",
+            weakness: "We couldn't fully process this, so we can't identify specific weaknesses yet.",
+            recommendation: "Record again in the main app. The full analysis will give you specific, honest feedback.",
           },
         });
       } else {
@@ -127,12 +126,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       }
     } catch {
       setAnalysisResult({
-        scores: { overall: 50, pace: 50, confidence: 50, clarity: 50, delivery: 50 },
+        scores: { overall: 30, pace: 28, confidence: 32, clarity: 30, delivery: 28 },
         analysis: {
-          overall: "Analysis encountered an error. The full app will provide complete results.",
-          strength: "You completed the recording — great start!",
-          weakness: "We couldn't process this particular recording.",
-          recommendation: "Give it another shot in the main dashboard.",
+          overall: "Something went wrong processing your speech. But honestly, most first attempts score low anyway — the real question is whether you'll come back and improve.",
+          strength: "You tried. That's step one.",
+          weakness: "We couldn't process this recording to give specific critique.",
+          recommendation: "Try again in the main dashboard for a full, unsparing analysis.",
         },
       });
     }
@@ -371,7 +370,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 800, color: "#fff" }}>Overall Score</div>
                   <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
-                    {analysisResult.scores.overall >= 80 ? "Impressive delivery" : analysisResult.scores.overall >= 60 ? "Good foundation — room to sharpen" : analysisResult.scores.overall >= 40 ? "Decent start — lots of room to grow" : "Keep practicing — you'll improve fast"}
+                    {analysisResult.scores.overall >= 80 ? "Strong delivery — rare for a first try" : analysisResult.scores.overall >= 60 ? "Decent — but decent doesn't win deals" : analysisResult.scores.overall >= 40 ? "Below average — significant room for improvement" : "Rough start — this is why you need coaching"}
                   </div>
                 </div>
               </div>

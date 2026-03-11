@@ -916,27 +916,27 @@ export default function Negotium() {
         }} />
       }
 
-      <AppDrawer
-        theme={theme}
-        setTheme={setTheme}
-        spacingMode={spacingMode}
-        setSpacingMode={setSpacingMode}
-        onOpenSetup={() => setQuizVisible(true)} />
-      
-
       {/* Header */}
       <div
         style={{
-          padding: "24px 28px 24px 60px",
+          padding: "24px 28px",
           borderBottom: `1px solid ${c.border}`,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           background: c.panel
         }}>
-        <div>
-          <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>SYNTERA</div>
-          <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>{userSubtitle}</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <AppDrawer
+            theme={theme}
+            setTheme={setTheme}
+            spacingMode={spacingMode}
+            setSpacingMode={setSpacingMode}
+            onOpenSetup={() => setQuizVisible(true)} />
+          <div>
+            <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>SYNTERA</div>
+            <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>{userSubtitle}</div>
+          </div>
         </div>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           {avgHistory !== null &&
