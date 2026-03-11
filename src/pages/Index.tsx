@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
 import AppDrawer from "@/components/layout/AppDrawer";
+import IntroExperience from "@/components/onboarding/IntroExperience";
+import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
@@ -432,6 +434,8 @@ export default function Negotium() {
   const [showPricing, setShowPricing] = useState(false);
   const [showTipPopup, setShowTipPopup] = useState(false);
   const [tipText, setTipText] = useState("");
+  const [showIntro, setShowIntro] = useState(() => !localStorage.getItem("syntera_intro_done"));
+  const [showForcedPaywall, setShowForcedPaywall] = useState(false);
 
   // Compute which categories have been completed today from history
   const completedCategoriesToday = useMemo(() => {
@@ -858,8 +862,40 @@ export default function Negotium() {
           setUserSubtitle(p.subtitle);
           setHeroFocus(p.heroFocus);
           setQuizVisible(false);
+          // Show intro if not seen yet
+          if (!localStorage.getItem("syntera_intro_done")) {
+            setShowIntro(true);
+          }
         }} />
+      }
 
+      {!quizVisible && showIntro && !isPremium &&
+        <IntroExperience
+          onComplete={() => {
+            localStorage.setItem("syntera_intro_done", "true");
+            setShowIntro(false);
+          }}
+          onForcePaywall={() => {
+            setShowForcedPaywall(true);
+          }}
+        />
+      }
+
+      {showForcedPaywall && !isPremium &&
+        <ForcedPaywall
+          onSubscribe={() => {
+            localStorage.setItem("syntera_premium", "true");
+            setIsPremium(true);
+            setShowForcedPaywall(false);
+            localStorage.setItem("syntera_intro_done", "true");
+            setShowIntro(false);
+          }}
+          onSkip={() => {
+            setShowForcedPaywall(false);
+            localStorage.setItem("syntera_intro_done", "true");
+            setShowIntro(false);
+          }}
+        />
       }
 
       <AppDrawer
