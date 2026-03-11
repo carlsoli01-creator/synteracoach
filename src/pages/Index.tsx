@@ -948,7 +948,7 @@ export default function Negotium() {
             </div>
           }
         </div>
-      </div>
+      </div>}
 
       {/* Tip of the Day Popup */}
       {showTipPopup &&
