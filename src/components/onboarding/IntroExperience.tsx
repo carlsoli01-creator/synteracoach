@@ -287,28 +287,116 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
         {testPhase === "done" && (
           <>
-            <div style={{ fontSize: 56, marginBottom: 24 }}>✅</div>
+            <div style={{ fontSize: 56, marginBottom: 20 }}>✅</div>
             <div style={{
-              fontSize: 28, fontWeight: 900, color: "#fff",
-              lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 12,
+              fontSize: 24, fontWeight: 900, color: "#fff",
+              lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 8,
               fontFamily: "'Inter', system-ui, sans-serif",
             }}>
-              Great job.
+              Here's a taste of your analysis.
             </div>
             <div style={{
-              fontSize: 13, color: "#666", lineHeight: 1.8,
-              maxWidth: 320, margin: "0 auto",
+              fontSize: 12, color: "#666", lineHeight: 1.7,
+              maxWidth: 340, margin: "0 auto 28px",
             }}>
-              Your voice data is ready for analysis. Unlocking your full report now...
+              Premium unlocks the full 7-dimension breakdown with personalized coaching.
+            </div>
+
+            {/* Preview score card */}
+            <div style={{
+              background: "#111", border: "1px solid #222", borderRadius: 14,
+              padding: "28px 24px", textAlign: "left", marginBottom: 24,
+            }}>
+              {/* Overall score */}
+              <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
+                <div style={{
+                  width: 56, height: 56, borderRadius: "50%",
+                  border: "3px solid #fff", display: "flex",
+                  alignItems: "center", justifyContent: "center",
+                  fontSize: 22, fontWeight: 900, color: "#fff",
+                  fontFamily: "'Inter', system-ui, sans-serif",
+                }}>
+                  72
+                </div>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: "#fff" }}>Overall Score</div>
+                  <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>Good foundation — room to sharpen</div>
+                </div>
+              </div>
+
+              {/* Mini scores row */}
+              <div style={{
+                display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 20,
+              }}>
+                {[
+                  { label: "Pace", score: 68 },
+                  { label: "Clarity", score: 74 },
+                  { label: "Confidence", score: 71 },
+                ].map((s, i) => (
+                  <div key={i} style={{
+                    background: "#0a0a0a", borderRadius: 10, padding: "14px 12px",
+                    textAlign: "center", border: "1px solid #1a1a1a",
+                  }}>
+                    <div style={{ fontSize: 20, fontWeight: 900, color: "#fff" }}>{s.score}</div>
+                    <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#555", marginTop: 4, textTransform: "uppercase" }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Insight */}
+              <div style={{
+                background: "#0a0a0a", borderRadius: 10, padding: "16px",
+                border: "1px solid #1a1a1a",
+              }}>
+                <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#555", textTransform: "uppercase", marginBottom: 8, fontWeight: 700 }}>
+                  AI INSIGHT
+                </div>
+                <div style={{ fontSize: 13, color: "#ccc", lineHeight: 1.7 }}>
+                  Your delivery has a natural confidence to it. Focus on reducing filler words and varying your pace to keep listeners engaged throughout.
+                </div>
+              </div>
+            </div>
+
+            {/* Blurred locked teaser */}
+            <div style={{
+              position: "relative", borderRadius: 10, overflow: "hidden",
+              marginBottom: 16,
+            }}>
+              <div style={{
+                filter: "blur(6px)", opacity: 0.4, pointerEvents: "none",
+                background: "#111", padding: "16px", borderRadius: 10,
+                display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8,
+              }}>
+                {["Persuasion", "Word Choice", "Filler Words", "Techniques"].map((l, i) => (
+                  <div key={i} style={{ background: "#0a0a0a", borderRadius: 8, padding: "12px", textAlign: "center" }}>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>{60 + i * 5}</div>
+                    <div style={{ fontSize: 8, color: "#666", textTransform: "uppercase", letterSpacing: "0.15em" }}>{l}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{
+                position: "absolute", inset: 0, display: "flex",
+                alignItems: "center", justifyContent: "center",
+              }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.15em", textTransform: "uppercase" }}>
+                  🔒 UNLOCK WITH PREMIUM
+                </span>
+              </div>
+            </div>
+
+            <div style={{
+              fontSize: 11, color: "#444", textAlign: "center",
+            }}>
+              Loading your upgrade options...
             </div>
             <div style={{
-              marginTop: 32,
-              width: 32, height: 32,
-              border: "3px solid #333",
-              borderTop: "3px solid #fff",
+              marginTop: 16,
+              width: 24, height: 24,
+              border: "2px solid #333",
+              borderTop: "2px solid #fff",
               borderRadius: "50%",
               animation: "spin 0.8s linear infinite",
-              margin: "32px auto 0",
+              margin: "16px auto 0",
             }} />
           </>
         )}
