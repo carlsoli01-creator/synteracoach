@@ -1135,10 +1135,10 @@ export default function Negotium() {
 
             {phase === "done" && metrics && feedback &&
           <div style={{ animation: "fadeUp 0.5s ease", marginTop: 16, position: "relative" }}>
-                {!isPremium && history.length <= 1 && (
+                {!isPremium && (
                   <PaywallCTA onUpgrade={() => setShowPricing(true)} />
                 )}
-                <div style={!isPremium && history.length <= 1 ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" as const } : {}}>
+                <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" as const } : {}}>
                 <div
               style={{
                 display: "flex",
