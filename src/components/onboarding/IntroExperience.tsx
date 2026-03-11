@@ -199,7 +199,9 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
         width: "min(520px, 92vw)",
         padding: "60px 40px",
         textAlign: "center",
-        animation: "fadeUp 0.5s ease",
+        opacity: transitioning ? 0 : 1,
+        transform: transitioning ? "translateY(16px)" : "translateY(0)",
+        transition: "opacity 0.4s ease, transform 0.4s ease",
       }}>
         {testPhase === "idle" && (
           <>

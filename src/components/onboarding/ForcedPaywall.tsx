@@ -83,7 +83,9 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
       position: "fixed", inset: 0, zIndex: 80,
       display: "flex", alignItems: "center", justifyContent: "center",
       background: "#000",
-      animation: "fadeUp 0.4s ease",
+      opacity: visible ? 1 : 0,
+      transform: visible ? "translateY(0)" : "translateY(20px)",
+      transition: "opacity 0.6s ease, transform 0.6s ease",
     }}>
       <div style={{
         width: "min(1080px, 96vw)",
