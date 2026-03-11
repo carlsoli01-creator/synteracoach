@@ -25,6 +25,7 @@ interface IntroExperienceProps {
 export default function IntroExperience({ onComplete, onForcePaywall }: IntroExperienceProps) {
   const [step, setStep] = useState(0);
   const [testPhase, setTestPhase] = useState<"idle" | "recording" | "done">("idle");
+  const [transitioning, setTransitioning] = useState(false);
   const [waveData, setWaveData] = useState(new Array(40).fill(0.5));
   const [timeLeft, setTimeLeft] = useState(10);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
