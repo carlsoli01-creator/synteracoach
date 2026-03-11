@@ -103,14 +103,16 @@ export default function Auth() {
     fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
   });
 
+  const isMobile = window.innerWidth < 768;
+
   return (
     <div style={{
       minHeight: "100vh",
       display: "flex",
       fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
     }}>
-      {/* Left panel — branding */}
-      <div style={{
+      {/* Left panel — branding (hidden on mobile) */}
+      {!isMobile && <div style={{
         flex: 1,
         background: "linear-gradient(160deg, #0b0b0b 0%, #1a1a2e 50%, #0b0b0b 100%)",
         display: "flex",
