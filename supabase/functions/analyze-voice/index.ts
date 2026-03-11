@@ -92,13 +92,13 @@ function buildFallbackAnalysis(
   );
 
   const wordChoiceScore = clamp(
-    Math.round(68 + Math.min(powerWords.length, 8) * 2 - hedgingInstances.length * 2),
-    60,
+    Math.round(25 + Math.min(wordCount, 60) * 0.4 + Math.min(powerWords.length, 8) * 3 - hedgingInstances.length * 3),
+    10,
     96,
   );
   const persuasionScore = clamp(
-    Math.round(64 + (powerWords.includes("because") ? 8 : 0) + Math.min(powerWords.length, 6) * 2),
-    60,
+    Math.round(20 + (powerWords.includes("because") ? 10 : 0) + Math.min(powerWords.length, 6) * 3 + Math.min(wordCount, 80) * 0.3),
+    10,
     95,
   );
 
