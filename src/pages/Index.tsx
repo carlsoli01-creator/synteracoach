@@ -465,7 +465,23 @@ export default function Negotium() {
     return true;
   });
 
-  // Load saved personalization on mount
+  // Show tip popup randomly after quiz completion (5-15s delay)
+  useEffect(() => {
+    const quizDone = localStorage.getItem("negotium_quiz");
+    const tipShownToday = localStorage.getItem("syntera_tip_shown_date") === new Date().toDateString();
+    if (!quizDone || tipShownToday || quizVisible) return;
+
+    const delay = 5000 + Math.random() * 10000; // 5-15 seconds
+    const timer = setTimeout(() => {
+      const randomTip = COMMUNICATION_TIPS[Math.floor(Math.random() * COMMUNICATION_TIPS.length)];
+      setTipText(randomTip);
+      setShowTipPopup(true);
+      localStorage.setItem("syntera_tip_shown_date", new Date().toDateString());
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [quizVisible]);
+
+
   useEffect(() => {
     try {
       const saved = localStorage.getItem("negotium_quiz");
