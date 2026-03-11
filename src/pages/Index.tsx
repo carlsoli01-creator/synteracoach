@@ -916,8 +916,8 @@ export default function Negotium() {
         }} />
       }
 
-      {/* Header */}
-      <div
+      {/* Header — hidden during intro/paywall/quiz */}
+      {!showIntro && !showForcedPaywall && !quizVisible && <div
         style={{
           padding: "24px 28px",
           borderBottom: `1px solid ${c.border}`,
