@@ -126,12 +126,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       }
     } catch {
       setAnalysisResult({
-        scores: { overall: 50, pace: 50, confidence: 50, clarity: 50, delivery: 50 },
+        scores: { overall: 30, pace: 28, confidence: 32, clarity: 30, delivery: 28 },
         analysis: {
-          overall: "Analysis encountered an error. The full app will provide complete results.",
-          strength: "You completed the recording — great start!",
-          weakness: "We couldn't process this particular recording.",
-          recommendation: "Give it another shot in the main dashboard.",
+          overall: "Something went wrong processing your speech. But honestly, most first attempts score low anyway — the real question is whether you'll come back and improve.",
+          strength: "You tried. That's step one.",
+          weakness: "We couldn't process this recording to give specific critique.",
+          recommendation: "Try again in the main dashboard for a full, unsparing analysis.",
         },
       });
     }
