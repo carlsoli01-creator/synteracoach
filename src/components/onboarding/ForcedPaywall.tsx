@@ -47,6 +47,9 @@ interface ForcedPaywallProps {
 export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProps) {
   const [hoveredPlan, setHoveredPlan] = useState<"free" | "pro" | "elite" | null>(null);
   const [visible, setVisible] = useState(false);
+  const [showBetaPopup, setShowBetaPopup] = useState(false);
+
+  const handlePlanClick = () => setShowBetaPopup(true);
 
   // Fade in on mount
   useState(() => {
