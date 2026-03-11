@@ -837,7 +837,7 @@ export default function Negotium() {
 
   const tagColor = (t) => t === "pos" ? "#4a8c5c" : t === "warn" ? "#c97a2a" : "#c04a2a";
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
-  const gap = spacingMode === "compact" ? 20 : 36;
+  const gap = spacingMode === "compact" ? 28 : 48;
 
   return (
     <div
