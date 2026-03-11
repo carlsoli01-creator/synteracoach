@@ -148,7 +148,7 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
             </div>
             <FeatureList features={FREE_FEATURES} />
             <button
-              onClick={onSkip}
+              onClick={handlePlanClick}
               style={{
                 marginTop: 20, width: "100%", padding: "13px",
                 fontSize: 12, fontWeight: 600,
