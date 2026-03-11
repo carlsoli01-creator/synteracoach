@@ -1,29 +1,42 @@
 import { useState } from "react";
 
 const FREE_FEATURES = [
-  { text: "1 analysis per day", included: true },
+  { text: "5 recordings per day", included: true },
   { text: "Basic overall score", included: true },
+  { text: "Daily tips", included: true },
   { text: "Detailed AI feedback", included: false },
   { text: "Technique detection", included: false },
   { text: "Filler word tracking", included: false },
   { text: "Power word detection", included: false },
   { text: "Word choice scoring", included: false },
-  { text: "Coaching tips", included: false },
+  { text: "Personalized coaching", included: false },
   { text: "Unlimited sessions", included: false },
-  { text: "Progress tracking", included: false },
 ];
 
-const PREMIUM_FEATURES = [
-  { text: "Unlimited analyses", included: true },
+const PRO_FEATURES = [
+  { text: "5 recordings per day", included: true },
+  { text: "Overall + 3 core scores", included: true },
+  { text: "Daily tips", included: true },
+  { text: "Basic AI feedback", included: true },
+  { text: "Filler word tracking", included: true },
+  { text: "Power word detection", included: true },
+  { text: "Technique detection", included: false },
+  { text: "Full word choice analysis", included: false },
+  { text: "Personalized coaching", included: false },
+  { text: "Unlimited sessions", included: false },
+];
+
+const ELITE_FEATURES = [
+  { text: "Unlimited recordings", included: true },
   { text: "Full 7-dimension scoring", included: true },
+  { text: "Daily tips + coaching", included: true },
   { text: "Deep AI feedback", included: true },
   { text: "Rhetorical technique detection", included: true },
   { text: "Filler & hedging tracking", included: true },
   { text: "Power word detection", included: true },
   { text: "Word choice & persuasion scoring", included: true },
-  { text: "Personalized coaching", included: true },
-  { text: "Unlimited history", included: true },
-  { text: "Streaks & badges", included: true },
+  { text: "Personalized coaching plans", included: true },
+  { text: "Unlimited history & streaks", included: true },
 ];
 
 interface ForcedPaywallProps {
@@ -32,7 +45,32 @@ interface ForcedPaywallProps {
 }
 
 export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProps) {
-  const [hoveredPlan, setHoveredPlan] = useState<"free" | "premium" | null>(null);
+  const [hoveredPlan, setHoveredPlan] = useState<"free" | "pro" | "elite" | null>(null);
+
+  const FeatureList = ({ features }: { features: { text: string; included: boolean }[] }) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      {features.map((f, i) => (
+        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12 }}>
+          <div style={{
+            width: 20, height: 20, borderRadius: "50%",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 10, fontWeight: 700, flexShrink: 0,
+            background: f.included ? "#1a1a1a" : "#0a0a0a",
+            color: f.included ? "#fff" : "#333",
+            border: `1px solid ${f.included ? "#333" : "#1a1a1a"}`,
+          }}>
+            {f.included ? "✓" : "✕"}
+          </div>
+          <span style={{
+            color: f.included ? "#bbb" : "#444",
+            textDecoration: f.included ? "none" : "line-through",
+          }}>
+            {f.text}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div style={{
@@ -42,13 +80,13 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
       animation: "fadeUp 0.4s ease",
     }}>
       <div style={{
-        width: "min(760px, 94vw)",
-        maxHeight: "92vh",
+        width: "min(1080px, 96vw)",
+        maxHeight: "94vh",
         overflowY: "auto",
-        padding: "48px 32px",
+        padding: "44px 24px",
       }}>
         {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
+        <div style={{ textAlign: "center", marginBottom: 36 }}>
           <div style={{
             fontSize: 10, letterSpacing: "0.4em", color: "#555",
             textTransform: "uppercase", marginBottom: 12, fontWeight: 700,
@@ -59,70 +97,50 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
             fontSize: 30, fontWeight: 900, color: "#fff",
             lineHeight: 1.15, letterSpacing: "-0.02em",
             fontFamily: "'Inter', system-ui, sans-serif",
-            marginBottom: 12,
+            marginBottom: 10,
           }}>
-            Unlock your full potential.
+            Choose your path to mastery.
           </div>
           <div style={{
-            fontSize: 14, color: "#666", lineHeight: 1.7,
-            maxWidth: 420, margin: "0 auto",
+            fontSize: 13, color: "#666", lineHeight: 1.7,
+            maxWidth: 440, margin: "0 auto",
           }}>
             Premium members improve <span style={{ color: "#fff", fontWeight: 700 }}>3x faster</span> with 
             unlimited AI coaching, detailed breakdowns, and personalized tips.
           </div>
         </div>
 
-        {/* Plans */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 32 }}>
+        {/* 3 Plans */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginBottom: 28 }}>
+          
           {/* Free Plan */}
           <div
             onMouseEnter={() => setHoveredPlan("free")}
             onMouseLeave={() => setHoveredPlan(null)}
             style={{
-              border: "1px solid #222",
+              border: "1px solid #1a1a1a",
               borderRadius: 14,
-              padding: "28px 22px",
+              padding: "24px 18px",
               background: hoveredPlan === "free" ? "#0a0a0a" : "#050505",
               transition: "all 0.25s",
             }}
           >
             <div style={{
-              fontSize: 10, letterSpacing: "0.3em", color: "#555",
+              fontSize: 9, letterSpacing: "0.3em", color: "#555",
               textTransform: "uppercase", marginBottom: 8, fontWeight: 700,
             }}>
               FREE
             </div>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 24 }}>
-              <span style={{ fontSize: 40, fontWeight: 900, color: "#fff" }}>$0</span>
-              <span style={{ fontSize: 13, color: "#555" }}>/forever</span>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 20 }}>
+              <span style={{ fontSize: 36, fontWeight: 900, color: "#fff" }}>$0</span>
+              <span style={{ fontSize: 12, color: "#555" }}>/forever</span>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              {FREE_FEATURES.map((f, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 13 }}>
-                  <div style={{
-                    width: 22, height: 22, borderRadius: "50%",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 11, fontWeight: 700, flexShrink: 0,
-                    background: f.included ? "#1a1a1a" : "#0a0a0a",
-                    color: f.included ? "#fff" : "#333",
-                    border: `1px solid ${f.included ? "#333" : "#1a1a1a"}`,
-                  }}>
-                    {f.included ? "✓" : "✕"}
-                  </div>
-                  <span style={{
-                    color: f.included ? "#ccc" : "#444",
-                    textDecoration: f.included ? "none" : "line-through",
-                  }}>
-                    {f.text}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <FeatureList features={FREE_FEATURES} />
             <button
               onClick={onSkip}
               style={{
-                marginTop: 24, width: "100%", padding: "14px",
-                fontSize: 13, fontWeight: 600,
+                marginTop: 20, width: "100%", padding: "13px",
+                fontSize: 12, fontWeight: 600,
                 background: "transparent",
                 border: "1px solid #222",
                 borderRadius: 10, color: "#555", cursor: "pointer",
@@ -133,66 +151,54 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
             </button>
           </div>
 
-          {/* Premium Plan */}
+          {/* Pro Plan — the appealing middle */}
           <div
-            onMouseEnter={() => setHoveredPlan("premium")}
+            onMouseEnter={() => setHoveredPlan("pro")}
             onMouseLeave={() => setHoveredPlan(null)}
             style={{
               border: "2px solid #fff",
               borderRadius: 14,
-              padding: "28px 22px",
-              background: hoveredPlan === "premium" ? "#0f0f0f" : "#0a0a0a",
+              padding: "24px 18px",
+              background: hoveredPlan === "pro" ? "#0f0f0f" : "#0a0a0a",
               transition: "all 0.25s",
               position: "relative",
               boxShadow: "0 0 60px rgba(255,255,255,0.06)",
+              transform: "scale(1.02)",
             }}
           >
             <div style={{
               position: "absolute", top: -13, left: "50%",
               transform: "translateX(-50%)",
               background: "#fff", color: "#000",
-              fontSize: 9, fontWeight: 800,
-              letterSpacing: "0.25em", padding: "5px 18px",
+              fontSize: 8, fontWeight: 800,
+              letterSpacing: "0.25em", padding: "5px 16px",
               borderRadius: 20, textTransform: "uppercase",
+              whiteSpace: "nowrap",
             }}>
-              RECOMMENDED
+              MOST POPULAR
             </div>
             <div style={{
-              fontSize: 10, letterSpacing: "0.3em", color: "#fff",
+              fontSize: 9, letterSpacing: "0.3em", color: "#fff",
               textTransform: "uppercase", marginBottom: 8, fontWeight: 800,
             }}>
-              PREMIUM
+              PRO
             </div>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 6 }}>
-              <span style={{ fontSize: 40, fontWeight: 900, color: "#fff" }}>$7.99</span>
-              <span style={{ fontSize: 13, color: "#666" }}>/month</span>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
+              <span style={{ fontSize: 36, fontWeight: 900, color: "#fff" }}>$8.99</span>
+              <span style={{ fontSize: 12, color: "#666" }}>/month</span>
             </div>
             <div style={{
-              fontSize: 11, color: "#999", marginBottom: 24,
+              fontSize: 10, color: "#999", marginBottom: 20,
               fontWeight: 500,
             }}>
-              Just $0.27/day — less than a coffee
+              Just $0.30/day — less than a coffee
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              {PREMIUM_FEATURES.map((f, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 13 }}>
-                  <div style={{
-                    width: 22, height: 22, borderRadius: "50%",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 11, fontWeight: 700, flexShrink: 0,
-                    background: "#fff", color: "#000",
-                  }}>
-                    ✓
-                  </div>
-                  <span style={{ color: "#fff", fontWeight: 500 }}>{f.text}</span>
-                </div>
-              ))}
-            </div>
+            <FeatureList features={PRO_FEATURES} />
             <button
               onClick={onSubscribe}
               style={{
-                marginTop: 24, width: "100%", padding: "16px",
-                fontSize: 15, fontWeight: 900,
+                marginTop: 20, width: "100%", padding: "14px",
+                fontSize: 14, fontWeight: 900,
                 letterSpacing: "0.04em",
                 background: "#fff", color: "#000",
                 border: "none", borderRadius: 10, cursor: "pointer",
@@ -200,10 +206,74 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
                 transition: "all 0.2s",
               }}
             >
-              Upgrade to Premium
+              Get Pro
             </button>
             <div style={{
-              fontSize: 10, color: "#555", textAlign: "center", marginTop: 10,
+              fontSize: 9, color: "#555", textAlign: "center", marginTop: 8,
+              letterSpacing: "0.05em",
+            }}>
+              Cancel anytime · 7-day money-back guarantee
+            </div>
+          </div>
+
+          {/* Elite Plan */}
+          <div
+            onMouseEnter={() => setHoveredPlan("elite")}
+            onMouseLeave={() => setHoveredPlan(null)}
+            style={{
+              border: "1px solid #333",
+              borderRadius: 14,
+              padding: "24px 18px",
+              background: hoveredPlan === "elite"
+                ? "linear-gradient(180deg, #111 0%, #0a0a0a 100%)"
+                : "linear-gradient(180deg, #0d0d0d 0%, #050505 100%)",
+              transition: "all 0.25s",
+              position: "relative",
+            }}
+          >
+            <div style={{
+              position: "absolute", top: -13, left: "50%",
+              transform: "translateX(-50%)",
+              background: "#333", color: "#fff",
+              fontSize: 8, fontWeight: 800,
+              letterSpacing: "0.25em", padding: "5px 16px",
+              borderRadius: 20, textTransform: "uppercase",
+              whiteSpace: "nowrap",
+            }}>
+              UNLIMITED
+            </div>
+            <div style={{
+              fontSize: 9, letterSpacing: "0.3em", color: "#999",
+              textTransform: "uppercase", marginBottom: 8, fontWeight: 800,
+            }}>
+              ELITE
+            </div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
+              <span style={{ fontSize: 36, fontWeight: 900, color: "#fff" }}>$18.99</span>
+              <span style={{ fontSize: 12, color: "#666" }}>/month</span>
+            </div>
+            <div style={{
+              fontSize: 10, color: "#999", marginBottom: 20,
+              fontWeight: 500,
+            }}>
+              Full AI coaching — everything unlocked
+            </div>
+            <FeatureList features={ELITE_FEATURES} />
+            <button
+              onClick={onSubscribe}
+              style={{
+                marginTop: 20, width: "100%", padding: "14px",
+                fontSize: 13, fontWeight: 800,
+                letterSpacing: "0.04em",
+                background: "transparent", color: "#fff",
+                border: "1px solid #555", borderRadius: 10, cursor: "pointer",
+                transition: "all 0.2s",
+              }}
+            >
+              Go Elite
+            </button>
+            <div style={{
+              fontSize: 9, color: "#555", textAlign: "center", marginTop: 8,
               letterSpacing: "0.05em",
             }}>
               Cancel anytime · 7-day money-back guarantee
