@@ -113,12 +113,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
       if (error || data?.error) {
         setAnalysisResult({
-          scores: { overall: 50, pace: 50, confidence: 50, clarity: 50, delivery: 50 },
+          scores: { overall: 35, pace: 30, confidence: 32, clarity: 38, delivery: 34 },
           analysis: {
-            overall: "We had trouble analyzing your speech this time. Don't worry — the full app experience will work better.",
-            strength: "You completed the test recording successfully.",
-            weakness: "Analysis was limited due to a processing issue.",
-            recommendation: "Try again in the main app for a full breakdown.",
+            overall: "Analysis hit a processing issue, but based on what we captured — there's work to do. Most first recordings are rough.",
+            strength: "You completed the recording, which puts you ahead of people who never try.",
+            weakness: "We couldn't fully process this, so we can't identify specific weaknesses yet.",
+            recommendation: "Record again in the main app. The full analysis will give you specific, honest feedback.",
           },
         });
       } else {
