@@ -81,14 +81,13 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
     const volVar = vols.length ? vols.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / vols.length : 0;
 
     if (!transcript || transcript.length < 3) {
-      // Not enough speech — show generic low result
       setAnalysisResult({
-        scores: { overall: 15, pace: 12, confidence: 18, clarity: 14, delivery: 16 },
+        scores: { overall: 10, pace: 8, confidence: 10, clarity: 12, delivery: 10 },
         analysis: {
-          overall: "We couldn't detect enough speech to provide a meaningful analysis. Try speaking more clearly next time.",
-          strength: "You showed up and tried — that's the first step.",
-          weakness: "We need more words to analyze your delivery patterns.",
-          recommendation: "Speak for at least 5 seconds with clear, audible words for best results.",
+          overall: "We detected almost no speech. In any real conversation, silence signals disengagement or lack of preparation. This needs serious work.",
+          strength: "You attempted the exercise — but showing up alone doesn't count for much.",
+          weakness: "Without audible, clear words, there is literally nothing to coach. This is a 10/100.",
+          recommendation: "Speak clearly into the mic for at least 5 seconds. Even a single confident sentence would score dramatically higher than silence.",
         },
         fillerWords: { count: 0, words: [] },
         powerWords: [],
