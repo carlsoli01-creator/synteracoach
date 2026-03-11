@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
 import AppDrawer from "@/components/layout/AppDrawer";
+import IntroExperience from "@/components/onboarding/IntroExperience";
+import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
