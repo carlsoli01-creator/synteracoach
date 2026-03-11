@@ -46,7 +46,17 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
   useEffect(() => () => cleanup(), [cleanup]);
 
+  const goNext = useCallback(() => {
+    setTransitioning(true);
+    setTimeout(() => {
+      setStep((s) => s + 1);
+      setTransitioning(false);
+    }, 400);
+  }, []);
+
   const startTest = useCallback(async () => {
+    setTransitioning(true);
+    setTimeout(() => setTransitioning(false), 400);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const audioCtx = new AudioContext();
