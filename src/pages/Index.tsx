@@ -434,7 +434,7 @@ export default function Negotium() {
   const [showPricing, setShowPricing] = useState(false);
   const [showTipPopup, setShowTipPopup] = useState(false);
   const [tipText, setTipText] = useState("");
-  const [showIntro, setShowIntro] = useState(() => !localStorage.getItem("syntera_intro_done"));
+  const [showIntro, setShowIntro] = useState(() => localStorage.getItem("syntera_premium") === "true" ? false : !localStorage.getItem("syntera_intro_done"));
   const [showForcedPaywall, setShowForcedPaywall] = useState(false);
 
   // Compute which categories have been completed today from history
@@ -457,12 +457,12 @@ export default function Negotium() {
 
   // Check if quiz was already completed
   const [quizVisible, setQuizVisible] = useState(() => {
+    if (localStorage.getItem("syntera_premium") === "true") return false;
     try {
       const saved = localStorage.getItem("negotium_quiz");
       if (saved) {
         const { answers } = JSON.parse(saved);
         const p = derivePersonalization(answers);
-        // We'll set these in an effect to avoid calling setState during init
         return false;
       }
     } catch (_) {}
