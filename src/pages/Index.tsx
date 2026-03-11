@@ -213,6 +213,8 @@ function OnboardingQuiz({ onFinish }: {onFinish: (result: {neg: string[];comm: s
   const handleFinish = () => {
     const { neg, comm } = derivePersonalization(answers);
     onFinish({ neg, comm, answers });
+    // Mark quiz completion time for tip popup delay
+    localStorage.setItem("syntera_quiz_completed_at", Date.now().toString());
   };
 
   return (
