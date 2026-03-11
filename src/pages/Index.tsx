@@ -878,36 +878,69 @@ export default function Negotium() {
         </div>
       </div>
 
-      {/* Tip of the Day — separated from main content */}
-      {tab === "analysis" && (
-        <div style={{
-          maxWidth: 860,
-          margin: "0 auto",
-          padding: `${gap + 8}px 20px 0`,
-        }}>
+      {/* Tip of the Day Popup */}
+      {showTipPopup && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 55,
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "center",
+            paddingBottom: 40,
+            background: "rgba(0,0,0,0.15)",
+            backdropFilter: "blur(2px)",
+            animation: "fadeUp 0.35s ease",
+          }}
+          onClick={() => setShowTipPopup(false)}
+        >
           <div
+            onClick={(e) => e.stopPropagation()}
             style={{
-              background: "rgba(255,255,255,0.03)",
-              border: `1px dashed ${c.border}`,
-              borderRadius: 12,
-              padding: "20px 24px",
-              display: "flex",
-              alignItems: "flex-start",
-              gap: 14,
-              marginBottom: gap + 12,
+              width: "min(420px, 90vw)",
+              background: "#fff",
+              borderRadius: 16,
+              padding: "28px 24px",
+              boxShadow: "0 24px 64px rgba(16,24,40,0.22)",
+              animation: "fadeUp 0.4s ease",
+              position: "relative",
+            }}
+          >
+            <button
+              onClick={() => setShowTipPopup(false)}
+              style={{
+                position: "absolute", top: 12, right: 14,
+                background: "none", border: "none", fontSize: 18,
+                color: "#9aa0a6", cursor: "pointer",
+              }}
+            >✕</button>
+            <div style={{ fontSize: 36, textAlign: "center", marginBottom: 12 }}>💡</div>
+            <div style={{
+              fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase",
+              color: "#9aa0a6", textAlign: "center", marginBottom: 8, fontWeight: 700,
             }}>
-            <span style={{ fontSize: 22, lineHeight: 1 }}>💡</span>
-            <div>
-              <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: c.muted, marginBottom: 4, fontWeight: 700 }}>
-                Tip of the Day
-              </div>
-              <div style={{ fontSize: 13, color: c.text, lineHeight: 1.6 }}>
-                {COMMUNICATION_TIPS[Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % COMMUNICATION_TIPS.length]}
-              </div>
+              Tip of the Day
             </div>
+            <div style={{
+              fontSize: 15, color: "#0b0b0b", lineHeight: 1.7,
+              textAlign: "center", fontWeight: 500,
+            }}>
+              {tipText}
+            </div>
+            <button
+              onClick={() => setShowTipPopup(false)}
+              style={{
+                marginTop: 20, width: "100%", padding: "12px",
+                fontSize: 13, fontWeight: 700,
+                background: "linear-gradient(90deg, #111827, #1f2937)",
+                color: "#fff", border: "none", borderRadius: 10,
+                cursor: "pointer",
+              }}
+            >
+              Got it 👍
+            </button>
           </div>
-          {/* Divider */}
-          <div style={{ height: 1, background: c.border, marginBottom: gap }} />
         </div>
       )}
 
