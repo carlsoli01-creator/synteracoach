@@ -157,7 +157,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
             {s.body}
           </div>
           <button
-            onClick={() => setStep(step + 1)}
+            onClick={goNext}
             style={{
               padding: "16px 48px", fontSize: 14, fontWeight: 800,
               letterSpacing: "0.06em",
