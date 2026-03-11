@@ -425,7 +425,7 @@ export default function Negotium() {
   const [tab] = useState("analysis");
   const [waveData, setWaveData] = useState(new Array(80).fill(0.5));
   const [micError, setMicError] = useState("");
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(() => localStorage.getItem("syntera_theme") || "light");
   const [spacingMode, setSpacingMode] = useState("airy");
   const [recCommTips, setRecCommTips] = useState<string[]>([]);
   const [userSubtitle, setUserSubtitle] = useState("Voice Intelligence Platform");
@@ -929,7 +929,7 @@ export default function Negotium() {
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <AppDrawer
             theme={theme}
-            setTheme={setTheme}
+            setTheme={(t) => { setTheme(t); localStorage.setItem("syntera_theme", t); }}
             spacingMode={spacingMode}
             setSpacingMode={setSpacingMode}
             onOpenSetup={() => setQuizVisible(true)} />
