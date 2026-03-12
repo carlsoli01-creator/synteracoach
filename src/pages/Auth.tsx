@@ -190,8 +190,8 @@ export default function Auth() {
         background: "#111114",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
-        padding: isMobile ? "32px 24px" : "48px 44px",
+        justifyContent: isMobile ? "flex-start" : "center",
+        padding: isMobile ? "60px 24px 32px" : "48px 44px",
         borderLeft: isMobile ? "none" : "1px solid rgba(255,255,255,0.04)",
       }}>
         <div style={{ marginBottom: 36 }}>
@@ -405,9 +405,9 @@ export default function Auth() {
         )}
 
         {/* Footer */}
-        <div style={{ marginTop: 32, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
+        {!isMobile && <div style={{ marginTop: 32, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
           By continuing, you agree to Syntera's Terms of Service
-        </div>
+        </div>}
       </div>
     </div>
   );
