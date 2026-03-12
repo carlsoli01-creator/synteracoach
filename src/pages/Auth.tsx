@@ -329,6 +329,13 @@ export default function Auth() {
                 </button>
               </div>
               {loginErrors.password && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{loginErrors.password}</p>}
+              <button
+                type="button"
+                onClick={() => setTab("forgot")}
+                style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", fontSize: 12, cursor: "pointer", marginTop: 4, padding: 0, fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif" }}
+              >
+                Forgot password?
+              </button>
             </div>
 
             <button
