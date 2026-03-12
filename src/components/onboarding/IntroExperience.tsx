@@ -398,7 +398,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
               {/* Strength */}
               {analysisResult.analysis.strength && (
                 <div style={{ background: "#0a0a0a", borderRadius: 10, padding: "16px", border: "1px solid #1a1a1a", marginTop: 12 }}>
-                  <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#4a8c5c", textTransform: "uppercase", marginBottom: 8, fontWeight: 700 }}>💪 STRENGTH</div>
+                  <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#4a8c5c", textTransform: "uppercase", marginBottom: 8, fontWeight: 700 }}><Zap size={10} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> STRENGTH</div>
                   <div style={{ fontSize: 13, color: "#ccc", lineHeight: 1.7 }}>{analysisResult.analysis.strength}</div>
                 </div>
               )}
