@@ -419,7 +419,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
                 ))}
               </div>
               <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.15em", textTransform: "uppercase" }}>🔒 UNLOCK WITH PREMIUM</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.15em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 6 }}><Lock size={12} /> UNLOCK WITH PREMIUM</span>
               </div>
             </div>
 
