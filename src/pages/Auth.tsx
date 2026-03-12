@@ -171,6 +171,17 @@ export default function Auth() {
           </div>
 
           <div style={{
+            fontSize: 13,
+            color: "rgba(255,255,255,0.3)",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            marginBottom: 16,
+            fontWeight: 500,
+          }}>
+            Speak with clarity
+          </div>
+
+          <div style={{
             fontSize: 15,
             color: "rgba(255,255,255,0.45)",
             lineHeight: 1.7,
