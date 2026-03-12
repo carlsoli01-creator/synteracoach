@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader2, Eye, EyeOff, Mic } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 
 const emailSchema = z.string().trim().email("Please enter a valid email address").max(255);
@@ -103,7 +104,7 @@ export default function Auth() {
     fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
   });
 
-  const isMobile = window.innerWidth < 768;
+  const isMobile = useIsMobile();
 
   return (
     <div style={{
