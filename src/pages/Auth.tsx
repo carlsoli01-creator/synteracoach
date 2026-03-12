@@ -250,10 +250,12 @@ export default function Auth() {
             color: "#f0f0f0",
             marginBottom: 6,
           }}>
-            {tab === "login" ? "Welcome back" : "Get started"}
+            {tab === "forgot" ? "Reset password" : tab === "login" ? "Welcome back" : "Get started"}
           </div>
           <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)" }}>
-            {tab === "login"
+            {tab === "forgot"
+              ? "Enter your email and we'll send you a reset link"
+              : tab === "login"
               ? "Sign in to continue your voice training"
               : "Create your account and start improving today"
             }
