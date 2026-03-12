@@ -434,7 +434,7 @@ export default function Negotium() {
   const [showPricing, setShowPricing] = useState(false);
   const [showTipPopup, setShowTipPopup] = useState(false);
   const [tipText, setTipText] = useState("");
-  const [showIntro, setShowIntro] = useState(() => localStorage.getItem("syntera_premium") === "true" ? false : !localStorage.getItem("syntera_intro_done"));
+  const [showIntro, setShowIntro] = useState(() => localStorage.getItem("syntera_premium") === "true" ? false : !localStorage.getItem("syntera_intro_done_v2"));
   const [showForcedPaywall, setShowForcedPaywall] = useState(false);
 
   // Compute which categories have been completed today from history
@@ -458,18 +458,16 @@ export default function Negotium() {
   // Check if quiz was already completed
   const [quizVisible, setQuizVisible] = useState(() => {
     if (localStorage.getItem("syntera_premium") === "true") return false;
-    // Quiz is shown AFTER intro — so don't auto-show it here
-    // It will be triggered when intro completes
     try {
-      const saved = localStorage.getItem("negotium_quiz");
+      const saved = localStorage.getItem("negotium_quiz_v2");
       if (saved) return false;
     } catch (_) {}
-    return false; // Don't show quiz on load — intro triggers it
+    return false;
   });
 
   // Show tip popup randomly after quiz completion (5-15s delay)
   useEffect(() => {
-    const quizDone = localStorage.getItem("negotium_quiz");
+    const quizDone = localStorage.getItem("negotium_quiz_v2");
     const tipShownToday = localStorage.getItem("syntera_tip_shown_date") === new Date().toDateString();
     if (!quizDone || tipShownToday || quizVisible) return;
 
@@ -486,7 +484,7 @@ export default function Negotium() {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("negotium_quiz");
+      const saved = localStorage.getItem("negotium_quiz_v2");
       if (saved) {
         const { answers } = JSON.parse(saved);
         const p = derivePersonalization(answers);
@@ -865,10 +863,10 @@ export default function Negotium() {
       {showIntro && !isPremium &&
       <IntroExperience
         onComplete={() => {
-          localStorage.setItem("syntera_intro_done", "true");
+           localStorage.setItem("syntera_intro_done_v2", "true");
           setShowIntro(false);
           // After intro, show quiz if not done yet
-          if (!localStorage.getItem("negotium_quiz")) {
+           if (!localStorage.getItem("negotium_quiz_v2")) {
             setQuizVisible(true);
           }
         }}
@@ -884,19 +882,19 @@ export default function Negotium() {
           localStorage.setItem("syntera_premium", "true");
           setIsPremium(true);
           setShowForcedPaywall(false);
-          localStorage.setItem("syntera_intro_done", "true");
+           localStorage.setItem("syntera_intro_done_v2", "true");
           setShowIntro(false);
           // After paying, show quiz if not done
-          if (!localStorage.getItem("negotium_quiz")) {
+           if (!localStorage.getItem("negotium_quiz_v2")) {
             setQuizVisible(true);
           }
         }}
         onSkip={() => {
           setShowForcedPaywall(false);
-          localStorage.setItem("syntera_intro_done", "true");
+          localStorage.setItem("syntera_intro_done_v2", "true");
           setShowIntro(false);
           // After skipping paywall, show quiz
-          if (!localStorage.getItem("negotium_quiz")) {
+          if (!localStorage.getItem("negotium_quiz_v2")) {
             setQuizVisible(true);
           }
         }} />
@@ -907,7 +905,7 @@ export default function Negotium() {
       {!showIntro && !showForcedPaywall && quizVisible &&
       <OnboardingQuiz
         onFinish={({ neg, comm, answers }) => {
-          localStorage.setItem("negotium_quiz", JSON.stringify({ answers }));
+          localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers }));
           const p = derivePersonalization(answers);
           setRecCommTips([...new Set([...(neg || []), ...(comm || [])].slice(0, 6))]);
           setUserSubtitle(p.subtitle);
