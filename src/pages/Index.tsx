@@ -865,7 +865,7 @@ export default function Negotium() {
       {showIntro && !isPremium &&
       <IntroExperience
         onComplete={() => {
-          localStorage.setItem("syntera_intro_done", "true");
+           localStorage.setItem("syntera_intro_done_v2", "true");
           setShowIntro(false);
           // After intro, show quiz if not done yet
           if (!localStorage.getItem("negotium_quiz")) {
