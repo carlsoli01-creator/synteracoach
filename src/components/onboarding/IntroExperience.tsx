@@ -11,7 +11,7 @@ const INTRO_STEPS = [
     cta: "How it works →",
   },
   {
-    emoji: "📊",
+    icon: "chart",
     title: "Speak. Get Scored.",
     subtitle: "REAL-TIME ANALYSIS",
     body: "Record yourself for 15–45 seconds on any topic. Our AI breaks down your delivery into 7 dimensions — from filler words to persuasion power — and gives you a comprehensive report.",
