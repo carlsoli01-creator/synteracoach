@@ -308,7 +308,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       }}>
         {testPhase === "idle" && (
           <>
-            <div style={{ fontSize: 56, marginBottom: 24 }}>🎤</div>
+            <div style={{ marginBottom: 24 }}><Mic size={48} color="#fff" /></div>
             <div style={{ fontSize: 10, letterSpacing: "0.4em", color: "#666", textTransform: "uppercase", marginBottom: 16, fontWeight: 700 }}>YOUR FIRST TEST</div>
             <div style={{ fontSize: 28, fontWeight: 900, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 16, fontFamily: "'Inter', system-ui, sans-serif" }}>Say anything for 10 seconds.</div>
             <div style={{ fontSize: 13, color: "#666", lineHeight: 1.8, maxWidth: 340, margin: "0 auto 36px" }}>Introduce yourself, read something aloud, or just talk freely. We'll show you how the analysis works.</div>
