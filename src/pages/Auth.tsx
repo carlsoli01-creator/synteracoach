@@ -84,6 +84,17 @@ export default function Auth() {
     }
   };
 
+  const handleOAuth = async (provider: "google" | "apple") => {
+    setIsSubmitting(true);
+    const { error } = await lovable.auth.signInWithOAuth(provider, {
+      redirect_uri: window.location.origin,
+    });
+    setIsSubmitting(false);
+    if (error) {
+      toast.error(`Failed to sign in with ${provider === "google" ? "Google" : "Apple"}.`);
+    }
+  };
+
   if (loading) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#0b0b0b" }}>
