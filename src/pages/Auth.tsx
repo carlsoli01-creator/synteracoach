@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Loader2, Eye, EyeOff, Mic } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
+import { lovable } from "@/integrations/lovable/index";
 
 const emailSchema = z.string().trim().email("Please enter a valid email address").max(255);
 const passwordSchema = z.string().min(8, "Password must be at least 8 characters").max(72);
@@ -80,6 +81,17 @@ export default function Auth() {
       toast.error(error.message.includes("User already registered") ? "An account with this email already exists." : error.message);
     } else {
       toast.success("Check your email to verify your account!");
+    }
+  };
+
+  const handleOAuth = async (provider: "google" | "apple") => {
+    setIsSubmitting(true);
+    const { error } = await lovable.auth.signInWithOAuth(provider, {
+      redirect_uri: window.location.origin,
+    });
+    setIsSubmitting(false);
+    if (error) {
+      toast.error(`Failed to sign in with ${provider === "google" ? "Google" : "Apple"}.`);
     }
   };
 
@@ -404,6 +416,66 @@ export default function Auth() {
             </button>
           </form>
         )}
+
+        {/* Divider */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "24px 0" }}>
+          <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em", textTransform: "uppercase" }}>or</span>
+          <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+        </div>
+
+        {/* Social Login Buttons */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <button
+            onClick={() => handleOAuth("google")}
+            disabled={isSubmitting}
+            style={{
+              width: "100%",
+              padding: 14,
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 10,
+              color: "#f0f0f0",
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: isSubmitting ? "not-allowed" : "pointer",
+              transition: "all 0.2s",
+              fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 10,
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.01 24.01 0 0 0 0 21.56l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Continue with Google
+          </button>
+
+          <button
+            onClick={() => handleOAuth("apple")}
+            disabled={isSubmitting}
+            style={{
+              width: "100%",
+              padding: 14,
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 10,
+              color: "#f0f0f0",
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: isSubmitting ? "not-allowed" : "pointer",
+              transition: "all 0.2s",
+              fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 10,
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+            Continue with Apple
+          </button>
+        </div>
 
         {/* Footer */}
         {!isMobile && <div style={{ marginTop: 32, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
