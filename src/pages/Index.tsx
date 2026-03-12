@@ -434,7 +434,7 @@ export default function Negotium() {
   const [showPricing, setShowPricing] = useState(false);
   const [showTipPopup, setShowTipPopup] = useState(false);
   const [tipText, setTipText] = useState("");
-  const [showIntro, setShowIntro] = useState(() => localStorage.getItem("syntera_premium") === "true" ? false : !localStorage.getItem("syntera_intro_done"));
+  const [showIntro, setShowIntro] = useState(() => localStorage.getItem("syntera_premium") === "true" ? false : !localStorage.getItem("syntera_intro_done_v2"));
   const [showForcedPaywall, setShowForcedPaywall] = useState(false);
 
   // Compute which categories have been completed today from history
