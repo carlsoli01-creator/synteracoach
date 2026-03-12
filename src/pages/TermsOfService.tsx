@@ -16,7 +16,7 @@ export default function TermsOfService() {
         <p style={{ fontSize: 11, color: muted, marginBottom: 32 }}>Last updated: March 12, 2026</p>
 
         {[
-          { t: "1. Acceptance of Terms", p: "By accessing or using Syntera ("the Service"), you agree to be bound by these Terms of Service. If you do not agree, do not use the Service." },
+          { t: "1. Acceptance of Terms", p: "By accessing or using Syntera, you agree to be bound by these Terms of Service. If you do not agree, do not use the Service." },
           { t: "2. Description of Service", p: "Syntera is a voice intelligence and coaching platform that provides AI-powered analysis of your speech patterns, negotiation skills, and communication effectiveness." },
           { t: "3. User Accounts", p: "You must create an account to use the Service. You are responsible for maintaining the confidentiality of your credentials and for all activity under your account." },
           { t: "4. Acceptable Use", p: "You agree not to misuse the Service, including but not limited to: reverse engineering, unauthorized access, transmitting harmful content, or using the Service for illegal purposes." },
