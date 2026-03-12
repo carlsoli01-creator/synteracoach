@@ -102,18 +102,18 @@ export default function Profile() {
     dangerBorder: isDark ? "#1a1010" : "rgba(192,74,42,0.15)",
     topBarBorder: isDark ? "#111" : "#e6e6e6",
     tabActive: isDark ? "#fff" : "#0b0b0b",
-    tabInactive: isDark ? "#555" : "#9aa0a6",
+    tabInactive: isDark ? "#ccc" : "#9aa0a6",
     tabBorder: isDark ? "#fff" : "#0b0b0b",
     badgeBg: isDark ? (localStorage.getItem("syntera_premium") === "true" ? "#fff" : "#1a1a1a")
       : (localStorage.getItem("syntera_premium") === "true" ? "#0b0b0b" : "#f0f0f0"),
-    badgeText: isDark ? (localStorage.getItem("syntera_premium") === "true" ? "#000" : "#555")
+    badgeText: isDark ? (localStorage.getItem("syntera_premium") === "true" ? "#000" : "#ddd")
       : (localStorage.getItem("syntera_premium") === "true" ? "#fff" : "#6b7280"),
     badgeBorder: isDark ? (localStorage.getItem("syntera_premium") === "true" ? "#fff" : "#222")
       : (localStorage.getItem("syntera_premium") === "true" ? "#0b0b0b" : "#ddd"),
     btnPrimary: isDark ? "#fff" : "#0b0b0b",
     btnPrimaryText: isDark ? "#000" : "#fff",
     btnSecondary: isDark ? "#1a1a1a" : "#e6e6e6",
-    btnSecondaryText: isDark ? "#555" : "#6b7280",
+    btnSecondaryText: isDark ? "#ccc" : "#6b7280",
   };
 
   // Preferences state
