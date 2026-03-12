@@ -1,16 +1,17 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { Mic, BarChart3, Search, CheckCircle, Lock, Zap } from "lucide-react";
 
 const INTRO_STEPS = [
   {
-    emoji: "🎙️",
+    icon: "mic",
     title: "Welcome to Syntera",
     subtitle: "YOUR AI VOICE COACH",
     body: "Syntera listens to how you speak — not just what you say. We analyze pace, tone, confidence, clarity, and word choice to give you actionable coaching in real time.",
     cta: "How it works →",
   },
   {
-    emoji: "📊",
+    icon: "chart",
     title: "Speak. Get Scored.",
     subtitle: "REAL-TIME ANALYSIS",
     body: "Record yourself for 15–45 seconds on any topic. Our AI breaks down your delivery into 7 dimensions — from filler words to persuasion power — and gives you a comprehensive report.",
@@ -269,7 +270,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
           transform: transitioning ? "translateY(16px)" : "translateY(0)",
           transition: "opacity 0.4s ease, transform 0.4s ease",
         }}>
-          <div style={{ fontSize: 56, marginBottom: 24 }}>{s.emoji}</div>
+          <div style={{ marginBottom: 24 }}>{s.icon === "mic" ? <Mic size={48} color="#fff" /> : <BarChart3 size={48} color="#fff" />}</div>
           <div style={{ fontSize: 10, letterSpacing: "0.4em", color: "#666", textTransform: "uppercase", marginBottom: 16, fontWeight: 700 }}>{s.subtitle}</div>
           <div style={{ fontSize: 32, fontWeight: 900, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.02em", marginBottom: 20, fontFamily: "'Inter', system-ui, sans-serif" }}>{s.title}</div>
           <div style={{ fontSize: 14, color: "#999", lineHeight: 1.9, maxWidth: 380, margin: "0 auto 40px", letterSpacing: "0.01em" }}>{s.body}</div>
@@ -307,7 +308,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       }}>
         {testPhase === "idle" && (
           <>
-            <div style={{ fontSize: 56, marginBottom: 24 }}>🎤</div>
+            <div style={{ marginBottom: 24 }}><Mic size={48} color="#fff" /></div>
             <div style={{ fontSize: 10, letterSpacing: "0.4em", color: "#666", textTransform: "uppercase", marginBottom: 16, fontWeight: 700 }}>YOUR FIRST TEST</div>
             <div style={{ fontSize: 28, fontWeight: 900, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 16, fontFamily: "'Inter', system-ui, sans-serif" }}>Say anything for 10 seconds.</div>
             <div style={{ fontSize: 13, color: "#666", lineHeight: 1.8, maxWidth: 340, margin: "0 auto 36px" }}>Introduce yourself, read something aloud, or just talk freely. We'll show you how the analysis works.</div>
@@ -315,7 +316,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
               padding: "16px 48px", fontSize: 14, fontWeight: 800, letterSpacing: "0.06em",
               background: "#fff", color: "#000", border: "none", borderRadius: 10, cursor: "pointer",
               boxShadow: "0 0 40px rgba(255,255,255,0.15)", transition: "all 0.2s",
-            }}>🎙️ Start Recording</button>
+            }}><Mic size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: 6 }} /> Start Recording</button>
           </>
         )}
 
@@ -345,7 +346,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
         {testPhase === "analyzing" && (
           <>
-            <div style={{ fontSize: 56, marginBottom: 20 }}>🔍</div>
+            <div style={{ marginBottom: 20 }}><Search size={48} color="#fff" /></div>
             <div style={{ fontSize: 24, fontWeight: 900, color: "#fff", lineHeight: 1.2, marginBottom: 12, fontFamily: "'Inter', system-ui, sans-serif" }}>Analyzing your speech...</div>
             <div style={{ fontSize: 12, color: "#666", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 28px" }}>Our AI is breaking down your delivery across multiple dimensions.</div>
             <div style={{ width: 24, height: 24, border: "2px solid #333", borderTop: "2px solid #fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto" }} />
@@ -354,7 +355,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
         {testPhase === "done" && analysisResult && (
           <>
-            <div style={{ fontSize: 56, marginBottom: 20 }}>✅</div>
+            <div style={{ marginBottom: 20 }}><CheckCircle size={48} color="#fff" /></div>
             <div style={{ fontSize: 24, fontWeight: 900, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 8, fontFamily: "'Inter', system-ui, sans-serif" }}>Your Real Analysis</div>
             <div style={{ fontSize: 12, color: "#666", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 28px" }}>Premium unlocks the full 7-dimension breakdown with personalized coaching.</div>
 
@@ -397,7 +398,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
               {/* Strength */}
               {analysisResult.analysis.strength && (
                 <div style={{ background: "#0a0a0a", borderRadius: 10, padding: "16px", border: "1px solid #1a1a1a", marginTop: 12 }}>
-                  <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#4a8c5c", textTransform: "uppercase", marginBottom: 8, fontWeight: 700 }}>💪 STRENGTH</div>
+                  <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#4a8c5c", textTransform: "uppercase", marginBottom: 8, fontWeight: 700 }}><Zap size={10} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> STRENGTH</div>
                   <div style={{ fontSize: 13, color: "#ccc", lineHeight: 1.7 }}>{analysisResult.analysis.strength}</div>
                 </div>
               )}
@@ -418,7 +419,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
                 ))}
               </div>
               <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.15em", textTransform: "uppercase" }}>🔒 UNLOCK WITH PREMIUM</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.15em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 6 }}><Lock size={12} /> UNLOCK WITH PREMIUM</span>
               </div>
             </div>
 
