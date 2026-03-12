@@ -884,7 +884,7 @@ export default function Negotium() {
           localStorage.setItem("syntera_premium", "true");
           setIsPremium(true);
           setShowForcedPaywall(false);
-          localStorage.setItem("syntera_intro_done", "true");
+           localStorage.setItem("syntera_intro_done_v2", "true");
           setShowIntro(false);
           // After paying, show quiz if not done
           if (!localStorage.getItem("negotium_quiz")) {
