@@ -896,7 +896,7 @@ export default function Negotium() {
           localStorage.setItem("syntera_intro_done_v2", "true");
           setShowIntro(false);
           // After skipping paywall, show quiz
-          if (!localStorage.getItem("negotium_quiz")) {
+          if (!localStorage.getItem("negotium_quiz_v2")) {
             setQuizVisible(true);
           }
         }} />
