@@ -355,7 +355,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
         {testPhase === "done" && analysisResult && (
           <>
-            <div style={{ fontSize: 56, marginBottom: 20 }}>✅</div>
+            <div style={{ marginBottom: 20 }}><CheckCircle size={48} color="#fff" /></div>
             <div style={{ fontSize: 24, fontWeight: 900, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 8, fontFamily: "'Inter', system-ui, sans-serif" }}>Your Real Analysis</div>
             <div style={{ fontSize: 12, color: "#666", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 28px" }}>Premium unlocks the full 7-dimension breakdown with personalized coaching.</div>
 
