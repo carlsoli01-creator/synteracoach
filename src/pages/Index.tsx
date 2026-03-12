@@ -863,44 +863,44 @@ export default function Negotium() {
       
       {/* Intro shows FIRST (before quiz) */}
       {showIntro && !isPremium &&
-        <IntroExperience
-          onComplete={() => {
-            localStorage.setItem("syntera_intro_done", "true");
-            setShowIntro(false);
-            // After intro, show quiz if not done yet
-            if (!localStorage.getItem("negotium_quiz")) {
-              setQuizVisible(true);
-            }
-          }}
-          onForcePaywall={() => {
-            setShowForcedPaywall(true);
-          }}
-        />
+      <IntroExperience
+        onComplete={() => {
+          localStorage.setItem("syntera_intro_done", "true");
+          setShowIntro(false);
+          // After intro, show quiz if not done yet
+          if (!localStorage.getItem("negotium_quiz")) {
+            setQuizVisible(true);
+          }
+        }}
+        onForcePaywall={() => {
+          setShowForcedPaywall(true);
+        }} />
+
       }
 
       {showForcedPaywall && !isPremium &&
-        <ForcedPaywall
-          onSubscribe={() => {
-            localStorage.setItem("syntera_premium", "true");
-            setIsPremium(true);
-            setShowForcedPaywall(false);
-            localStorage.setItem("syntera_intro_done", "true");
-            setShowIntro(false);
-            // After paying, show quiz if not done
-            if (!localStorage.getItem("negotium_quiz")) {
-              setQuizVisible(true);
-            }
-          }}
-          onSkip={() => {
-            setShowForcedPaywall(false);
-            localStorage.setItem("syntera_intro_done", "true");
-            setShowIntro(false);
-            // After skipping paywall, show quiz
-            if (!localStorage.getItem("negotium_quiz")) {
-              setQuizVisible(true);
-            }
-          }}
-        />
+      <ForcedPaywall
+        onSubscribe={() => {
+          localStorage.setItem("syntera_premium", "true");
+          setIsPremium(true);
+          setShowForcedPaywall(false);
+          localStorage.setItem("syntera_intro_done", "true");
+          setShowIntro(false);
+          // After paying, show quiz if not done
+          if (!localStorage.getItem("negotium_quiz")) {
+            setQuizVisible(true);
+          }
+        }}
+        onSkip={() => {
+          setShowForcedPaywall(false);
+          localStorage.setItem("syntera_intro_done", "true");
+          setShowIntro(false);
+          // After skipping paywall, show quiz
+          if (!localStorage.getItem("negotium_quiz")) {
+            setQuizVisible(true);
+          }
+        }} />
+
       }
 
       {/* Quiz shows AFTER intro */}
@@ -929,7 +929,7 @@ export default function Negotium() {
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <AppDrawer
             theme={theme}
-            setTheme={(t) => { setTheme(t); localStorage.setItem("syntera_theme", t); }}
+            setTheme={(t) => {setTheme(t);localStorage.setItem("syntera_theme", t);}}
             spacingMode={spacingMode}
             setSpacingMode={setSpacingMode}
             onOpenSetup={() => setQuizVisible(true)} />
@@ -1035,20 +1035,20 @@ export default function Negotium() {
               
                 Speak. <span style={{ color: c.text, opacity: 0.35 }} className="text-black">{heroFocus}</span>
               </div>
-              <div style={{ fontSize: 10, letterSpacing: "0.5em", color: c.muted, textTransform: "uppercase", marginTop: 20 }}>PACE · TONE · CONFIDENCE · CLARITY</div>
-              <div style={{ fontSize: 11, color: c.muted, marginTop: 14, fontStyle: "italic", letterSpacing: "0.04em", opacity: 0.7 }}>🎙️ Use a microphone for best results</div>
+              <div style={{ fontSize: 10, letterSpacing: "0.5em", color: c.muted, textTransform: "uppercase", marginTop: 20 }}>
+</div>
+              <div style={{ fontSize: 11, color: c.muted, marginTop: 14, fontStyle: "italic", letterSpacing: "0.04em", opacity: 0.7 }} className="my-0">🎙️ Use a microphone for best results</div>
             </div>
 
             {/* Waveform */}
             <div style={{ marginBottom: gap }}>
-              <div
-              style={{
-                fontSize: 9,
-                letterSpacing: "0.25em",
-                color: c.muted,
-                textTransform: "uppercase",
-                marginBottom: 8
-              }}>
+              <div style={{
+              fontSize: 9,
+              letterSpacing: "0.25em",
+              color: c.muted,
+              textTransform: "uppercase",
+              marginBottom: 8
+            }}>
               
                 Live Waveform
               </div>
