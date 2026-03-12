@@ -89,31 +89,31 @@ export default function Profile() {
     card: isDark ? "#0a0a0a" : "#f5f5f5",
     cardBorder: isDark ? "#151515" : "#e6e6e6",
     text: isDark ? "#fff" : "#0b0b0b",
-    muted: isDark ? "#555" : "#9aa0a6",
-    dimText: isDark ? "#888" : "#6b7280",
-    sectionLabel: isDark ? "#444" : "#9aa0a6",
+    muted: isDark ? "#ccc" : "#9aa0a6",
+    dimText: isDark ? "#e0e0e0" : "#6b7280",
+    sectionLabel: isDark ? "#bbb" : "#9aa0a6",
     border: isDark ? "#111" : "#e6e6e6",
     inputBg: isDark ? "#0a0a0a" : "#f7f7f8",
     inputBorder: isDark ? "#151515" : "#e0e0e0",
     selectBg: isDark ? "#0a0a0a" : "#f7f7f8",
     selectBorder: isDark ? "#222" : "#ddd",
-    selectText: isDark ? "#ccc" : "#333",
+    selectText: isDark ? "#fff" : "#333",
     dangerBg: isDark ? "rgba(192,74,42,0.03)" : "rgba(192,74,42,0.04)",
     dangerBorder: isDark ? "#1a1010" : "rgba(192,74,42,0.15)",
     topBarBorder: isDark ? "#111" : "#e6e6e6",
     tabActive: isDark ? "#fff" : "#0b0b0b",
-    tabInactive: isDark ? "#555" : "#9aa0a6",
+    tabInactive: isDark ? "#ccc" : "#9aa0a6",
     tabBorder: isDark ? "#fff" : "#0b0b0b",
     badgeBg: isDark ? (localStorage.getItem("syntera_premium") === "true" ? "#fff" : "#1a1a1a")
       : (localStorage.getItem("syntera_premium") === "true" ? "#0b0b0b" : "#f0f0f0"),
-    badgeText: isDark ? (localStorage.getItem("syntera_premium") === "true" ? "#000" : "#555")
+    badgeText: isDark ? (localStorage.getItem("syntera_premium") === "true" ? "#000" : "#ddd")
       : (localStorage.getItem("syntera_premium") === "true" ? "#fff" : "#6b7280"),
     badgeBorder: isDark ? (localStorage.getItem("syntera_premium") === "true" ? "#fff" : "#222")
       : (localStorage.getItem("syntera_premium") === "true" ? "#0b0b0b" : "#ddd"),
     btnPrimary: isDark ? "#fff" : "#0b0b0b",
     btnPrimaryText: isDark ? "#000" : "#fff",
     btnSecondary: isDark ? "#1a1a1a" : "#e6e6e6",
-    btnSecondaryText: isDark ? "#555" : "#6b7280",
+    btnSecondaryText: isDark ? "#ccc" : "#6b7280",
   };
 
   // Preferences state
