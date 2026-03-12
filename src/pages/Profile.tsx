@@ -622,12 +622,16 @@ export default function Profile() {
               </div>
 
               <SectionLabel color={c.sectionLabel}>Legal</SectionLabel>
-              {["Terms of Service", "Privacy Policy", "Cookie Policy"].map((item, i) => (
-                <div key={i} style={{
+              {[
+                { label: "Terms of Service", path: "/terms" },
+                { label: "Privacy Policy", path: "/privacy" },
+                { label: "Cookie Policy", path: "/cookies" },
+              ].map((item, i) => (
+                <div key={i} onClick={() => navigate(item.path)} style={{
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   padding: "14px 0", borderBottom: `1px solid ${c.border}`, cursor: "pointer",
                 }}>
-                  <span style={{ fontSize: 13, color: c.dimText }}>{item}</span>
+                  <span style={{ fontSize: 13, color: c.dimText }}>{item.label}</span>
                   <span style={{ fontSize: 12, color: c.muted }}>→</span>
                 </div>
               ))}
