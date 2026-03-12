@@ -316,7 +316,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
               padding: "16px 48px", fontSize: 14, fontWeight: 800, letterSpacing: "0.06em",
               background: "#fff", color: "#000", border: "none", borderRadius: 10, cursor: "pointer",
               boxShadow: "0 0 40px rgba(255,255,255,0.15)", transition: "all 0.2s",
-            }}>🎙️ Start Recording</button>
+            }}><Mic size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: 6 }} /> Start Recording</button>
           </>
         )}
 
