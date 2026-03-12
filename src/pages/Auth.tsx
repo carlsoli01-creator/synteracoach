@@ -462,6 +462,49 @@ export default function Auth() {
           </form>
         )}
 
+        {/* Forgot Password Form */}
+        {tab === "forgot" && (
+          <form onSubmit={handleForgotPassword} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
+                Email
+              </label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={forgotEmail}
+                onChange={e => setForgotEmail(e.target.value)}
+                disabled={isSubmitting}
+                style={inputStyle(!!forgotError)}
+              />
+              {forgotError && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{forgotError}</p>}
+            </div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                width: "100%", padding: 15,
+                background: "linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%)",
+                color: "#0b0b0b", border: "none", borderRadius: 10,
+                fontSize: 13, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                cursor: isSubmitting ? "not-allowed" : "pointer",
+                opacity: isSubmitting ? 0.6 : 1,
+                transition: "opacity 0.2s, transform 0.1s",
+                fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif", marginTop: 8,
+              }}
+            >
+              {isSubmitting ? "Sending..." : "Send Reset Link →"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setTab("login")}
+              style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", fontSize: 12, cursor: "pointer", textAlign: "center", fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif" }}
+            >
+              ← Back to sign in
+            </button>
+          </form>
+        )}
+
         {/* Divider */}
         <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "24px 0" }}>
           <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
