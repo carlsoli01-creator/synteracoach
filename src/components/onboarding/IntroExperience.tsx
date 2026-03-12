@@ -270,7 +270,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
           transform: transitioning ? "translateY(16px)" : "translateY(0)",
           transition: "opacity 0.4s ease, transform 0.4s ease",
         }}>
-          <div style={{ fontSize: 56, marginBottom: 24 }}>{s.emoji}</div>
+          <div style={{ marginBottom: 24 }}>{s.icon === "mic" ? <Mic size={48} color="#fff" /> : <BarChart3 size={48} color="#fff" />}</div>
           <div style={{ fontSize: 10, letterSpacing: "0.4em", color: "#666", textTransform: "uppercase", marginBottom: 16, fontWeight: 700 }}>{s.subtitle}</div>
           <div style={{ fontSize: 32, fontWeight: 900, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.02em", marginBottom: 20, fontFamily: "'Inter', system-ui, sans-serif" }}>{s.title}</div>
           <div style={{ fontSize: 14, color: "#999", lineHeight: 1.9, maxWidth: 380, margin: "0 auto 40px", letterSpacing: "0.01em" }}>{s.body}</div>
