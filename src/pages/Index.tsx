@@ -484,7 +484,7 @@ export default function Negotium() {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("negotium_quiz");
+      const saved = localStorage.getItem("negotium_quiz_v2");
       if (saved) {
         const { answers } = JSON.parse(saved);
         const p = derivePersonalization(answers);
