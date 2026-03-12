@@ -907,7 +907,7 @@ export default function Negotium() {
       {!showIntro && !showForcedPaywall && quizVisible &&
       <OnboardingQuiz
         onFinish={({ neg, comm, answers }) => {
-          localStorage.setItem("negotium_quiz", JSON.stringify({ answers }));
+          localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers }));
           const p = derivePersonalization(answers);
           setRecCommTips([...new Set([...(neg || []), ...(comm || [])].slice(0, 6))]);
           setUserSubtitle(p.subtitle);
