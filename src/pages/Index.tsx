@@ -467,7 +467,7 @@ export default function Negotium() {
 
   // Show tip popup randomly after quiz completion (5-15s delay)
   useEffect(() => {
-    const quizDone = localStorage.getItem("negotium_quiz");
+    const quizDone = localStorage.getItem("negotium_quiz_v2");
     const tipShownToday = localStorage.getItem("syntera_tip_shown_date") === new Date().toDateString();
     if (!quizDone || tipShownToday || quizVisible) return;
 
