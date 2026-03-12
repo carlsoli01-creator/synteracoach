@@ -6,6 +6,7 @@ import { Loader2, Eye, EyeOff, Mic } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 import { lovable } from "@/integrations/lovable/index";
+import { supabase } from "@/integrations/supabase/client";
 
 const emailSchema = z.string().trim().email("Please enter a valid email address").max(255);
 const passwordSchema = z.string().min(8, "Password must be at least 8 characters").max(72);
@@ -15,13 +16,15 @@ export default function Auth() {
   const navigate = useNavigate();
   const { user, loading, signIn, signUp } = useAuth();
 
-  const [tab, setTab] = useState<"login" | "signup">("login");
+  const [tab, setTab] = useState<"login" | "signup" | "forgot">("login");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [loginErrors, setLoginErrors] = useState<{ email?: string; password?: string }>({});
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotError, setForgotError] = useState("");
 
   const [signupName, setSignupName] = useState("");
   const [signupEmail, setSignupEmail] = useState("");
@@ -92,6 +95,28 @@ export default function Auth() {
     setIsSubmitting(false);
     if (error) {
       toast.error(`Failed to sign in with ${provider === "google" ? "Google" : "Apple"}.`);
+    }
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const result = emailSchema.safeParse(forgotEmail);
+    if (!result.success) {
+      setForgotError(result.error.errors[0].message);
+      return;
+    }
+    setForgotError("");
+    setIsSubmitting(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail.trim(), {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setIsSubmitting(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Check your email for a password reset link!");
+      setTab("login");
+      setForgotEmail("");
     }
   };
 
@@ -225,10 +250,12 @@ export default function Auth() {
             color: "#f0f0f0",
             marginBottom: 6,
           }}>
-            {tab === "login" ? "Welcome back" : "Get started"}
+            {tab === "forgot" ? "Reset password" : tab === "login" ? "Welcome back" : "Get started"}
           </div>
           <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)" }}>
-            {tab === "login"
+            {tab === "forgot"
+              ? "Enter your email and we'll send you a reset link"
+              : tab === "login"
               ? "Sign in to continue your voice training"
               : "Create your account and start improving today"
             }
@@ -236,7 +263,7 @@ export default function Auth() {
         </div>
 
         {/* Tabs */}
-        <div style={{ display: "flex", marginBottom: 28, gap: 4, background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: 4 }}>
+        {tab !== "forgot" && <div style={{ display: "flex", marginBottom: 28, gap: 4, background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: 4 }}>
           {(["login", "signup"] as const).map(t => (
             <button
               key={t}
@@ -260,7 +287,7 @@ export default function Auth() {
               {t === "login" ? "Sign In" : "Sign Up"}
             </button>
           ))}
-        </div>
+        </div>}
 
         {/* Login Form */}
         {tab === "login" && (
@@ -302,6 +329,13 @@ export default function Auth() {
                 </button>
               </div>
               {loginErrors.password && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{loginErrors.password}</p>}
+              <button
+                type="button"
+                onClick={() => setTab("forgot")}
+                style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", fontSize: 12, cursor: "pointer", marginTop: 4, padding: 0, fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif" }}
+              >
+                Forgot password?
+              </button>
             </div>
 
             <button
@@ -424,6 +458,49 @@ export default function Auth() {
               }}
             >
               {isSubmitting ? "Creating account..." : "Create Account →"}
+            </button>
+          </form>
+        )}
+
+        {/* Forgot Password Form */}
+        {tab === "forgot" && (
+          <form onSubmit={handleForgotPassword} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
+                Email
+              </label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={forgotEmail}
+                onChange={e => setForgotEmail(e.target.value)}
+                disabled={isSubmitting}
+                style={inputStyle(!!forgotError)}
+              />
+              {forgotError && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{forgotError}</p>}
+            </div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                width: "100%", padding: 15,
+                background: "linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%)",
+                color: "#0b0b0b", border: "none", borderRadius: 10,
+                fontSize: 13, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                cursor: isSubmitting ? "not-allowed" : "pointer",
+                opacity: isSubmitting ? 0.6 : 1,
+                transition: "opacity 0.2s, transform 0.1s",
+                fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif", marginTop: 8,
+              }}
+            >
+              {isSubmitting ? "Sending..." : "Send Reset Link →"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setTab("login")}
+              style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", fontSize: 12, cursor: "pointer", textAlign: "center", fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif" }}
+            >
+              ← Back to sign in
             </button>
           </form>
         )}
