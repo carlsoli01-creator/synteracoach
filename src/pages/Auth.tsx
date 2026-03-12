@@ -263,7 +263,7 @@ export default function Auth() {
         </div>
 
         {/* Tabs */}
-        <div style={{ display: "flex", marginBottom: 28, gap: 4, background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: 4 }}>
+        {tab !== "forgot" && <div style={{ display: "flex", marginBottom: 28, gap: 4, background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: 4 }}>
           {(["login", "signup"] as const).map(t => (
             <button
               key={t}
