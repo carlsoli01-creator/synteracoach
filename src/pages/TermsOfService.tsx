@@ -22,7 +22,7 @@ export default function TermsOfService() {
           { t: "4. Acceptable Use", p: "You agree not to misuse the Service, including but not limited to: reverse engineering, unauthorized access, transmitting harmful content, or using the Service for illegal purposes." },
           { t: "5. Intellectual Property", p: "All content, features, and functionality of the Service are owned by Syntera and protected by copyright, trademark, and other intellectual property laws." },
           { t: "6. Privacy", p: "Your use of the Service is also governed by our Privacy Policy, which is incorporated into these Terms by reference." },
-          { t: "7. Disclaimer of Warranties", p: 'The Service is provided "as is" without warranties of any kind, express or implied. Syntera does not guarantee that the Service will be uninterrupted or error-free.' },
+          { t: "7. Disclaimer of Warranties", p: "The Service is provided as-is without warranties of any kind, express or implied. Syntera does not guarantee that the Service will be uninterrupted or error-free." },
           { t: "8. Limitation of Liability", p: "To the maximum extent permitted by law, Syntera shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Service." },
           { t: "9. Termination", p: "We may suspend or terminate your access to the Service at any time, with or without cause, with or without notice." },
           { t: "10. Changes to Terms", p: "We reserve the right to modify these Terms at any time. Continued use of the Service after changes constitutes acceptance of the new Terms." },
