@@ -8,6 +8,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import PageTransition from "@/components/layout/PageTransition";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 import Scenarios from "./pages/Scenarios";
 import ScenarioCategory from "./pages/ScenarioCategory";
