@@ -6,6 +6,7 @@ import { Loader2, Eye, EyeOff, Mic } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 import { lovable } from "@/integrations/lovable/index";
+import { supabase } from "@/integrations/supabase/client";
 
 const emailSchema = z.string().trim().email("Please enter a valid email address").max(255);
 const passwordSchema = z.string().min(8, "Password must be at least 8 characters").max(72);
