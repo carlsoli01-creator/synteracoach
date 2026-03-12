@@ -405,9 +405,9 @@ export default function Auth() {
         )}
 
         {/* Footer */}
-        <div style={{ marginTop: 32, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
+        {!isMobile && <div style={{ marginTop: 32, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
           By continuing, you agree to Syntera's Terms of Service
-        </div>
+        </div>}
       </div>
     </div>
   );
