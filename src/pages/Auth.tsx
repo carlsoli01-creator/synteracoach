@@ -104,7 +104,7 @@ export default function Auth() {
     fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
   });
 
-  const isMobile = window.innerWidth < 768;
+  const isMobile = useIsMobile();
 
   return (
     <div style={{
