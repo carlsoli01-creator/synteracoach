@@ -287,7 +287,7 @@ export default function Auth() {
               {t === "login" ? "Sign In" : "Sign Up"}
             </button>
           ))}
-        </div>
+        </div>}
 
         {/* Login Form */}
         {tab === "login" && (
