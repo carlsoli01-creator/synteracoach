@@ -402,7 +402,11 @@ CRITICAL RULES:
 - SHORT RECORDINGS (under 10 seconds): Do NOT penalize for incomplete thoughts, unfinished sentences, or lack of a full argument structure. Short recordings are practice snippets — judge them on the QUALITY of the words spoken, not on whether the speaker completed a full idea. Focus on word choice, confidence of delivery, and any techniques used in the brief window. A strong 5-second clip with decisive language should score well.
 - Power words should include a BROAD list: "because", "imagine", "guaranteed", "proven", "exclusive", "immediately", "need", "must", "will", "important", "critical", "essential", "definitely", "absolutely", "clearly", "certainly", "actually", "specifically", "exactly", "directly", "effectively", "successfully", "opportunity", "value", "benefit", "result", "achieve", "ensure", "deliver", "commit".`;
 
-    const userPrompt = `Analyze this speech transcript with extreme precision. Focus on the words themselves, the delivery patterns, and any rhetorical or persuasion techniques used.
+    const goalInfo = sessionGoal ? `\nSession Goal: ${sessionGoal}` : "";
+    const typeInfo = sessionType ? `\nSession Type: ${sessionType}` : "";
+    const eventInfo2 = eventContext ? `\nEvent Context: ${eventContext}` : "";
+
+    const userPrompt = `Analyze this speech transcript with extreme precision. Focus on the words themselves, the delivery patterns, and any rhetorical or persuasion techniques used.${goalInfo}${typeInfo}${eventInfo2}
 
 Transcript (${wordCount} words, ~${Math.round(wpm)} WPM over ${audioMetrics.durationSeconds || 0}s):
 "${transcript}"
