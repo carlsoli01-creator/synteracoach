@@ -158,7 +158,7 @@ export default function Auth() {
         alignItems: "center",
         justifyContent: "center",
         padding: 48,
-        position: "relative",
+        maxWidth: 700,
         overflow: "hidden",
       }}>
         {/* Subtle grid overlay */}
