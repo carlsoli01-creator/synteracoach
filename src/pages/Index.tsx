@@ -1022,12 +1022,12 @@ export default function Negotium() {
             <div style={{ textAlign: "center", marginBottom: gap + 16, paddingTop: 12 }}>
               <div
               style={{
-                fontFamily: "'Inter', system-ui, sans-serif",
+                fontFamily: "'Syne', sans-serif",
                 fontSize: "clamp(1.6rem,5vw,3rem)",
                 color: c.text,
                 lineHeight: 1.1,
                 marginBottom: 0,
-                fontWeight: 900,
+                fontWeight: 800,
                 letterSpacing: "-0.03em"
               }}>
               
