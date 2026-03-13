@@ -246,7 +246,7 @@ export default function Auth() {
         width: isMobile ? "100%" : 460,
         minWidth: isMobile ? undefined : 400,
         flex: isMobile ? 1 : undefined,
-        background: "#111114",
+        background: "#080808",
         display: "flex",
         flexDirection: "column",
         justifyContent: isMobile ? "flex-start" : "center",
