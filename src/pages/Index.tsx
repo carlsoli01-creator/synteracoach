@@ -913,7 +913,7 @@ export default function Negotium() {
             setSpacingMode={setSpacingMode}
             onOpenSetup={() => setQuizVisible(true)} />
           <div>
-            <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.08em", fontFamily: "'Syne', sans-serif" }}>SYNTERA</div>
+            <div style={{ fontSize: 26, fontWeight: 400, color: c.text, letterSpacing: "0.08em", fontFamily: "'Syne', sans-serif" }}>SYNTERA</div>
             <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>{userSubtitle}</div>
           </div>
         </div>
@@ -1008,7 +1008,7 @@ export default function Negotium() {
                 color: c.text,
                 lineHeight: 1.1,
                 marginBottom: 0,
-                fontWeight: 800,
+                fontWeight: 400,
                 letterSpacing: "-0.03em"
               }}>
               
