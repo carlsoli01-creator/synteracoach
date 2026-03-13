@@ -1008,7 +1008,7 @@ export default function Negotium() {
                 color: c.text,
                 lineHeight: 1.1,
                 marginBottom: 0,
-                fontWeight: 800,
+                fontWeight: 400,
                 letterSpacing: "-0.03em"
               }}>
               
