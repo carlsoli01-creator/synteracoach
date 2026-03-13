@@ -147,12 +147,12 @@ export default function Auth() {
     <div style={{
       minHeight: "100vh",
       display: "flex",
-      fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+      fontFamily: "'DM Mono', monospace",
     }}>
       {/* Left panel — branding (hidden on mobile) */}
       {!isMobile && <div style={{
         flex: 1,
-        background: "linear-gradient(160deg, #0b0b0b 0%, #1a1a2e 50%, #0b0b0b 100%)",
+        background: "#080808",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
