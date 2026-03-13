@@ -149,7 +149,7 @@ export default function Auth() {
       display: "flex",
       fontFamily: "'DM Mono', monospace",
     }}>
-      {/* Left panel — branding (hidden on mobile) */}
+      {/* Left panel — branding (desktop only) */}
       {!isMobile && <div style={{
         flex: 1,
         background: "#080808",
@@ -158,7 +158,7 @@ export default function Auth() {
         alignItems: "center",
         justifyContent: "center",
         padding: 48,
-        maxWidth: 700,
+        position: "relative",
         overflow: "hidden",
       }}>
         {/* Subtle grid overlay */}
@@ -167,6 +167,7 @@ export default function Auth() {
           inset: 0,
           backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0)",
           backgroundSize: "32px 32px",
+          pointerEvents: "none",
         }} />
 
         <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 560 }}>
@@ -187,7 +188,7 @@ export default function Auth() {
 
           <div style={{
             fontSize: 36,
-            fontWeight: 800,
+            fontWeight: 400,
             fontFamily: "'Syne', sans-serif",
             color: "#ffffff",
             letterSpacing: "0.08em",
@@ -245,13 +246,14 @@ export default function Auth() {
       <div style={{
         width: isMobile ? "100%" : 460,
         minWidth: isMobile ? undefined : 400,
-        flex: isMobile ? 1 : undefined,
+        flexShrink: 0,
         background: "#080808",
         display: "flex",
         flexDirection: "column",
         justifyContent: isMobile ? "flex-start" : "center",
         padding: isMobile ? "60px 24px 32px" : "48px 44px",
         borderLeft: isMobile ? "none" : "1px solid rgba(255,255,255,0.04)",
+        overflowY: "auto",
       }}>
         <div style={{ marginBottom: 36 }}>
           <div style={{
