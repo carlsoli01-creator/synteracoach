@@ -274,7 +274,7 @@ export default function Auth() {
         </div>
 
         {/* Tabs */}
-        {tab !== "forgot" && <div style={{ display: "flex", marginBottom: 28, gap: 4, background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: 4 }}>
+        {tab !== "forgot" && <div style={{ display: "flex", marginBottom: 28, gap: 4, background: "rgba(255,255,255,0.03)", borderRadius: 0, padding: 4 }}>
           {(["login", "signup"] as const).map(t => (
             <button
               key={t}
@@ -284,15 +284,15 @@ export default function Auth() {
                 padding: "10px 0",
                 background: tab === t ? "rgba(255,255,255,0.08)" : "transparent",
                 border: "none",
-                borderRadius: 8,
+                borderRadius: 0,
                 color: tab === t ? "#f0f0f0" : "rgba(255,255,255,0.3)",
-                fontSize: 12,
-                fontWeight: tab === t ? 600 : 400,
-                letterSpacing: "0.12em",
+                fontSize: 11,
+                fontWeight: tab === t ? 500 : 400,
+                letterSpacing: "0.15em",
                 textTransform: "uppercase",
                 cursor: "pointer",
                 transition: "all 0.2s",
-                fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+                fontFamily: "'DM Mono', monospace",
               }}
             >
               {t === "login" ? "Sign In" : "Sign Up"}
