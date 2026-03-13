@@ -212,10 +212,17 @@ serve(async (req) => {
     durationSeconds?: number;
   } = {};
 
+  let sessionGoal = "";
+  let sessionType = "";
+  let eventContext = "";
+
   try {
     const body = await req.json();
     transcript = body?.transcript ?? "";
     audioMetrics = body?.audioMetrics ?? {};
+    sessionGoal = body?.sessionGoal ?? "";
+    sessionType = body?.sessionType ?? "";
+    eventContext = body?.eventContext ?? "";
 
     if (!transcript || transcript.trim().length < 5) {
       return new Response(
