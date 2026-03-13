@@ -174,8 +174,8 @@ export default function Auth() {
           <div style={{
             width: 64,
             height: 64,
-            borderRadius: 16,
-            background: "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))",
+            borderRadius: 0,
+            background: "rgba(255,255,255,0.04)",
             border: "1px solid rgba(255,255,255,0.06)",
             display: "flex",
             alignItems: "center",
