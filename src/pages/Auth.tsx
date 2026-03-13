@@ -256,9 +256,10 @@ export default function Auth() {
         <div style={{ marginBottom: 36 }}>
           <div style={{
             fontSize: 22,
-            fontWeight: 700,
+            fontWeight: 800,
             color: "#f0f0f0",
             marginBottom: 6,
+            fontFamily: "'Syne', sans-serif",
           }}>
             {tab === "forgot" ? "Reset password" : tab === "login" ? "Welcome back" : "Get started"}
           </div>
