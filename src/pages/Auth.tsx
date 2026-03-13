@@ -188,6 +188,7 @@ export default function Auth() {
           <div style={{
             fontSize: 36,
             fontWeight: 800,
+            fontFamily: "'Syne', sans-serif",
             color: "#ffffff",
             letterSpacing: "0.08em",
             marginBottom: 12,
