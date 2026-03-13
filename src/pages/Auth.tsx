@@ -131,14 +131,14 @@ export default function Auth() {
   const inputStyle = (hasError?: boolean): React.CSSProperties => ({
     width: "100%",
     padding: "13px 16px",
-    fontSize: 14,
-    border: `1px solid ${hasError ? "#c04a2a" : "rgba(255,255,255,0.08)"}`,
-    borderRadius: 10,
+    fontSize: 13,
+    border: `1px solid ${hasError ? "#888" : "rgba(255,255,255,0.08)"}`,
+    borderRadius: 0,
     background: "rgba(255,255,255,0.04)",
     color: "#f0f0f0",
     outline: "none",
     transition: "border-color 0.2s, background 0.2s",
-    fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+    fontFamily: "'DM Mono', monospace",
   });
 
   const isMobile = useIsMobile();
@@ -147,12 +147,12 @@ export default function Auth() {
     <div style={{
       minHeight: "100vh",
       display: "flex",
-      fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+      fontFamily: "'DM Mono', monospace",
     }}>
       {/* Left panel — branding (hidden on mobile) */}
       {!isMobile && <div style={{
         flex: 1,
-        background: "linear-gradient(160deg, #0b0b0b 0%, #1a1a2e 50%, #0b0b0b 100%)",
+        background: "#080808",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -174,8 +174,8 @@ export default function Auth() {
           <div style={{
             width: 64,
             height: 64,
-            borderRadius: 16,
-            background: "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))",
+            borderRadius: 0,
+            background: "rgba(255,255,255,0.04)",
             border: "1px solid rgba(255,255,255,0.06)",
             display: "flex",
             alignItems: "center",
@@ -188,6 +188,7 @@ export default function Auth() {
           <div style={{
             fontSize: 36,
             fontWeight: 800,
+            fontFamily: "'Syne', sans-serif",
             color: "#ffffff",
             letterSpacing: "0.08em",
             marginBottom: 12,
@@ -226,7 +227,7 @@ export default function Auth() {
                 padding: "20px 16px",
                 background: "rgba(255,255,255,0.03)",
                 border: "1px solid rgba(255,255,255,0.06)",
-                borderRadius: 12,
+                borderRadius: 0,
                 display: "flex",
                 flexDirection: "column",
                 gap: 12,
@@ -245,7 +246,7 @@ export default function Auth() {
         width: isMobile ? "100%" : 460,
         minWidth: isMobile ? undefined : 400,
         flex: isMobile ? 1 : undefined,
-        background: "#111114",
+        background: "#080808",
         display: "flex",
         flexDirection: "column",
         justifyContent: isMobile ? "flex-start" : "center",
@@ -255,9 +256,10 @@ export default function Auth() {
         <div style={{ marginBottom: 36 }}>
           <div style={{
             fontSize: 22,
-            fontWeight: 700,
+            fontWeight: 800,
             color: "#f0f0f0",
             marginBottom: 6,
+            fontFamily: "'Syne', sans-serif",
           }}>
             {tab === "forgot" ? "Reset password" : tab === "login" ? "Welcome back" : "Get started"}
           </div>
@@ -272,7 +274,7 @@ export default function Auth() {
         </div>
 
         {/* Tabs */}
-        {tab !== "forgot" && <div style={{ display: "flex", marginBottom: 28, gap: 4, background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: 4 }}>
+        {tab !== "forgot" && <div style={{ display: "flex", marginBottom: 28, gap: 4, background: "rgba(255,255,255,0.03)", borderRadius: 0, padding: 4 }}>
           {(["login", "signup"] as const).map(t => (
             <button
               key={t}
@@ -282,15 +284,15 @@ export default function Auth() {
                 padding: "10px 0",
                 background: tab === t ? "rgba(255,255,255,0.08)" : "transparent",
                 border: "none",
-                borderRadius: 8,
+                borderRadius: 0,
                 color: tab === t ? "#f0f0f0" : "rgba(255,255,255,0.3)",
-                fontSize: 12,
-                fontWeight: tab === t ? 600 : 400,
-                letterSpacing: "0.12em",
+                fontSize: 11,
+                fontWeight: tab === t ? 500 : 400,
+                letterSpacing: "0.15em",
                 textTransform: "uppercase",
                 cursor: "pointer",
                 transition: "all 0.2s",
-                fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+                fontFamily: "'DM Mono', monospace",
               }}
             >
               {t === "login" ? "Sign In" : "Sign Up"}
@@ -353,18 +355,18 @@ export default function Auth() {
               style={{
                 width: "100%",
                 padding: 15,
-                background: "linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%)",
-                color: "#0b0b0b",
+                background: "#fff",
+                color: "#000",
                 border: "none",
-                borderRadius: 10,
-                fontSize: 13,
-                fontWeight: 700,
-                letterSpacing: "0.1em",
+                borderRadius: 0,
+                fontSize: 12,
+                fontWeight: 500,
+                letterSpacing: "0.12em",
                 textTransform: "uppercase",
                 cursor: isSubmitting ? "not-allowed" : "pointer",
                 opacity: isSubmitting ? 0.6 : 1,
-                transition: "opacity 0.2s, transform 0.1s",
-                fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+                transition: "opacity 0.2s",
+                fontFamily: "'DM Mono', monospace",
                 marginTop: 8,
               }}
             >
@@ -451,18 +453,18 @@ export default function Auth() {
               style={{
                 width: "100%",
                 padding: 15,
-                background: "linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%)",
-                color: "#0b0b0b",
+                background: "#fff",
+                color: "#000",
                 border: "none",
-                borderRadius: 10,
-                fontSize: 13,
-                fontWeight: 700,
-                letterSpacing: "0.1em",
+                borderRadius: 0,
+                fontSize: 12,
+                fontWeight: 500,
+                letterSpacing: "0.12em",
                 textTransform: "uppercase",
                 cursor: isSubmitting ? "not-allowed" : "pointer",
                 opacity: isSubmitting ? 0.6 : 1,
-                transition: "opacity 0.2s, transform 0.1s",
-                fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+                transition: "opacity 0.2s",
+                fontFamily: "'DM Mono', monospace",
                 marginTop: 8,
               }}
             >
@@ -493,13 +495,13 @@ export default function Auth() {
               disabled={isSubmitting}
               style={{
                 width: "100%", padding: 15,
-                background: "linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%)",
-                color: "#0b0b0b", border: "none", borderRadius: 10,
-                fontSize: 13, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                background: "#fff",
+                color: "#000", border: "none", borderRadius: 0,
+                fontSize: 12, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase",
                 cursor: isSubmitting ? "not-allowed" : "pointer",
                 opacity: isSubmitting ? 0.6 : 1,
-                transition: "opacity 0.2s, transform 0.1s",
-                fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif", marginTop: 8,
+                transition: "opacity 0.2s",
+                fontFamily: "'DM Mono', monospace", marginTop: 8,
               }}
             >
               {isSubmitting ? "Sending..." : "Send Reset Link →"}
@@ -531,13 +533,13 @@ export default function Auth() {
               padding: 14,
               background: "rgba(255,255,255,0.04)",
               border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 10,
+              borderRadius: 0,
               color: "#f0f0f0",
-              fontSize: 13,
-              fontWeight: 600,
+              fontSize: 12,
+              fontWeight: 400,
               cursor: isSubmitting ? "not-allowed" : "pointer",
               transition: "all 0.2s",
-              fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+              fontFamily: "'DM Mono', monospace",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -556,13 +558,13 @@ export default function Auth() {
               padding: 14,
               background: "rgba(255,255,255,0.04)",
               border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 10,
+              borderRadius: 0,
               color: "#f0f0f0",
-              fontSize: 13,
-              fontWeight: 600,
+              fontSize: 12,
+              fontWeight: 400,
               cursor: isSubmitting ? "not-allowed" : "pointer",
               transition: "all 0.2s",
-              fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+              fontFamily: "'DM Mono', monospace",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",

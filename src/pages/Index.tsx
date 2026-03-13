@@ -22,34 +22,15 @@ function ScoreRing({ score, label, color }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
       <svg width={72} height={72} viewBox="0 0 72 72">
-        <circle cx={36} cy={36} r={r} fill="none" stroke="#e6e6e6" strokeWidth={5} />
-        <circle
-          cx={36}
-          cy={36}
-          r={r}
-          fill="none"
-          stroke={color}
-          strokeWidth={5}
-          strokeLinecap="round"
-          strokeDasharray={circ}
-          strokeDashoffset={offset}
+        <circle cx={36} cy={36} r={r} fill="none" stroke="#e2e2e2" strokeWidth={5} />
+        <circle cx={36} cy={36} r={r} fill="none" stroke={color} strokeWidth={5}
+          strokeLinecap="square" strokeDasharray={circ} strokeDashoffset={offset}
           style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s ease" }} />
-        
-        <text
-          x={36}
-          y={40}
-          textAnchor="middle"
-          fill="#0b0b0b"
-          fontSize={14}
-          fontFamily="Inter, sans-serif"
-          fontWeight="bold">
-          
-          {score}
-        </text>
+        <text x={36} y={40} textAnchor="middle" fill="#111" fontSize={14}
+          fontFamily="'DM Mono', monospace" fontWeight="500">{score}</text>
       </svg>
-      <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#9aa0a6" }}>{label}</span>
+      <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#888", fontFamily: "'DM Mono', monospace" }}>{label}</span>
     </div>);
-
 }
 
 function HistoryCard({ entry, index }) {
@@ -514,14 +495,14 @@ export default function Negotium() {
   const ringOffset = CIRCUMFERENCE * (timeLeft / selectedDuration);
   const isDark = theme === "dark";
   const c = {
-    bg: isDark ? "#070707" : "#ffffff",
-    panel: isDark ? "#0b0b0b" : "#f5f5f5",
-    border: isDark ? "#1e1e1e" : "#e0e0e0",
-    text: isDark ? "#e8e0d0" : "#1a1a1a",
-    muted: isDark ? "#9aa0a6" : "#6b7280",
-    card: isDark ? "#0f0f0f" : "#ffffff",
-    waveBg: isDark ? "#0d0d0b" : "#f0f0f0",
-    waveEmpty: isDark ? "#2a2a26" : "#d0d0d0"
+    bg: isDark ? "#080808" : "#ffffff",
+    panel: isDark ? "#0a0a0a" : "#f8f8f8",
+    border: isDark ? "#1c1c1c" : "#e2e2e2",
+    text: isDark ? "#f0f0f0" : "#111",
+    muted: isDark ? "#888" : "#888",
+    card: isDark ? "#0d0d0d" : "#ffffff",
+    waveBg: isDark ? "#0a0a0a" : "#f0f0f0",
+    waveEmpty: isDark ? "#1c1c1c" : "#ddd"
   };
 
   const stopAll = useCallback(() => {
@@ -845,7 +826,7 @@ export default function Negotium() {
     setMicError("");
   }, [stopAll, selectedDuration]);
 
-  const tagColor = (t) => t === "pos" ? "#4a8c5c" : t === "warn" ? "#c97a2a" : "#c04a2a";
+  const tagColor = (t) => t === "pos" ? "#111" : t === "warn" ? "#555" : "#888";
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
   const gap = spacingMode === "compact" ? 28 : 48;
 
@@ -855,7 +836,7 @@ export default function Negotium() {
         minHeight: "100vh",
         background: c.bg,
         color: c.text,
-        fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+        fontFamily: "'DM Mono', monospace",
         paddingBottom: 80
       }}>
       
@@ -932,7 +913,7 @@ export default function Negotium() {
             setSpacingMode={setSpacingMode}
             onOpenSetup={() => setQuizVisible(true)} />
           <div>
-            <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.05em" }}>SYNTERA</div>
+            <div style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: "0.08em", fontFamily: "'Syne', sans-serif" }}>SYNTERA</div>
             <div style={{ fontSize: 11, color: c.muted, letterSpacing: "0.14em" }}>{userSubtitle}</div>
           </div>
         </div>
@@ -1022,12 +1003,12 @@ export default function Negotium() {
             <div style={{ textAlign: "center", marginBottom: gap + 16, paddingTop: 12 }}>
               <div
               style={{
-                fontFamily: "'Inter', system-ui, sans-serif",
+                fontFamily: "'Syne', sans-serif",
                 fontSize: "clamp(1.6rem,5vw,3rem)",
                 color: c.text,
                 lineHeight: 1.1,
                 marginBottom: 0,
-                fontWeight: 900,
+                fontWeight: 800,
                 letterSpacing: "-0.03em"
               }}>
               
@@ -1224,12 +1205,12 @@ export default function Negotium() {
                   <ScoreRing
                   score={metrics.overall}
                   label="Overall"
-                  color={metrics.overall >= 80 ? "#4a8c5c" : metrics.overall >= 60 ? "#6b7280" : "#c04a2a"} />
+                  color={metrics.overall >= 80 ? "#111" : metrics.overall >= 60 ? "#555" : "#888"} />
               
-                  <ScoreRing score={metrics.delivery} label="Delivery" color="#6b7280" />
-                  <ScoreRing score={metrics.pace} label="Pace" color="#6b7280" />
-                  <ScoreRing score={metrics.conf} label="Confidence" color="#6b7280" />
-                  <ScoreRing score={metrics.clar} label="Clarity" color="#6b7280" />
+                  <ScoreRing score={metrics.delivery} label="Delivery" color="#555" />
+                  <ScoreRing score={metrics.pace} label="Pace" color="#555" />
+                  <ScoreRing score={metrics.conf} label="Confidence" color="#555" />
+                  <ScoreRing score={metrics.clar} label="Clarity" color="#555" />
                 </div>
 
                 {/* Delivery Breakdown Scores */}

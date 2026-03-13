@@ -22,16 +22,16 @@ export default function Badges() {
   }, [user]);
 
   const c = {
-    bg: "#f7f7f8", panel: "#ffffff", border: "#e6e6e6",
-    text: "#0b0b0b", muted: "#9aa0a6", card: "#ffffff",
+    bg: "#f8f8f8", panel: "#fff", border: "#e2e2e2",
+    text: "#111", muted: "#888", card: "#fff",
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: c.bg, fontFamily: "Inter, sans-serif", paddingBottom: 80 }}>
+    <div style={{ minHeight: "100vh", background: c.bg, fontFamily: "'DM Mono', monospace", paddingBottom: 80 }}>
       <AppDrawer />
       <div style={{ padding: "40px 28px 24px 60px", textAlign: "center" }}>
-        <div style={{ fontSize: 28, fontWeight: 800, color: c.text, marginBottom: 8 }}>🏆 Badges</div>
-        <div style={{ fontSize: 13, color: c.muted }}>Earn badges by building streaks and hitting milestones</div>
+        <div style={{ fontSize: 28, fontWeight: 800, color: c.text, marginBottom: 8, fontFamily: "'Syne', sans-serif" }}>Badges</div>
+        <div style={{ fontSize: 12, color: c.muted }}>Earn badges by building streaks and hitting milestones</div>
       </div>
       <div style={{ maxWidth: 860, margin: "0 auto", padding: "0 20px" }}>
         <StreakBadges history={history} colors={c} />
