@@ -156,4 +156,4 @@ export function getTodayScenario(category: ScenarioCategory): Scenario {
 }
 
 export const diffColor = (d: string) =>
-  d === "Easy" ? "#4a8c5c" : d === "Medium" ? "#e8a838" : "#c04a2a";
+  d === "Easy" ? "#888" : d === "Medium" ? "#555" : "#111";
