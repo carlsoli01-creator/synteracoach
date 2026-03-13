@@ -1205,7 +1205,7 @@ export default function Negotium() {
                   <ScoreRing
                   score={metrics.overall}
                   label="Overall"
-                  color={metrics.overall >= 80 ? "#4a8c5c" : metrics.overall >= 60 ? "#6b7280" : "#c04a2a"} />
+                  color={metrics.overall >= 80 ? "#111" : metrics.overall >= 60 ? "#555" : "#888"} />
               
                   <ScoreRing score={metrics.delivery} label="Delivery" color="#6b7280" />
                   <ScoreRing score={metrics.pace} label="Pace" color="#6b7280" />
