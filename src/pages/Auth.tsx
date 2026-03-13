@@ -158,7 +158,7 @@ export default function Auth() {
         alignItems: "center",
         justifyContent: "center",
         padding: 48,
-        position: "relative",
+        maxWidth: 700,
         overflow: "hidden",
       }}>
         {/* Subtle grid overlay */}
@@ -169,7 +169,7 @@ export default function Auth() {
           backgroundSize: "32px 32px",
         }} />
 
-        <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 380 }}>
+        <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 560 }}>
           {/* Logo mark */}
           <div style={{
             width: 64,
