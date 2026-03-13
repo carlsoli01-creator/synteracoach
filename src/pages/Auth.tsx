@@ -495,13 +495,13 @@ export default function Auth() {
               disabled={isSubmitting}
               style={{
                 width: "100%", padding: 15,
-                background: "linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%)",
-                color: "#0b0b0b", border: "none", borderRadius: 10,
-                fontSize: 13, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                background: "#fff",
+                color: "#000", border: "none", borderRadius: 0,
+                fontSize: 12, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase",
                 cursor: isSubmitting ? "not-allowed" : "pointer",
                 opacity: isSubmitting ? 0.6 : 1,
-                transition: "opacity 0.2s, transform 0.1s",
-                fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif", marginTop: 8,
+                transition: "opacity 0.2s",
+                fontFamily: "'DM Mono', monospace", marginTop: 8,
               }}
             >
               {isSubmitting ? "Sending..." : "Send Reset Link →"}
