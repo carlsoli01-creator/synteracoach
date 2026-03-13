@@ -131,14 +131,14 @@ export default function Auth() {
   const inputStyle = (hasError?: boolean): React.CSSProperties => ({
     width: "100%",
     padding: "13px 16px",
-    fontSize: 14,
-    border: `1px solid ${hasError ? "#c04a2a" : "rgba(255,255,255,0.08)"}`,
-    borderRadius: 10,
+    fontSize: 13,
+    border: `1px solid ${hasError ? "#888" : "rgba(255,255,255,0.08)"}`,
+    borderRadius: 0,
     background: "rgba(255,255,255,0.04)",
     color: "#f0f0f0",
     outline: "none",
     transition: "border-color 0.2s, background 0.2s",
-    fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+    fontFamily: "'DM Mono', monospace",
   });
 
   const isMobile = useIsMobile();
