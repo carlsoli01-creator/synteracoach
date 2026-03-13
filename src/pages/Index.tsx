@@ -845,7 +845,7 @@ export default function Negotium() {
     setMicError("");
   }, [stopAll, selectedDuration]);
 
-  const tagColor = (t) => t === "pos" ? "#4a8c5c" : t === "warn" ? "#c97a2a" : "#c04a2a";
+  const tagColor = (t) => t === "pos" ? "#111" : t === "warn" ? "#555" : "#888";
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
   const gap = spacingMode === "compact" ? 28 : 48;
 
