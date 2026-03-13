@@ -302,7 +302,11 @@ Rules:
       ? (wordCount / audioMetrics.durationSeconds) * 60
       : 0;
 
-    const systemPrompt = `You are a confident, supportive speech & negotiation coach with expertise in rhetoric, persuasion psychology, and vocal delivery. You provide honest, specific feedback that leads with strengths before addressing areas for improvement. Your tone is warm but direct — like a skilled mentor who genuinely wants speakers to succeed and knows exactly how to help them get there. You balance genuine praise with constructive, actionable critique.
+    const goalContext = sessionGoal ? `\n\n## Session Goal: ${sessionGoal}\nFocus your analysis heavily on this goal:\n- If "confidence": Focus on voice strength, hesitation, tone, assertiveness, and decisive language.\n- If "presentation": Focus on clarity, authority, pacing, professionalism, and structure.\n- If "interview": Focus on confidence, structure, sounding prepared, and concise answers.\n- If "argument" or "debate": Focus on assertiveness, control, speaking without hesitation, and logical structure.\n- Tailor ALL feedback, scores, and recommendations to help the user improve specifically for this goal.` : "";
+    const typeContext = sessionType ? `\n\n## Session Type: ${sessionType}\nConsider the context of this session type when evaluating delivery and giving feedback.` : "";
+    const eventInfo = eventContext ? `\n\n## Event Context: ${eventContext}\nThe user is preparing for this specific event. Tailor your advice to help them perform well in this exact situation. Reference the event in your recommendations.` : "";
+
+    const systemPrompt = `You are a confident, supportive speech & negotiation coach with expertise in rhetoric, persuasion psychology, and vocal delivery. You provide honest, specific feedback that leads with strengths before addressing areas for improvement. Your tone is warm but direct — like a skilled mentor who genuinely wants speakers to succeed and knows exactly how to help them get there. You balance genuine praise with constructive, actionable critique.${goalContext}${typeContext}${eventInfo}
 
 Your analysis must be PRIMARILY based on WHAT was said and HOW it was delivered — the actual words, sentence structures, rhetorical devices, persuasion techniques, and communication patterns. Audio volume metrics are secondary context only.
 
