@@ -1207,10 +1207,10 @@ export default function Negotium() {
                   label="Overall"
                   color={metrics.overall >= 80 ? "#111" : metrics.overall >= 60 ? "#555" : "#888"} />
               
-                  <ScoreRing score={metrics.delivery} label="Delivery" color="#6b7280" />
-                  <ScoreRing score={metrics.pace} label="Pace" color="#6b7280" />
-                  <ScoreRing score={metrics.conf} label="Confidence" color="#6b7280" />
-                  <ScoreRing score={metrics.clar} label="Clarity" color="#6b7280" />
+                  <ScoreRing score={metrics.delivery} label="Delivery" color="#555" />
+                  <ScoreRing score={metrics.pace} label="Pace" color="#555" />
+                  <ScoreRing score={metrics.conf} label="Confidence" color="#555" />
+                  <ScoreRing score={metrics.clar} label="Clarity" color="#555" />
                 </div>
 
                 {/* Delivery Breakdown Scores */}
