@@ -215,16 +215,25 @@ export default function Auth() {
             AI-powered voice coaching that tells you the truth about how you speak — and shows you how to improve.
           </div>
 
-          {/* Feature bullets */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 14, textAlign: "left" }}>
+          {/* Feature cards */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, textAlign: "left", marginTop: 8 }}>
             {[
-              { icon: "🎯", text: "Honest scoring — no inflated grades" },
-              { icon: "🧠", text: "Deep analysis of pace, clarity & confidence" },
-              { icon: "📈", text: "Track your progress over time" },
+              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>, title: "Honest Scoring", desc: "No inflated grades, no overhyped excitement, just pure assessment and helpful feedback." },
+              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>, title: "Structured Feedback", desc: "Deep analysis of pace, clarity, and confidence so you understand what to work on." },
+              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>, title: "Progress Tracking", desc: "Track your progress over time, share updates with others, and understand how to improve." },
             ].map((f, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <span style={{ fontSize: 16 }}>{f.icon}</span>
-                <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>{f.text}</span>
+              <div key={i} style={{
+                padding: "20px 16px",
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.06)",
+                borderRadius: 12,
+                display: "flex",
+                flexDirection: "column",
+                gap: 12,
+              }}>
+                <div>{f.icon}</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)" }}>{f.title}</div>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", lineHeight: 1.6 }}>{f.desc}</div>
               </div>
             ))}
           </div>
