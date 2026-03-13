@@ -22,34 +22,15 @@ function ScoreRing({ score, label, color }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
       <svg width={72} height={72} viewBox="0 0 72 72">
-        <circle cx={36} cy={36} r={r} fill="none" stroke="#e6e6e6" strokeWidth={5} />
-        <circle
-          cx={36}
-          cy={36}
-          r={r}
-          fill="none"
-          stroke={color}
-          strokeWidth={5}
-          strokeLinecap="round"
-          strokeDasharray={circ}
-          strokeDashoffset={offset}
+        <circle cx={36} cy={36} r={r} fill="none" stroke="#e2e2e2" strokeWidth={5} />
+        <circle cx={36} cy={36} r={r} fill="none" stroke={color} strokeWidth={5}
+          strokeLinecap="square" strokeDasharray={circ} strokeDashoffset={offset}
           style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s ease" }} />
-        
-        <text
-          x={36}
-          y={40}
-          textAnchor="middle"
-          fill="#0b0b0b"
-          fontSize={14}
-          fontFamily="Inter, sans-serif"
-          fontWeight="bold">
-          
-          {score}
-        </text>
+        <text x={36} y={40} textAnchor="middle" fill="#111" fontSize={14}
+          fontFamily="'DM Mono', monospace" fontWeight="500">{score}</text>
       </svg>
-      <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#9aa0a6" }}>{label}</span>
+      <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#888", fontFamily: "'DM Mono', monospace" }}>{label}</span>
     </div>);
-
 }
 
 function HistoryCard({ entry, index }) {
