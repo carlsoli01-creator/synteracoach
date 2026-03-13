@@ -855,7 +855,7 @@ export default function Negotium() {
         minHeight: "100vh",
         background: c.bg,
         color: c.text,
-        fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+        fontFamily: "'DM Mono', monospace",
         paddingBottom: 80
       }}>
       
