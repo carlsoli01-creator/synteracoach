@@ -143,7 +143,6 @@ export default function Auth() {
     fontFamily: "'DM Mono', monospace",
   });
 
-  const isMobile = useIsMobile();
 
   return (
     <div style={{
