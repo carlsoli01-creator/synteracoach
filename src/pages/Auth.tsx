@@ -34,6 +34,8 @@ export default function Auth() {
     name?: string; email?: string; password?: string; confirmPassword?: string;
   }>({});
 
+  const isMobile = useIsMobile();
+
   useEffect(() => {
     if (!loading && user) navigate("/");
   }, [user, loading, navigate]);
@@ -141,7 +143,6 @@ export default function Auth() {
     fontFamily: "'DM Mono', monospace",
   });
 
-  const isMobile = useIsMobile();
 
   return (
     <div style={{
