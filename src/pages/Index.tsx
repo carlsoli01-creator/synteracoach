@@ -583,10 +583,10 @@ export default function Negotium() {
                 <div>
                   {/* Hero */}
                   <div style={{ marginBottom: 48 }}>
-                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", color: "#0a0a0a", lineHeight: 0.9, fontWeight: 400, letterSpacing: "-0.04em" }}>
+                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: "#0a0a0a", lineHeight: 0.9, fontWeight: 400, letterSpacing: "-0.04em" }}>
                       Speak.
                     </div>
-                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", color: "#0a0a0a", lineHeight: 0.9, fontWeight: 400, letterSpacing: "-0.04em", opacity: 0.45 }}>
+                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: "#0a0a0a", lineHeight: 0.9, fontWeight: 400, letterSpacing: "-0.04em", opacity: 0.45 }}>
                       {heroFocus}
                     </div>
                   </div>
