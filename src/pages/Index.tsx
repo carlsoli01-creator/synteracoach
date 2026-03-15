@@ -563,7 +563,7 @@ export default function Negotium() {
           <div style={{ paddingLeft: 220 }}>
             {/* Top bar */}
             <div style={{ padding: "20px 48px", borderBottom: "1px solid #e2e2e2", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ fontSize: 18, fontWeight: 700, color: "#0a0a0a", fontFamily: "'Syne', sans-serif" }}>Analysis</div>
+              <div style={{ width: 1 }} />
               {avgHistory !== null && (
                 <div style={{ textAlign: "right" }}>
                   <div style={{ fontSize: 9, color: "#888", letterSpacing: "0.2em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>Avg Score</div>
