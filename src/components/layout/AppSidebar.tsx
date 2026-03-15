@@ -2,13 +2,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
 const NAV_ITEMS = [
-  { label: "Analysis", path: "/" },
-  { label: "Practice", path: "/scenarios" },
-  { label: "Progress", path: "/progress" },
-  { label: "Badges", path: "/badges" },
-  { label: "History", path: "/history" },
-  { label: "Profile", path: "/profile" },
-];
+{ label: "Analysis", path: "/" },
+{ label: "Practice", path: "/scenarios" },
+{ label: "Progress", path: "/progress" },
+{ label: "Badges", path: "/badges" },
+{ label: "History", path: "/history" },
+{ label: "Profile", path: "/profile" }];
+
 
 interface Props {
   userSubtitle?: string;
@@ -33,9 +33,9 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
         zIndex: 100,
         display: "flex",
         flexDirection: "column",
-        fontFamily: "'DM Mono', monospace",
-      }}
-    >
+        fontFamily: "'DM Mono', monospace"
+      }}>
+      
       {/* Logo */}
       <div style={{ padding: "32px 28px 24px" }}>
         <div
@@ -44,9 +44,9 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
             fontWeight: 800,
             letterSpacing: "0.14em",
             color: "#ffffff",
-            fontFamily: "'Syne', sans-serif",
-          }}
-        >
+            fontFamily: "'Syne', sans-serif"
+          }}>
+          
           SYNTERA
         </div>
         <div
@@ -55,9 +55,9 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
             letterSpacing: "0.22em",
             color: "#555",
             marginTop: 4,
-            textTransform: "uppercase",
-          }}
-        >
+            textTransform: "uppercase"
+          }} className="text-primary-foreground">
+          
           {userSubtitle || "Voice Intelligence"}
         </div>
       </div>
@@ -85,12 +85,12 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
                 textAlign: "left",
                 cursor: "pointer",
                 fontFamily: "'DM Mono', monospace",
-                transition: "all 0.2s ease",
-              }}
-            >
+                transition: "all 0.2s ease"
+              }}>
+              
               {item.label}
-            </button>
-          );
+            </button>);
+
         })}
       </nav>
 
@@ -102,31 +102,31 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
           borderTop: "1px solid #1a1a1a",
           display: "flex",
           flexDirection: "column",
-          gap: 6,
-        }}
-      >
-        {onOpenSetup && (
-          <button
-            onClick={onOpenSetup}
-            style={{
-              display: "block",
-              width: "100%",
-              padding: "11px 16px",
-              border: "none",
-              borderRadius: 0,
-              background: "transparent",
-              color: "#555",
-              fontSize: 11,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              textAlign: "left",
-              cursor: "pointer",
-              fontFamily: "'DM Mono', monospace",
-            }}
-          >
+          gap: 6
+        }}>
+        
+        {onOpenSetup &&
+        <button
+          onClick={onOpenSetup}
+          style={{
+            display: "block",
+            width: "100%",
+            padding: "11px 16px",
+            border: "none",
+            borderRadius: 0,
+            background: "transparent",
+            color: "#555",
+            fontSize: 11,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            textAlign: "left",
+            cursor: "pointer",
+            fontFamily: "'DM Mono', monospace"
+          }}>
+          
             Re-run Setup
           </button>
-        )}
+        }
         <button
           onClick={() => signOut()}
           style={{
@@ -141,12 +141,12 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
             letterSpacing: "0.14em",
             textAlign: "left",
             cursor: "pointer",
-            fontFamily: "'DM Mono', monospace",
-          }}
-        >
+            fontFamily: "'DM Mono', monospace"
+          }}>
+          
           Sign Out
         </button>
       </div>
-    </div>
-  );
+    </div>);
+
 }
