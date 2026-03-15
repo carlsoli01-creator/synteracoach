@@ -5,86 +5,63 @@
 @layer base {
   :root {
     --background: 0 0% 97%;
-    --foreground: 0 0% 7%;
-
+    --foreground: 0 0% 4%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 7%;
-
+    --card-foreground: 0 0% 4%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
-
-    --primary: 0 0% 0%;
+    --popover-foreground: 0 0% 4%;
+    --primary: 0 0% 4%;
     --primary-foreground: 0 0% 100%;
-
     --secondary: 0 0% 93%;
-    --secondary-foreground: 0 0% 7%;
-
+    --secondary-foreground: 0 0% 4%;
     --muted: 0 0% 93%;
     --muted-foreground: 0 0% 53%;
-
     --accent: 0 0% 93%;
-    --accent-foreground: 0 0% 7%;
-
+    --accent-foreground: 0 0% 4%;
     --destructive: 0 0% 33%;
     --destructive-foreground: 0 0% 100%;
-
-    --success: 0 0% 7%;
+    --success: 0 0% 4%;
     --success-foreground: 0 0% 100%;
-
     --warning: 0 0% 33%;
     --warning-foreground: 0 0% 100%;
-
     --border: 0 0% 89%;
     --input: 0 0% 89%;
-    --ring: 0 0% 0%;
-
-    --radius: 0px;
-
-    --sidebar-background: 0 0% 100%;
+    --ring: 0 0% 4%;
+    --radius: 0rem;
+    --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 53%;
-    --sidebar-primary: 0 0% 0%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 93%;
-    --sidebar-accent-foreground: 0 0% 7%;
-    --sidebar-border: 0 0% 89%;
-    --sidebar-ring: 0 0% 0%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 11%;
+    --sidebar-accent-foreground: 0 0% 94%;
+    --sidebar-border: 0 0% 10%;
+    --sidebar-ring: 0 0% 100%;
   }
 
   .dark {
     --background: 0 0% 3%;
     --foreground: 0 0% 94%;
-
     --card: 0 0% 5%;
     --card-foreground: 0 0% 94%;
-
     --popover: 0 0% 5%;
     --popover-foreground: 0 0% 94%;
-
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
-
     --secondary: 0 0% 11%;
     --secondary-foreground: 0 0% 94%;
-
     --muted: 0 0% 11%;
     --muted-foreground: 0 0% 60%;
-
     --accent: 0 0% 11%;
     --accent-foreground: 0 0% 94%;
-
     --destructive: 0 0% 60%;
     --destructive-foreground: 0 0% 100%;
-
     --success: 0 0% 94%;
     --success-foreground: 0 0% 0%;
-
     --warning: 0 0% 60%;
     --warning-foreground: 0 0% 100%;
-
     --border: 0 0% 11%;
     --input: 0 0% 11%;
     --ring: 0 0% 100%;
-
     --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 60%;
     --sidebar-primary: 0 0% 100%;
@@ -100,20 +77,20 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'DM Mono', monospace;
   }
-
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Syne', sans-serif;
     font-weight: 800;
   }
-
   ::selection {
     background: #000;
     color: #fff;
+  }
+  button, input, select, textarea {
+    border-radius: 0 !important;
   }
 }
 
@@ -122,21 +99,17 @@
     font-family: 'Syne', sans-serif;
     font-weight: 800;
   }
-
   .font-mono {
     font-family: 'DM Mono', monospace;
   }
-
   .shadow-card {
     box-shadow: none;
   }
-  
   .shadow-card-hover {
     box-shadow: none;
   }
 }
 
-/* Global range input styling */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -144,21 +117,19 @@ input[type="range"] {
   background: #ddd;
   outline: none;
 }
-
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 12px;
   height: 12px;
-  background: #000;
+  background: #0a0a0a;
   border-radius: 0;
   cursor: pointer;
 }
-
 input[type="range"]::-moz-range-thumb {
   width: 12px;
   height: 12px;
-  background: #000;
+  background: #0a0a0a;
   border-radius: 0;
   border: none;
   cursor: pointer;
