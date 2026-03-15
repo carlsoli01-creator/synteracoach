@@ -562,7 +562,7 @@ export default function Negotium() {
       {!isOverlay && (
         <>
           <AppSidebar userSubtitle={userSubtitle} onOpenSetup={() => setQuizVisible(true)} />
-          <div style={{ paddingLeft: 220 }}>
+          <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
             {/* Top bar */}
             <div style={{ padding: "20px 48px", borderBottom: "1px solid #e2e2e2", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ width: 1 }} />
