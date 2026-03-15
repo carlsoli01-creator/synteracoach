@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
 import AppSidebar from "@/components/layout/AppSidebar";
+import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenarios";
+import { useNavigate } from "react-router-dom";
 import IntroExperience from "@/components/onboarding/IntroExperience";
 import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 
@@ -224,7 +226,7 @@ export default function Negotium() {
     loadHistory();
   }, [user]);
 
-  const [tab] = useState("analysis");
+  const navigate = useNavigate();
   const [waveData, setWaveData] = useState(new Array(80).fill(0.5));
   const [micError, setMicError] = useState("");
   const [theme, setTheme] = useState(() => localStorage.getItem("syntera_theme") || "light");
@@ -571,7 +573,7 @@ export default function Negotium() {
             </div>
 
             {/* Two-column layout */}
-            {tab === "analysis" && (
+            {(
               <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: 32, padding: "40px 48px", maxWidth: 1200 }}>
                 {/* Left column — recording */}
                 <div>
@@ -657,12 +659,48 @@ export default function Negotium() {
 
                 {/* Right column — results / history */}
                 <div>
-                  {(phase === "idle" || phase === "recording") && history.length > 0 && (
+                  {(phase === "idle" || phase === "recording") && (
                     <div>
-                      <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>Recent Sessions</div>
-                      {history.slice(0, 3).map((entry, i) => (
-                        <HistoryRow key={entry.id || i} entry={entry} index={history.length - 1 - i} />
-                      ))}
+                      <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 12, fontFamily: "'DM Mono', monospace" }}>Today's Practice</div>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                        {SCENARIO_CATEGORIES.map((cat) => {
+                          const todayItem = getTodayScenario(cat);
+                          const done = completedCategoriesToday.includes(cat.category);
+                          return (
+                            <button
+                              key={cat.slug}
+                              onClick={() => navigate(`/scenarios/${cat.slug}`)}
+                              style={{
+                                width: "100%",
+                                background: done ? "#f5f5f5" : "#fff",
+                                border: "1px solid #e2e2e2",
+                                borderRadius: 0,
+                                padding: "12px 14px",
+                                textAlign: "left",
+                                cursor: "pointer",
+                                transition: "all 0.2s ease",
+                                opacity: done ? 0.6 : 1,
+                                fontFamily: "'DM Mono', monospace",
+                              }}
+                            >
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <div>
+                                  <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", marginBottom: 4 }}>
+                                    {cat.category}
+                                    {done && <span style={{ marginLeft: 6, color: "#555" }}>[DONE]</span>}
+                                  </div>
+                                  <div style={{ fontSize: 12, fontWeight: 600, color: "#0a0a0a", fontFamily: "'Syne', sans-serif" }}>
+                                    {todayItem.title}
+                                  </div>
+                                </div>
+                                <div style={{ fontSize: 9, fontWeight: 500, color: diffColor(todayItem.difficulty), letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                                  {todayItem.difficulty}
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
 
