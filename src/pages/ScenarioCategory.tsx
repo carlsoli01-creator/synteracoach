@@ -10,6 +10,7 @@ export default function ScenarioCategory() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { sidebarWidth } = useSidebarState();
   const [completedCategoriesToday, setCompletedCategoriesToday] = useState<string[]>([]);
 
   const category = SCENARIO_CATEGORIES.find((c) => c.slug === slug);
