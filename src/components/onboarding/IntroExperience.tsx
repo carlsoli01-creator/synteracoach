@@ -114,12 +114,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
       if (error || data?.error) {
         setAnalysisResult({
-          scores: { overall: 35, pace: 30, confidence: 32, clarity: 38, delivery: 34 },
+          scores: { overall: 25, pace: 20, confidence: 22, clarity: 28, delivery: 24 },
           analysis: {
-            overall: "Analysis hit a processing issue, but based on what we captured — there's work to do. Most first recordings are rough.",
-            strength: "You completed the recording, which puts you ahead of people who never try.",
-            weakness: "We couldn't fully process this, so we can't identify specific weaknesses yet.",
-            recommendation: "Record again in the main app. The full analysis will give you specific, honest feedback.",
+            overall: "Processing failed, but let's be real — if your delivery was strong, we'd have plenty to work with. The fact that analysis choked on your input isn't a great sign.",
+            strength: "You pressed the button. Congratulations. That's about all we can credit you for right now.",
+            weakness: "We couldn't fully process this, which usually means the audio quality or speech volume was poor. That alone tells us something.",
+            recommendation: "Get into the full app and record properly. Speak up, speak clearly, and give us something worth analyzing.",
           },
         });
       } else {
@@ -127,12 +127,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       }
     } catch {
       setAnalysisResult({
-        scores: { overall: 30, pace: 28, confidence: 32, clarity: 30, delivery: 28 },
+        scores: { overall: 20, pace: 18, confidence: 22, clarity: 20, delivery: 18 },
         analysis: {
-          overall: "Something went wrong processing your speech. But honestly, most first attempts score low anyway — the real question is whether you'll come back and improve.",
-          strength: "You tried. That's step one.",
-          weakness: "We couldn't process this recording to give specific critique.",
-          recommendation: "Try again in the main dashboard for a full, unsparing analysis.",
+          overall: "Technical failure aside — most people's first recordings are painful to listen to. Yours probably isn't the exception. The question is whether you have the discipline to come back and actually improve.",
+          strength: "You tried. That puts you marginally ahead of people who didn't. Marginally.",
+          weakness: "We couldn't process this recording. Whether that's our fault or yours, the result is the same: no data, no improvement.",
+          recommendation: "Try again in the main dashboard. Next time, speak like someone who expects to be taken seriously.",
         },
       });
     }
