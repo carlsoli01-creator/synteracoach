@@ -76,6 +76,7 @@ function Toggle({ checked, onChange, isDark }: { checked: boolean; onChange: (v:
 export default function Profile() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { sidebarWidth } = useSidebarState();
   const [activeTab, setActiveTab] = useState<Tab>("profile");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
