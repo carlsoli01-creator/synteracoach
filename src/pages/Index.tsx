@@ -782,9 +782,9 @@ export default function Negotium() {
         // Real-time pace: words per minute from transcript / elapsed time
         const elapsedSec = (Date.now() - recordingStartRef.current) / 1000;
         const wordCount = transcriptRef.current.trim().split(/\s+/).filter(Boolean).length;
-        const wpm = elapsedSec > 1 ? wordCount / elapsedSec * 60 : 0;
-        // Map WPM to 0-100: 0wpm=0, 130wpm=75 (ideal ~130-160), 200+=100, <80=low
-        const paceScore = Math.min(100, Math.round(wpm / 160 * 100));
+        const currentWpm = elapsedSec > 1 ? wordCount / elapsedSec * 60 : 0;
+        // Deterministic WPM brackets matching server-side scoring
+        const paceScore = currentWpm < 100 ? 20 : currentWpm <= 119 ? 45 : currentWpm <= 139 ? 70 : currentWpm <= 160 ? 100 : currentWpm <= 180 ? 80 : currentWpm <= 200 ? 55 : 30;
         setLivePace(paceScore);
 
         animFrameRef.current = requestAnimationFrame(animate);
