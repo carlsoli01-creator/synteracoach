@@ -83,12 +83,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
     if (!transcript || transcript.length < 3) {
       setAnalysisResult({
-        scores: { overall: 10, pace: 8, confidence: 10, clarity: 12, delivery: 10 },
+        scores: { overall: 5, pace: 3, confidence: 5, clarity: 4, delivery: 5 },
         analysis: {
-          overall: "We detected almost no speech. In any real conversation, silence signals disengagement or lack of preparation. This needs serious work.",
-          strength: "You attempted the exercise — but showing up alone doesn't count for much.",
-          weakness: "Without audible, clear words, there is literally nothing to coach. This is a 10/100.",
-          recommendation: "Speak clearly into the mic for at least 5 seconds. Even a single confident sentence would score dramatically higher than silence.",
+          overall: "Nothing. We got nothing. You either didn't speak or whispered into the void. In a real meeting, this would be career-damaging silence — the kind that makes people question whether you belong in the room.",
+          strength: "None detected. Showing up isn't a strength — it's the bare minimum, and you barely did that.",
+          weakness: "You produced no measurable speech. Zero words means zero scores. There is nothing to analyze because you gave us nothing to work with.",
+          recommendation: "Open your mouth. Speak words. Literally any sentence spoken with audible volume would score 10x higher than this. This is a 5 out of 100 — rock bottom.",
         },
         fillerWords: { count: 0, words: [] },
         powerWords: [],
@@ -114,12 +114,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
       if (error || data?.error) {
         setAnalysisResult({
-          scores: { overall: 35, pace: 30, confidence: 32, clarity: 38, delivery: 34 },
+          scores: { overall: 25, pace: 20, confidence: 22, clarity: 28, delivery: 24 },
           analysis: {
-            overall: "Analysis hit a processing issue, but based on what we captured — there's work to do. Most first recordings are rough.",
-            strength: "You completed the recording, which puts you ahead of people who never try.",
-            weakness: "We couldn't fully process this, so we can't identify specific weaknesses yet.",
-            recommendation: "Record again in the main app. The full analysis will give you specific, honest feedback.",
+            overall: "Processing failed, but let's be real — if your delivery was strong, we'd have plenty to work with. The fact that analysis choked on your input isn't a great sign.",
+            strength: "You pressed the button. Congratulations. That's about all we can credit you for right now.",
+            weakness: "We couldn't fully process this, which usually means the audio quality or speech volume was poor. That alone tells us something.",
+            recommendation: "Get into the full app and record properly. Speak up, speak clearly, and give us something worth analyzing.",
           },
         });
       } else {
@@ -127,12 +127,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       }
     } catch {
       setAnalysisResult({
-        scores: { overall: 30, pace: 28, confidence: 32, clarity: 30, delivery: 28 },
+        scores: { overall: 20, pace: 18, confidence: 22, clarity: 20, delivery: 18 },
         analysis: {
-          overall: "Something went wrong processing your speech. But honestly, most first attempts score low anyway — the real question is whether you'll come back and improve.",
-          strength: "You tried. That's step one.",
-          weakness: "We couldn't process this recording to give specific critique.",
-          recommendation: "Try again in the main dashboard for a full, unsparing analysis.",
+          overall: "Technical failure aside — most people's first recordings are painful to listen to. Yours probably isn't the exception. The question is whether you have the discipline to come back and actually improve.",
+          strength: "You tried. That puts you marginally ahead of people who didn't. Marginally.",
+          weakness: "We couldn't process this recording. Whether that's our fault or yours, the result is the same: no data, no improvement.",
+          recommendation: "Try again in the main dashboard. Next time, speak like someone who expects to be taken seriously.",
         },
       });
     }
@@ -371,7 +371,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 800, color: "#fff" }}>Overall Score</div>
                   <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
-                    {analysisResult.scores.overall >= 80 ? "Strong delivery — rare for a first try" : analysisResult.scores.overall >= 60 ? "Decent — but decent doesn't win deals" : analysisResult.scores.overall >= 40 ? "Below average — significant room for improvement" : "Rough start — this is why you need coaching"}
+                    {analysisResult.scores.overall >= 80 ? "Surprisingly competent — don't let it go to your head" : analysisResult.scores.overall >= 60 ? "Mediocre. You'd lose the room in under 2 minutes." : analysisResult.scores.overall >= 40 ? "Weak. This is the kind of delivery people tune out of." : "Brutal. If this were a pitch, you'd be shown the door."}
                   </div>
                 </div>
               </div>
