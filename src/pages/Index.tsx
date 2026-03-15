@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
 import AppSidebar from "@/components/layout/AppSidebar";
+import { useSidebarState } from "@/contexts/SidebarContext";
 import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenarios";
 import { useNavigate } from "react-router-dom";
 import IntroExperience from "@/components/onboarding/IntroExperience";
@@ -210,6 +211,7 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: {onStart: () =
 
 export default function Negotium() {
   const { user, signOut } = useAuth();
+  const { sidebarWidth } = useSidebarState();
   const [phase, setPhase] = useState("idle");
   const [selectedDuration, setSelectedDuration] = useState(DEFAULT_DURATION);
   const [timeLeft, setTimeLeft] = useState(DEFAULT_DURATION);
@@ -560,7 +562,7 @@ export default function Negotium() {
       {!isOverlay && (
         <>
           <AppSidebar userSubtitle={userSubtitle} onOpenSetup={() => setQuizVisible(true)} />
-          <div style={{ paddingLeft: 220 }}>
+          <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
             {/* Top bar */}
             <div style={{ padding: "20px 48px", borderBottom: "1px solid #e2e2e2", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ width: 1 }} />
@@ -574,7 +576,7 @@ export default function Negotium() {
 
             {/* Two-column layout */}
             {(
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 40, padding: "40px 48px", maxWidth: 1200 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 220px", gap: 40, padding: "40px 48px", maxWidth: 1200 }}>
                 {/* Left column — recording */}
                 <div>
                   {/* Hero */}

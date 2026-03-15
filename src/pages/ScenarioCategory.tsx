@@ -4,11 +4,13 @@ import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenari
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import AppSidebar from "@/components/layout/AppSidebar";
+import { useSidebarState } from "@/contexts/SidebarContext";
 
 export default function ScenarioCategory() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { sidebarWidth } = useSidebarState();
   const [completedCategoriesToday, setCompletedCategoriesToday] = useState<string[]>([]);
 
   const category = SCENARIO_CATEGORIES.find((c) => c.slug === slug);
@@ -58,7 +60,7 @@ export default function ScenarioCategory() {
   return (
     <div style={{ minHeight: "100vh", background: "#f8f8f8", fontFamily: "'DM Mono', monospace" }}>
       <AppSidebar />
-      <div style={{ paddingLeft: 220 }}>
+      <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
         <div style={{ padding: "20px 48px 0" }}>
           <button
             onClick={() => navigate("/scenarios")}

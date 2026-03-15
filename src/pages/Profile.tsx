@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
 import AppSidebar from "@/components/layout/AppSidebar";
+import { useSidebarState } from "@/contexts/SidebarContext";
 
 const nameSchema = z.string().trim().max(100, "Name must be less than 100 characters");
 
@@ -75,6 +76,7 @@ function Toggle({ checked, onChange, isDark }: { checked: boolean; onChange: (v:
 export default function Profile() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { sidebarWidth } = useSidebarState();
   const [activeTab, setActiveTab] = useState<Tab>("profile");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -215,7 +217,7 @@ export default function Profile() {
   return (
     <div style={{ minHeight: "100vh", background: c.bg, fontFamily: "'Syne', sans-serif", color: c.text }}>
       <AppSidebar />
-      <div style={{ paddingLeft: 220 }}>
+      <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
       {/* Top bar */}
       <div style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",

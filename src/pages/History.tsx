@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import AppSidebar from "@/components/layout/AppSidebar";
+import { useSidebarState } from "@/contexts/SidebarContext";
 import { toast } from "@/hooks/use-toast";
 
 function HistoryRow({ entry, index, onDelete }: { entry: any; index: number; onDelete: (id: string) => void }) {
@@ -59,6 +60,7 @@ function HistoryRow({ entry, index, onDelete }: { entry: any; index: number; onD
 
 export default function History() {
   const { user } = useAuth();
+  const { sidebarWidth } = useSidebarState();
   const [history, setHistory] = useState<any[]>([]);
 
   useEffect(() => {
@@ -90,7 +92,7 @@ export default function History() {
   return (
     <div style={{ minHeight: "100vh", background: "#f8f8f8", fontFamily: "'DM Mono', monospace" }}>
       <AppSidebar />
-      <div style={{ paddingLeft: 220 }}>
+      <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
         <div style={{ padding: "40px 48px 32px" }}>
           <div style={{ fontSize: 22, fontWeight: 700, color: "#0a0a0a", fontFamily: "'Syne', sans-serif" }}>History</div>
           <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginTop: 8, fontFamily: "'DM Mono', monospace" }}>
