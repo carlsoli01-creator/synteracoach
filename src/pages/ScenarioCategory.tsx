@@ -4,6 +4,7 @@ import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenari
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import AppSidebar from "@/components/layout/AppSidebar";
+import { useSidebarState } from "@/contexts/SidebarContext";
 
 export default function ScenarioCategory() {
   const { slug } = useParams<{ slug: string }>();
