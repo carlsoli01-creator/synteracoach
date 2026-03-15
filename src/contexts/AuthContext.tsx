@@ -25,6 +25,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+
+        // Reset onboarding flags for brand-new accounts (email confirm or first OAuth login)
+        if (event === "SIGNED_IN" && session?.user) {
+          const createdAt = new Date(session.user.created_at).getTime();
+          const now = Date.now();
+          // If account was created within the last 60 seconds, treat as new
+          if (now - createdAt < 60000) {
+            localStorage.removeItem("syntera_intro_done_v2");
+            localStorage.removeItem("negotium_quiz_v2");
+            localStorage.removeItem("syntera_premium");
+            localStorage.removeItem("syntera_quiz_completed_at");
+            localStorage.removeItem("syntera_tip_shown_date");
+          }
+        }
       }
     );
 

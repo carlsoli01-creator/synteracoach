@@ -85,6 +85,12 @@ export default function Auth() {
     if (error) {
       toast.error(error.message.includes("User already registered") ? "An account with this email already exists." : error.message);
     } else {
+      // Clear onboarding flags so new account gets the full intro + quiz flow
+      localStorage.removeItem("syntera_intro_done_v2");
+      localStorage.removeItem("negotium_quiz_v2");
+      localStorage.removeItem("syntera_premium");
+      localStorage.removeItem("syntera_quiz_completed_at");
+      localStorage.removeItem("syntera_tip_shown_date");
       toast.success("Check your email to verify your account!");
     }
   };
