@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
 import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenarios";
 import { useNavigate } from "react-router-dom";
 import IntroExperience from "@/components/onboarding/IntroExperience";
@@ -212,6 +213,7 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: {onStart: () =
 export default function Negotium() {
   const { user, signOut } = useAuth();
   const { sidebarWidth } = useSidebarState();
+  const isMobile = useIsMobile();
   const [phase, setPhase] = useState("idle");
   const [selectedDuration, setSelectedDuration] = useState(DEFAULT_DURATION);
   const [timeLeft, setTimeLeft] = useState(DEFAULT_DURATION);
@@ -576,7 +578,7 @@ export default function Negotium() {
 
             {/* Two-column layout */}
             {(
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 220px", gap: 40, padding: "40px 48px", maxWidth: 1200 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 220px", gap: 40, padding: isMobile ? "24px 16px" : "40px 48px", maxWidth: 1200 }}>
                 {/* Left column — recording */}
                 <div>
                   {/* Hero */}
@@ -661,7 +663,7 @@ export default function Negotium() {
 
                 {/* Right column — results / history */}
                 <div>
-                  {(phase === "idle" || phase === "recording") && (
+                  {!isMobile && (phase === "idle" || phase === "recording") && (
                     <div>
                       <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 12, fontFamily: "'DM Mono', monospace" }}>Today's Practice</div>
                       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

@@ -1,11 +1,21 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSidebarState } from "@/contexts/SidebarContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "Analysis", path: "/" },
   { label: "Practice", path: "/scenarios" },
+  { label: "Progress", path: "/progress" },
+  { label: "Badges", path: "/badges" },
+  { label: "History", path: "/history" },
+  { label: "Profile", path: "/profile" },
+];
+
+const NAV_ITEMS_MOBILE = [
+  { label: "Analysis", path: "/" },
+  { label: "Scenarios", path: "/scenarios" },
   { label: "Progress", path: "/progress" },
   { label: "Badges", path: "/badges" },
   { label: "History", path: "/history" },
@@ -22,7 +32,8 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
   const location = useLocation();
   const { signOut } = useAuth();
   const { expanded, toggle } = useSidebarState();
-
+  const isMobile = useIsMobile();
+  const navItems = isMobile ? NAV_ITEMS_MOBILE : NAV_ITEMS;
   return (
     <>
       {/* Floating arrow toggle — always visible */}
@@ -93,7 +104,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 2, overflowY: "auto" }}>
-          {NAV_ITEMS.map((item) => {
+          {navItems.map((item) => {
             const active = location.pathname === item.path;
             return (
               <button
