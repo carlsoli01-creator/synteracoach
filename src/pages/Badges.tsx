@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import AppSidebar from "@/components/layout/AppSidebar";
+import { useSidebarState } from "@/contexts/SidebarContext";
 import StreakBadges from "@/components/voice/StreakBadges";
 
 export default function Badges() {
