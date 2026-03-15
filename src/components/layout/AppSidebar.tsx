@@ -51,12 +51,14 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
         </div>
         <div
           style={{
-            fontSize: 9,
-            letterSpacing: "0.22em",
+            fontSize: 10,
+            letterSpacing: "0.14em",
             color: "#555",
             marginTop: 4,
-            textTransform: "uppercase"
-          }} className="text-primary-foreground">
+            textTransform: "uppercase",
+            fontFamily: "'Syne', sans-serif",
+            fontWeight: 400
+          }}>
           
           {userSubtitle || "Voice Intelligence"}
         </div>
