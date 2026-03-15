@@ -15,8 +15,7 @@ const NAV_ITEMS = [
 
 const NAV_ITEMS_MOBILE = [
   { label: "Analysis", path: "/" },
-  { label: "Practice", path: "/scenarios" },
-  { label: "Today's Practice", path: "/scenarios", isTodaysPractice: true },
+  { label: "Scenarios", path: "/scenarios" },
   { label: "Progress", path: "/progress" },
   { label: "Badges", path: "/badges" },
   { label: "History", path: "/history" },
