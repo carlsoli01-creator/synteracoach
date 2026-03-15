@@ -599,9 +599,9 @@ export default function Negotium() {
       console.log("[DEBUG] Analysis successful, scores:", data?.scores);
       const { scores, analysis, tags, communicationTips, techniques, fillerWords, hedgingInstances, powerWords, wordChoiceScore, persuasionScore } = data;
 
-      // Compute final measured pace from raw audio data
+      // Compute final measured pace from raw audio data (deterministic WPM brackets)
       const finalWpm = durationSeconds > 0 ? transcript.trim().split(/\s+/).filter(Boolean).length / durationSeconds * 60 : 0;
-      const measuredPace = Math.min(100, Math.round(finalWpm / 160 * 100));
+      const measuredPace = finalWpm < 100 ? 20 : finalWpm <= 119 ? 45 : finalWpm <= 139 ? 70 : finalWpm <= 160 ? 100 : finalWpm <= 180 ? 80 : finalWpm <= 200 ? 55 : 30;
 
       setMetrics({
         pace: scores.pace, conf: scores.confidence, clar: scores.clarity,
