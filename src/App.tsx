@@ -30,6 +30,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
+          <SidebarProvider>
           <PageTransition>
             <Routes>
               <Route path="/auth" element={<Auth />} />
