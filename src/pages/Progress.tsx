@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import AppDrawer from "@/components/layout/AppDrawer";
+import AppSidebar from "@/components/layout/AppSidebar";
 import ProgressDashboard from "@/components/voice/ProgressDashboard";
 
 export default function Progress() {
@@ -23,18 +23,20 @@ export default function Progress() {
 
   const c = {
     bg: "#f8f8f8", panel: "#fff", border: "#e2e2e2",
-    text: "#111", muted: "#888", card: "#fff",
+    text: "#0a0a0a", muted: "#888", card: "#fff",
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: c.bg, fontFamily: "'DM Mono', monospace", paddingBottom: 80 }}>
-      <AppDrawer />
-      <div style={{ padding: "40px 28px 24px 60px", textAlign: "center" }}>
-        <div style={{ fontSize: 28, fontWeight: 800, color: c.text, marginBottom: 8, fontFamily: "'Syne', sans-serif" }}>Progress</div>
-        <div style={{ fontSize: 12, color: c.muted }}>Track your improvement over time</div>
-      </div>
-      <div style={{ maxWidth: 860, margin: "0 auto", padding: "0 20px" }}>
-        <ProgressDashboard history={history} colors={c} />
+    <div style={{ minHeight: "100vh", background: "#f8f8f8", fontFamily: "'DM Mono', monospace" }}>
+      <AppSidebar />
+      <div style={{ paddingLeft: 220 }}>
+        <div style={{ padding: "40px 48px 24px" }}>
+          <div style={{ fontSize: 22, fontWeight: 700, color: "#0a0a0a", fontFamily: "'Syne', sans-serif" }}>Progress</div>
+          <div style={{ fontSize: 11, color: "#888", marginTop: 6, fontFamily: "'DM Mono', monospace" }}>Track your improvement over time</div>
+        </div>
+        <div style={{ maxWidth: 900, padding: "0 48px", paddingBottom: 80 }}>
+          <ProgressDashboard history={history} colors={c} />
+        </div>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
-import AppDrawer from "@/components/layout/AppDrawer";
+import AppSidebar from "@/components/layout/AppSidebar";
 
 const nameSchema = z.string().trim().max(100, "Name must be less than 100 characters");
 
@@ -213,22 +213,15 @@ export default function Profile() {
   const settingColors = { text: isDark ? "#ccc" : "#333", muted: isDark ? "#444" : "#9aa0a6", border: c.border };
 
   return (
-    <div style={{ minHeight: "100vh", background: c.bg, fontFamily: "'Inter', system-ui, sans-serif", color: c.text }}>
+    <div style={{ minHeight: "100vh", background: c.bg, fontFamily: "'Syne', sans-serif", color: c.text }}>
+      <AppSidebar />
+      <div style={{ paddingLeft: 220 }}>
       {/* Top bar */}
       <div style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "20px 24px", borderBottom: `1px solid ${c.topBarBorder}`,
+        padding: "20px 48px", borderBottom: `1px solid ${c.topBarBorder}`,
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <AppDrawer theme={theme} setTheme={(t) => { setTheme(t); localStorage.setItem("syntera_theme", t); }} />
-          <button onClick={() => navigate("/")} style={{
-            background: "none", border: "none", color: c.muted, fontSize: 13, cursor: "pointer",
-            display: "flex", alignItems: "center", gap: 6,
-          }}>
-            ← Back
-          </button>
-        </div>
-        <div style={{ fontSize: 10, letterSpacing: "0.3em", color: c.muted, fontWeight: 700 }}>SYNTERA</div>
+        <div style={{ fontSize: 22, fontWeight: 700, color: c.text, fontFamily: "'Syne', sans-serif" }}>Profile</div>
         <div style={{ width: 60 }} />
       </div>
 
@@ -651,6 +644,7 @@ export default function Profile() {
         }
         @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
+      </div>
     </div>
   );
 }

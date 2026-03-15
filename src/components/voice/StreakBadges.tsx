@@ -22,7 +22,7 @@ interface Props {
 
 interface Badge {
   id: string;
-  icon: string;
+  abbr: string;
   title: string;
   description: string;
   earned: boolean;
@@ -57,18 +57,18 @@ export default function StreakBadges({ history, colors: c }: Props) {
     );
 
     return [
-      { id: "first", icon: "🎤", title: "First Steps", description: "Complete your first session", earned: count >= 1 },
-      { id: "five", icon: "✋", title: "High Five", description: "Complete 5 sessions", earned: count >= 5 },
-      { id: "ten", icon: "🔟", title: "Dedicated", description: "Complete 10 sessions", earned: count >= 10 },
-      { id: "twenty", icon: "💪", title: "Powerhouse", description: "Complete 20 sessions", earned: count >= 20 },
-      { id: "streak3", icon: "🔥", title: "On Fire", description: "3-day practice streak", earned: streak >= 3 },
-      { id: "streak7", icon: "⚡", title: "Unstoppable", description: "7-day practice streak", earned: streak >= 7 },
-      { id: "score90", icon: "🏆", title: "Elite Speaker", description: "Score 90+ overall", earned: has90 },
-      { id: "pace80", icon: "🎯", title: "Pace Master", description: "Score 80+ in pace", earned: has80Pace },
-      { id: "conf80", icon: "👑", title: "Confident Voice", description: "Score 80+ in confidence", earned: has80Conf },
-      { id: "clar80", icon: "💎", title: "Crystal Clear", description: "Score 80+ in clarity", earned: has80Clar },
-      { id: "balanced", icon: "⚖️", title: "Well Rounded", description: "All scores above 70 in one session", earned: allAbove70 },
-      { id: "fifty", icon: "🌟", title: "Veteran", description: "Complete 50 sessions", earned: count >= 50 },
+      { id: "first", abbr: "FS", title: "First Steps", description: "Complete your first session", earned: count >= 1 },
+      { id: "five", abbr: "H5", title: "High Five", description: "Complete 5 sessions", earned: count >= 5 },
+      { id: "ten", abbr: "10", title: "Dedicated", description: "Complete 10 sessions", earned: count >= 10 },
+      { id: "twenty", abbr: "20", title: "Powerhouse", description: "Complete 20 sessions", earned: count >= 20 },
+      { id: "streak3", abbr: "S3", title: "On Fire", description: "3-day practice streak", earned: streak >= 3 },
+      { id: "streak7", abbr: "S7", title: "Unstoppable", description: "7-day practice streak", earned: streak >= 7 },
+      { id: "score90", abbr: "EL", title: "Elite Speaker", description: "Score 90+ overall", earned: has90 },
+      { id: "pace80", abbr: "PM", title: "Pace Master", description: "Score 80+ in pace", earned: has80Pace },
+      { id: "conf80", abbr: "CV", title: "Confident Voice", description: "Score 80+ in confidence", earned: has80Conf },
+      { id: "clar80", abbr: "CC", title: "Crystal Clear", description: "Score 80+ in clarity", earned: has80Clar },
+      { id: "balanced", abbr: "WR", title: "Well Rounded", description: "All scores above 70 in one session", earned: allAbove70 },
+      { id: "fifty", abbr: "VT", title: "Veteran", description: "Complete 50 sessions", earned: count >= 50 },
     ];
   }, [sessions, streak]);
 
@@ -81,8 +81,7 @@ export default function StreakBadges({ history, colors: c }: Props) {
         background: c.card, border: `1px solid ${c.border}`,
         borderRadius: 0, padding: 32, textAlign: "center",
       }}>
-        <div style={{ fontSize: 48, marginBottom: 8 }}>{streak >= 3 ? "🔥" : streak >= 1 ? "✨" : "💤"}</div>
-        <div style={{ fontSize: 36, fontWeight: 800, color: c.text, fontFamily: "'Syne', sans-serif" }}>{streak}</div>
+        <div style={{ fontSize: 36, fontWeight: 300, color: c.text, fontFamily: "'DM Mono', monospace" }}>{streak}</div>
         <div style={{ fontSize: 10, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase", marginTop: 2, fontFamily: "'DM Mono', monospace" }}>
           Day Streak
         </div>
@@ -90,8 +89,8 @@ export default function StreakBadges({ history, colors: c }: Props) {
           {streakDots.map((active, i) => (
             <div key={i} style={{
               width: 12, height: 12, borderRadius: 0,
-              background: active ? "#111" : c.border,
-              transition: "background 0.3s",
+              background: active ? "#0a0a0a" : c.border,
+              transition: "background 0.2s ease",
             }} />
           ))}
         </div>
@@ -115,21 +114,26 @@ export default function StreakBadges({ history, colors: c }: Props) {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
           {badges.map(badge => (
             <div key={badge.id} style={{
-              background: c.card, border: `1px solid ${badge.earned ? "#111" : c.border}`,
+              background: badge.earned ? "#0a0a0a" : "#f8f8f8",
+              border: `1px solid ${badge.earned ? "#0a0a0a" : c.border}`,
               borderRadius: 0, padding: "16px 10px", textAlign: "center",
-              opacity: badge.earned ? 1 : 0.4, transition: "all 0.3s", position: "relative",
+              transition: "all 0.2s ease", position: "relative",
             }}>
-              <div style={{ fontSize: 28, marginBottom: 4, filter: badge.earned ? "none" : "grayscale(1)" }}>
-                {badge.icon}
+              <div style={{
+                fontSize: 20, marginBottom: 4, fontWeight: 300,
+                color: badge.earned ? "#fff" : "#bbb",
+                fontFamily: "'DM Mono', monospace",
+              }}>
+                {badge.abbr}
               </div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: c.text, marginBottom: 2, fontFamily: "'Syne', sans-serif" }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: badge.earned ? "#fff" : "#bbb", marginBottom: 2, fontFamily: "'Syne', sans-serif" }}>
                 {badge.title}
               </div>
-              <div style={{ fontSize: 9, color: c.muted, lineHeight: 1.4, fontFamily: "'DM Mono', monospace" }}>
+              <div style={{ fontSize: 9, color: badge.earned ? "rgba(255,255,255,0.6)" : "#bbb", lineHeight: 1.4, fontFamily: "'DM Mono', monospace" }}>
                 {badge.description}
               </div>
               {badge.earned && (
-                <div style={{ position: "absolute", top: 6, right: 6, fontSize: 10, color: "#111" }}>✓</div>
+                <div style={{ position: "absolute", top: 6, right: 6, fontSize: 10, color: "#fff", fontFamily: "'DM Mono', monospace" }}>✓</div>
               )}
             </div>
           ))}
