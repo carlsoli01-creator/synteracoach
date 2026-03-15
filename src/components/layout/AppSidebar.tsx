@@ -88,7 +88,6 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
             SYNTERA
           </div>
           <div style={{ fontSize: 10, letterSpacing: "0.14em", color: "#555", marginTop: 4, textTransform: "uppercase", fontFamily: "'Syne', sans-serif", fontWeight: 400, whiteSpace: "nowrap" }}>
-            {userSubtitle || "Voice Intelligence"}
           </div>
         </div>
 
