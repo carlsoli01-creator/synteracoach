@@ -573,7 +573,7 @@ export default function Negotium() {
             </div>
 
             {/* Two-column layout */}
-            {tab === "analysis" && (
+            {(
               <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: 32, padding: "40px 48px", maxWidth: 1200 }}>
                 {/* Left column — recording */}
                 <div>
