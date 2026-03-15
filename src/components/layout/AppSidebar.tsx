@@ -32,7 +32,8 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
   const location = useLocation();
   const { signOut } = useAuth();
   const { expanded, toggle } = useSidebarState();
-
+  const isMobile = useIsMobile();
+  const navItems = isMobile ? NAV_ITEMS_MOBILE : NAV_ITEMS;
   return (
     <>
       {/* Floating arrow toggle — always visible */}
