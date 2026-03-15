@@ -6,183 +6,296 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-const POWER_WORDS = [
-  "because", "imagine", "guaranteed", "proven", "exclusive", "immediately", "need", "must", "will", "important", "critical", "essential", "definitely", "absolutely", "clearly", "certainly", "specifically", "exactly", "directly", "effectively", "successfully", "opportunity", "value", "benefit", "result", "achieve", "ensure", "deliver", "commit",
-];
+// ─── HARDCODED WORD LISTS ────────────────────────────────────────────
 
-const FILLER_WORDS = ["um", "uh", "like", "you", "know", "basically", "actually", "literally"];
+const FILLER_WORDS = ["um", "uh", "like", "you know", "sort of", "kind of", "basically", "literally", "right?", "so yeah"];
 
-const HEDGING_SUGGESTIONS = [
+const HEDGING_PHRASES = [
   { phrase: "i think", suggestion: "I believe" },
+  { phrase: "i feel like", suggestion: "I know" },
   { phrase: "maybe", suggestion: "Here is what I recommend" },
+  { phrase: "probably", suggestion: "very likely" },
+  { phrase: "i guess", suggestion: "I am confident" },
   { phrase: "sort of", suggestion: "precisely" },
   { phrase: "kind of", suggestion: "specifically" },
-  { phrase: "i guess", suggestion: "I am confident" },
-  { phrase: "probably", suggestion: "very likely" },
-  { phrase: "hopefully", suggestion: "I will" },
-  { phrase: "i feel like", suggestion: "I know" },
-  { phrase: "just", suggestion: "" },
+  { phrase: "might be", suggestion: "is" },
+  { phrase: "could be", suggestion: "is" },
+  { phrase: "i'm not sure but", suggestion: "What I know is" },
 ];
 
-const clamp = (value: number, min: number, max: number) =>
-  Math.max(min, Math.min(max, value));
+const POWER_WORDS = [
+  "because", "imagine", "guaranteed", "proven", "exclusive", "immediately",
+  "need", "must", "will", "important", "critical", "essential", "definitely",
+  "absolutely", "clearly", "certainly", "specifically", "exactly", "directly",
+  "effectively", "successfully", "opportunity", "value", "benefit", "result",
+  "achieve", "ensure", "deliver", "commit",
+];
 
-const escapeRegExp = (value: string) =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const PASSIVE_CONSTRUCTIONS = [
+  "was done", "were made", "has been", "it was decided",
+  "there is", "there are", "you know what i mean",
+];
+
+const HEDGING_SUGGESTIONS_MAP: Record<string, string> = {};
+HEDGING_PHRASES.forEach(h => { HEDGING_SUGGESTIONS_MAP[h.phrase] = h.suggestion; });
+
+// ─── UTILITY ─────────────────────────────────────────────────────────
+
+const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
 const extractWords = (text: string) =>
-  text
-    .toLowerCase()
-    .replace(/[^\w\s']/g, " ")
-    .split(/\s+/)
-    .filter(Boolean);
+  text.toLowerCase().replace(/[^\w\s']/g, " ").split(/\s+/).filter(Boolean);
+
+const extractSentences = (text: string): string[] =>
+  text.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 0);
+
+const countSubstring = (haystack: string, needle: string): number => {
+  const lower = haystack.toLowerCase();
+  const n = needle.toLowerCase();
+  let count = 0, pos = 0;
+  while ((pos = lower.indexOf(n, pos)) !== -1) { count++; pos += n.length; }
+  return count;
+};
 
 const extractQuote = (transcript: string, term: string) => {
-  const pattern = new RegExp(`([^.!?]*\\b${escapeRegExp(term)}\\b[^.!?]*)`, "i");
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const pattern = new RegExp(`([^.!?]*\\b${escaped}\\b[^.!?]*)`, "i");
   const match = transcript.match(pattern);
   return match?.[1]?.trim().slice(0, 180) || transcript.slice(0, 180).trim();
 };
 
-function buildFallbackAnalysis(
+// ─── DETERMINISTIC SCORING ENGINE ────────────────────────────────────
+
+function computePaceScore(wpm: number): number {
+  if (wpm < 100) return 20;
+  if (wpm <= 119) return 45;
+  if (wpm <= 139) return 70;
+  if (wpm <= 160) return 100;
+  if (wpm <= 180) return 80;
+  if (wpm <= 200) return 55;
+  return 30;
+}
+
+function computeFillerAdjustment(fillerRate: number): number {
+  if (fillerRate === 0) return 25;
+  if (fillerRate <= 1) return 15;
+  if (fillerRate <= 3) return 0;
+  if (fillerRate <= 6) return -15;
+  return -30;
+}
+
+function computeSilenceAdjustment(silenceRatio: number, wpm: number): { confidence: number; delivery: number } {
+  let deliveryAdj = 0;
+  if (silenceRatio < 0.10) deliveryAdj = 10;
+  else if (silenceRatio <= 0.25) deliveryAdj = 0;
+  else if (silenceRatio <= 0.40) deliveryAdj = -10;
+  else deliveryAdj = -25;
+
+  // Extra penalty when high silence + low word count
+  let confidenceAdj = deliveryAdj;
+  if (silenceRatio > 0.25 && wpm < 80) {
+    confidenceAdj -= 10;
+  }
+  return { confidence: confidenceAdj, delivery: deliveryAdj };
+}
+
+function computeClarityScore(transcript: string, words: string[], sentences: string[]): number {
+  if (words.length < 3) return 10;
+
+  // 1. Sentence length variance (30%)
+  const sentenceWordCounts = sentences.map(s => s.split(/\s+/).filter(Boolean).length);
+  const avgSentLen = sentenceWordCounts.reduce((a, b) => a + b, 0) / (sentenceWordCounts.length || 1);
+  let sentLenScore = 100;
+  if (avgSentLen < 5) sentLenScore = 40;
+  else if (avgSentLen > 25) sentLenScore = 30;
+  else if (avgSentLen < 8) sentLenScore = 70;
+  else if (avgSentLen > 18) sentLenScore = 65;
+  // Variance penalty
+  if (sentenceWordCounts.length > 1) {
+    const variance = sentenceWordCounts.reduce((a, b) => a + Math.pow(b - avgSentLen, 2), 0) / sentenceWordCounts.length;
+    const stdDev = Math.sqrt(variance);
+    if (stdDev > 10) sentLenScore = Math.max(20, sentLenScore - 25);
+    else if (stdDev > 7) sentLenScore = Math.max(30, sentLenScore - 15);
+  }
+
+  // 2. Hedging language rate (40%)
+  const lowerTranscript = transcript.toLowerCase();
+  let hedgeCount = 0;
+  HEDGING_PHRASES.forEach(h => { hedgeCount += countSubstring(lowerTranscript, h.phrase); });
+  const sentenceCount = Math.max(sentences.length, 1);
+  const hedgesPerFiveSentences = (hedgeCount / sentenceCount) * 5;
+  const hedgingScore = clamp(Math.round(100 - hedgesPerFiveSentences * 12), 0, 100);
+
+  // 3. Vocabulary repetition (30%)
+  const uniqueWords = new Set(words);
+  const uniqueRatio = uniqueWords.size / words.length;
+  let vocabScore: number;
+  if (uniqueRatio >= 0.72) vocabScore = 100;
+  else if (uniqueRatio <= 0.45) vocabScore = 40;
+  else vocabScore = Math.round(40 + ((uniqueRatio - 0.45) / (0.72 - 0.45)) * 60);
+
+  return clamp(Math.round(sentLenScore * 0.30 + hedgingScore * 0.40 + vocabScore * 0.30), 0, 100);
+}
+
+function computeConfidenceScore(
+  fillerRate: number,
+  silenceRatio: number,
+  wpm: number,
+  volumeVariance: number,
+  hedgeCount: number,
+  sentenceCount: number,
+): number {
+  const fillerAdj = computeFillerAdjustment(fillerRate);
+  const silenceAdj = computeSilenceAdjustment(silenceRatio, wpm).confidence;
+
+  // Hedging adjustment: each hedge per 5 sentences = -6
+  const hedgesPerFive = (hedgeCount / Math.max(sentenceCount, 1)) * 5;
+  const hedgingAdj = clamp(Math.round(-hedgesPerFive * 6), -30, 0);
+
+  // Volume variance: low = flat = -10, high = dynamic = +10
+  let volVarAdj = 0;
+  if (volumeVariance < 2) volVarAdj = -10;
+  else if (volumeVariance > 8) volVarAdj = 10;
+  else volVarAdj = Math.round(((volumeVariance - 2) / 6) * 20 - 10);
+
+  return clamp(50 + fillerAdj + silenceAdj + hedgingAdj + volVarAdj, 10, 100);
+}
+
+function computeDeliveryScore(paceScore: number, clarityScore: number, silenceDeliveryAdj: number): number {
+  // Normalize silence adjustment to 0-100 scale: -25 → 0, +10 → 100
+  const silenceNormalized = clamp(Math.round(((silenceDeliveryAdj + 25) / 35) * 100), 0, 100);
+  return clamp(Math.round(paceScore * 0.30 + clarityScore * 0.40 + silenceNormalized * 0.30), 0, 100);
+}
+
+function computeOverallScore(pace: number, confidence: number, clarity: number, delivery: number): number {
+  return clamp(Math.round(pace * 0.20 + confidence * 0.25 + clarity * 0.25 + delivery * 0.30), 0, 100);
+}
+
+function computeWordChoiceScore(words: string[], transcript: string): { score: number; powerWordsFound: string[]; passiveCount: number } {
+  const wordSet = new Set(words);
+  const powerWordsFound = [...new Set(POWER_WORDS.filter(w => wordSet.has(w)))];
+  const lowerTranscript = transcript.toLowerCase();
+  let passiveCount = 0;
+  PASSIVE_CONSTRUCTIONS.forEach(p => { passiveCount += countSubstring(lowerTranscript, p); });
+
+  const score = clamp(40 + (powerWordsFound.length * 8) - (passiveCount * 12), 0, 100);
+  return { score, powerWordsFound, passiveCount };
+}
+
+function computeAllScores(
   transcript: string,
-  audioMetrics: {
-    averageVolume?: number;
-    silenceRatio?: number;
-    volumeVariance?: number;
-    durationSeconds?: number;
-  },
-  reason: string,
+  audioMetrics: { silenceRatio?: number; volumeVariance?: number; durationSeconds?: number },
 ) {
   const cleanTranscript = transcript.trim();
   const words = extractWords(cleanTranscript);
   const wordCount = words.length;
+  const sentences = extractSentences(cleanTranscript);
   const durationSeconds = Math.max(1, Number(audioMetrics.durationSeconds || 1));
   const wpm = Math.round((wordCount / durationSeconds) * 60);
 
-  const fillerFound = FILLER_WORDS.filter((word) => words.includes(word));
-  const fillerCount = words.filter((word) => FILLER_WORDS.includes(word)).length;
+  // Filler counting (multi-word fillers first)
+  const lowerTranscript = cleanTranscript.toLowerCase();
+  let fillerCount = 0;
+  const fillerWordsFound: string[] = [];
+  FILLER_WORDS.forEach(fw => {
+    const c = countSubstring(lowerTranscript, fw);
+    if (c > 0) { fillerCount += c; fillerWordsFound.push(fw); }
+  });
+  const fillerRate = (fillerCount / Math.max(wordCount, 1)) * 100;
 
-  const hedgingInstances = HEDGING_SUGGESTIONS
-    .filter(({ phrase }) => cleanTranscript.toLowerCase().includes(phrase))
-    .slice(0, 6)
-    .map(({ phrase, suggestion }) => ({ phrase, suggestion: suggestion || "remove this softener for more authority" }));
+  // Hedging count
+  let hedgeCount = 0;
+  const hedgingInstances: Array<{ phrase: string; suggestion: string }> = [];
+  HEDGING_PHRASES.forEach(h => {
+    const c = countSubstring(lowerTranscript, h.phrase);
+    if (c > 0) {
+      hedgeCount += c;
+      hedgingInstances.push({ phrase: h.phrase, suggestion: h.suggestion });
+    }
+  });
 
-  const powerWords = [...new Set(POWER_WORDS.filter((word) => words.includes(word)))].slice(0, 12);
+  const silenceRatio = audioMetrics.silenceRatio ?? 0;
+  const volumeVariance = audioMetrics.volumeVariance ?? 5;
 
-  const paceScore = clamp(Math.round(100 - Math.abs(wpm - 145) * 1.15), 10, 96);
-  const confidenceScore = clamp(
-    Math.round(30 + Math.min(wordCount, 60) * 0.5 + Math.min(powerWords.length, 8) * 3 - Math.min(fillerCount, 8) * 2 - hedgingInstances.length * 3),
-    10,
-    96,
-  );
-  const clarityScore = clamp(
-    Math.round(25 + Math.min(wordCount, 180) / 4 - Math.min(fillerCount, 10) * 2 - hedgingInstances.length * 2),
-    10,
-    96,
-  );
-  const deliveryScore = clamp(
-    Math.round((paceScore + confidenceScore + clarityScore) / 3 + (powerWords.includes("because") ? 4 : 0)),
-    10,
-    97,
-  );
-  const overallScore = clamp(
-    Math.round(deliveryScore * 0.45 + clarityScore * 0.25 + confidenceScore * 0.2 + paceScore * 0.1),
-    10,
-    97,
-  );
+  const paceScore = computePaceScore(wpm);
+  const clarityScore = computeClarityScore(cleanTranscript, words, sentences);
+  const silenceAdj = computeSilenceAdjustment(silenceRatio, wpm);
+  const confidenceScore = computeConfidenceScore(fillerRate, silenceRatio, wpm, volumeVariance, hedgeCount, sentences.length);
+  const deliveryScore = computeDeliveryScore(paceScore, clarityScore, silenceAdj.delivery);
+  const overallScore = computeOverallScore(paceScore, confidenceScore, clarityScore, deliveryScore);
+  const { score: wordChoiceScore, powerWordsFound, passiveCount } = computeWordChoiceScore(words, cleanTranscript);
 
-  const wordChoiceScore = clamp(
-    Math.round(25 + Math.min(wordCount, 60) * 0.4 + Math.min(powerWords.length, 8) * 3 - hedgingInstances.length * 3),
-    10,
-    96,
-  );
-  const persuasionScore = clamp(
-    Math.round(20 + (powerWords.includes("because") ? 10 : 0) + Math.min(powerWords.length, 6) * 3 + Math.min(wordCount, 80) * 0.3),
-    10,
-    95,
-  );
+  const fillerPercentage = Number(fillerRate.toFixed(1));
 
-  const techniques = [] as Array<{
-    name: string;
-    quote: string;
-    impact: "pos" | "neutral" | "neg";
-    explanation: string;
-  }>;
+  return {
+    wpm, wordCount, paceScore, clarityScore, confidenceScore, deliveryScore, overallScore,
+    wordChoiceScore, powerWordsFound, passiveCount,
+    fillerCount, fillerWordsFound, fillerPercentage,
+    hedgeCount, hedgingInstances,
+    sentences, silenceRatio,
+  };
+}
 
-  if (powerWords.includes("because")) {
-    techniques.push({
-      name: "Justification Trigger",
-      quote: extractQuote(cleanTranscript, "because"),
-      impact: "pos",
-      explanation: "Using 'because' strengthens reasoning and improves listener buy-in.",
-    });
+// ─── GRADE ───────────────────────────────────────────────────────────
+
+function getGrade(score: number): string {
+  if (score >= 80) return "A";
+  if (score >= 65) return "B";
+  if (score >= 50) return "C";
+  return "D";
+}
+
+// ─── FALLBACK (no AI) ────────────────────────────────────────────────
+
+function buildFallbackAnalysis(
+  transcript: string,
+  audioMetrics: { averageVolume?: number; silenceRatio?: number; volumeVariance?: number; durationSeconds?: number },
+  reason: string,
+) {
+  const s = computeAllScores(transcript, audioMetrics);
+
+  const techniques: Array<{ name: string; quote: string; impact: "pos" | "neutral" | "neg"; explanation: string }> = [];
+  if (s.powerWordsFound.includes("because")) {
+    techniques.push({ name: "Justification Trigger", quote: extractQuote(transcript, "because"), impact: "pos", explanation: "Using 'because' strengthens reasoning and improves listener buy-in." });
   }
-
-  if (hedgingInstances.length > 0) {
-    techniques.push({
-      name: "Hedging Language",
-      quote: extractQuote(cleanTranscript, hedgingInstances[0].phrase),
-      impact: "neutral",
-      explanation: "Reducing hedging can make your delivery feel even more decisive.",
-    });
+  if (s.hedgingInstances.length > 0) {
+    techniques.push({ name: "Hedging Language", quote: extractQuote(transcript, s.hedgingInstances[0].phrase), impact: "neutral", explanation: "Reducing hedging can make your delivery feel more decisive." });
   }
-
-  if (fillerFound.length > 0) {
-    techniques.push({
-      name: "Filler Opportunity",
-      quote: extractQuote(cleanTranscript, fillerFound[0]),
-      impact: "neutral",
-      explanation: "Replacing filler with short pauses boosts clarity and authority.",
-    });
+  if (s.fillerWordsFound.length > 0) {
+    techniques.push({ name: "Filler Opportunity", quote: extractQuote(transcript, s.fillerWordsFound[0]), impact: "neutral", explanation: "Replacing filler with short pauses boosts clarity and authority." });
   }
 
   const fallbackModeLabel =
-    reason === "credits_exhausted"
-      ? "Fallback: Credits"
-      : reason === "rate_limited"
-      ? "Fallback: Rate Limit"
-      : "Fallback: Auto";
-
-  const fillerPercentage = Number(((fillerCount / Math.max(wordCount, 1)) * 100).toFixed(1));
+    reason === "credits_exhausted" ? "Fallback: Credits"
+    : reason === "rate_limited" ? "Fallback: Rate Limit"
+    : "Fallback: Auto";
 
   return {
     scores: {
-      pace: paceScore,
-      confidence: confidenceScore,
-      clarity: clarityScore,
-      delivery: deliveryScore,
-      overall: overallScore,
+      pace: s.paceScore, confidence: s.confidenceScore, clarity: s.clarityScore,
+      delivery: s.deliveryScore, overall: s.overallScore,
     },
     analysis: {
-      overall:
-        "You communicated a clear point and showed real intent, which is the strongest foundation for persuasive speaking. Even in fallback mode, your transcript shows meaningful structure and commitment. With small refinements to pacing and certainty language, this can become even more compelling.",
-      pace: `Your estimated pace is about ${wpm} WPM. The ideal persuasive range is usually 130–160 WPM, so keep key points deliberate and avoid rushing transitions. Strategic pauses can make your strongest lines land with more impact.`,
-      tone:
-        "Your tone reads as purposeful and engaged. You can make it even stronger by replacing softeners with direct statements. Command language and shorter declarations will increase authority.",
-      clarity:
-        "Your message is understandable and has a central point. To improve clarity further, tighten long phrases and remove repeated filler words. Keep one key idea per sentence whenever possible.",
-      delivery:
-        "Your word choices include persuasive signals that help drive intent. Continuing to use concrete language and direct framing will improve delivery consistency. The biggest gain now is reducing hedging and filler to sound more decisive.",
-      strength:
-        `A strong moment is: "${cleanTranscript.slice(0, 140)}${cleanTranscript.length > 140 ? "..." : ""}" — this gives your message direction and emotional weight.`,
-      weakness:
-        hedgingInstances.length > 0
-          ? `You could make this even stronger by upgrading "${hedgingInstances[0].phrase}" to a direct statement like "${hedgingInstances[0].suggestion}".`
-          : "You could make this even stronger by trimming filler words and ending key points with a decisive close.",
-      recommendation:
-        "Keep your central message, but lead with your strongest claim in the first sentence. Replace any hedging phrase with decisive wording, then pause after major points. That combination will make your delivery sound more confident and persuasive.",
+      overall: `Your speech was ${s.wpm} WPM across ${s.wordCount} words. Grade: ${getGrade(s.overallScore)}. Filler rate: ${s.fillerPercentage}%. Hedging phrases detected: ${s.hedgeCount}.`,
+      pace: `Estimated pace: ${s.wpm} WPM. ${s.wpm < 100 ? "Too slow — aim for 140-160 WPM." : s.wpm > 200 ? "Too fast — slow down for clarity." : s.wpm >= 140 && s.wpm <= 160 ? "Ideal pace range." : "Adjust toward 140-160 WPM for optimal delivery."}`,
+      tone: "Tone analysis requires AI processing. Focus on replacing hedging language with direct statements for stronger authority.",
+      clarity: `Clarity score is based on sentence length consistency, hedging rate, and vocabulary diversity. ${s.hedgeCount > 0 ? `Found ${s.hedgeCount} hedging phrase(s) — reduce these for sharper delivery.` : "No hedging detected — clean language."}`,
+      delivery: `Delivery combines pace (${s.paceScore}), clarity (${s.clarityScore}), and silence patterns. ${s.passiveCount > 0 ? `Found ${s.passiveCount} passive construction(s) — use active voice.` : ""}`,
+      strength: `"${transcript.slice(0, 140)}${transcript.length > 140 ? "..." : ""}" — this gives your message direction.`,
+      weakness: s.hedgingInstances.length > 0
+        ? `Upgrade "${s.hedgingInstances[0].phrase}" to "${s.hedgingInstances[0].suggestion}" for more authority.`
+        : s.fillerWordsFound.length > 0
+        ? `Reduce filler words like "${s.fillerWordsFound[0]}" — replace with short pauses.`
+        : "Focus on varying your sentence structure for stronger impact.",
+      recommendation: "Lead with your strongest claim. Replace hedging with decisive language. Pause after major points.",
     },
     techniques,
-    fillerWords: {
-      count: fillerCount,
-      words: fillerFound,
-      percentage: fillerPercentage,
-    },
-    hedgingInstances,
-    powerWords,
+    fillerWords: { count: s.fillerCount, words: s.fillerWordsFound, percentage: s.fillerPercentage },
+    hedgingInstances: s.hedgingInstances,
+    powerWords: s.powerWordsFound,
     tags: [
-      { label: "Encouraging Baseline", type: "pos" },
-      { label: fillerCount > 0 ? "Filler Reduction" : "Clean Language", type: fillerCount > 0 ? "warn" : "pos" },
+      { label: `Grade ${getGrade(s.overallScore)}`, type: s.overallScore >= 65 ? "pos" : s.overallScore >= 50 ? "warn" : "neg" },
+      { label: s.fillerCount > 0 ? "Filler Reduction" : "Clean Language", type: s.fillerCount > 0 ? "warn" : "pos" },
       { label: fallbackModeLabel, type: "warn" },
     ],
     communicationTips: [
@@ -193,10 +306,12 @@ function buildFallbackAnalysis(
       "Use 'because' to support key claims with clear reasons.",
       "End each point with a firm, downward close.",
     ],
-    wordChoiceScore,
-    persuasionScore,
+    wordChoiceScore: s.wordChoiceScore,
+    persuasionScore: clamp(30 + s.powerWordsFound.length * 5 + Math.min(s.wordCount, 80) * 0.3, 10, 70),
   };
 }
+
+// ─── MAIN ────────────────────────────────────────────────────────────
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -211,7 +326,6 @@ serve(async (req) => {
     totalFrames?: number;
     durationSeconds?: number;
   } = {};
-
   let sessionGoal = "";
   let sessionType = "";
   let eventContext = "";
@@ -226,14 +340,8 @@ serve(async (req) => {
 
     if (!transcript || transcript.trim().length < 5) {
       return new Response(
-        JSON.stringify({
-          error:
-            "Could not detect enough speech. Please speak clearly into your microphone and try again.",
-        }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        },
+        JSON.stringify({ error: "Could not detect enough speech. Please speak clearly into your microphone and try again." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
@@ -245,45 +353,33 @@ serve(async (req) => {
       );
     }
 
-    // Step 1: AI-powered transcript cleanup for much higher accuracy
+    // Step 1: AI-powered transcript cleanup
     console.log("Raw transcript:", transcript);
     try {
-      const cleanupResponse = await fetch(
-        "https://ai.gateway.lovable.dev/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${LOVABLE_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "google/gemini-2.5-flash",
-            messages: [
-              {
-                role: "system",
-                content: `You are a speech transcript correction engine. Your ONLY job is to fix a raw speech-to-text transcript that may contain errors from browser-based speech recognition.
+      const cleanupResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          messages: [
+            {
+              role: "system",
+              content: `You are a speech transcript correction engine. Your ONLY job is to fix a raw speech-to-text transcript.
 
 Rules:
 - Fix misheard words, broken grammar, and nonsensical phrases caused by speech recognition errors
 - Reconstruct what the speaker ACTUALLY said based on context clues
-- Fix word boundaries (e.g. "I scream" vs "ice cream", "new direction" vs "nude erection")
-- Fix homophones chosen incorrectly (e.g. "their/there/they're", "your/you're")
+- Fix word boundaries and homophones chosen incorrectly
 - Remove duplicate words/phrases caused by recognition restarts
 - Preserve the speaker's actual vocabulary level and style — do NOT upgrade their language
 - Do NOT add words or ideas the speaker didn't say
-- Do NOT rephrase or restructure sentences — keep the original word order
-- Do NOT fix intentional informal speech patterns (contractions, slang they clearly meant)
-- If a section is genuinely unintelligible, keep the closest approximation
-- Return ONLY the corrected transcript text, nothing else — no explanations, no quotes, no labels`
-              },
-              {
-                role: "user",
-                content: `Raw speech-to-text transcript to correct:\n\n${transcript}`
-              },
-            ],
-          }),
-        },
-      );
+- Do NOT rephrase or restructure sentences
+- Return ONLY the corrected transcript text, nothing else`
+            },
+            { role: "user", content: `Raw speech-to-text transcript to correct:\n\n${transcript}` },
+          ],
+        }),
+      });
 
       if (cleanupResponse.ok) {
         const cleanupResult = await cleanupResponse.json();
@@ -294,163 +390,96 @@ Rules:
         }
       }
     } catch (cleanupErr) {
-      console.warn("Transcript cleanup failed, using raw transcript:", cleanupErr);
+      console.warn("Transcript cleanup failed, using raw:", cleanupErr);
     }
 
-    const wordCount = transcript.trim().split(/\s+/).filter(Boolean).length;
-    const wpm = audioMetrics.durationSeconds && audioMetrics.durationSeconds > 0
-      ? (wordCount / audioMetrics.durationSeconds) * 60
-      : 0;
+    // Step 2: Compute ALL scores deterministically
+    const scores = computeAllScores(transcript, audioMetrics);
 
-    const goalContext = sessionGoal ? `\n\n## Session Goal: ${sessionGoal}\nFocus your analysis heavily on this goal:\n- If "confidence": Focus on voice strength, hesitation, tone, assertiveness, and decisive language.\n- If "presentation": Focus on clarity, authority, pacing, professionalism, and structure.\n- If "interview": Focus on confidence, structure, sounding prepared, and concise answers.\n- If "argument" or "debate": Focus on assertiveness, control, speaking without hesitation, and logical structure.\n- Tailor ALL feedback, scores, and recommendations to help the user improve specifically for this goal.` : "";
-    const typeContext = sessionType ? `\n\n## Session Type: ${sessionType}\nConsider the context of this session type when evaluating delivery and giving feedback.` : "";
-    const eventInfo = eventContext ? `\n\n## Event Context: ${eventContext}\nThe user is preparing for this specific event. Tailor your advice to help them perform well in this exact situation. Reference the event in your recommendations.` : "";
+    // Step 3: AI provides ONLY qualitative analysis text + persuasion score
+    const goalContext = sessionGoal ? `\nSession Goal: ${sessionGoal}` : "";
+    const typeContext = sessionType ? `\nSession Type: ${sessionType}` : "";
+    const eventInfo = eventContext ? `\nEvent Context: ${eventContext}` : "";
 
-    const systemPrompt = `You are a confident, supportive speech & negotiation coach with expertise in rhetoric, persuasion psychology, and vocal delivery. You provide honest, specific feedback that leads with strengths before addressing areas for improvement. Your tone is warm but direct — like a skilled mentor who genuinely wants speakers to succeed and knows exactly how to help them get there. You balance genuine praise with constructive, actionable critique.${goalContext}${typeContext}${eventInfo}
+    const systemPrompt = `You are a speech & communication coach. You provide honest, specific feedback.
+Your job is to analyze the transcript and provide QUALITATIVE feedback only. All numeric scores are pre-computed — do NOT generate scores for pace, confidence, clarity, delivery, overall, or word choice. You ONLY provide:
+1. Written analysis paragraphs
+2. Technique detection
+3. A persuasion score (0-100) with strict rubric
 
-Your analysis must be PRIMARILY based on WHAT was said and HOW it was delivered — the actual words, sentence structures, rhetorical devices, persuasion techniques, and communication patterns. Audio volume metrics are secondary context only.
+## Pre-computed metrics (reference these in your feedback):
+- WPM: ${scores.wpm}
+- Pace Score: ${scores.paceScore}/100
+- Clarity Score: ${scores.clarityScore}/100
+- Confidence Score: ${scores.confidenceScore}/100
+- Delivery Score: ${scores.deliveryScore}/100
+- Overall Score: ${scores.overallScore}/100 (Grade: ${getGrade(scores.overallScore)})
+- Word Choice Score: ${scores.wordChoiceScore}/100
+- Filler count: ${scores.fillerCount} (${scores.fillerPercentage}%)
+- Fillers found: ${scores.fillerWordsFound.join(", ") || "none"}
+- Hedging phrases: ${scores.hedgeCount} (${scores.hedgingInstances.map(h => h.phrase).join(", ") || "none"})
+- Power words: ${scores.powerWordsFound.join(", ") || "none"}
+- Passive constructions: ${scores.passiveCount}
+${goalContext}${typeContext}${eventInfo}
 
-## Analysis Framework
+## Persuasion Score Rubric (0-100) — the ONLY score you generate:
+- 0-20: No discernible argument or claim. Random words, no structure.
+- 21-40: A vague point exists but no supporting evidence, no clear ask.
+- 41-60: A basic claim is present with some reasoning, but weak structure or missing call-to-action.
+- 61-80: Clear claim + supporting evidence/reasoning + some form of conclusion or call-to-action.
+- 81-100: Strong claim, compelling evidence, emotional or logical appeal, decisive call-to-action.
 
-### 1. DELIVERY ANALYSIS (Primary — 70% of scoring weight)
-Examine the transcript deeply for:
-- **Word choice quality**: Are words precise, powerful, and purposeful? Or vague, weak, hedging?
-- **Sentence structure**: Short punchy sentences vs rambling? Active vs passive voice? Command language vs tentative?
-- **Rhetorical devices used**: Anaphora, tricolon, antithesis, rhetorical questions, metaphor, contrast, framing
-- **Persuasion techniques**: Anchoring, social proof, scarcity, authority framing, reciprocity, loss aversion
-- **Hedging/weakening language**: "I think", "maybe", "sort of", "kind of", "just", "I guess", "probably", "hopefully"
-- **Filler words**: "um", "uh", "like", "you know", "basically", "actually", "literally"
-- **Power words**: "because", "imagine", "guaranteed", "proven", "exclusive", "immediately"
-- **Opening strength**: Did they open with impact or meander?
-- **Closing strength**: Did they end decisively or trail off?
-- **Logical flow**: Are ideas connected coherently? Is there a clear argument structure?
-- **Conciseness**: Word economy — could the same point be made in fewer words?
+Example calibration:
+- "Um I think we should maybe do something about this" → persuasion: 15
+- "We need to act now because our competitors are moving fast" → persuasion: 55
+- "Our data shows a 40% improvement. I recommend we commit to this approach by Friday." → persuasion: 78
 
-### 2. CONSISTENCY & RHYTHM (20% weight)
-- **Pace consistency**: Estimated ${Math.round(wpm)} WPM. Ideal negotiation pace: 130-160 WPM. Did they likely rush through key points or drag?
-- **Structural consistency**: Do they maintain the same quality throughout or deteriorate?
-- **Message discipline**: Do they stay on point or go off on tangents?
-
-### 3. AUDIO CONTEXT (10% weight — secondary only)
-- Volume avg: ${(audioMetrics.averageVolume ?? 0).toFixed(1)}, silence ratio: ${((audioMetrics.silenceRatio ?? 0) * 100).toFixed(1)}%, variance: ${(audioMetrics.volumeVariance ?? 0).toFixed(1)}
-- Use these only to supplement delivery analysis, never as primary scoring factors
-
-## Key Techniques to Detect and Call Out
-When the speaker uses any of these, explicitly identify them as a POSITIVE:
-- Strategic pausing (silence ratio context)
-- Power positioning ("We will" vs "We could")
-- The rule of three (tricolon)
-- Contrast/antithesis ("Not X, but Y")
-- Anchoring (stating a number/position first)
-- Mirroring/labeling emotions
-- Calibrated questions ("How would you...?")
-- Decisive closings
-- Reframing negative to positive
-- Using "because" to justify (compliance trigger)
-- Name/pronoun inclusion for engagement
-- Specific numbers/data for credibility
-
-## Response Format
-Return ONLY raw JSON (no markdown, no code blocks):
+Return ONLY raw JSON:
 {
-  "scores": {
-    "pace": <0-100>,
-    "confidence": <0-100>,
-    "clarity": <0-100>,
-    "delivery": <0-100>,
-    "overall": <0-100>
-  },
   "analysis": {
-    "overall": "<3-4 sentence assessment focusing on the actual words used>",
-    "pace": "<2-3 sentences about rhythm, WPM, and pacing of key points>",
-    "tone": "<2-3 sentences about authority, command language, and vocal power>",
-    "clarity": "<2-3 sentences about message clarity, structure, and conciseness>",
-    "delivery": "<3-4 sentences about word choice quality, rhetorical techniques, and persuasion patterns>",
-    "strength": "<2 sentences identifying the single strongest moment/technique in the transcript with a direct quote>",
-    "weakness": "<2 sentences identifying the weakest moment with a direct quote and how to fix it>",
-    "recommendation": "<3 sentences with specific, actionable advice referencing their actual words>"
+    "overall": "<3-4 sentences referencing the pre-computed scores>",
+    "pace": "<2-3 sentences about rhythm and pacing, reference ${scores.wpm} WPM>",
+    "tone": "<2-3 sentences about authority and vocal power>",
+    "clarity": "<2-3 sentences about message clarity and structure>",
+    "delivery": "<3-4 sentences about word choice and rhetorical techniques>",
+    "strength": "<2 sentences with a direct quote of the strongest moment>",
+    "weakness": "<2 sentences with a direct quote of the weakest moment and fix>",
+    "recommendation": "<3 sentences with specific actionable advice>"
   },
   "techniques": [
-    {"name": "<technique name>", "quote": "<exact words from transcript>", "impact": "pos|neutral|neg", "explanation": "<1 sentence why this matters>"}
+    {"name": "<technique>", "quote": "<exact words>", "impact": "pos|neutral|neg", "explanation": "<1 sentence>"}
   ],
-  "fillerWords": {
-    "count": <number>,
-    "words": ["<word1>", "<word2>"],
-    "percentage": <percentage of total words>
-  },
-  "hedgingInstances": [
-    {"phrase": "<hedging phrase found>", "suggestion": "<stronger alternative>"}
-  ],
-  "powerWords": ["<power word found in transcript>"],
-  "tags": [
-    {"label": "<short label>", "type": "pos|warn|neg"}
-  ],
+  "persuasionScore": <0-100>,
+  "persuasionReasoning": "<1 sentence explaining the persuasion score>",
   "communicationTips": ["<tip 1>", "<tip 2>", "<tip 3>", "<tip 4>", "<tip 5>", "<tip 6>"],
-  "wordChoiceScore": <0-100>,
-  "persuasionScore": <0-100>
+  "tags": [{"label": "<short label>", "type": "pos|warn|neg"}]
 }
 
-CRITICAL RULES:
-- Quote the speaker's ACTUAL words when giving feedback. Never be generic.
-- If they used a technique well, acknowledge it clearly with the exact quote — but don't overpraise.
-- If they hedged or used filler, call it out directly: "This weakened your delivery because..." Be honest about the impact.
-- Scores should reflect the WORDS and DELIVERY, not just volume.
-- A quiet speaker with perfect word choice should score higher than a loud speaker with weak language.
-- Be specific and direct. "Your phrase '...' worked because..." or "Your phrase '...' fell flat because..." — don't dance around problems.
-- TONE: Lead with genuine strengths, then address areas for growth constructively. Frame weaknesses as specific opportunities with clear solutions — be honest but encouraging. Speakers improve fastest when they feel capable AND know exactly what to work on.
-- SCORING GUIDELINES: Use the FULL 0-100 range. Be brutally honest. If someone mumbles 3 words quietly over 30 seconds, that's a 10-20. If someone rambles with tons of filler and no structure, that's 25-40. Casual unfocused speech with some effort scores 40-55. Average delivery with decent clarity scores 55-70. Good speakers with clear structure and intent score 70-82. Strong speakers with rhetorical skill score 82-90. Exceptional, polished delivery with powerful techniques scores 90-97. Don't be afraid to give very low scores for genuinely poor delivery, and don't hold back high scores for genuinely excellent speech. The score should MEAN something. For wordChoiceScore: vague/empty language 15-40, generic language 40-60, clear language 60-78, precise and powerful language 78-95. For persuasionScore: no argument at all 10-30, weak scattered argument 30-50, a basic point 50-68, well-structured persuasion 68-85, masterful persuasion 85-97.
-- SHORT RECORDINGS (under 10 seconds): Do NOT penalize for incomplete thoughts, unfinished sentences, or lack of a full argument structure. Short recordings are practice snippets — judge them on the QUALITY of the words spoken, not on whether the speaker completed a full idea. Focus on word choice, confidence of delivery, and any techniques used in the brief window. A strong 5-second clip with decisive language should score well.
-- Power words should include a BROAD list: "because", "imagine", "guaranteed", "proven", "exclusive", "immediately", "need", "must", "will", "important", "critical", "essential", "definitely", "absolutely", "clearly", "certainly", "actually", "specifically", "exactly", "directly", "effectively", "successfully", "opportunity", "value", "benefit", "result", "achieve", "ensure", "deliver", "commit".`;
+CRITICAL: Quote the speaker's ACTUAL words. Be honest — reference the pre-computed scores in your feedback. If the grade is D, say so directly.`;
 
-    const goalInfo = sessionGoal ? `\nSession Goal: ${sessionGoal}` : "";
-    const typeInfo = sessionType ? `\nSession Type: ${sessionType}` : "";
-    const eventInfo2 = eventContext ? `\nEvent Context: ${eventContext}` : "";
+    const userPrompt = `Analyze this speech transcript. All scores are pre-computed. Provide qualitative feedback and a persuasion score only.
 
-    const userPrompt = `Analyze this speech transcript with extreme precision. Focus on the words themselves, the delivery patterns, and any rhetorical or persuasion techniques used.${goalInfo}${typeInfo}${eventInfo2}
+Transcript (${scores.wordCount} words, ${scores.wpm} WPM over ${audioMetrics.durationSeconds || 0}s):
+"${transcript}"`;
 
-Transcript (${wordCount} words, ~${Math.round(wpm)} WPM over ${audioMetrics.durationSeconds || 0}s):
-"${transcript}"
-
-Provide your detailed analysis as JSON.`;
-
-    const response = await fetch(
-      "https://ai.gateway.lovable.dev/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt },
-          ],
-        }),
-      },
-    );
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+      }),
+    });
 
     if (!response.ok) {
       const errText = await response.text();
       console.error("AI gateway error:", response.status, errText);
-
-      if (response.status === 429) {
-        return new Response(
-          JSON.stringify(buildFallbackAnalysis(transcript, audioMetrics, "rate_limited")),
-          { headers: { ...corsHeaders, "Content-Type": "application/json" } },
-        );
-      }
-
-      if (response.status === 402) {
-        return new Response(
-          JSON.stringify(buildFallbackAnalysis(transcript, audioMetrics, "credits_exhausted")),
-          { headers: { ...corsHeaders, "Content-Type": "application/json" } },
-        );
-      }
-
+      const reason = response.status === 429 ? "rate_limited" : response.status === 402 ? "credits_exhausted" : "gateway_error";
       return new Response(
-        JSON.stringify(buildFallbackAnalysis(transcript, audioMetrics, "gateway_error")),
+        JSON.stringify(buildFallbackAnalysis(transcript, audioMetrics, reason)),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
@@ -458,43 +487,74 @@ Provide your detailed analysis as JSON.`;
     const aiResponse = await response.json();
     const content = aiResponse.choices?.[0]?.message?.content || "";
 
-    // Extract JSON from the response (handle markdown code blocks)
+    // Parse AI response
     let jsonStr = content;
     const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (jsonMatch) jsonStr = jsonMatch[1];
     jsonStr = jsonStr.trim();
 
-    let parsed;
+    let parsed: any;
     try {
       parsed = JSON.parse(jsonStr);
-    } catch (_e1) {
+    } catch {
       try {
-        const repaired = jsonStr
-          .replace(/,\s*\n\s*[a-zA-Z]\s+"name"/g, ',\n    {"name"')
-          .replace(/}\s*,\s*\n\s*[a-zA-Z]\s+\{/g, '},\n    {');
-        parsed = JSON.parse(repaired);
-      } catch (_e2) {
-        try {
-          const firstBrace = jsonStr.indexOf("{");
-          const lastBrace = jsonStr.lastIndexOf("}");
-          if (firstBrace !== -1 && lastBrace !== -1) {
-            const subset = jsonStr.substring(firstBrace, lastBrace + 1);
-            parsed = JSON.parse(subset);
-          } else {
-            throw new Error("No JSON object found in AI response");
-          }
-        } catch {
-          console.error("Failed to parse AI response:", content);
-          parsed = buildFallbackAnalysis(transcript, audioMetrics, "parse_failure");
+        const firstBrace = jsonStr.indexOf("{");
+        const lastBrace = jsonStr.lastIndexOf("}");
+        if (firstBrace !== -1 && lastBrace !== -1) {
+          parsed = JSON.parse(jsonStr.substring(firstBrace, lastBrace + 1));
+        } else {
+          throw new Error("No JSON found");
         }
+      } catch {
+        console.error("Failed to parse AI response:", content);
+        return new Response(
+          JSON.stringify(buildFallbackAnalysis(transcript, audioMetrics, "parse_failure")),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
       }
     }
 
-    if (!parsed?.scores || !parsed?.analysis) {
-      parsed = buildFallbackAnalysis(transcript, audioMetrics, "invalid_shape");
-    }
+    // Persuasion score is the ONLY AI-generated score — clamp it
+    const persuasionScore = clamp(Number(parsed.persuasionScore) || 30, 0, 100);
 
-    return new Response(JSON.stringify(parsed), {
+    // Build final response with deterministic scores + AI qualitative text
+    const result = {
+      scores: {
+        pace: scores.paceScore,
+        confidence: scores.confidenceScore,
+        clarity: scores.clarityScore,
+        delivery: scores.deliveryScore,
+        overall: scores.overallScore,
+      },
+      analysis: parsed.analysis || buildFallbackAnalysis(transcript, audioMetrics, "missing_analysis").analysis,
+      techniques: parsed.techniques || [],
+      fillerWords: {
+        count: scores.fillerCount,
+        words: scores.fillerWordsFound,
+        percentage: scores.fillerPercentage,
+      },
+      hedgingInstances: scores.hedgingInstances,
+      powerWords: scores.powerWordsFound,
+      tags: [
+        { label: `Grade ${getGrade(scores.overallScore)}`, type: scores.overallScore >= 65 ? "pos" : scores.overallScore >= 50 ? "warn" : "neg" },
+        { label: `${scores.wpm} WPM`, type: scores.wpm >= 140 && scores.wpm <= 160 ? "pos" : scores.wpm >= 120 && scores.wpm <= 180 ? "warn" : "neg" },
+        { label: scores.fillerCount > 0 ? `${scores.fillerCount} Fillers` : "Clean Language", type: scores.fillerCount > 0 ? "warn" : "pos" },
+        ...(parsed.tags || []),
+      ],
+      communicationTips: parsed.communicationTips || [
+        "Start with your strongest point.",
+        "Replace hedging with direct statements.",
+        "Use strategic pauses instead of filler words.",
+        "Keep sentences between 8-18 words.",
+        "End points with decisive, downward closes.",
+        "Use 'because' to justify key claims.",
+      ],
+      wordChoiceScore: scores.wordChoiceScore,
+      persuasionScore,
+      persuasionReasoning: parsed.persuasionReasoning || "",
+    };
+
+    return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
@@ -509,10 +569,7 @@ Provide your detailed analysis as JSON.`;
 
     return new Response(
       JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      },
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
 });
