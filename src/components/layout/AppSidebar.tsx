@@ -21,163 +21,140 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
   const { signOut } = useAuth();
-  const { expanded, toggle, sidebarWidth } = useSidebarState();
+  const { expanded, toggle } = useSidebarState();
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        bottom: 0,
-        width: sidebarWidth,
-        background: "#0a0a0a",
-        borderRight: "1px solid #1a1a1a",
-        zIndex: 100,
-        display: "flex",
-        flexDirection: "column",
-        fontFamily: "'DM Mono', monospace",
-        transition: "width 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
-        overflow: "hidden",
-      }}
-    >
-      {/* Logo + Toggle */}
-      <div style={{ padding: expanded ? "32px 28px 24px" : "32px 0 24px", display: "flex", flexDirection: "column", alignItems: expanded ? "flex-start" : "center" }}>
-        {expanded ? (
-          <>
-            <div style={{ fontSize: 16, fontWeight: 800, letterSpacing: "0.14em", color: "#ffffff", fontFamily: "'Syne', sans-serif", whiteSpace: "nowrap" }}>
-              SYNTERA
-            </div>
-            <div style={{ fontSize: 10, letterSpacing: "0.14em", color: "#555", marginTop: 4, textTransform: "uppercase", fontFamily: "'Syne', sans-serif", fontWeight: 400, whiteSpace: "nowrap" }}>
-              {userSubtitle || "Voice Intelligence"}
-            </div>
-          </>
-        ) : (
-          <div style={{ fontSize: 14, fontWeight: 800, letterSpacing: "0.08em", color: "#ffffff", fontFamily: "'Syne', sans-serif" }}>
-            S
-          </div>
-        )}
-      </div>
-
-      {/* Toggle button */}
+    <>
+      {/* Floating arrow toggle — always visible */}
       <button
         onClick={toggle}
         style={{
+          position: "fixed",
+          top: 20,
+          left: expanded ? 224 : 12,
+          zIndex: 301,
+          width: 28,
+          height: 28,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          width: "100%",
-          padding: "10px 0",
-          border: "none",
-          borderTop: "1px solid #1a1a1a",
-          borderBottom: "1px solid #1a1a1a",
-          background: "transparent",
-          color: "#555",
+          background: "#0a0a0a",
+          border: "1px solid #1a1a1a",
+          borderRadius: 0,
           cursor: "pointer",
-          transition: "color 0.2s",
+          transition: "left 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.15s",
+          color: "#fff",
         }}
         aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
       >
-        {expanded ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+        {expanded ? <ChevronLeft size={14} strokeWidth={2.5} /> : <ChevronRight size={14} strokeWidth={2.5} />}
       </button>
 
-      {/* Nav */}
-      <nav style={{ flex: 1, padding: "8px 0", display: "flex", flexDirection: "column", gap: 2, overflowY: "auto", overflowX: "hidden" }}>
-        {NAV_ITEMS.map((item) => {
-          const active = location.pathname === item.path;
-          return (
-            <button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              title={!expanded ? item.label : undefined}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                padding: expanded ? "11px 16px" : "11px 0",
-                justifyContent: expanded ? "flex-start" : "center",
-                border: "none",
-                borderRadius: 0,
-                background: active ? "#ffffff" : "transparent",
-                color: active ? "#0a0a0a" : "#555",
-                fontSize: 11,
-                fontWeight: active ? 500 : 400,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                textAlign: "left",
-                cursor: "pointer",
-                fontFamily: "'DM Mono', monospace",
-                transition: "all 0.2s ease",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-              }}
-            >
-              {expanded ? item.label : item.label.charAt(0)}
-            </button>
-          );
-        })}
-      </nav>
+      {/* Overlay when expanded on mobile */}
+      {expanded && (
+        <div
+          onClick={toggle}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.3)",
+            zIndex: 199,
+            transition: "opacity 0.25s",
+          }}
+        />
+      )}
 
-      {/* Bottom */}
+      {/* Sidebar panel */}
       <div
         style={{
-          marginTop: "auto",
-          padding: expanded ? "16px 12px" : "16px 0",
-          borderTop: "1px solid #1a1a1a",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          bottom: 0,
+          width: 220,
+          background: "#0a0a0a",
+          borderRight: "1px solid #1a1a1a",
+          zIndex: 200,
           display: "flex",
           flexDirection: "column",
-          gap: 6,
-          overflow: "hidden",
+          fontFamily: "'DM Mono', monospace",
+          transform: expanded ? "translateX(0)" : "translateX(-100%)",
+          transition: "transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        {onOpenSetup && expanded && (
+        {/* Logo */}
+        <div style={{ padding: "32px 28px 24px" }}>
+          <div style={{ fontSize: 16, fontWeight: 800, letterSpacing: "0.14em", color: "#ffffff", fontFamily: "'Syne', sans-serif", whiteSpace: "nowrap" }}>
+            SYNTERA
+          </div>
+          <div style={{ fontSize: 10, letterSpacing: "0.14em", color: "#555", marginTop: 4, textTransform: "uppercase", fontFamily: "'Syne', sans-serif", fontWeight: 400, whiteSpace: "nowrap" }}>
+            {userSubtitle || "Voice Intelligence"}
+          </div>
+        </div>
+
+        {/* Nav */}
+        <nav style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 2, overflowY: "auto" }}>
+          {NAV_ITEMS.map((item) => {
+            const active = location.pathname === item.path;
+            return (
+              <button
+                key={item.path}
+                onClick={() => { navigate(item.path); toggle(); }}
+                style={{
+                  display: "block",
+                  width: "100%",
+                  padding: "11px 16px",
+                  border: "none",
+                  borderRadius: 0,
+                  background: active ? "#ffffff" : "transparent",
+                  color: active ? "#0a0a0a" : "#555",
+                  fontSize: 11,
+                  fontWeight: active ? 500 : 400,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  textAlign: "left",
+                  cursor: "pointer",
+                  fontFamily: "'DM Mono', monospace",
+                  transition: "all 0.2s ease",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Bottom */}
+        <div style={{ marginTop: "auto", padding: "16px 12px", borderTop: "1px solid #1a1a1a", display: "flex", flexDirection: "column", gap: 6 }}>
+          {onOpenSetup && (
+            <button
+              onClick={() => { toggle(); onOpenSetup(); }}
+              style={{
+                display: "block", width: "100%", padding: "11px 16px",
+                border: "none", borderRadius: 0, background: "transparent",
+                color: "#555", fontSize: 11, letterSpacing: "0.14em",
+                textTransform: "uppercase", textAlign: "left", cursor: "pointer",
+                fontFamily: "'DM Mono', monospace", whiteSpace: "nowrap",
+              }}
+            >
+              Re-run Setup
+            </button>
+          )}
           <button
-            onClick={onOpenSetup}
+            onClick={() => signOut()}
             style={{
-              display: "block",
-              width: "100%",
-              padding: "11px 16px",
-              border: "none",
-              borderRadius: 0,
-              background: "transparent",
-              color: "#555",
-              fontSize: 11,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              textAlign: "left",
-              cursor: "pointer",
-              fontFamily: "'DM Mono', monospace",
-              whiteSpace: "nowrap",
+              display: "block", width: "100%", padding: "11px 16px",
+              border: "none", borderRadius: 0, background: "transparent",
+              color: "#444", fontSize: 11, letterSpacing: "0.14em",
+              textAlign: "left", cursor: "pointer",
+              fontFamily: "'DM Mono', monospace", whiteSpace: "nowrap",
             }}
           >
-            Re-run Setup
+            Sign Out
           </button>
-        )}
-        <button
-          onClick={() => signOut()}
-          title={!expanded ? "Sign Out" : undefined}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: expanded ? "flex-start" : "center",
-            width: "100%",
-            padding: expanded ? "11px 16px" : "11px 0",
-            border: "none",
-            borderRadius: 0,
-            background: "transparent",
-            color: "#444",
-            fontSize: 11,
-            letterSpacing: "0.14em",
-            textAlign: "left",
-            cursor: "pointer",
-            fontFamily: "'DM Mono', monospace",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-          }}
-        >
-          {expanded ? "Sign Out" : "⏻"}
-        </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
