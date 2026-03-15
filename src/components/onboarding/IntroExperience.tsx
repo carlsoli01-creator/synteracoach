@@ -83,12 +83,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
     if (!transcript || transcript.length < 3) {
       setAnalysisResult({
-        scores: { overall: 10, pace: 8, confidence: 10, clarity: 12, delivery: 10 },
+        scores: { overall: 5, pace: 3, confidence: 5, clarity: 4, delivery: 5 },
         analysis: {
-          overall: "We detected almost no speech. In any real conversation, silence signals disengagement or lack of preparation. This needs serious work.",
-          strength: "You attempted the exercise — but showing up alone doesn't count for much.",
-          weakness: "Without audible, clear words, there is literally nothing to coach. This is a 10/100.",
-          recommendation: "Speak clearly into the mic for at least 5 seconds. Even a single confident sentence would score dramatically higher than silence.",
+          overall: "Nothing. We got nothing. You either didn't speak or whispered into the void. In a real meeting, this would be career-damaging silence — the kind that makes people question whether you belong in the room.",
+          strength: "None detected. Showing up isn't a strength — it's the bare minimum, and you barely did that.",
+          weakness: "You produced no measurable speech. Zero words means zero scores. There is nothing to analyze because you gave us nothing to work with.",
+          recommendation: "Open your mouth. Speak words. Literally any sentence spoken with audible volume would score 10x higher than this. This is a 5 out of 100 — rock bottom.",
         },
         fillerWords: { count: 0, words: [] },
         powerWords: [],
