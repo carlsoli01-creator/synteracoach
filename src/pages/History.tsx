@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import AppDrawer from "@/components/layout/AppDrawer";
+import { toast } from "@/hooks/use-toast";
 
-function HistoryCard({ entry, index }: { entry: any; index: number }) {
+function HistoryCard({ entry, index, onDelete }: { entry: any; index: number; onDelete: (id: string) => void }) {
   const score = entry.overall_score ?? entry.overall;
   const pace = entry.pace_score ?? entry.pace;
   const conf = entry.confidence_score ?? entry.conf;
@@ -35,9 +36,23 @@ function HistoryCard({ entry, index }: { entry: any; index: number }) {
           ))}
         </div>
       </div>
-      <div style={{ fontSize: 9, color: "#888", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>
-        {date && <div>{date}</div>}
-        <div>{time}</div>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ fontSize: 9, color: "#888", textAlign: "right", fontFamily: "'DM Mono', monospace" }}>
+          {date && <div>{date}</div>}
+          <div>{time}</div>
+        </div>
+        <button
+          onClick={() => onDelete(entry.id)}
+          style={{
+            background: "none", border: "1px solid #e2e2e2", cursor: "pointer",
+            padding: "4px 8px", fontSize: 9, color: "#888", fontFamily: "'DM Mono', monospace",
+            letterSpacing: "0.1em",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "#c00"; e.currentTarget.style.color = "#c00"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e2e2"; e.currentTarget.style.color = "#888"; }}
+        >
+          ✕
+        </button>
       </div>
     </div>
   );
@@ -60,6 +75,19 @@ export default function History() {
     load();
   }, [user]);
 
+  const handleDelete = async (id: string) => {
+    const { error } = await (supabase as any)
+      .from("voice_sessions")
+      .delete()
+      .eq("id", id);
+    if (error) {
+      toast({ title: "Error", description: "Failed to delete session", variant: "destructive" });
+    } else {
+      setHistory(prev => prev.filter(s => s.id !== id));
+      toast({ title: "Deleted", description: "Session removed" });
+    }
+  };
+
   return (
     <div style={{ minHeight: "100vh", background: "#f8f8f8", fontFamily: "'DM Mono', monospace", paddingBottom: 80 }}>
       <AppDrawer />
@@ -79,7 +107,7 @@ export default function History() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {history.map((entry, i) => (
-                <HistoryCard key={i} entry={entry} index={history.length - 1 - i} />
+                <HistoryCard key={entry.id || i} entry={entry} index={history.length - 1 - i} onDelete={handleDelete} />
               ))}
             </div>
             {history.length > 1 && (
