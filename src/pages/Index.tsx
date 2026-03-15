@@ -578,7 +578,7 @@ export default function Negotium() {
 
             {/* Two-column layout */}
             {(
-              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 220px", gap: 40, padding: isMobile ? "24px 16px" : "40px 48px", maxWidth: 1200 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 360px", gap: 40, padding: isMobile ? "24px 16px" : "40px 48px" }}>
                 {/* Left column — recording */}
                 <div>
                   {/* Hero */}
