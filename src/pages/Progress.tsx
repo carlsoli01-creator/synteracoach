@@ -7,6 +7,7 @@ import ProgressDashboard from "@/components/voice/ProgressDashboard";
 
 export default function Progress() {
   const { user } = useAuth();
+  const { sidebarWidth } = useSidebarState();
   const [history, setHistory] = useState<any[]>([]);
 
   useEffect(() => {
