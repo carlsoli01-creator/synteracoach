@@ -662,8 +662,8 @@ export default function Negotium() {
                 </div>
 
                 {/* Right column — results / history */}
-                {!isMobile && <div>
-                  {(phase === "idle" || phase === "recording") && (
+                <div>
+                  {!isMobile && (phase === "idle" || phase === "recording") && (
                     <div>
                       <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 12, fontFamily: "'DM Mono', monospace" }}>Today's Practice</div>
                       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
