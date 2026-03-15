@@ -7,6 +7,7 @@ import StreakBadges from "@/components/voice/StreakBadges";
 
 export default function Badges() {
   const { user } = useAuth();
+  const { sidebarWidth } = useSidebarState();
   const [history, setHistory] = useState<any[]>([]);
 
   useEffect(() => {
