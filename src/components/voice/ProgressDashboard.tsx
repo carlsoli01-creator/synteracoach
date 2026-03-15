@@ -44,8 +44,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
 
   if (!sessions.length) {
     return (
-      <div style={{ textAlign: "center", padding: 60, color: c.muted }}>
-        <div style={{ fontSize: 40, marginBottom: 16 }}>📊</div>
+      <div style={{ padding: 60, color: c.muted }}>
         <div style={{ fontSize: 13, fontWeight: 800, fontFamily: "'Syne', sans-serif" }}>No sessions yet</div>
         <div style={{ fontSize: 11, marginTop: 4, fontFamily: "'DM Mono', monospace" }}>Complete your first recording to see progress charts</div>
       </div>
@@ -68,33 +67,32 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
   const metrics = [
     { key: "pace_score", color: "#888", label: "Pace" },
     { key: "confidence_score", color: "#555", label: "Confidence" },
-    { key: "clarity_score", color: "#333", label: "Clarity" },
-    { key: "overall_score", color: "#111", label: "Overall" },
+    { key: "clarity_score", color: "#444", label: "Clarity" },
+    { key: "overall_score", color: "#0a0a0a", label: "Overall" },
   ];
 
   const statCards = stats ? [
-    { label: "Sessions", value: stats.totalSessions, icon: "🎙" },
-    { label: "Best Score", value: stats.bestScore, icon: "🏆" },
-    { label: "Practice Time", value: `${stats.totalMinutes}m`, icon: "⏱" },
-    { label: "Improvement", value: `${stats.improvement >= 0 ? "+" : ""}${stats.improvement}`, icon: stats.improvement >= 0 ? "📈" : "📉" },
+    { label: "Sessions", value: stats.totalSessions },
+    { label: "Best Score", value: stats.bestScore },
+    { label: "Practice Time", value: `${stats.totalMinutes}m` },
+    { label: "Improvement", value: `${stats.improvement >= 0 ? "+" : ""}${stats.improvement}` },
   ] : [];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
-        {statCards.map(({ label, value, icon }) => (
+        {statCards.map(({ label, value }) => (
           <div key={label} style={{
             background: c.card, border: `1px solid ${c.border}`,
-            borderRadius: 0, padding: "20px 12px", textAlign: "center",
+            borderRadius: 0, padding: "20px 24px",
           }}>
-            <div style={{ fontSize: 20, marginBottom: 6 }}>{icon}</div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: c.text, fontFamily: "'DM Mono', monospace" }}>{value}</div>
+            <div style={{ fontSize: 32, fontWeight: 300, color: c.text, fontFamily: "'DM Mono', monospace" }}>{value}</div>
             <div style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase", marginTop: 4, fontFamily: "'DM Mono', monospace" }}>{label}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ background: c.card, border: `1px solid ${c.border}`, borderRadius: 0, padding: 24 }}>
+      <div style={{ background: c.card, border: `1px solid ${c.border}`, borderRadius: 0, padding: 28 }}>
         <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 12, fontFamily: "'DM Mono', monospace" }}>
           Score Trends
         </div>
@@ -121,13 +119,13 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
       </div>
 
       {stats && (
-        <div style={{ background: c.card, border: `1px solid ${c.border}`, borderRadius: 0, padding: 24 }}>
+        <div style={{ background: c.card, border: `1px solid ${c.border}`, borderRadius: 0, padding: 28 }}>
           <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'DM Mono', monospace" }}>
             Average Scores
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
-              { label: "Overall", value: stats.avgOverall, color: "#111" },
+              { label: "Overall", value: stats.avgOverall, color: "#0a0a0a" },
               { label: "Pace", value: stats.avgPace, color: "#555" },
               { label: "Confidence", value: stats.avgConfidence, color: "#555" },
               { label: "Clarity", value: stats.avgClarity, color: "#555" },
