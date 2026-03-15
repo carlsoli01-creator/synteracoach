@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
 import AppSidebar from "@/components/layout/AppSidebar";
+import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenarios";
+import { useNavigate } from "react-router-dom";
 import IntroExperience from "@/components/onboarding/IntroExperience";
 import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 
