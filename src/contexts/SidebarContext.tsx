@@ -9,13 +9,13 @@ interface SidebarContextType {
 const SidebarContext = createContext<SidebarContextType>({
   expanded: false,
   toggle: () => {},
-  sidebarWidth: 56,
+  sidebarWidth: 0,
 });
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [expanded, setExpanded] = useState(false);
   const toggle = useCallback(() => setExpanded((e) => !e), []);
-  const sidebarWidth = expanded ? 220 : 56;
+  const sidebarWidth = expanded ? 220 : 0;
 
   return (
     <SidebarContext.Provider value={{ expanded, toggle, sidebarWidth }}>
