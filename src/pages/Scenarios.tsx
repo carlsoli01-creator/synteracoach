@@ -9,6 +9,7 @@ import { useSidebarState } from "@/contexts/SidebarContext";
 export default function Scenarios() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { sidebarWidth } = useSidebarState();
   const [completedCategoriesToday, setCompletedCategoriesToday] = useState<string[]>([]);
 
   useEffect(() => {
