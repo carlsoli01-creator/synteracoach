@@ -211,6 +211,7 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: {onStart: () =
 
 export default function Negotium() {
   const { user, signOut } = useAuth();
+  const { sidebarWidth } = useSidebarState();
   const [phase, setPhase] = useState("idle");
   const [selectedDuration, setSelectedDuration] = useState(DEFAULT_DURATION);
   const [timeLeft, setTimeLeft] = useState(DEFAULT_DURATION);
