@@ -60,6 +60,7 @@ function HistoryRow({ entry, index, onDelete }: { entry: any; index: number; onD
 
 export default function History() {
   const { user } = useAuth();
+  const { sidebarWidth } = useSidebarState();
   const [history, setHistory] = useState<any[]>([]);
 
   useEffect(() => {
