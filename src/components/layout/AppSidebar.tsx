@@ -104,7 +104,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 2, overflowY: "auto" }}>
-          {NAV_ITEMS.map((item) => {
+          {navItems.map((item) => {
             const active = location.pathname === item.path;
             return (
               <button
