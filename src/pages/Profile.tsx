@@ -217,7 +217,7 @@ export default function Profile() {
   return (
     <div style={{ minHeight: "100vh", background: c.bg, fontFamily: "'Syne', sans-serif", color: c.text }}>
       <AppSidebar />
-      <div style={{ paddingLeft: 220 }}>
+      <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
       {/* Top bar */}
       <div style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",

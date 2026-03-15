@@ -31,7 +31,7 @@ export default function Progress() {
   return (
     <div style={{ minHeight: "100vh", background: "#f8f8f8", fontFamily: "'DM Mono', monospace" }}>
       <AppSidebar />
-      <div style={{ paddingLeft: 220 }}>
+      <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
         <div style={{ padding: "40px 48px 24px" }}>
           <div style={{ fontSize: 22, fontWeight: 700, color: "#0a0a0a", fontFamily: "'Syne', sans-serif" }}>Progress</div>
           <div style={{ fontSize: 11, color: "#888", marginTop: 6, fontFamily: "'DM Mono', monospace" }}>Track your improvement over time</div>
