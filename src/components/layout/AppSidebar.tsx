@@ -1,11 +1,22 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSidebarState } from "@/contexts/SidebarContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "Analysis", path: "/" },
   { label: "Practice", path: "/scenarios" },
+  { label: "Progress", path: "/progress" },
+  { label: "Badges", path: "/badges" },
+  { label: "History", path: "/history" },
+  { label: "Profile", path: "/profile" },
+];
+
+const NAV_ITEMS_MOBILE = [
+  { label: "Analysis", path: "/" },
+  { label: "Practice", path: "/scenarios" },
+  { label: "Today's Practice", path: "/scenarios", isTodaysPractice: true },
   { label: "Progress", path: "/progress" },
   { label: "Badges", path: "/badges" },
   { label: "History", path: "/history" },
