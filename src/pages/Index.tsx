@@ -226,7 +226,7 @@ export default function Negotium() {
     loadHistory();
   }, [user]);
 
-  const [tab] = useState("analysis");
+  const navigate = useNavigate();
   const [waveData, setWaveData] = useState(new Array(80).fill(0.5));
   const [micError, setMicError] = useState("");
   const [theme, setTheme] = useState(() => localStorage.getItem("syntera_theme") || "light");
