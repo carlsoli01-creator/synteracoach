@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 import { RetroGrid } from "@/components/ui/retro-grid";
+import { Footer } from "@/components/ui/footer";
 
 const emailSchema = z.string().trim()
   .email("Please enter a valid email address")
@@ -433,6 +434,11 @@ export default function Auth() {
             By continuing, you agree to Syntera's Terms of Service
           </div>
         </div>
+      </div>
+
+      {/* Footer */}
+      <div className="dark">
+        <Footer />
       </div>
     </div>
   );
