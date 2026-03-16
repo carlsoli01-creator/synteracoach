@@ -8,7 +8,16 @@ import { toast } from "sonner";
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 
-const emailSchema = z.string().trim().email("Please enter a valid email address").max(255);
+const emailSchema = z.string().trim()
+  .email("Please enter a valid email address")
+  .max(255)
+  .refine((email) => {
+    // Require a real TLD (at least 2 chars after the last dot)
+    const domainPart = email.split("@")[1];
+    if (!domainPart) return false;
+    const tld = domainPart.split(".").pop();
+    return !!tld && tld.length >= 2;
+  }, { message: "Please enter a valid email with a real domain (e.g. gmail.com)" });
 const passwordSchema = z.string().min(8, "Password must be at least 8 characters").max(72);
 const nameSchema = z.string().trim().min(1, "Name is required").max(100);
 
