@@ -78,7 +78,14 @@ export default function Auth() {
     const { error } = await signIn(loginEmail.trim(), loginPassword);
     setIsSubmitting(false);
     if (error) {
-      toast.error(error.message.includes("Invalid login credentials") ? "Invalid email or password." : error.message);
+      const msg = error.message.toLowerCase();
+      if (msg.includes("invalid login credentials")) {
+        // Supabase doesn't distinguish between no account and wrong password,
+        // but we can give a clear message
+        toast.error("Account not found or incorrect password. Please check your email and password.");
+      } else {
+        toast.error(error.message);
+      }
     } else {
       toast.success("Welcome back!");
       navigate("/");
