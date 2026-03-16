@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useAuth } from "@/contexts/AuthContext";
-import { Loader2, Eye, EyeOff, Mic } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
+import { RetroGrid } from "@/components/ui/retro-grid";
 
 const emailSchema = z.string().trim()
   .email("Please enter a valid email address")
   .max(255)
   .refine((email) => {
-    // Require a real TLD (at least 2 chars after the last dot)
     const domainPart = email.split("@")[1];
     if (!domainPart) return false;
     const tld = domainPart.split(".").pop();
@@ -80,8 +80,6 @@ export default function Auth() {
     if (error) {
       const msg = error.message.toLowerCase();
       if (msg.includes("invalid login credentials")) {
-        // Supabase doesn't distinguish between no account and wrong password,
-        // but we can give a clear message
         toast.error("Account not found or incorrect password. Please check your email and password.");
       } else {
         toast.error(error.message);
@@ -101,7 +99,6 @@ export default function Auth() {
     if (error) {
       toast.error(error.message.includes("User already registered") ? "An account with this email already exists." : error.message);
     } else {
-      // Clear onboarding flags so new account gets the full intro + quiz flow
       localStorage.removeItem("syntera_intro_done_v2");
       localStorage.removeItem("negotium_quiz_v2");
       localStorage.removeItem("syntera_premium");
@@ -165,446 +162,277 @@ export default function Auth() {
     fontFamily: "'DM Mono', monospace",
   });
 
-
   return (
-    <div style={{
-      minHeight: "100vh",
-      display: "flex",
-      fontFamily: "'DM Mono', monospace",
-    }}>
-      {/* Left panel — branding (desktop only) */}
-      {!isMobile && <div style={{
-        flex: 1,
-        background: "#080808",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 48,
-        position: "relative",
-        overflow: "hidden",
-      }}>
-        {/* Subtle grid overlay */}
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0)",
-          backgroundSize: "32px 32px",
-          pointerEvents: "none",
-        }} />
-
-        <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 560 }}>
-          {/* Logo mark */}
-          <div style={{
-            width: 64,
-            height: 64,
-            borderRadius: 0,
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "0 auto 28px",
-          }}>
-            <Mic size={28} style={{ color: "rgba(255,255,255,0.7)" }} />
-          </div>
-
-          <div style={{
-            fontSize: 36,
-            fontWeight: 400,
-            fontFamily: "'Syne', sans-serif",
-            color: "#ffffff",
-            letterSpacing: "0.08em",
-            marginBottom: 12,
-          }}>
+    <div style={{ background: "#080808", minHeight: "100vh", overflowY: "auto" }}>
+      {/* Hero Section with RetroGrid */}
+      <div className="relative flex items-center justify-center" style={{ height: "100vh" }}>
+        <RetroGrid angle={65} />
+        <div className="relative z-10 text-center">
+          <h1
+            className="font-heading"
+            style={{
+              fontSize: isMobile ? 48 : 80,
+              fontWeight: 800,
+              color: "#fff",
+              letterSpacing: "0.1em",
+              lineHeight: 1,
+            }}
+          >
             SYNTERA
-          </div>
-
-          <div style={{
-            fontSize: 13,
-            color: "rgba(255,255,255,0.3)",
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            marginBottom: 16,
-            fontWeight: 500,
-          }}>
+          </h1>
+          <p
+            style={{
+              fontSize: 13,
+              color: "rgba(255,255,255,0.35)",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              marginTop: 16,
+              fontFamily: "'DM Mono', monospace",
+            }}
+          >
             Speak with clarity
-          </div>
-
-          <div style={{
-            fontSize: 15,
-            color: "rgba(255,255,255,0.45)",
-            lineHeight: 1.7,
-            marginBottom: 40,
-          }}>
-            AI-powered voice coaching that tells you the truth about how you speak — and shows you how to improve.
-          </div>
-
-          {/* Feature cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, textAlign: "left", marginTop: 8 }}>
-            {[
-              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>, title: "Honest Scoring", desc: "No inflated grades, no overhyped excitement, just pure assessment and helpful feedback." },
-              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>, title: "Structured Feedback", desc: "Deep analysis of pace, clarity, and confidence so you understand what to work on." },
-              { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>, title: "Progress Tracking", desc: "Track your progress over time, share updates with others, and understand how to improve." },
-            ].map((f, i) => (
-              <div key={i} style={{
-                padding: "20px 16px",
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.06)",
-                borderRadius: 0,
-                display: "flex",
-                flexDirection: "column",
-                gap: 12,
-              }}>
-                <div>{f.icon}</div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,0.85)" }}>{f.title}</div>
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", lineHeight: 1.6 }}>{f.desc}</div>
-              </div>
-            ))}
+          </p>
+          {/* Scroll indicator */}
+          <div
+            className="animate-bounce"
+            style={{
+              marginTop: 48,
+              color: "rgba(255,255,255,0.25)",
+              fontSize: 12,
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              fontFamily: "'DM Mono', monospace",
+            }}
+          >
+            ↓
           </div>
         </div>
-      </div>}
+      </div>
 
-      {/* Right panel — form */}
-      <div style={{
-        width: isMobile ? "100%" : 460,
-        minWidth: isMobile ? undefined : 400,
-        flexShrink: 0,
-        background: "#080808",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: isMobile ? "flex-start" : "center",
-        padding: isMobile ? "60px 24px 32px" : "48px 44px",
-        borderLeft: isMobile ? "none" : "1px solid rgba(255,255,255,0.04)",
-        overflowY: "auto",
-      }}>
-        <div style={{ marginBottom: 36 }}>
-          <div style={{
-            fontSize: 22,
-            fontWeight: 800,
-            color: "#f0f0f0",
-            marginBottom: 6,
-            fontFamily: "'Syne', sans-serif",
-          }}>
-            {tab === "forgot" ? "Reset password" : tab === "login" ? "Welcome back" : "Get started"}
-          </div>
-          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)" }}>
-            {tab === "forgot"
-              ? "Enter your email and we'll send you a reset link"
-              : tab === "login"
-              ? "Sign in to continue your voice training"
-              : "Create your account and start improving today"
-            }
-          </div>
-        </div>
-
-        {/* Tabs */}
-        {tab !== "forgot" && <div style={{ display: "flex", marginBottom: 28, gap: 4, background: "rgba(255,255,255,0.03)", borderRadius: 0, padding: 4 }}>
-          {(["login", "signup"] as const).map(t => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              style={{
-                flex: 1,
-                padding: "10px 0",
-                background: tab === t ? "rgba(255,255,255,0.08)" : "transparent",
-                border: "none",
-                borderRadius: 0,
-                color: tab === t ? "#f0f0f0" : "rgba(255,255,255,0.3)",
-                fontSize: 11,
-                fontWeight: tab === t ? 500 : 400,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                cursor: "pointer",
-                transition: "all 0.2s",
-                fontFamily: "'DM Mono', monospace",
-              }}
-            >
-              {t === "login" ? "Sign In" : "Sign Up"}
-            </button>
-          ))}
-        </div>}
-
-        {/* Login Form */}
-        {tab === "login" && (
-          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-            <div>
-              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
-                Email
-              </label>
-              <input
-                type="email"
-                placeholder="you@example.com"
-                value={loginEmail}
-                onChange={e => setLoginEmail(e.target.value)}
-                disabled={isSubmitting}
-                style={inputStyle(!!loginErrors.email)}
-              />
-              {loginErrors.email && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{loginErrors.email}</p>}
+      {/* Login Section */}
+      <div
+        className="flex items-center justify-center"
+        style={{
+          minHeight: "100vh",
+          padding: isMobile ? "60px 24px 32px" : "80px 44px",
+        }}
+      >
+        <div style={{ width: "100%", maxWidth: 420, fontFamily: "'DM Mono', monospace" }}>
+          <div style={{ marginBottom: 36 }}>
+            <div style={{
+              fontSize: 22,
+              fontWeight: 800,
+              color: "#f0f0f0",
+              marginBottom: 6,
+              fontFamily: "'Syne', sans-serif",
+            }}>
+              {tab === "forgot" ? "Reset password" : tab === "login" ? "Welcome back" : "Get started"}
             </div>
+            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)" }}>
+              {tab === "forgot"
+                ? "Enter your email and we'll send you a reset link"
+                : tab === "login"
+                ? "Sign in to continue your voice training"
+                : "Create your account and start improving today"
+              }
+            </div>
+          </div>
 
-            <div>
-              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
-                Password
-              </label>
-              <div style={{ position: "relative" }}>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  value={loginPassword}
-                  onChange={e => setLoginPassword(e.target.value)}
-                  disabled={isSubmitting}
-                  style={{ ...inputStyle(!!loginErrors.password), paddingRight: 44 }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer" }}
-                >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-              {loginErrors.password && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{loginErrors.password}</p>}
+          {/* Tabs */}
+          {tab !== "forgot" && <div style={{ display: "flex", marginBottom: 28, gap: 4, background: "rgba(255,255,255,0.03)", padding: 4 }}>
+            {(["login", "signup"] as const).map(t => (
               <button
-                type="button"
-                onClick={() => setTab("forgot")}
-                style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", fontSize: 12, cursor: "pointer", marginTop: 4, padding: 0, fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif" }}
+                key={t}
+                onClick={() => setTab(t)}
+                style={{
+                  flex: 1,
+                  padding: "10px 0",
+                  background: tab === t ? "rgba(255,255,255,0.08)" : "transparent",
+                  border: "none",
+                  color: tab === t ? "#f0f0f0" : "rgba(255,255,255,0.3)",
+                  fontSize: 11,
+                  fontWeight: tab === t ? 500 : 400,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                  fontFamily: "'DM Mono', monospace",
+                }}
               >
-                Forgot password?
+                {t === "login" ? "Sign In" : "Sign Up"}
               </button>
-            </div>
+            ))}
+          </div>}
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              style={{
-                width: "100%",
-                padding: 15,
-                background: "#fff",
-                color: "#000",
-                border: "none",
-                borderRadius: 0,
-                fontSize: 12,
-                fontWeight: 500,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                cursor: isSubmitting ? "not-allowed" : "pointer",
-                opacity: isSubmitting ? 0.6 : 1,
-                transition: "opacity 0.2s",
-                fontFamily: "'DM Mono', monospace",
-                marginTop: 8,
-              }}
-            >
-              {isSubmitting ? "Signing in..." : "Sign In →"}
-            </button>
-          </form>
-        )}
-
-        {/* Signup Form */}
-        {tab === "signup" && (
-          <form onSubmit={handleSignup} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-            <div>
-              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
-                Full Name
-              </label>
-              <input
-                type="text"
-                placeholder="Jane Smith"
-                value={signupName}
-                onChange={e => setSignupName(e.target.value)}
-                disabled={isSubmitting}
-                style={inputStyle(!!signupErrors.name)}
-              />
-              {signupErrors.name && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{signupErrors.name}</p>}
-            </div>
-
-            <div>
-              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
-                Email
-              </label>
-              <input
-                type="email"
-                placeholder="you@example.com"
-                value={signupEmail}
-                onChange={e => setSignupEmail(e.target.value)}
-                disabled={isSubmitting}
-                style={inputStyle(!!signupErrors.email)}
-              />
-              {signupErrors.email && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{signupErrors.email}</p>}
-            </div>
-
-            <div>
-              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
-                Password
-              </label>
-              <div style={{ position: "relative" }}>
+          {/* Login Form */}
+          {tab === "login" && (
+            <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
+                  Email
+                </label>
                 <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  value={signupPassword}
-                  onChange={e => setSignupPassword(e.target.value)}
+                  type="email"
+                  placeholder="you@example.com"
+                  value={loginEmail}
+                  onChange={e => setLoginEmail(e.target.value)}
                   disabled={isSubmitting}
-                  style={{ ...inputStyle(!!signupErrors.password), paddingRight: 44 }}
+                  style={inputStyle(!!loginErrors.email)}
                 />
+                {loginErrors.email && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{loginErrors.email}</p>}
+              </div>
+
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
+                  Password
+                </label>
+                <div style={{ position: "relative" }}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={loginPassword}
+                    onChange={e => setLoginPassword(e.target.value)}
+                    disabled={isSubmitting}
+                    style={{ ...inputStyle(!!loginErrors.password), paddingRight: 44 }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer" }}
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                {loginErrors.password && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{loginErrors.password}</p>}
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer" }}
+                  onClick={() => setTab("forgot")}
+                  style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", fontSize: 12, cursor: "pointer", marginTop: 4, padding: 0, fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif" }}
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  Forgot password?
                 </button>
               </div>
-              {signupErrors.password && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{signupErrors.password}</p>}
-            </div>
 
-            <div>
-              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
-                Confirm Password
-              </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                value={signupConfirmPassword}
-                onChange={e => setSignupConfirmPassword(e.target.value)}
+              <button
+                type="submit"
                 disabled={isSubmitting}
-                style={inputStyle(!!signupErrors.confirmPassword)}
-              />
-              {signupErrors.confirmPassword && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{signupErrors.confirmPassword}</p>}
-            </div>
+                style={{
+                  width: "100%", padding: 15, background: "#fff", color: "#000",
+                  border: "none", fontSize: 12, fontWeight: 500, letterSpacing: "0.12em",
+                  textTransform: "uppercase", cursor: isSubmitting ? "not-allowed" : "pointer",
+                  opacity: isSubmitting ? 0.6 : 1, transition: "opacity 0.2s",
+                  fontFamily: "'DM Mono', monospace", marginTop: 8,
+                }}
+              >
+                {isSubmitting ? "Signing in..." : "Sign In →"}
+              </button>
+            </form>
+          )}
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              style={{
-                width: "100%",
-                padding: 15,
-                background: "#fff",
-                color: "#000",
-                border: "none",
-                borderRadius: 0,
-                fontSize: 12,
-                fontWeight: 500,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                cursor: isSubmitting ? "not-allowed" : "pointer",
-                opacity: isSubmitting ? 0.6 : 1,
-                transition: "opacity 0.2s",
-                fontFamily: "'DM Mono', monospace",
-                marginTop: 8,
-              }}
-            >
-              {isSubmitting ? "Creating account..." : "Create Account →"}
-            </button>
-          </form>
-        )}
-
-        {/* Forgot Password Form */}
-        {tab === "forgot" && (
-          <form onSubmit={handleForgotPassword} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-            <div>
-              <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>
-                Email
-              </label>
-              <input
-                type="email"
-                placeholder="you@example.com"
-                value={forgotEmail}
-                onChange={e => setForgotEmail(e.target.value)}
-                disabled={isSubmitting}
-                style={inputStyle(!!forgotError)}
-              />
-              {forgotError && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{forgotError}</p>}
-            </div>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              style={{
-                width: "100%", padding: 15,
-                background: "#fff",
-                color: "#000", border: "none", borderRadius: 0,
+          {/* Signup Form */}
+          {tab === "signup" && (
+            <form onSubmit={handleSignup} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>Full Name</label>
+                <input type="text" placeholder="Jane Smith" value={signupName} onChange={e => setSignupName(e.target.value)} disabled={isSubmitting} style={inputStyle(!!signupErrors.name)} />
+                {signupErrors.name && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{signupErrors.name}</p>}
+              </div>
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>Email</label>
+                <input type="email" placeholder="you@example.com" value={signupEmail} onChange={e => setSignupEmail(e.target.value)} disabled={isSubmitting} style={inputStyle(!!signupErrors.email)} />
+                {signupErrors.email && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{signupErrors.email}</p>}
+              </div>
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>Password</label>
+                <div style={{ position: "relative" }}>
+                  <input type={showPassword ? "text" : "password"} placeholder="••••••••" value={signupPassword} onChange={e => setSignupPassword(e.target.value)} disabled={isSubmitting} style={{ ...inputStyle(!!signupErrors.password), paddingRight: 44 }} />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer" }}>
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                {signupErrors.password && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{signupErrors.password}</p>}
+              </div>
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>Confirm Password</label>
+                <input type={showPassword ? "text" : "password"} placeholder="••••••••" value={signupConfirmPassword} onChange={e => setSignupConfirmPassword(e.target.value)} disabled={isSubmitting} style={inputStyle(!!signupErrors.confirmPassword)} />
+                {signupErrors.confirmPassword && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{signupErrors.confirmPassword}</p>}
+              </div>
+              <button type="submit" disabled={isSubmitting} style={{
+                width: "100%", padding: 15, background: "#fff", color: "#000", border: "none",
                 fontSize: 12, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase",
-                cursor: isSubmitting ? "not-allowed" : "pointer",
-                opacity: isSubmitting ? 0.6 : 1,
-                transition: "opacity 0.2s",
-                fontFamily: "'DM Mono', monospace", marginTop: 8,
+                cursor: isSubmitting ? "not-allowed" : "pointer", opacity: isSubmitting ? 0.6 : 1,
+                transition: "opacity 0.2s", fontFamily: "'DM Mono', monospace", marginTop: 8,
+              }}>
+                {isSubmitting ? "Creating account..." : "Create Account →"}
+              </button>
+            </form>
+          )}
+
+          {/* Forgot Password Form */}
+          {tab === "forgot" && (
+            <form onSubmit={handleForgotPassword} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+              <div>
+                <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>Email</label>
+                <input type="email" placeholder="you@example.com" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)} disabled={isSubmitting} style={inputStyle(!!forgotError)} />
+                {forgotError && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{forgotError}</p>}
+              </div>
+              <button type="submit" disabled={isSubmitting} style={{
+                width: "100%", padding: 15, background: "#fff", color: "#000", border: "none",
+                fontSize: 12, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase",
+                cursor: isSubmitting ? "not-allowed" : "pointer", opacity: isSubmitting ? 0.6 : 1,
+                transition: "opacity 0.2s", fontFamily: "'DM Mono', monospace", marginTop: 8,
+              }}>
+                {isSubmitting ? "Sending..." : "Send Reset Link →"}
+              </button>
+              <button type="button" onClick={() => setTab("login")} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", fontSize: 12, cursor: "pointer", textAlign: "center", fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif" }}>
+                ← Back to sign in
+              </button>
+            </form>
+          )}
+
+          {/* Divider */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "24px 0" }}>
+            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+            <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em", textTransform: "uppercase" }}>or</span>
+            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+          </div>
+
+          {/* Social Login Buttons */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <button
+              onClick={() => handleOAuth("google")}
+              disabled={isSubmitting}
+              style={{
+                width: "100%", padding: 14, background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)", color: "#f0f0f0",
+                fontSize: 12, fontWeight: 400, cursor: isSubmitting ? "not-allowed" : "pointer",
+                transition: "all 0.2s", fontFamily: "'DM Mono', monospace",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
               }}
             >
-              {isSubmitting ? "Sending..." : "Send Reset Link →"}
+              <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.01 24.01 0 0 0 0 21.56l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+              Continue with Google
             </button>
             <button
-              type="button"
-              onClick={() => setTab("login")}
-              style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", fontSize: 12, cursor: "pointer", textAlign: "center", fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif" }}
+              onClick={() => handleOAuth("apple")}
+              disabled={isSubmitting}
+              style={{
+                width: "100%", padding: 14, background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)", color: "#f0f0f0",
+                fontSize: 12, fontWeight: 400, cursor: isSubmitting ? "not-allowed" : "pointer",
+                transition: "all 0.2s", fontFamily: "'DM Mono', monospace",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+              }}
             >
-              ← Back to sign in
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+              Continue with Apple
             </button>
-          </form>
-        )}
+          </div>
 
-        {/* Divider */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "24px 0" }}>
-          <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em", textTransform: "uppercase" }}>or</span>
-          <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+          <div style={{ marginTop: 32, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
+            By continuing, you agree to Syntera's Terms of Service
+          </div>
         </div>
-
-        {/* Social Login Buttons */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <button
-            onClick={() => handleOAuth("google")}
-            disabled={isSubmitting}
-            style={{
-              width: "100%",
-              padding: 14,
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 0,
-              color: "#f0f0f0",
-              fontSize: 12,
-              fontWeight: 400,
-              cursor: isSubmitting ? "not-allowed" : "pointer",
-              transition: "all 0.2s",
-              fontFamily: "'DM Mono', monospace",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 10,
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.01 24.01 0 0 0 0 21.56l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-            Continue with Google
-          </button>
-
-          <button
-            onClick={() => handleOAuth("apple")}
-            disabled={isSubmitting}
-            style={{
-              width: "100%",
-              padding: 14,
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 0,
-              color: "#f0f0f0",
-              fontSize: 12,
-              fontWeight: 400,
-              cursor: isSubmitting ? "not-allowed" : "pointer",
-              transition: "all 0.2s",
-              fontFamily: "'DM Mono', monospace",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 10,
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-            Continue with Apple
-          </button>
-        </div>
-
-        {/* Footer */}
-        {!isMobile && <div style={{ marginTop: 32, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
-          By continuing, you agree to Syntera's Terms of Service
-        </div>}
       </div>
     </div>
   );
