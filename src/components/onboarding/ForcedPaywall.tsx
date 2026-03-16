@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const FREE_FEATURES = [
-  { text: "5 recordings per day", included: true },
+  { text: "1 recording per day", included: true },
   { text: "Basic overall score", included: true },
   { text: "Daily tips", included: true },
   { text: "Detailed AI feedback", included: false },
