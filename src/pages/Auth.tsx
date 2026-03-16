@@ -8,7 +8,16 @@ import { toast } from "sonner";
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 
-const emailSchema = z.string().trim().email("Please enter a valid email address").max(255);
+const emailSchema = z.string().trim()
+  .email("Please enter a valid email address")
+  .max(255)
+  .refine((email) => {
+    // Require a real TLD (at least 2 chars after the last dot)
+    const domainPart = email.split("@")[1];
+    if (!domainPart) return false;
+    const tld = domainPart.split(".").pop();
+    return !!tld && tld.length >= 2;
+  }, { message: "Please enter a valid email with a real domain (e.g. gmail.com)" });
 const passwordSchema = z.string().min(8, "Password must be at least 8 characters").max(72);
 const nameSchema = z.string().trim().min(1, "Name is required").max(100);
 
@@ -69,7 +78,14 @@ export default function Auth() {
     const { error } = await signIn(loginEmail.trim(), loginPassword);
     setIsSubmitting(false);
     if (error) {
-      toast.error(error.message.includes("Invalid login credentials") ? "Invalid email or password." : error.message);
+      const msg = error.message.toLowerCase();
+      if (msg.includes("invalid login credentials")) {
+        // Supabase doesn't distinguish between no account and wrong password,
+        // but we can give a clear message
+        toast.error("Account not found or incorrect password. Please check your email and password.");
+      } else {
+        toast.error(error.message);
+      }
     } else {
       toast.success("Welcome back!");
       navigate("/");
