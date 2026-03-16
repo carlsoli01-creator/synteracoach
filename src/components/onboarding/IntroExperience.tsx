@@ -19,6 +19,12 @@ const INTRO_STEPS = [
   },
 ];
 
+function getVariance(arr: number[]) {
+  if (!arr.length) return 0;
+  const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+  return arr.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / arr.length;
+}
+
 interface IntroExperienceProps {
   onComplete: () => void;
   onForcePaywall: () => void;
@@ -38,23 +44,25 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
   const [waveData, setWaveData] = useState(new Array(40).fill(0.5));
   const [timeLeft, setTimeLeft] = useState(10);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult>(null);
+  const [micError, setMicError] = useState("");
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animFrameRef = useRef<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const analysisTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const transcriptRef = useRef("");
   const recognitionRef = useRef<any>(null);
   const volumeRef = useRef<number[]>([]);
   const silenceRef = useRef(0);
   const framesRef = useRef(0);
   const recordingStartRef = useRef(0);
+  const isAnalyzingRef = useRef(false);
 
-  const cleanup = useCallback(() => {
+  const stopAll = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
-    try { recognitionRef.current?.stop(); } catch (_) {}
+    if (analysisTimeoutRef.current) { clearTimeout(analysisTimeoutRef.current); analysisTimeoutRef.current = null; }
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
       mediaRecorderRef.current.stop();
       mediaRecorderRef.current.stream?.getTracks().forEach((t) => t.stop());
@@ -62,7 +70,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
     try { audioCtxRef.current?.close(); } catch (_) {}
   }, []);
 
-  useEffect(() => () => cleanup(), [cleanup]);
+  useEffect(() => () => stopAll(), [stopAll]);
 
   const goNext = useCallback(() => {
     setTransitioning(true);
@@ -72,16 +80,20 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
     }, 400);
   }, []);
 
-  const runAnalysis = useCallback(async () => {
-    const transcript = transcriptRef.current.trim();
-    const durationSeconds = Math.round((Date.now() - recordingStartRef.current) / 1000);
+  const analyzeVoice = useCallback(async () => {
+    if (isAnalyzingRef.current) return;
+    isAnalyzingRef.current = true;
     const vols = volumeRef.current;
     const avgVol = vols.reduce((a, b) => a + b, 0) / (vols.length || 1);
     const silRatio = silenceRef.current / (framesRef.current || 1);
-    const mean = vols.length ? vols.reduce((a, b) => a + b, 0) / vols.length : 0;
-    const volVar = vols.length ? vols.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / vols.length : 0;
+    const volVar = getVariance(vols);
+    const durationSeconds = Math.round((Date.now() - recordingStartRef.current) / 1000);
+    const transcript = transcriptRef.current.trim();
 
-    if (!transcript || transcript.length < 3) {
+    try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
+    try { recognitionRef.current?.stop(); } catch (_) {}
+
+    if (!transcript || transcript.length < 5) {
       setAnalysisResult({
         scores: { overall: 5, pace: 3, confidence: 5, clarity: 4, delivery: 5 },
         analysis: {
@@ -93,6 +105,8 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
         fillerWords: { count: 0, words: [] },
         powerWords: [],
       });
+      setTestPhase("done");
+      isAnalyzingRef.current = false;
       return;
     }
 
@@ -125,6 +139,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       } else {
         setAnalysisResult(data);
       }
+      setTestPhase("done");
     } catch {
       setAnalysisResult({
         scores: { overall: 20, pace: 18, confidence: 22, clarity: 20, delivery: 18 },
@@ -135,27 +150,26 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
           recommendation: "Try again in the main dashboard. Next time, speak like someone who expects to be taken seriously.",
         },
       });
+      setTestPhase("done");
+    } finally {
+      if (analysisTimeoutRef.current) { clearTimeout(analysisTimeoutRef.current); analysisTimeoutRef.current = null; }
+      isAnalyzingRef.current = false;
     }
   }, []);
 
-  const finishRecording = useCallback(() => {
-    cleanup();
-    setTransitioning(true);
-    setTimeout(() => {
-      setWaveData(new Array(40).fill(0.5));
-      setTransitioning(false);
-      void runAnalysis();
-    }, 400);
-  }, [cleanup, runAnalysis]);
+  const scheduleAnalyze = useCallback(() => {
+    if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
+    analysisTimeoutRef.current = setTimeout(() => { void analyzeVoice(); }, 1500);
+  }, [analyzeVoice]);
 
   const startTest = useCallback(async () => {
-    setTransitioning(true);
-    setTimeout(() => setTransitioning(false), 400);
+    setMicError("");
+    transcriptRef.current = "";
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const audioCtx = new AudioContext();
       const analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 256;
+      analyser.fftSize = 1024;
       audioCtx.createMediaStreamSource(stream).connect(analyser);
       audioCtxRef.current = audioCtx;
       analyserRef.current = analyser;
@@ -163,7 +177,6 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       silenceRef.current = 0;
       framesRef.current = 0;
       recordingStartRef.current = Date.now();
-      transcriptRef.current = "";
 
       // Start speech recognition
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -174,17 +187,17 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
         recognition.lang = "en-US";
         recognition.maxAlternatives = 3;
         let finalTranscript = "";
-        let isActive = true;
+        let isRecognitionActive = true;
 
         recognition.onresult = (event: any) => {
           let interim = "";
           for (let i = event.resultIndex; i < event.results.length; i++) {
             if (event.results[i].isFinal) {
-              let best = event.results[i][0];
+              let bestAlt = event.results[i][0];
               for (let j = 1; j < event.results[i].length; j++) {
-                if (event.results[i][j].confidence > best.confidence) best = event.results[i][j];
+                if (event.results[i][j].confidence > bestAlt.confidence) bestAlt = event.results[i][j];
               }
-              finalTranscript += best.transcript + " ";
+              finalTranscript += bestAlt.transcript + " ";
             } else {
               interim += event.results[i][0].transcript;
             }
@@ -192,16 +205,18 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
           transcriptRef.current = finalTranscript + interim;
         };
         recognition.onerror = (e: any) => {
-          if (isActive && ["network", "aborted", "no-speech"].includes(e.error)) {
-            setTimeout(() => { if (isActive) try { recognition.start(); } catch (_) {} }, 300);
+          if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) {
+            try { setTimeout(() => { if (isRecognitionActive) recognition.start(); }, 300); } catch (_) {}
           }
         };
         recognition.onend = () => {
-          if (isActive) setTimeout(() => { if (isActive) try { recognition.start(); } catch (_) {} }, 200);
+          if (isRecognitionActive) {
+            try { setTimeout(() => { if (isRecognitionActive) recognition.start(); }, 200); } catch (_) {}
+          }
         };
         recognition.start();
         recognitionRef.current = recognition;
-        (recognitionRef.current as any)._stopAutoRestart = () => { isActive = false; };
+        (recognitionRef.current as any)._stopAutoRestart = () => { isRecognitionActive = false; };
       }
 
       const mr = new MediaRecorder(stream);
@@ -228,22 +243,30 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       timerRef.current = setInterval(() => {
         t--;
         setTimeLeft(t);
-        if (t <= 0) finishRecording();
+        if (t <= 0) {
+          if (timerRef.current) clearInterval(timerRef.current);
+          if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+          mr.stop();
+          try { stream.getTracks().forEach((tr) => tr.stop()); } catch (_) {}
+          try { audioCtx.close(); } catch (_) {}
+          try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
+          try { recognitionRef.current?.stop(); } catch (_) {}
+          setWaveData(new Array(40).fill(0.5));
+          scheduleAnalyze();
+        }
       }, 1000);
-    } catch (_) {
-      // Mic denied — run analysis with empty transcript
-      void runAnalysis();
+    } catch (e: any) {
+      setMicError(e?.message || "Microphone access denied.");
     }
-  }, [finishRecording, runAnalysis]);
+  }, [scheduleAnalyze]);
 
-  const stopEarly = useCallback(() => finishRecording(), [finishRecording]);
-
-  // When analysis is done, set phase to done
-  useEffect(() => {
-    if (analysisResult && testPhase === "analyzing") {
-      setTestPhase("done");
-    }
-  }, [analysisResult, testPhase]);
+  const stopEarly = useCallback(() => {
+    if (testPhase !== "recording") return;
+    stopAll();
+    setWaveData(new Array(40).fill(0.5));
+    setTestPhase("analyzing");
+    scheduleAnalyze();
+  }, [testPhase, stopAll, scheduleAnalyze]);
 
   // When done, trigger paywall after a brief moment
   useEffect(() => {
@@ -301,9 +324,6 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
     }}>
       <div style={{
         width: "min(520px, 92vw)", padding: "60px 40px", textAlign: "center",
-        opacity: transitioning ? 0 : 1,
-        transform: transitioning ? "translateY(16px)" : "translateY(0)",
-        transition: "opacity 0.4s ease, transform 0.4s ease",
         maxHeight: "90vh", overflowY: "auto",
       }}>
         {testPhase === "idle" && (
@@ -317,6 +337,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
               background: "#fff", color: "#000", border: "none", borderRadius: 10, cursor: "pointer",
               boxShadow: "0 0 40px rgba(255,255,255,0.15)", transition: "all 0.2s",
             }}><Mic size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: 6 }} /> Start Recording</button>
+            {micError && <div style={{ marginTop: 16, fontSize: 12, color: "#c04a2a" }}>{micError}</div>}
           </>
         )}
 
