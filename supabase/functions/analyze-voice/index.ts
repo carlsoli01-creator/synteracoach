@@ -100,41 +100,48 @@ function computeSilenceAdjustment(silenceRatio: number, wpm: number): { confiden
 }
 
 function computeClarityScore(transcript: string, words: string[], sentences: string[]): number {
-  if (words.length < 3) return 10;
+  if (words.length < 3) return 5;
 
-  // 1. Sentence length variance (30%)
+  // 1. Sentence length variance (30%) — harsher brackets
   const sentenceWordCounts = sentences.map(s => s.split(/\s+/).filter(Boolean).length);
   const avgSentLen = sentenceWordCounts.reduce((a, b) => a + b, 0) / (sentenceWordCounts.length || 1);
-  let sentLenScore = 100;
-  if (avgSentLen < 5) sentLenScore = 40;
-  else if (avgSentLen > 25) sentLenScore = 30;
-  else if (avgSentLen < 8) sentLenScore = 70;
-  else if (avgSentLen > 18) sentLenScore = 65;
-  // Variance penalty
+  let sentLenScore = 85; // cap baseline lower
+  if (avgSentLen < 5) sentLenScore = 20;
+  else if (avgSentLen > 25) sentLenScore = 15;
+  else if (avgSentLen < 8) sentLenScore = 45;
+  else if (avgSentLen > 18) sentLenScore = 40;
+  else if (avgSentLen >= 12 && avgSentLen <= 16) sentLenScore = 85; // tight ideal window
+  // Variance penalty — steeper
   if (sentenceWordCounts.length > 1) {
     const variance = sentenceWordCounts.reduce((a, b) => a + Math.pow(b - avgSentLen, 2), 0) / sentenceWordCounts.length;
     const stdDev = Math.sqrt(variance);
-    if (stdDev > 10) sentLenScore = Math.max(20, sentLenScore - 25);
-    else if (stdDev > 7) sentLenScore = Math.max(30, sentLenScore - 15);
+    if (stdDev > 8) sentLenScore = Math.max(10, sentLenScore - 35);
+    else if (stdDev > 5) sentLenScore = Math.max(15, sentLenScore - 25);
+    else if (stdDev > 3) sentLenScore = Math.max(25, sentLenScore - 12);
   }
 
-  // 2. Hedging language rate (40%)
+  // 2. Hedging language rate (40%) — much harsher penalty per hedge
   const lowerTranscript = transcript.toLowerCase();
   let hedgeCount = 0;
   HEDGING_PHRASES.forEach(h => { hedgeCount += countSubstring(lowerTranscript, h.phrase); });
   const sentenceCount = Math.max(sentences.length, 1);
   const hedgesPerFiveSentences = (hedgeCount / sentenceCount) * 5;
-  const hedgingScore = clamp(Math.round(100 - hedgesPerFiveSentences * 12), 0, 100);
+  const hedgingScore = clamp(Math.round(100 - hedgesPerFiveSentences * 20), 0, 100);
 
-  // 3. Vocabulary repetition (30%)
+  // 3. Vocabulary repetition (30%) — tighter thresholds
   const uniqueWords = new Set(words);
   const uniqueRatio = uniqueWords.size / words.length;
   let vocabScore: number;
-  if (uniqueRatio >= 0.72) vocabScore = 100;
-  else if (uniqueRatio <= 0.45) vocabScore = 40;
-  else vocabScore = Math.round(40 + ((uniqueRatio - 0.45) / (0.72 - 0.45)) * 60);
+  if (uniqueRatio >= 0.80) vocabScore = 100;
+  else if (uniqueRatio >= 0.72) vocabScore = 75;
+  else if (uniqueRatio <= 0.50) vocabScore = 15;
+  else if (uniqueRatio <= 0.60) vocabScore = 35;
+  else vocabScore = Math.round(35 + ((uniqueRatio - 0.60) / (0.72 - 0.60)) * 40);
 
-  return clamp(Math.round(sentLenScore * 0.30 + hedgingScore * 0.40 + vocabScore * 0.30), 0, 100);
+  // Fewer sentences = lower ceiling (short recordings shouldn't get high clarity)
+  const sentencePenalty = sentences.length < 3 ? -15 : sentences.length < 5 ? -8 : 0;
+
+  return clamp(Math.round(sentLenScore * 0.30 + hedgingScore * 0.40 + vocabScore * 0.30) + sentencePenalty, 0, 100);
 }
 
 function computeConfidenceScore(
