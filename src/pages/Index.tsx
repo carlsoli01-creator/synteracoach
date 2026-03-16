@@ -9,6 +9,7 @@ import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenari
 import { useNavigate } from "react-router-dom";
 import IntroExperience from "@/components/onboarding/IntroExperience";
 import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
+import { Footer } from "@/components/ui/footer";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
@@ -881,6 +882,8 @@ export default function Negotium() {
       )}
 
       {showPricing && <PricingModal onClose={() => setShowPricing(false)} onSubscribe={() => { localStorage.setItem("syntera_premium", "true"); setIsPremium(true); setShowPricing(false); }} />}
+
+      <Footer />
 
       <style>{`
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
