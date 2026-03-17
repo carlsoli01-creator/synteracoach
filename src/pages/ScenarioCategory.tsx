@@ -53,8 +53,7 @@ export default function ScenarioCategory() {
   const isCategoryDone = completedCategoriesToday.includes(category.category);
 
   const handleStart = () => {
-    localStorage.setItem("syntera_active_scenario_category", category.category);
-    navigate("/");
+    navigate(`/scenarios/${slug}/record`);
   };
 
   return (

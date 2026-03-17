@@ -40,6 +40,8 @@ const App = () => (
               <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
               <Route path="/scenarios" element={<ProtectedRoute><Scenarios /></ProtectedRoute>} />
               <Route path="/scenarios/:slug" element={<ProtectedRoute><ScenarioCategory /></ProtectedRoute>} />
+              <Route path="/scenarios/:slug/record" element={<ProtectedRoute><ScenarioRecording /></ProtectedRoute>} />
+              <Route path="/custom-practice" element={<ProtectedRoute><CustomPractice /></ProtectedRoute>} />
               <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
               <Route path="/badges" element={<ProtectedRoute><Badges /></ProtectedRoute>} />
               <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
