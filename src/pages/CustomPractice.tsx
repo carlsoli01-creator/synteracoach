@@ -28,8 +28,8 @@ export default function CustomPractice() {
     const customScenario: Scenario = {
       title: "Custom Practice",
       prompt: notes || `Practice focusing on ${selectedGoal} with sub-goals: ${selectedSubGoals.join(", ")}.`,
-      duration: "45s",
-      durationSeconds: 45,
+      duration: `${duration}s`,
+      durationSeconds: duration,
       difficulty: "Medium",
       goal: selectedGoal,
       subGoals: selectedSubGoals,
