@@ -592,6 +592,25 @@ export default function Negotium() {
                     </div>
                   </div>
 
+                  {/* Wide Image Showcase */}
+                  <div style={{ marginBottom: 40, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} style={{
+                        aspectRatio: "16/9",
+                        background: "#f0f0f0",
+                        border: "1px solid #e2e2e2",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                      }}>
+                        <span style={{ fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", color: "#bbb", fontFamily: "'DM Mono', monospace" }}>
+                          Insert Image
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
                   {/* Waveform */}
                   <div style={{ marginBottom: 32 }}>
                     <div style={{ height: 64, background: "#f0f0f0", border: "1px solid #e2e2e2", borderRadius: 0, display: "flex", alignItems: "center", padding: "0 8px", gap: 2 }}>
