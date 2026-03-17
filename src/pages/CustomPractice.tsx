@@ -12,6 +12,7 @@ export default function CustomPractice() {
   const [selectedGoal, setSelectedGoal] = useState<GoalOption | null>(null);
   const [selectedSubGoals, setSelectedSubGoals] = useState<SubgoalOption[]>([]);
   const [notes, setNotes] = useState("");
+  const [duration, setDuration] = useState(45);
 
   const toggleSubGoal = (sg: SubgoalOption) => {
     if (selectedSubGoals.includes(sg)) {
