@@ -706,6 +706,20 @@ export default function Negotium() {
                           );
                         })}
                       </div>
+                      {/* Custom Practice Card */}
+                      <button
+                        onClick={() => navigate("/custom-practice")}
+                        style={{
+                          marginTop: 12, padding: "14px 20px", background: "#fff", border: "1px solid #e2e2e2",
+                          cursor: "pointer", fontFamily: "'DM Mono', monospace", textAlign: "left",
+                          transition: "all 0.2s", width: "100%",
+                        }}
+                        onMouseEnter={(e) => { (e.currentTarget).style.borderColor = "#0a0a0a"; }}
+                        onMouseLeave={(e) => { (e.currentTarget).style.borderColor = "#e2e2e2"; }}
+                      >
+                        <div style={{ fontSize: 11, fontWeight: 600, color: "#0a0a0a", marginBottom: 2 }}>+ Add Custom Practice</div>
+                        <div style={{ fontSize: 9, color: "#888", letterSpacing: "0.1em" }}>Choose your own goals</div>
+                      </button>
                     </div>
                   )}
 
