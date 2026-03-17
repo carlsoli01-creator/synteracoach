@@ -125,6 +125,20 @@ export default function CustomPractice() {
             </div>
           </div>
 
+          {/* Duration */}
+          <div style={{ marginBottom: 28 }}>
+            <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", marginBottom: 10, fontFamily: "'DM Mono', monospace" }}>
+              Duration — {duration}s
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 10, color: "#888", fontFamily: "'DM Mono', monospace" }}>5s</span>
+              <input type="range" min={5} max={45} step={1} value={duration}
+                onChange={(e) => setDuration(Number(e.target.value))}
+                style={{ flex: 1, cursor: "pointer" }} />
+              <span style={{ fontSize: 10, color: "#888", fontFamily: "'DM Mono', monospace" }}>45s</span>
+            </div>
+          </div>
+
           {/* Notes */}
           <div style={{ marginBottom: 32 }}>
             <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
