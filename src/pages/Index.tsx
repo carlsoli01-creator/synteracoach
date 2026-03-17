@@ -590,22 +590,6 @@ export default function Negotium() {
                     <div style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: "#0a0a0a", lineHeight: 0.9, fontWeight: 400, letterSpacing: "-0.04em", opacity: 0.45 }}>
                      {heroFocus}
                     </div>
-                    {/* Custom Practice Card */}
-                    <div style={{ marginTop: 24 }}>
-                      <button
-                        onClick={() => navigate("/custom-practice")}
-                        style={{
-                          padding: "14px 20px", background: "#fff", border: "1px solid #e2e2e2",
-                          cursor: "pointer", fontFamily: "'DM Mono', monospace", textAlign: "left",
-                          transition: "all 0.2s", width: "auto", display: "inline-block",
-                        }}
-                        onMouseEnter={(e) => { (e.target as HTMLElement).style.borderColor = "#0a0a0a"; }}
-                        onMouseLeave={(e) => { (e.target as HTMLElement).style.borderColor = "#e2e2e2"; }}
-                      >
-                        <div style={{ fontSize: 11, fontWeight: 600, color: "#0a0a0a", marginBottom: 2 }}>+ Add Custom Practice</div>
-                        <div style={{ fontSize: 9, color: "#888", letterSpacing: "0.1em" }}>Choose your own goals</div>
-                      </button>
-                    </div>
                   </div>
 
                   {/* Waveform */}
