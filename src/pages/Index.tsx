@@ -879,6 +879,42 @@ export default function Negotium() {
                 </div>
               </div>
             )}
+
+            {/* Quote + Custom Practice row — full width below grid */}
+            {phase === "idle" && (
+              <div style={{ display: "flex", gap: 16, padding: isMobile ? "0 16px 40px" : "0 48px 40px", alignItems: "stretch" }}>
+                <div style={{
+                  flex: "0 0 40%", padding: "40px 28px", border: "1px solid #e2e2e2",
+                  textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14,
+                }}>
+                  <div style={{
+                    fontFamily: "'Syne', sans-serif", fontSize: "clamp(0.85rem, 1.5vw, 1.1rem)", color: "#0a0a0a",
+                    fontWeight: 400, letterSpacing: "0.12em", lineHeight: 1.8, textTransform: "uppercase",
+                  }}>
+                    Great speakers aren't born. They're trained.
+                  </div>
+                  <div style={{
+                    fontFamily: "'DM Mono', monospace", fontSize: 10, color: "#888",
+                    letterSpacing: "0.2em", textTransform: "uppercase",
+                  }}>
+                    — Unknown
+                  </div>
+                </div>
+                <button
+                  onClick={() => navigate("/custom-practice")}
+                  style={{
+                    flex: 1, padding: "24px 28px", background: "#fff", border: "1px solid #e2e2e2",
+                    cursor: "pointer", fontFamily: "'DM Mono', monospace", textAlign: "left",
+                    transition: "all 0.2s", display: "flex", flexDirection: "column", justifyContent: "center",
+                  }}
+                  onMouseEnter={(e) => { (e.currentTarget).style.borderColor = "#0a0a0a"; }}
+                  onMouseLeave={(e) => { (e.currentTarget).style.borderColor = "#e2e2e2"; }}
+                >
+                  <div style={{ fontSize: 14, fontWeight: 600, color: "#0a0a0a", marginBottom: 4 }}>+ Add Custom Practice</div>
+                  <div style={{ fontSize: 10, color: "#888", letterSpacing: "0.1em" }}>Choose your own scenario and goals</div>
+                </button>
+              </div>
+            )}
           </div>
         </>
       )}
