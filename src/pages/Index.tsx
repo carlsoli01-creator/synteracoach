@@ -662,41 +662,6 @@ export default function Negotium() {
                   {micError && <div style={{ textAlign: "center", fontSize: 11, color: "#0a0a0a", marginBottom: 16, lineHeight: 1.6 }}>{micError}</div>}
                   {phase === "analyzing" && <div style={{ textAlign: "center", fontSize: 11, color: "#888", marginBottom: 24, fontFamily: "'DM Mono', monospace" }}>Analyzing your speech patterns...</div>}
 
-                  {/* Quote + Custom Practice row */}
-                  {phase === "idle" && (
-                    <div style={{ display: "flex", gap: 16, marginTop: 40, alignItems: "stretch" }}>
-                      <div style={{
-                        flex: 1, padding: "40px 28px", border: "1px solid #e2e2e2",
-                        textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14,
-                      }}>
-                        <div style={{
-                          fontFamily: "'Syne', sans-serif", fontSize: "clamp(0.85rem, 1.5vw, 1.1rem)", color: "#0a0a0a",
-                          fontWeight: 400, letterSpacing: "0.12em", lineHeight: 1.8, textTransform: "uppercase",
-                        }}>
-                          Great speakers aren't born. They're trained.
-                        </div>
-                        <div style={{
-                          fontFamily: "'DM Mono', monospace", fontSize: 10, color: "#888",
-                          letterSpacing: "0.2em", textTransform: "uppercase",
-                        }}>
-                          — Unknown
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => navigate("/custom-practice")}
-                        style={{
-                          flex: 1, padding: "24px 28px", background: "#fff", border: "1px solid #e2e2e2",
-                          cursor: "pointer", fontFamily: "'DM Mono', monospace", textAlign: "left",
-                          transition: "all 0.2s", display: "flex", flexDirection: "column", justifyContent: "center",
-                        }}
-                        onMouseEnter={(e) => { (e.currentTarget).style.borderColor = "#0a0a0a"; }}
-                        onMouseLeave={(e) => { (e.currentTarget).style.borderColor = "#e2e2e2"; }}
-                      >
-                        <div style={{ fontSize: 14, fontWeight: 600, color: "#0a0a0a", marginBottom: 4 }}>+ Add Custom Practice</div>
-                        <div style={{ fontSize: 10, color: "#888", letterSpacing: "0.1em" }}>Choose your own scenario and goals</div>
-                      </button>
-                    </div>
-                  )}
                 </div>
 
                 {/* Right column — results / history */}
