@@ -115,6 +115,21 @@ export default function ScenarioCategory() {
               "{todayItem.prompt}"
             </div>
 
+            {/* Goals */}
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>Goals</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
+                <span style={{ padding: "6px 12px", background: "#0a0a0a", color: "#fff", fontSize: 10, fontFamily: "'DM Mono', monospace", fontWeight: 600 }}>
+                  {todayItem.goal}
+                </span>
+                {todayItem.subGoals.map((sg) => (
+                  <span key={sg} style={{ padding: "5px 10px", border: "1px solid #e2e2e2", fontSize: 10, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>
+                    {sg}
+                  </span>
+                ))}
+              </div>
+            </div>
+
             {isCategoryDone ? (
               <div style={{
                 textAlign: "center", padding: 20, background: "#f8f8f8",
