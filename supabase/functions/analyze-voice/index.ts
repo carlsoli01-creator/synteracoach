@@ -536,8 +536,82 @@ Transcript (${scores.wordCount} words, ${scores.wpm} WPM over ${audioMetrics.dur
     // Persuasion score is the ONLY AI-generated score — clamp it
     const persuasionScore = clamp(Number(parsed.persuasionScore) || 30, 0, 100);
 
+    // ─── SCENARIO MODE: Goal-focused analysis ─────────────────────────
+    let goalAnalysis: any = null;
+    if (scenarioMode && scenarioGoal) {
+      try {
+        const goalPrompt = `You are a speech coach evaluating a practice scenario recording.
+
+Scenario: "${scenarioTitle}" (Category: ${scenarioCategory})
+Primary Goal: ${scenarioGoal}
+Sub-Goals: ${scenarioSubGoals.join(", ")}
+${customNotes ? `User Notes: ${customNotes}` : ""}
+
+Pre-computed metrics:
+- WPM: ${scores.wpm}, Pace: ${scores.paceScore}/100
+- Clarity: ${scores.clarityScore}/100, Confidence: ${scores.confidenceScore}/100
+- Overall: ${scores.overallScore}/100
+- Filler count: ${scores.fillerCount}, Hedging: ${scores.hedgeCount}
+
+Evaluate HOW WELL the speaker achieved the primary goal and each sub-goal. Be brutally honest.
+Score each 0-100. Focus analysis on goal achievement, not general speech quality.
+
+Return ONLY raw JSON:
+{
+  "goalScore": <0-100>,
+  "goalFeedback": "<2-3 sentences on primary goal achievement>",
+  "subGoalScores": [
+    {"name": "${scenarioSubGoals[0] || ''}", "score": <0-100>, "feedback": "<1-2 sentences>"}${scenarioSubGoals[1] ? `,\n    {"name": "${scenarioSubGoals[1]}", "score": <0-100>, "feedback": "<1-2 sentences>"}` : ""}${scenarioSubGoals[2] ? `,\n    {"name": "${scenarioSubGoals[2]}", "score": <0-100>, "feedback": "<1-2 sentences>"}` : ""}
+  ],
+  "overallGoalSummary": "<2 sentences summarizing goal performance>"
+}`;
+
+        const goalResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: "google/gemini-2.5-flash",
+            messages: [
+              { role: "system", content: goalPrompt },
+              { role: "user", content: `Transcript:\n"${transcript}"` },
+            ],
+          }),
+        });
+
+        if (goalResponse.ok) {
+          const goalResult = await goalResponse.json();
+          const goalContent = goalResult.choices?.[0]?.message?.content || "";
+          let goalJson = goalContent;
+          const goalMatch = goalContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+          if (goalMatch) goalJson = goalMatch[1];
+          goalJson = goalJson.trim();
+          try {
+            goalAnalysis = JSON.parse(goalJson);
+          } catch {
+            const fb = goalJson.indexOf("{");
+            const lb = goalJson.lastIndexOf("}");
+            if (fb !== -1 && lb !== -1) {
+              goalAnalysis = JSON.parse(goalJson.substring(fb, lb + 1));
+            }
+          }
+          // Clamp scores
+          if (goalAnalysis) {
+            goalAnalysis.goalScore = clamp(Number(goalAnalysis.goalScore) || 50, 0, 100);
+            if (goalAnalysis.subGoalScores) {
+              goalAnalysis.subGoalScores = goalAnalysis.subGoalScores.map((sg: any) => ({
+                ...sg,
+                score: clamp(Number(sg.score) || 50, 0, 100),
+              }));
+            }
+          }
+        }
+      } catch (goalErr) {
+        console.warn("Goal analysis failed:", goalErr);
+      }
+    }
+
     // Build final response with deterministic scores + AI qualitative text
-    const result = {
+    const result: any = {
       scores: {
         pace: scores.paceScore,
         confidence: scores.confidenceScore,
@@ -572,6 +646,10 @@ Transcript (${scores.wordCount} words, ${scores.wpm} WPM over ${audioMetrics.dur
       persuasionScore,
       persuasionReasoning: parsed.persuasionReasoning || "",
     };
+
+    if (goalAnalysis) {
+      result.goalAnalysis = goalAnalysis;
+    }
 
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
