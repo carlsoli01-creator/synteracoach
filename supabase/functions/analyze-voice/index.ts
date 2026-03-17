@@ -336,6 +336,12 @@ serve(async (req) => {
   let sessionGoal = "";
   let sessionType = "";
   let eventContext = "";
+  let scenarioMode = false;
+  let scenarioTitle = "";
+  let scenarioGoal = "";
+  let scenarioSubGoals: string[] = [];
+  let scenarioCategory = "";
+  let customNotes = "";
 
   try {
     const body = await req.json();
@@ -344,6 +350,12 @@ serve(async (req) => {
     sessionGoal = body?.sessionGoal ?? "";
     sessionType = body?.sessionType ?? "";
     eventContext = body?.eventContext ?? "";
+    scenarioMode = body?.scenarioMode ?? false;
+    scenarioTitle = body?.scenarioTitle ?? "";
+    scenarioGoal = body?.scenarioGoal ?? "";
+    scenarioSubGoals = body?.scenarioSubGoals ?? [];
+    scenarioCategory = body?.scenarioCategory ?? "";
+    customNotes = body?.customNotes ?? "";
 
     if (!transcript || transcript.trim().length < 5) {
       return new Response(
