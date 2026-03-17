@@ -13,6 +13,8 @@ import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 import Scenarios from "./pages/Scenarios";
 import ScenarioCategory from "./pages/ScenarioCategory";
+import ScenarioRecording from "./pages/ScenarioRecording";
+import CustomPractice from "./pages/CustomPractice";
 import Progress from "./pages/Progress";
 import Badges from "./pages/Badges";
 import History from "./pages/History";
