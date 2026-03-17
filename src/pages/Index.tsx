@@ -606,7 +606,6 @@ export default function Negotium() {
                         <div style={{ fontSize: 9, color: "#888", letterSpacing: "0.1em" }}>Choose your own goals</div>
                       </button>
                     </div>
-                    </div>
                   </div>
 
                   {/* Waveform */}
