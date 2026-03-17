@@ -12,6 +12,7 @@ export default function CustomPractice() {
   const [selectedGoal, setSelectedGoal] = useState<GoalOption | null>(null);
   const [selectedSubGoals, setSelectedSubGoals] = useState<SubgoalOption[]>([]);
   const [notes, setNotes] = useState("");
+  const [duration, setDuration] = useState(45);
 
   const toggleSubGoal = (sg: SubgoalOption) => {
     if (selectedSubGoals.includes(sg)) {
@@ -27,8 +28,8 @@ export default function CustomPractice() {
     const customScenario: Scenario = {
       title: "Custom Practice",
       prompt: notes || `Practice focusing on ${selectedGoal} with sub-goals: ${selectedSubGoals.join(", ")}.`,
-      duration: "45s",
-      durationSeconds: 45,
+      duration: `${duration}s`,
+      durationSeconds: duration,
       difficulty: "Medium",
       goal: selectedGoal,
       subGoals: selectedSubGoals,
@@ -121,6 +122,20 @@ export default function CustomPractice() {
                   </button>
                 );
               })}
+            </div>
+          </div>
+
+          {/* Duration */}
+          <div style={{ marginBottom: 28 }}>
+            <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", marginBottom: 10, fontFamily: "'DM Mono', monospace" }}>
+              Duration — {duration}s
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 10, color: "#888", fontFamily: "'DM Mono', monospace" }}>5s</span>
+              <input type="range" min={5} max={45} step={1} value={duration}
+                onChange={(e) => setDuration(Number(e.target.value))}
+                style={{ flex: 1, cursor: "pointer" }} />
+              <span style={{ fontSize: 10, color: "#888", fontFamily: "'DM Mono', monospace" }}>45s</span>
             </div>
           </div>
 
