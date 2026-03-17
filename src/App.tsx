@@ -13,6 +13,8 @@ import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 import Scenarios from "./pages/Scenarios";
 import ScenarioCategory from "./pages/ScenarioCategory";
+import ScenarioRecording from "./pages/ScenarioRecording";
+import CustomPractice from "./pages/CustomPractice";
 import Progress from "./pages/Progress";
 import Badges from "./pages/Badges";
 import History from "./pages/History";
@@ -38,6 +40,8 @@ const App = () => (
               <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
               <Route path="/scenarios" element={<ProtectedRoute><Scenarios /></ProtectedRoute>} />
               <Route path="/scenarios/:slug" element={<ProtectedRoute><ScenarioCategory /></ProtectedRoute>} />
+              <Route path="/scenarios/:slug/record" element={<ProtectedRoute><ScenarioRecording /></ProtectedRoute>} />
+              <Route path="/custom-practice" element={<ProtectedRoute><CustomPractice /></ProtectedRoute>} />
               <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
               <Route path="/badges" element={<ProtectedRoute><Badges /></ProtectedRoute>} />
               <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
