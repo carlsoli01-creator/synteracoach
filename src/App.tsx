@@ -19,6 +19,7 @@ import Progress from "./pages/Progress";
 import Badges from "./pages/Badges";
 import History from "./pages/History";
 import NotFound from "./pages/NotFound";
+import Coach from "./pages/Coach";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookiePolicy from "./pages/CookiePolicy";
@@ -46,6 +47,7 @@ const App = () => (
               <Route path="/badges" element={<ProtectedRoute><Badges /></ProtectedRoute>} />
               <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/coach" element={<ProtectedRoute><Coach /></ProtectedRoute>} />
               <Route path="/terms" element={<TermsOfService />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/cookies" element={<CookiePolicy />} />

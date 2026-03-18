@@ -7,6 +7,7 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 const NAV_ITEMS = [
   { label: "Analysis", path: "/" },
   { label: "Practice", path: "/scenarios" },
+  { label: "Coach", path: "/coach" },
   { label: "Progress", path: "/progress" },
   { label: "Badges", path: "/badges" },
   { label: "History", path: "/history" },
@@ -16,6 +17,7 @@ const NAV_ITEMS = [
 const NAV_ITEMS_MOBILE = [
   { label: "Analysis", path: "/" },
   { label: "Scenarios", path: "/scenarios" },
+  { label: "Coach", path: "/coach" },
   { label: "Progress", path: "/progress" },
   { label: "Badges", path: "/badges" },
   { label: "History", path: "/history" },
