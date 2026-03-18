@@ -532,7 +532,19 @@ export default function Negotium() {
   const tagColor = (t) => t === "pos" ? "#0a0a0a" : t === "warn" ? "#555" : "#888";
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
 
-  const isOverlay = showIntro || showForcedPaywall || quizVisible;
+  const isOverlay = showIntro || showForcedPaywall || showInterstitial || quizVisible;
+
+  const handlePaywallDone = () => {
+    setShowForcedPaywall(false);
+    localStorage.setItem("syntera_intro_done_v2", "true");
+    setShowIntro(false);
+    setShowInterstitial(true);
+  };
+
+  const handleInterstitialComplete = () => {
+    setShowInterstitial(false);
+    if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true);
+  };
 
   return (
     <div style={{ minHeight: "100vh", background: "#f8f8f8", color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>
@@ -544,10 +556,13 @@ export default function Negotium() {
       }
       {showForcedPaywall && !isPremium &&
         <ForcedPaywall
-          onSubscribe={() => { localStorage.setItem("syntera_premium", "true"); setIsPremium(true); setShowForcedPaywall(false); localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }}
-          onSkip={() => { setShowForcedPaywall(false); localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }} />
+          onSubscribe={() => { localStorage.setItem("syntera_premium", "true"); setIsPremium(true); handlePaywallDone(); }}
+          onSkip={() => { handlePaywallDone(); }} />
       }
-      {!showIntro && !showForcedPaywall && quizVisible &&
+      {showInterstitial &&
+        <SpeakBetterInterstitial onComplete={handleInterstitialComplete} />
+      }
+      {!showIntro && !showForcedPaywall && !showInterstitial && quizVisible &&
         <OnboardingQuiz onFinish={({ neg, comm, answers }) => { localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers })); const p = derivePersonalization(answers); setRecCommTips([...new Set([...(neg || []), ...(comm || [])].slice(0, 6))]); setUserSubtitle(p.subtitle); setHeroFocus(p.heroFocus); setQuizVisible(false); }} />
       }
 
