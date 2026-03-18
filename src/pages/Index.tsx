@@ -880,11 +880,11 @@ export default function Negotium() {
               </div>
             )}
 
-            {/* Quote + Custom Practice — vertical, narrow, spaced */}
+            {/* Quote + Custom Practice — side by side */}
             {phase === "idle" && (
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 40, padding: isMobile ? "40px 16px 0" : "60px 48px 0" }}>
+              <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: 16, padding: isMobile ? "40px 16px 0" : "60px 48px 0", justifyContent: "center" }}>
                 <div style={{
-                  maxWidth: 360, width: "100%", padding: "40px 28px", border: "1px solid #e2e2e2",
+                  flex: 1, padding: "40px 28px", border: "1px solid #e2e2e2",
                   textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14,
                 }}>
                   <div style={{
@@ -903,7 +903,7 @@ export default function Negotium() {
                 <button
                   onClick={() => navigate("/custom-practice")}
                   style={{
-                    maxWidth: 360, width: "100%", padding: "24px 28px", background: "#fff", border: "1px solid #e2e2e2",
+                    flex: 1, padding: "24px 28px", background: "#fff", border: "1px solid #e2e2e2",
                     cursor: "pointer", fontFamily: "'DM Mono', monospace", textAlign: "left",
                     transition: "all 0.2s", display: "flex", flexDirection: "column", justifyContent: "center",
                   }}
