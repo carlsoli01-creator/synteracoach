@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import IntroExperience from "@/components/onboarding/IntroExperience";
 import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 import { Footer } from "@/components/ui/footer";
+import { HyperText } from "@/components/ui/hyper-text";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
