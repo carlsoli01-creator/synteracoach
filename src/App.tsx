@@ -47,6 +47,7 @@ const App = () => (
               <Route path="/badges" element={<ProtectedRoute><Badges /></ProtectedRoute>} />
               <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/coach" element={<ProtectedRoute><Coach /></ProtectedRoute>} />
               <Route path="/terms" element={<TermsOfService />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/cookies" element={<CookiePolicy />} />
