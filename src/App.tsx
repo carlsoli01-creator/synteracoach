@@ -19,6 +19,7 @@ import Progress from "./pages/Progress";
 import Badges from "./pages/Badges";
 import History from "./pages/History";
 import NotFound from "./pages/NotFound";
+import Coach from "./pages/Coach";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookiePolicy from "./pages/CookiePolicy";
