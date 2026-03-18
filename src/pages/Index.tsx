@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import IntroExperience from "@/components/onboarding/IntroExperience";
 import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 import { Footer } from "@/components/ui/footer";
-import { HyperText } from "@/components/ui/hyper-text";
+import { MorphingText } from "@/components/ui/morphing-text";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
@@ -888,10 +888,14 @@ export default function Negotium() {
                   flex: 1, padding: "64px 28px", border: "1px solid #e2e2e2",
                   textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14,
                 }}>
-                  <HyperText
-                    text="Great speakers aren't born. They're trained."
-                    className="font-heading text-foreground"
-                    duration={1200}
+                  <MorphingText
+                    texts={[
+                      "Great speakers aren't born. They're trained.",
+                      "Your voice is your most powerful tool.",
+                      "Confidence comes from practice.",
+                      "Every conversation is an opportunity.",
+                    ]}
+                    className="font-heading text-foreground text-base h-8"
                   />
                   <div style={{
                     fontFamily: "'DM Mono', monospace", fontSize: 10, color: "#888",
