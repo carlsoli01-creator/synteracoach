@@ -61,9 +61,9 @@ const Footer = ({
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-12">
+          <div className="flex flex-col gap-20">
             {menuItems.map((section, sectionIdx) => (
-              <div key={sectionIdx}>
+              <div key={sectionIdx} className="max-w-[160px]">
                 <h4 className="font-mono text-xs uppercase tracking-widest text-foreground mb-4">
                   {section.title}
                 </h4>
@@ -84,7 +84,7 @@ const Footer = ({
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="mt-24 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="font-mono text-[10px] text-muted-foreground">
             {copyright}
           </p>
