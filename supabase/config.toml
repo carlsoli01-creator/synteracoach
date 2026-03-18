@@ -2,3 +2,6 @@ project_id = "lxwceoxfxfpmyjsgrxgr"
 
 [functions.send-reminder]
 verify_jwt = false
+
+[functions.feedback-coach]
+verify_jwt = false
