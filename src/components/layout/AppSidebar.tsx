@@ -24,15 +24,6 @@ const NAV_ITEMS_MOBILE = [
   { label: "Profile", path: "/profile" },
 ];
 
-const NAV_ITEMS_MOBILE = [
-  { label: "Analysis", path: "/" },
-  { label: "Scenarios", path: "/scenarios" },
-  { label: "Progress", path: "/progress" },
-  { label: "Badges", path: "/badges" },
-  { label: "History", path: "/history" },
-  { label: "Profile", path: "/profile" },
-];
-
 interface Props {
   userSubtitle?: string;
   onOpenSetup?: () => void;
