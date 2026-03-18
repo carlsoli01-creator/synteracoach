@@ -883,17 +883,16 @@ export default function Negotium() {
 
             {/* Quote + Custom Practice — side by side */}
             {phase === "idle" && (
-              <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: 16, padding: isMobile ? "40px 16px 0" : "60px 48px 0", justifyContent: "center" }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 24, padding: isMobile ? "40px 16px 0" : "60px 48px 0" }}>
                 <div style={{
-                  flex: 1, padding: "40px 28px", border: "1px solid #e2e2e2",
+                  width: "100%", maxWidth: 420, padding: "48px 28px", border: "1px solid #e2e2e2",
                   textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14,
                 }}>
-                  <div style={{
-                    fontFamily: "'Syne', sans-serif", fontSize: "clamp(0.85rem, 1.5vw, 1.1rem)", color: "#0a0a0a",
-                    fontWeight: 400, letterSpacing: "0.12em", lineHeight: 1.8, textTransform: "uppercase",
-                  }}>
-                    Great speakers aren't born. They're trained.
-                  </div>
+                  <HyperText
+                    text="Great speakers aren't born. They're trained."
+                    className="font-heading text-foreground"
+                    duration={1200}
+                  />
                   <div style={{
                     fontFamily: "'DM Mono', monospace", fontSize: 10, color: "#888",
                     letterSpacing: "0.2em", textTransform: "uppercase",
@@ -904,7 +903,7 @@ export default function Negotium() {
                 <button
                   onClick={() => navigate("/custom-practice")}
                   style={{
-                    flex: 1, padding: "24px 28px", background: "#fff", border: "1px solid #e2e2e2",
+                    width: "100%", maxWidth: 420, padding: "24px 28px", background: "#fff", border: "1px solid #e2e2e2",
                     cursor: "pointer", fontFamily: "'DM Mono', monospace", textAlign: "left",
                     transition: "all 0.2s", display: "flex", flexDirection: "column", justifyContent: "center",
                   }}
