@@ -888,15 +888,9 @@ export default function Negotium() {
                   flex: 1, padding: "64px 28px", border: "1px solid #e2e2e2",
                   textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14,
                 }}>
-                  <MorphingText
-                    texts={[
-                      "Great speakers aren't born. They're trained.",
-                      "Your voice is your most powerful tool.",
-                      "Confidence comes from practice.",
-                      "Every conversation is an opportunity.",
-                    ]}
-                    className="font-heading text-foreground text-base h-8"
-                  />
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, color: "#0a0a0a", fontWeight: 300 }}>
+                    Great speakers aren't born. They're trained.
+                  </div>
                   <div style={{
                     fontFamily: "'DM Mono', monospace", fontSize: 10, color: "#888",
                     letterSpacing: "0.2em", textTransform: "uppercase",
