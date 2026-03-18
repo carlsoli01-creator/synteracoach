@@ -881,11 +881,11 @@ export default function Negotium() {
               </div>
             )}
 
-            {/* Quote + Custom Practice — side by side */}
+            {/* Quote + Custom Practice — side by side, tall & narrow */}
             {phase === "idle" && (
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 24, padding: isMobile ? "40px 16px 0" : "60px 48px 0" }}>
+              <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: 16, padding: isMobile ? "40px 16px 0" : "60px 48px 0" }}>
                 <div style={{
-                  width: "100%", maxWidth: 420, padding: "48px 28px", border: "1px solid #e2e2e2",
+                  flex: 1, padding: "64px 28px", border: "1px solid #e2e2e2",
                   textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14,
                 }}>
                   <HyperText
@@ -903,9 +903,9 @@ export default function Negotium() {
                 <button
                   onClick={() => navigate("/custom-practice")}
                   style={{
-                    width: "100%", maxWidth: 420, padding: "24px 28px", background: "#fff", border: "1px solid #e2e2e2",
+                    flex: 1, padding: "64px 28px", background: "#fff", border: "1px solid #e2e2e2",
                     cursor: "pointer", fontFamily: "'DM Mono', monospace", textAlign: "left",
-                    transition: "all 0.2s", display: "flex", flexDirection: "column", justifyContent: "center",
+                    transition: "all 0.2s", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                   }}
                   onMouseEnter={(e) => { (e.currentTarget).style.borderColor = "#0a0a0a"; }}
                   onMouseLeave={(e) => { (e.currentTarget).style.borderColor = "#e2e2e2"; }}
