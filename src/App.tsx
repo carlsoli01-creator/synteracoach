@@ -57,6 +57,7 @@ const App = () => (
             </Routes>
           </PageTransition>
           </SidebarProvider>
+          </ThemeProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
