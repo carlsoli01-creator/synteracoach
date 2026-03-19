@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSidebarState } from "@/contexts/SidebarContext";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useTheme } from "@/contexts/ThemeContext";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
 const NAV_ITEMS = [
