@@ -36,6 +36,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
   const { signOut } = useAuth();
   const { expanded, toggle } = useSidebarState();
   const isMobile = useIsMobile();
+  const { isDark } = useTheme();
   const navItems = isMobile ? NAV_ITEMS_MOBILE : NAV_ITEMS;
   return (
     <>
