@@ -120,7 +120,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
                   padding: "11px 16px",
                   border: "none",
                   borderRadius: 0,
-                  background: active ? "#ffffff" : "transparent",
+                  background: active ? "rgba(255,255,255,0.1)" : "transparent",
                   color: active ? "#ffffff" : "#999",
                   fontSize: 11,
                   fontWeight: active ? 500 : 400,
