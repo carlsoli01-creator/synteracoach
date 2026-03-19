@@ -31,26 +31,26 @@ function ScoreRing({ score, label, color }) {
       <svg width={72} height={72} viewBox="0 0 72 72">
         <circle cx={36} cy={36} r={r} fill="none" stroke="#e2e2e2" strokeWidth={5} />
         <circle cx={36} cy={36} r={r} fill="none" stroke={color} strokeWidth={5}
-          strokeLinecap="square" strokeDasharray={circ} strokeDashoffset={offset}
-          style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s ease" }} />
+        strokeLinecap="square" strokeDasharray={circ} strokeDashoffset={offset}
+        style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s ease" }} />
         <text x={36} y={40} textAnchor="middle" fill="#0a0a0a" fontSize={14}
-          fontFamily="'DM Mono', monospace" fontWeight="300">{score}</text>
+        fontFamily="'DM Mono', monospace" fontWeight="300">{score}</text>
       </svg>
       <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#888", fontFamily: "'DM Mono', monospace" }}>{label}</span>
-    </div>
-  );
+    </div>);
+
 }
 
 function HistoryRow({ entry, index }) {
   const score = entry.overall_score ?? entry.overall;
   const grade = score >= 80 ? "A" : score >= 65 ? "B" : score >= 50 ? "C" : "D";
-  const date = entry.created_at
-    ? new Date(entry.created_at).toLocaleDateString([], { month: "short", day: "numeric" })
-    : "";
+  const date = entry.created_at ?
+  new Date(entry.created_at).toLocaleDateString([], { month: "short", day: "numeric" }) :
+  "";
   return (
     <div style={{
       padding: "12px 0", borderBottom: "1px solid #e2e2e2",
-      display: "flex", alignItems: "center", gap: 16,
+      display: "flex", alignItems: "center", gap: 16
     }}>
       <div style={{ fontSize: 22, fontWeight: 300, minWidth: 20, fontFamily: "'DM Mono', monospace", color: "#0a0a0a" }}>{grade}</div>
       <div style={{ flex: 1 }}>
@@ -60,8 +60,8 @@ function HistoryRow({ entry, index }) {
       </div>
       <div style={{ fontSize: 14, fontWeight: 300, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>{score}</div>
       <div style={{ fontSize: 9, color: "#888", fontFamily: "'DM Mono', monospace" }}>{date}</div>
-    </div>
-  );
+    </div>);
+
 }
 
 const COMMUNICATION_TIPS = [
@@ -157,37 +157,37 @@ function OnboardingQuiz({ onFinish }: {onFinish: (result: {neg: string[];comm: s
         <div style={{ fontSize: 14, color: "#0a0a0a", marginBottom: 12, fontWeight: 500 }}>{q.q}</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
           {q.options.map((opt) =>
-            <button key={opt} onClick={() => setAnswers((a) => ({ ...a, [q.id]: opt }))}
-              style={{
-                textAlign: "left", padding: "10px 14px", borderRadius: 0, cursor: "pointer",
-                border: answers[q.id] === opt ? "2px solid #0a0a0a" : "1px solid #e2e2e2",
-                background: answers[q.id] === opt ? "#f8f8f8" : "#fff",
-                fontWeight: answers[q.id] === opt ? 600 : 400, fontSize: 13, color: "#0a0a0a",
-                transition: "all .15s", fontFamily: "'DM Mono', monospace",
-              }}>
+          <button key={opt} onClick={() => setAnswers((a) => ({ ...a, [q.id]: opt }))}
+          style={{
+            textAlign: "left", padding: "10px 14px", borderRadius: 0, cursor: "pointer",
+            border: answers[q.id] === opt ? "2px solid #0a0a0a" : "1px solid #e2e2e2",
+            background: answers[q.id] === opt ? "#f8f8f8" : "#fff",
+            fontWeight: answers[q.id] === opt ? 600 : 400, fontSize: 13, color: "#0a0a0a",
+            transition: "all .15s", fontFamily: "'DM Mono', monospace"
+          }}>
               {opt}
             </button>
           )}
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <button onClick={() => setStep((s) => Math.max(s - 1, 0))} disabled={step === 0}
-            style={{ padding: "10px 18px", borderRadius: 0, border: "1px solid #e2e2e2", background: "transparent", cursor: step === 0 ? "not-allowed" : "pointer", color: "#888", fontSize: 13, fontFamily: "'DM Mono', monospace" }}>
+          style={{ padding: "10px 18px", borderRadius: 0, border: "1px solid #e2e2e2", background: "transparent", cursor: step === 0 ? "not-allowed" : "pointer", color: "#888", fontSize: 13, fontFamily: "'DM Mono', monospace" }}>
             Back
           </button>
           {step < QUIZ_QUESTIONS.length - 1 ?
-            <button onClick={() => answers[q.id] && setStep((s) => s + 1)} disabled={!answers[q.id]}
-              style={{ padding: "10px 22px", borderRadius: 0, border: "none", background: answers[q.id] ? "#0a0a0a" : "#bbb", color: "#fff", cursor: answers[q.id] ? "pointer" : "not-allowed", fontSize: 13, fontWeight: 600, opacity: answers[q.id] ? 1 : 0.6, transition: "all 0.2s", fontFamily: "'DM Mono', monospace" }}>
+          <button onClick={() => answers[q.id] && setStep((s) => s + 1)} disabled={!answers[q.id]}
+          style={{ padding: "10px 22px", borderRadius: 0, border: "none", background: answers[q.id] ? "#0a0a0a" : "#bbb", color: "#fff", cursor: answers[q.id] ? "pointer" : "not-allowed", fontSize: 13, fontWeight: 600, opacity: answers[q.id] ? 1 : 0.6, transition: "all 0.2s", fontFamily: "'DM Mono', monospace" }}>
               Next
             </button> :
-            <button onClick={() => answers[q.id] && handleFinish()} disabled={!answers[q.id]}
-              style={{ padding: "10px 22px", borderRadius: 0, border: "none", background: answers[q.id] ? "#0a0a0a" : "#bbb", color: "#fff", cursor: answers[q.id] ? "pointer" : "not-allowed", fontSize: 13, fontWeight: 600, opacity: answers[q.id] ? 1 : 0.6, transition: "all 0.2s", fontFamily: "'DM Mono', monospace" }}>
+          <button onClick={() => answers[q.id] && handleFinish()} disabled={!answers[q.id]}
+          style={{ padding: "10px 22px", borderRadius: 0, border: "none", background: answers[q.id] ? "#0a0a0a" : "#bbb", color: "#fff", cursor: answers[q.id] ? "pointer" : "not-allowed", fontSize: 13, fontWeight: 600, opacity: answers[q.id] ? 1 : 0.6, transition: "all 0.2s", fontFamily: "'DM Mono', monospace" }}>
               Finish & Start
             </button>
           }
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: {onStart: () => void;onStop: () => void;onStopEarly: () => void;phase: string;}) {
@@ -196,21 +196,21 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: {onStart: () =
   return (
     <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 16 }}>
       {isRecording ?
-        <button onClick={onStopEarly}
-          style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: "pointer", background: "#0a0a0a", color: "#fff", fontWeight: 500, borderRadius: 0, transition: "all 0.2s", fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
+      <button onClick={onStopEarly}
+      style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: "pointer", background: "#0a0a0a", color: "#fff", fontWeight: 500, borderRadius: 0, transition: "all 0.2s", fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
           STOP RECORDING
         </button> :
-        <button onClick={!isAnalyzing ? onStart : undefined} disabled={isAnalyzing}
-          style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: isAnalyzing ? "not-allowed" : "pointer", background: "#0a0a0a", color: "#fff", fontWeight: 500, borderRadius: 0, opacity: isAnalyzing ? 0.6 : 1, transition: "all 0.2s", fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
+      <button onClick={!isAnalyzing ? onStart : undefined} disabled={isAnalyzing}
+      style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: isAnalyzing ? "not-allowed" : "pointer", background: "#0a0a0a", color: "#fff", fontWeight: 500, borderRadius: 0, opacity: isAnalyzing ? 0.6 : 1, transition: "all 0.2s", fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
           {phase === "idle" ? "START RECORDING" : phase === "analyzing" ? "ANALYZING..." : "RECORD AGAIN"}
         </button>
       }
       <button onClick={onStop}
-        style={{ fontSize: 11, padding: "14px 18px", background: "none", border: "1px solid #e2e2e2", color: "#888", cursor: "pointer", transition: "all 0.2s", borderRadius: 0, fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em" }}>
+      style={{ fontSize: 11, padding: "14px 18px", background: "none", border: "1px solid #e2e2e2", color: "#888", cursor: "pointer", transition: "all 0.2s", borderRadius: 0, fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em" }}>
         Reset
       </button>
-    </div>
-  );
+    </div>);
+
 }
 
 export default function Negotium() {
@@ -322,12 +322,12 @@ export default function Negotium() {
   const stopAll = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    if (analysisTimeoutRef.current) { clearTimeout(analysisTimeoutRef.current); analysisTimeoutRef.current = null; }
+    if (analysisTimeoutRef.current) {clearTimeout(analysisTimeoutRef.current);analysisTimeoutRef.current = null;}
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
       mediaRecorderRef.current.stop();
       mediaRecorderRef.current.stream?.getTracks().forEach((t) => t.stop());
     }
-    try { audioCtxRef.current?.close(); } catch (_) {}
+    try {audioCtxRef.current?.close();} catch (_) {}
   }, []);
 
   const analyzeVoice = useCallback(async () => {
@@ -339,8 +339,8 @@ export default function Negotium() {
     const volVar = getVariance(vols);
     const durationSeconds = Math.round((Date.now() - recordingStartRef.current) / 1000);
     const transcript = transcriptRef.current.trim();
-    try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
-    try { recognitionRef.current?.stop(); } catch (_) {}
+    try {(recognitionRef.current as any)?._stopAutoRestart?.();} catch (_) {}
+    try {recognitionRef.current?.stop();} catch (_) {}
     if (!transcript || transcript.length < 5) {
       setMicError("Could not detect speech. Please speak clearly and try again.");
       setPhase("idle");
@@ -357,14 +357,14 @@ export default function Negotium() {
         const responseContext = (error as any)?.context;
         if (responseContext && typeof responseContext.text === "function") {
           const responseText = await responseContext.text();
-          try { const parsed = JSON.parse(responseText); if (parsed?.error) errorMessage = parsed.error; } catch { if (responseText?.trim()) errorMessage = responseText; }
+          try {const parsed = JSON.parse(responseText);if (parsed?.error) errorMessage = parsed.error;} catch {if (responseText?.trim()) errorMessage = responseText;}
         }
         if ((error as any)?.message?.includes("402")) errorMessage = "AI credits are exhausted.";
         setMicError(errorMessage);
         setPhase("idle");
         return;
       }
-      if (data?.error) { setMicError(data.error); setPhase("idle"); return; }
+      if (data?.error) {setMicError(data.error);setPhase("idle");return;}
       const { scores, analysis, tags, communicationTips, techniques, fillerWords, hedgingInstances, powerWords, wordChoiceScore, persuasionScore } = data;
       const finalWpm = durationSeconds > 0 ? transcript.trim().split(/\s+/).filter(Boolean).length / durationSeconds * 60 : 0;
       const measuredPace = finalWpm < 100 ? 20 : finalWpm <= 119 ? 45 : finalWpm <= 139 ? 70 : finalWpm <= 160 ? 100 : finalWpm <= 180 ? 80 : finalWpm <= 200 ? 55 : 30;
@@ -400,14 +400,14 @@ export default function Negotium() {
       setMicError("Analysis failed. Please try again.");
       setPhase("idle");
     } finally {
-      if (analysisTimeoutRef.current) { clearTimeout(analysisTimeoutRef.current); analysisTimeoutRef.current = null; }
+      if (analysisTimeoutRef.current) {clearTimeout(analysisTimeoutRef.current);analysisTimeoutRef.current = null;}
       isAnalyzingRef.current = false;
     }
   }, [user?.id]);
 
   const scheduleAnalyze = useCallback(() => {
     if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
-    analysisTimeoutRef.current = setTimeout(() => { void analyzeVoice(); }, 1500);
+    analysisTimeoutRef.current = setTimeout(() => {void analyzeVoice();}, 1500);
   }, [analyzeVoice]);
 
   const todaySessionCount = useMemo(() => {
@@ -416,7 +416,7 @@ export default function Negotium() {
   }, [history]);
 
   const startRecording = useCallback(async () => {
-    if (!isPremium && todaySessionCount >= 1) { setShowPricing(true); return; }
+    if (!isPremium && todaySessionCount >= 1) {setShowPricing(true);return;}
     setMicError("");
     transcriptRef.current = "";
     try {
@@ -449,23 +449,23 @@ export default function Negotium() {
                 if (event.results[i][j].confidence > bestAlt.confidence) bestAlt = event.results[i][j];
               }
               finalTranscript += bestAlt.transcript + " ";
-            } else { interim += event.results[i][0].transcript; }
+            } else {interim += event.results[i][0].transcript;}
           }
           transcriptRef.current = finalTranscript + interim;
         };
         recognition.onerror = (e: any) => {
           if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) {
-            try { setTimeout(() => { if (isRecognitionActive) recognition.start(); }, 300); } catch (_) {}
+            try {setTimeout(() => {if (isRecognitionActive) recognition.start();}, 300);} catch (_) {}
           }
         };
         recognition.onend = () => {
           if (isRecognitionActive) {
-            try { setTimeout(() => { if (isRecognitionActive) recognition.start(); }, 200); } catch (_) {}
+            try {setTimeout(() => {if (isRecognitionActive) recognition.start();}, 200);} catch (_) {}
           }
         };
         recognition.start();
         recognitionRef.current = recognition;
-        (recognitionRef.current as any)._stopAutoRestart = () => { isRecognitionActive = false; };
+        (recognitionRef.current as any)._stopAutoRestart = () => {isRecognitionActive = false;};
       }
       const mr = new MediaRecorder(stream);
       mediaRecorderRef.current = mr;
@@ -503,10 +503,10 @@ export default function Negotium() {
           if (timerRef.current) clearInterval(timerRef.current);
           if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
           mr.stop();
-          try { stream.getTracks().forEach((tr) => tr.stop()); } catch (_) {}
-          try { audioCtx.close(); } catch (_) {}
-          try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
-          try { recognitionRef.current?.stop(); } catch (_) {}
+          try {stream.getTracks().forEach((tr) => tr.stop());} catch (_) {}
+          try {audioCtx.close();} catch (_) {}
+          try {(recognitionRef.current as any)?._stopAutoRestart?.();} catch (_) {}
+          try {recognitionRef.current?.stop();} catch (_) {}
           setWaveData(new Array(80).fill(0.5));
           scheduleAnalyze();
         }
@@ -518,8 +518,8 @@ export default function Negotium() {
 
   const reset = useCallback(() => {
     stopAll();
-    try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
-    try { recognitionRef.current?.stop(); } catch (_) {}
+    try {(recognitionRef.current as any)?._stopAutoRestart?.();} catch (_) {}
+    try {recognitionRef.current?.stop();} catch (_) {}
     transcriptRef.current = "";
     setPhase("idle");
     setTimeLeft(selectedDuration);
@@ -550,25 +550,25 @@ export default function Negotium() {
     <div style={{ minHeight: "100vh", background: "#f8f8f8", color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>
       {/* Intro */}
       {showIntro && !isPremium &&
-        <IntroExperience
-          onComplete={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }}
-          onForcePaywall={() => setShowForcedPaywall(true)} />
+      <IntroExperience
+        onComplete={() => {localStorage.setItem("syntera_intro_done_v2", "true");setShowIntro(false);if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true);}}
+        onForcePaywall={() => setShowForcedPaywall(true)} />
       }
       {showForcedPaywall && !isPremium &&
-        <ForcedPaywall
-          onSubscribe={() => { localStorage.setItem("syntera_premium", "true"); setIsPremium(true); handlePaywallDone(); }}
-          onSkip={() => { handlePaywallDone(); }} />
+      <ForcedPaywall
+        onSubscribe={() => {localStorage.setItem("syntera_premium", "true");setIsPremium(true);handlePaywallDone();}}
+        onSkip={() => {handlePaywallDone();}} />
       }
       {showInterstitial &&
-        <SpeakBetterInterstitial onComplete={handleInterstitialComplete} />
+      <SpeakBetterInterstitial onComplete={handleInterstitialComplete} />
       }
       {!showIntro && !showForcedPaywall && !showInterstitial && quizVisible &&
-        <OnboardingQuiz onFinish={({ neg, comm, answers }) => { localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers })); const p = derivePersonalization(answers); setRecCommTips([...new Set([...(neg || []), ...(comm || [])].slice(0, 6))]); setUserSubtitle(p.subtitle); setHeroFocus(p.heroFocus); setQuizVisible(false); }} />
+      <OnboardingQuiz onFinish={({ neg, comm, answers }) => {localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers }));const p = derivePersonalization(answers);setRecCommTips([...new Set([...(neg || []), ...(comm || [])].slice(0, 6))]);setUserSubtitle(p.subtitle);setHeroFocus(p.heroFocus);setQuizVisible(false);}} />
       }
 
       {/* Tip Popup */}
       {showTipPopup &&
-        <div style={{ position: "fixed", inset: 0, zIndex: 55, display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 40, background: "rgba(0,0,0,0.15)" }} onClick={() => setShowTipPopup(false)}>
+      <div style={{ position: "fixed", inset: 0, zIndex: 55, display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 40, background: "rgba(0,0,0,0.15)" }} onClick={() => setShowTipPopup(false)}>
           <div onClick={(e) => e.stopPropagation()} style={{ width: "min(420px, 90vw)", background: "#fff", borderRadius: 0, padding: "28px 24px", border: "1px solid #e2e2e2", position: "relative" }}>
             <button onClick={() => setShowTipPopup(false)} style={{ position: "absolute", top: 12, right: 14, background: "none", border: "none", fontSize: 18, color: "#888", cursor: "pointer" }}>✕</button>
             <div style={{ fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase", color: "#888", textAlign: "center", marginBottom: 8, fontWeight: 700, fontFamily: "'DM Mono', monospace" }}>Tip of the Day</div>
@@ -580,31 +580,31 @@ export default function Negotium() {
         </div>
       }
 
-      {!isOverlay && (
-        <>
+      {!isOverlay &&
+      <>
           <AppSidebar userSubtitle={userSubtitle} onOpenSetup={() => setQuizVisible(true)} />
           <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
             {/* Top bar */}
             <div style={{ padding: "20px 48px", borderBottom: "1px solid #e2e2e2", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ width: 1 }} />
-              {avgHistory !== null && (
-                <div style={{ textAlign: "right" }}>
+              {avgHistory !== null &&
+            <div style={{ textAlign: "right" }}>
                   <div style={{ fontSize: 9, color: "#888", letterSpacing: "0.2em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>Avg Score</div>
                   <div style={{ fontSize: 28, fontWeight: 300, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>{avgHistory}</div>
                 </div>
-              )}
+            }
             </div>
 
             {/* Two-column layout */}
-            {(
-              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 400px", gap: 40, padding: isMobile ? "24px 16px" : "40px 48px" }}>
+            {
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 400px", gap: 40, padding: isMobile ? "24px 16px" : "40px 48px" }}>
                 {/* Left column — recording */}
                 <div>
                   {/* Hero */}
                   <div style={{ marginBottom: 48 }}>
-                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: "#0a0a0a", lineHeight: 0.9, fontWeight: 400, letterSpacing: "-0.04em" }}>
-                      Speak.
-                    </div>
+                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: "#0a0a0a", lineHeight: 0.9, fontWeight: 400, letterSpacing: "-0.04em" }}>Practice.
+
+                </div>
                     <div style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: "#0a0a0a", lineHeight: 0.9, fontWeight: 400, letterSpacing: "-0.04em", opacity: 0.45 }}>
                      {heroFocus}
                     </div>
@@ -615,15 +615,15 @@ export default function Negotium() {
                   <div style={{ marginBottom: 32 }}>
                     <div style={{ height: 64, background: "#f0f0f0", border: "1px solid #e2e2e2", borderRadius: 0, display: "flex", alignItems: "center", padding: "0 8px", gap: 2 }}>
                       {waveData.map((v, i) =>
-                        <div key={i} style={{
-                          flex: 1,
-                          background: phase === "recording" ? "#0a0a0a" : "#d8d8d8",
-                          height: `${Math.max(4, Math.abs(v - 0.5) * 128)}px`,
-                          borderRadius: 0,
-                          transition: "height 0.05s, background 0.2s",
-                          opacity: phase === "recording" ? 0.5 + Math.abs(v - 0.5) : 0.5
-                        }} />
-                      )}
+                  <div key={i} style={{
+                    flex: 1,
+                    background: phase === "recording" ? "#0a0a0a" : "#d8d8d8",
+                    height: `${Math.max(4, Math.abs(v - 0.5) * 128)}px`,
+                    borderRadius: 0,
+                    transition: "height 0.05s, background 0.2s",
+                    opacity: phase === "recording" ? 0.5 + Math.abs(v - 0.5) : 0.5
+                  }} />
+                  )}
                     </div>
                   </div>
 
@@ -633,8 +633,8 @@ export default function Negotium() {
                       <svg width={140} height={140} viewBox="0 0 160 160">
                         <circle cx={80} cy={80} r={70} fill="none" stroke="#e2e2e2" strokeWidth={1} />
                         <circle cx={80} cy={80} r={70} fill="none" stroke="#0a0a0a" strokeWidth={1}
-                          strokeLinecap="square" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={ringOffset}
-                          style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
+                    strokeLinecap="square" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={ringOffset}
+                    style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
                       </svg>
                       <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                         <div style={{ fontSize: 48, fontWeight: 300, color: "#0a0a0a", lineHeight: 1, fontFamily: "'DM Mono', monospace" }}>{timeLeft}</div>
@@ -645,37 +645,37 @@ export default function Negotium() {
                   </div>
 
                   {/* Duration slider */}
-                  {phase === "idle" && (
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, marginBottom: 20, width: "100%", maxWidth: 280, margin: "0 auto 20px" }}>
+                  {phase === "idle" &&
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, marginBottom: 20, width: "100%", maxWidth: 280, margin: "0 auto 20px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", width: "100%", fontSize: 11, color: "#888", fontFamily: "'DM Mono', monospace" }}>
                         <span>5s</span>
                         <span style={{ fontWeight: 500, color: "#0a0a0a", fontSize: 13 }}>{selectedDuration}s</span>
                         <span>45s</span>
                       </div>
                       <input type="range" min={5} max={45} step={1} value={selectedDuration}
-                        onChange={(e) => { const v = Number(e.target.value); setSelectedDuration(v); setTimeLeft(v); }}
-                        style={{ width: "100%", cursor: "pointer" }} />
+                onChange={(e) => {const v = Number(e.target.value);setSelectedDuration(v);setTimeLeft(v);}}
+                style={{ width: "100%", cursor: "pointer" }} />
                     </div>
-                  )}
+              }
 
                   {/* Live metrics */}
-                  {phase === "recording" && (
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8, marginBottom: 24 }}>
+                  {phase === "recording" &&
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8, marginBottom: 24 }}>
                       {["Pace", "Energy"].map((label, i) => {
-                        const val = i === 0 ? livePace : liveEnergy;
-                        return (
-                          <div key={label} style={{ border: "1px solid #e2e2e2", padding: "10px 12px", borderRadius: 0, background: "#fff" }}>
+                  const val = i === 0 ? livePace : liveEnergy;
+                  return (
+                    <div key={label} style={{ border: "1px solid #e2e2e2", padding: "10px 12px", borderRadius: 0, background: "#fff" }}>
                             <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>{label}</div>
                             <div style={{ height: 1, background: "#e2e2e2" }}>
                               <div style={{ height: "100%", width: val + "%", background: "#0a0a0a", transition: "width 0.1s" }} />
                             </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                          </div>);
 
-                  <VoiceMicControl onStart={startRecording} onStop={reset} onStopEarly={() => { if (phase !== "recording") return; stopAll(); setWaveData(new Array(80).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }} phase={phase} />
+                })}
+                    </div>
+              }
+
+                  <VoiceMicControl onStart={startRecording} onStop={reset} onStopEarly={() => {if (phase !== "recording") return;stopAll();setWaveData(new Array(80).fill(0.5));setPhase("analyzing");scheduleAnalyze();}} phase={phase} />
 
                   {micError && <div style={{ textAlign: "center", fontSize: 11, color: "#0a0a0a", marginBottom: 16, lineHeight: 1.6 }}>{micError}</div>}
                   {phase === "analyzing" && <div style={{ textAlign: "center", fontSize: 11, color: "#888", marginBottom: 24, fontFamily: "'DM Mono', monospace" }}>Analyzing your speech patterns...</div>}
@@ -684,30 +684,30 @@ export default function Negotium() {
 
                 {/* Right column — results / history */}
                 <div>
-                  {!isMobile && (phase === "idle" || phase === "recording") && (
-                    <div>
+                  {!isMobile && (phase === "idle" || phase === "recording") &&
+              <div>
                       <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 12, fontFamily: "'DM Mono', monospace" }}>Today's Practice</div>
                       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                         {SCENARIO_CATEGORIES.map((cat) => {
-                          const todayItem = getTodayScenario(cat);
-                          const done = completedCategoriesToday.includes(cat.category);
-                          return (
-                            <button
-                              key={cat.slug}
-                              onClick={() => navigate(`/scenarios/${cat.slug}`)}
-                              style={{
-                                width: "100%",
-                                background: done ? "#f5f5f5" : "#fff",
-                                border: "1px solid #e2e2e2",
-                                borderRadius: 0,
-                                padding: "12px 14px",
-                                textAlign: "left",
-                                cursor: "pointer",
-                                transition: "all 0.2s ease",
-                                opacity: done ? 0.6 : 1,
-                                fontFamily: "'DM Mono', monospace",
-                              }}
-                            >
+                    const todayItem = getTodayScenario(cat);
+                    const done = completedCategoriesToday.includes(cat.category);
+                    return (
+                      <button
+                        key={cat.slug}
+                        onClick={() => navigate(`/scenarios/${cat.slug}`)}
+                        style={{
+                          width: "100%",
+                          background: done ? "#f5f5f5" : "#fff",
+                          border: "1px solid #e2e2e2",
+                          borderRadius: 0,
+                          padding: "12px 14px",
+                          textAlign: "left",
+                          cursor: "pointer",
+                          transition: "all 0.2s ease",
+                          opacity: done ? 0.6 : 1,
+                          fontFamily: "'DM Mono', monospace"
+                        }}>
+                        
                               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                 <div>
                                   <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", marginBottom: 4 }}>
@@ -722,15 +722,15 @@ export default function Negotium() {
                                   {todayItem.difficulty}
                                 </div>
                               </div>
-                            </button>
-                          );
-                        })}
+                            </button>);
+
+                  })}
                       </div>
                     </div>
-                  )}
+              }
 
-                  {phase === "done" && metrics && feedback && (
-                    <div style={{ animation: "fadeUp 0.5s ease", position: "relative" }}>
+                  {phase === "done" && metrics && feedback &&
+              <div style={{ animation: "fadeUp 0.5s ease", position: "relative" }}>
                       {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
                       <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" } : {}}>
                         {/* Score rings */}
@@ -746,10 +746,10 @@ export default function Negotium() {
                         <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
                           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
                             {[
-                              { label: "Word Choice", value: metrics.wordChoice, color: metrics.wordChoice >= 55 ? "#0a0a0a" : metrics.wordChoice >= 30 ? "#555" : "#888" },
-                              { label: "Persuasion", value: metrics.persuasion, color: metrics.persuasion >= 55 ? "#0a0a0a" : metrics.persuasion >= 30 ? "#555" : "#888" }
-                            ].map(({ label, value, color }) =>
-                              <div key={label}>
+                      { label: "Word Choice", value: metrics.wordChoice, color: metrics.wordChoice >= 55 ? "#0a0a0a" : metrics.wordChoice >= 30 ? "#555" : "#888" },
+                      { label: "Persuasion", value: metrics.persuasion, color: metrics.persuasion >= 55 ? "#0a0a0a" : metrics.persuasion >= 30 ? "#555" : "#888" }].
+                      map(({ label, value, color }) =>
+                      <div key={label}>
                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
                                   <span style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>{label}</span>
                                   <span style={{ fontSize: 18, fontWeight: 300, color, fontFamily: "'DM Mono', monospace" }}>{value}</span>
@@ -758,7 +758,7 @@ export default function Negotium() {
                                   <div style={{ height: "100%", width: `${value}%`, background: color, borderRadius: 0, transition: "width 0.5s ease" }} />
                                 </div>
                               </div>
-                            )}
+                      )}
                           </div>
                         </div>
 
@@ -777,46 +777,46 @@ export default function Negotium() {
                         {/* Tags */}
                         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
                           {feedback.tags.map((tag, i) =>
-                            <span key={i} style={{ fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", padding: "4px 10px", border: `1px solid ${tagColor(tag.t)}`, color: tagColor(tag.t), borderRadius: 0, fontFamily: "'DM Mono', monospace" }}>
+                    <span key={i} style={{ fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", padding: "4px 10px", border: `1px solid ${tagColor(tag.t)}`, color: tagColor(tag.t), borderRadius: 0, fontFamily: "'DM Mono', monospace" }}>
                               {tag.label}
                             </span>
-                          )}
+                    )}
                         </div>
 
                         {/* Transcript */}
-                        {feedback.transcript && (
-                          <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
+                        {feedback.transcript &&
+                  <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
                             <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Your Speech</div>
                             <div style={{ fontSize: 13, lineHeight: 1.8, color: "#0a0a0a", fontStyle: "italic" }}>"{feedback.transcript}"</div>
                           </div>
-                        )}
+                  }
 
                         {/* Feedback sections */}
                         {[
-                          { title: "Overall Assessment", text: feedback.overallTxt },
-                          { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
-                          { title: "Pace & Rhythm", text: feedback.paceTxt },
-                          { title: "Tone & Authority", text: feedback.toneTxt },
-                          { title: "Clarity & Structure", text: feedback.clarityTxt },
-                          { title: "Key Strength", text: feedback.strengthTxt },
-                          { title: "Key Weakness", text: feedback.weaknessTxt },
-                          { title: "Recommendation", text: feedback.recTxt }
-                        ].filter(({ text }) => text).map(({ title, text }) =>
-                          <div key={title} style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
+                  { title: "Overall Assessment", text: feedback.overallTxt },
+                  { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
+                  { title: "Pace & Rhythm", text: feedback.paceTxt },
+                  { title: "Tone & Authority", text: feedback.toneTxt },
+                  { title: "Clarity & Structure", text: feedback.clarityTxt },
+                  { title: "Key Strength", text: feedback.strengthTxt },
+                  { title: "Key Weakness", text: feedback.weaknessTxt },
+                  { title: "Recommendation", text: feedback.recTxt }].
+                  filter(({ text }) => text).map(({ title, text }) =>
+                  <div key={title} style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
                             <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>{title}</div>
                             <div style={{ fontSize: 13, lineHeight: 1.8, color: "#0a0a0a" }}>{text}</div>
                           </div>
-                        )}
+                  )}
 
                         {/* Techniques */}
-                        {feedback.techniques?.length > 0 && (
-                          <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
+                        {feedback.techniques?.length > 0 &&
+                  <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
                             <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
                               Techniques Detected ({feedback.techniques.length})
                             </div>
                             <div style={{ display: "grid", gap: 8 }}>
                               {feedback.techniques.map((t: any, i: number) =>
-                                <div key={i} style={{ border: `1px solid ${t.impact === "pos" ? "#0a0a0a" : t.impact === "neg" ? "#888" : "#e2e2e2"}`, borderRadius: 0, padding: "10px 12px" }}>
+                      <div key={i} style={{ border: `1px solid ${t.impact === "pos" ? "#0a0a0a" : t.impact === "neg" ? "#888" : "#e2e2e2"}`, borderRadius: 0, padding: "10px 12px" }}>
                                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
                                     <span style={{ fontSize: 11, fontWeight: 700, color: "#0a0a0a" }}>{t.name}</span>
                                     <span style={{ fontSize: 9, padding: "2px 8px", borderRadius: 0, background: t.impact === "pos" ? "#0a0a0a" : t.impact === "neg" ? "#f0f0f0" : "#f5f5f5", color: t.impact === "pos" ? "#fff" : t.impact === "neg" ? "#0a0a0a" : "#888", fontFamily: "'DM Mono', monospace" }}>
@@ -826,10 +826,10 @@ export default function Negotium() {
                                   <div style={{ fontSize: 12, fontStyle: "italic", color: "#888", marginBottom: 4 }}>"{t.quote}"</div>
                                   <div style={{ fontSize: 11, color: "#0a0a0a", lineHeight: 1.5 }}>{t.explanation}</div>
                                 </div>
-                              )}
+                      )}
                             </div>
                           </div>
-                        )}
+                  }
 
                         {/* Filler & Power Words */}
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
@@ -837,107 +837,107 @@ export default function Negotium() {
                             <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Filler Words</div>
                             <div style={{ fontSize: 28, fontWeight: 300, color: "#0a0a0a", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>{feedback.fillerWords?.count || 0}</div>
                             <div style={{ fontSize: 10, color: "#888", fontFamily: "'DM Mono', monospace" }}>{feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}</div>
-                            {feedback.fillerWords?.words?.length > 0 && (
-                              <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
+                            {feedback.fillerWords?.words?.length > 0 &&
+                      <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
                                 {feedback.fillerWords.words.map((w: string, i: number) =>
-                                  <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#f0f0f0", color: "#0a0a0a", borderRadius: 0, fontFamily: "'DM Mono', monospace" }}>{w}</span>
-                                )}
+                        <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#f0f0f0", color: "#0a0a0a", borderRadius: 0, fontFamily: "'DM Mono', monospace" }}>{w}</span>
+                        )}
                               </div>
-                            )}
+                      }
                           </div>
                           <div>
                             <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Power Words</div>
                             <div style={{ fontSize: 28, fontWeight: 300, color: "#0a0a0a", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>{feedback.powerWords?.length || 0}</div>
-                            {feedback.powerWords?.length > 0 && (
-                              <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
+                            {feedback.powerWords?.length > 0 &&
+                      <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
                                 {feedback.powerWords.map((w: string, i: number) =>
-                                  <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#0a0a0a", color: "#fff", borderRadius: 0, fontFamily: "'DM Mono', monospace" }}>{w}</span>
-                                )}
+                        <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#0a0a0a", color: "#fff", borderRadius: 0, fontFamily: "'DM Mono', monospace" }}>{w}</span>
+                        )}
                               </div>
-                            )}
+                      }
                           </div>
                         </div>
 
                         {/* Hedging */}
-                        {feedback.hedgingInstances?.length > 0 && (
-                          <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
+                        {feedback.hedgingInstances?.length > 0 &&
+                  <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
                             <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
                               Hedging → Stronger Alternatives
                             </div>
                             <div style={{ display: "grid", gap: 6 }}>
                               {feedback.hedgingInstances.map((h: any, i: number) =>
-                                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
+                      <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
                                   <span style={{ color: "#888", textDecoration: "line-through" }}>"{h.phrase}"</span>
                                   <span style={{ color: "#bbb" }}>→</span>
                                   <span style={{ color: "#0a0a0a", fontWeight: 600 }}>"{h.suggestion}"</span>
                                 </div>
-                              )}
+                      )}
                             </div>
                           </div>
-                        )}
+                  }
 
                         {/* Communication Tips */}
-                        {recCommTips.length > 0 && (
-                          <div>
+                        {recCommTips.length > 0 &&
+                  <div>
                             <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
                               Recommended Tips
                             </div>
                             <div style={{ display: "grid", gap: 8 }}>
                               {recCommTips.map((t, i) =>
-                                <div key={i} style={{ border: "1px solid #e2e2e2", borderRadius: 0, padding: "10px 12px", fontSize: 12, color: "#0a0a0a", lineHeight: 1.6 }}>
+                      <div key={i} style={{ border: "1px solid #e2e2e2", borderRadius: 0, padding: "10px 12px", fontSize: 12, color: "#0a0a0a", lineHeight: 1.6 }}>
                                   {t}
                                 </div>
-                              )}
+                      )}
                             </div>
                           </div>
-                        )}
+                  }
                       </div>
                     </div>
-                  )}
+              }
                 </div>
               </div>
-            )}
+          }
 
             {/* Quote + Custom Practice — side by side, tall & narrow */}
-            {phase === "idle" && (
-              <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: 16, padding: isMobile ? "40px 16px 0" : "60px 48px 0" }}>
+            {phase === "idle" &&
+          <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: 16, padding: isMobile ? "40px 16px 0" : "60px 48px 0" }}>
                 <div style={{
-                  flex: 1, padding: "64px 28px", border: "1px solid #e2e2e2",
-                  textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14,
-                }}>
+              flex: 1, padding: "64px 28px", border: "1px solid #e2e2e2",
+              textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14
+            }}>
                   <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, color: "#0a0a0a", fontWeight: 300 }}>
                     Great speakers aren't born. They're trained.
                   </div>
                   <div style={{
-                    fontFamily: "'DM Mono', monospace", fontSize: 10, color: "#888",
-                    letterSpacing: "0.2em", textTransform: "uppercase",
-                  }}>
+                fontFamily: "'DM Mono', monospace", fontSize: 10, color: "#888",
+                letterSpacing: "0.2em", textTransform: "uppercase"
+              }}>
                     — Unknown
                   </div>
                 </div>
                 <button
-                  onClick={() => navigate("/custom-practice")}
-                  style={{
-                    flex: 1, padding: "64px 28px", background: "#fff", border: "1px solid #e2e2e2",
-                    cursor: "pointer", fontFamily: "'DM Mono', monospace", textAlign: "left",
-                    transition: "all 0.2s", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  }}
-                  onMouseEnter={(e) => { (e.currentTarget).style.borderColor = "#0a0a0a"; }}
-                  onMouseLeave={(e) => { (e.currentTarget).style.borderColor = "#e2e2e2"; }}
-                >
+              onClick={() => navigate("/custom-practice")}
+              style={{
+                flex: 1, padding: "64px 28px", background: "#fff", border: "1px solid #e2e2e2",
+                cursor: "pointer", fontFamily: "'DM Mono', monospace", textAlign: "left",
+                transition: "all 0.2s", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"
+              }}
+              onMouseEnter={(e) => {e.currentTarget.style.borderColor = "#0a0a0a";}}
+              onMouseLeave={(e) => {e.currentTarget.style.borderColor = "#e2e2e2";}}>
+              
                   <div style={{ fontSize: 14, fontWeight: 600, color: "#0a0a0a", marginBottom: 4 }}>+ Add Custom Practice</div>
                   <div style={{ fontSize: 10, color: "#888", letterSpacing: "0.1em" }}>Choose your own scenario and goals</div>
                 </button>
               </div>
-            )}
+          }
 
             {/* Massive spacer before footer */}
             <div style={{ height: 200 }} />
           </div>
         </>
-      )}
+      }
 
-      {showPricing && <PricingModal onClose={() => setShowPricing(false)} onSubscribe={() => { localStorage.setItem("syntera_premium", "true"); setIsPremium(true); setShowPricing(false); }} />}
+      {showPricing && <PricingModal onClose={() => setShowPricing(false)} onSubscribe={() => {localStorage.setItem("syntera_premium", "true");setIsPremium(true);setShowPricing(false);}} />}
 
       <Footer />
 
@@ -946,6 +946,6 @@ export default function Negotium() {
         @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
         * { box-sizing: border-box; }
       `}</style>
-    </div>
-  );
+    </div>);
+
 }
