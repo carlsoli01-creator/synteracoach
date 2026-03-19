@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const nameSchema = z.string().trim().max(100, "Name must be less than 100 characters");
 
@@ -83,9 +84,9 @@ export default function Profile() {
   const [fullName, setFullName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sessionCount, setSessionCount] = useState(0);
-  const [theme, setTheme] = useState(() => localStorage.getItem("syntera_theme") || "light");
+  const { theme, isDark, setTheme } = useTheme();
 
-  const isDark = theme === "dark";
+  
   const c = {
     bg: isDark ? "#000" : "#ffffff",
     card: isDark ? "#0a0a0a" : "#f5f5f5",
@@ -348,6 +349,12 @@ export default function Profile() {
           {/* ===== PREFERENCES TAB ===== */}
           {activeTab === "preferences" && (
             <div>
+              <SectionLabel color={c.sectionLabel}>Appearance</SectionLabel>
+              <SettingRow label="Dark Mode" description="Switch between light and dark themes" colors={settingColors}>
+                <Toggle isDark={isDark} checked={isDark} onChange={() => setTheme(isDark ? "light" : "dark")} />
+              </SettingRow>
+
+              <div style={{ marginTop: 28 }} />
               <SectionLabel color={c.sectionLabel}>Notifications</SectionLabel>
               <SettingRow label="Push Notifications" description="Get notified about daily tips and streaks" colors={settingColors}>
                 <Toggle isDark={isDark} checked={notificationsEnabled} onChange={(v) => { setNotificationsEnabled(v); savePref("syntera_notif", String(v)); }} />
