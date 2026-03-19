@@ -160,7 +160,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
             style={{
               display: "block", width: "100%", padding: "11px 16px",
               border: "none", borderRadius: 0, background: "transparent",
-              color: "#444", fontSize: 11, letterSpacing: "0.14em",
+              color: "#777", fontSize: 11, letterSpacing: "0.14em",
               textAlign: "left", cursor: "pointer",
               fontFamily: "'DM Mono', monospace", whiteSpace: "nowrap",
             }}
