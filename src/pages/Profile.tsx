@@ -85,7 +85,7 @@ export default function Profile() {
   const [fullName, setFullName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sessionCount, setSessionCount] = useState(0);
-  const [theme, setTheme] = useState(() => localStorage.getItem("syntera_theme") || "light");
+  const { theme, isDark, setTheme } = useTheme();
 
   const isDark = theme === "dark";
   const c = {
