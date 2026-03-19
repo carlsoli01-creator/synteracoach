@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSidebarState } from "@/contexts/SidebarContext";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useTheme } from "@/contexts/ThemeContext";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -35,6 +36,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
   const { signOut } = useAuth();
   const { expanded, toggle } = useSidebarState();
   const isMobile = useIsMobile();
+  const { isDark } = useTheme();
   const navItems = isMobile ? NAV_ITEMS_MOBILE : NAV_ITEMS;
   return (
     <>
@@ -51,12 +53,12 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0a0a0a",
-          border: "1px solid #1a1a1a",
+          background: "transparent",
+          border: "none",
           borderRadius: 0,
           cursor: "pointer",
-          transition: "left 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.15s",
-          color: "#fff",
+          transition: "left 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+          color: isDark ? "#fff" : "#000",
         }}
         aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
       >
@@ -118,8 +120,8 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
                   padding: "11px 16px",
                   border: "none",
                   borderRadius: 0,
-                  background: active ? "#ffffff" : "transparent",
-                  color: active ? "#0a0a0a" : "#555",
+                  background: active ? "rgba(255,255,255,0.1)" : "transparent",
+                  color: active ? "#ffffff" : "#999",
                   fontSize: 11,
                   fontWeight: active ? 500 : 400,
                   letterSpacing: "0.14em",
@@ -145,7 +147,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
               style={{
                 display: "block", width: "100%", padding: "11px 16px",
                 border: "none", borderRadius: 0, background: "transparent",
-                color: "#555", fontSize: 11, letterSpacing: "0.14em",
+                color: "#888", fontSize: 11, letterSpacing: "0.14em",
                 textTransform: "uppercase", textAlign: "left", cursor: "pointer",
                 fontFamily: "'DM Mono', monospace", whiteSpace: "nowrap",
               }}
@@ -158,7 +160,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
             style={{
               display: "block", width: "100%", padding: "11px 16px",
               border: "none", borderRadius: 0, background: "transparent",
-              color: "#444", fontSize: 11, letterSpacing: "0.14em",
+              color: "#777", fontSize: 11, letterSpacing: "0.14em",
               textAlign: "left", cursor: "pointer",
               fontFamily: "'DM Mono', monospace", whiteSpace: "nowrap",
             }}
