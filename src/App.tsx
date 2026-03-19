@@ -34,6 +34,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
+          <ThemeProvider>
           <SidebarProvider>
           <PageTransition>
             <Routes>
