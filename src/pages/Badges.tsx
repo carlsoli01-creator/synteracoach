@@ -36,7 +36,7 @@ export default function Badges() {
           <div style={{ fontSize: 22, fontWeight: 700, color: "#0a0a0a", fontFamily: "'Syne', sans-serif" }}>Badges</div>
           <div style={{ fontSize: 11, color: "#888", marginTop: 6, fontFamily: "'DM Mono', monospace" }}>Earn badges by building streaks and hitting milestones</div>
         </div>
-        <div style={{ maxWidth: 900, padding: "0 48px", paddingBottom: 80 }}>
+        <div style={{ padding: "0 48px", paddingBottom: 80 }}>
           <StreakBadges history={history} colors={c} />
         </div>
       </div>
