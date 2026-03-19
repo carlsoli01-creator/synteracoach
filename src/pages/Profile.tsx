@@ -87,7 +87,7 @@ export default function Profile() {
   const [sessionCount, setSessionCount] = useState(0);
   const { theme, isDark, setTheme } = useTheme();
 
-  const isDark = theme === "dark";
+  
   const c = {
     bg: isDark ? "#000" : "#ffffff",
     card: isDark ? "#0a0a0a" : "#f5f5f5",
