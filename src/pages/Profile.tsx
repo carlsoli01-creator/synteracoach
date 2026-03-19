@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useSidebarState } from "@/contexts/SidebarContext";
 
 const nameSchema = z.string().trim().max(100, "Name must be less than 100 characters");
 
