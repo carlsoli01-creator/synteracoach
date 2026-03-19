@@ -53,12 +53,12 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0a0a0a",
-          border: "1px solid #1a1a1a",
+          background: "transparent",
+          border: "none",
           borderRadius: 0,
           cursor: "pointer",
-          transition: "left 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.15s",
-          color: "#fff",
+          transition: "left 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+          color: isDark ? "#fff" : "#000",
         }}
         aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
       >
