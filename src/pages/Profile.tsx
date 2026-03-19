@@ -349,6 +349,12 @@ export default function Profile() {
           {/* ===== PREFERENCES TAB ===== */}
           {activeTab === "preferences" && (
             <div>
+              <SectionLabel color={c.sectionLabel}>Appearance</SectionLabel>
+              <SettingRow label="Dark Mode" description="Switch between light and dark themes" colors={settingColors}>
+                <Toggle isDark={isDark} checked={isDark} onChange={() => setTheme(isDark ? "light" : "dark")} />
+              </SettingRow>
+
+              <div style={{ marginTop: 28 }} />
               <SectionLabel color={c.sectionLabel}>Notifications</SectionLabel>
               <SettingRow label="Push Notifications" description="Get notified about daily tips and streaks" colors={settingColors}>
                 <Toggle isDark={isDark} checked={notificationsEnabled} onChange={(v) => { setNotificationsEnabled(v); savePref("syntera_notif", String(v)); }} />
