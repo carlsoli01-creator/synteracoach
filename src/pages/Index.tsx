@@ -393,8 +393,8 @@ export default function Negotium() {
     setMetrics(null); setFeedback(null); setWaveData(new Array(80).fill(0.5)); setMicError("");
   }, [stopAll, selectedDuration]);
 
-  const tagColor = (t) => t === "pos" ? "#111" : t === "warn" ? "#555" : "#999";
-  const tagBg = (t) => t === "pos" ? "#f0f0f0" : t === "warn" ? "#f7f7f7" : "#fafafa";
+  const tagColor = (t) => t === "pos" ? "var(--pg-text)" : t === "warn" ? "var(--pg-faint)" : "var(--pg-muted)";
+  const tagBg = (t) => t === "pos" ? "var(--pg-accent)" : t === "warn" ? "var(--pg-surface-alt)" : "var(--pg-bg)";
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
   const isOverlay = showIntro || showForcedPaywall || showInterstitial || quizVisible;
 
