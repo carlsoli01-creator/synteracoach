@@ -634,19 +634,21 @@ export default function Negotium() {
             </main>
 
             {phase === "idle" && (
-              <div className={`bottom-cards${isMobile ? " mobile" : ""}`}>
-                <div className="quote-card">
-                  <p className="quote-text">Great speakers aren't born. They're trained.</p>
-                  <span className="quote-attr">— Unknown</span>
+              <div style={{ marginTop: 160, paddingBottom: 40 }}>
+                <div className={`bottom-cards${isMobile ? " mobile" : ""}`} style={{ flexDirection: "column", maxWidth: 600, margin: "0 auto" }}>
+                  <div className="quote-card" style={{ minHeight: 180 }}>
+                    <p className="quote-text">Great speakers aren't born. They're trained.</p>
+                    <span className="quote-attr">— Unknown</span>
+                  </div>
+                  <button className="custom-card" style={{ minHeight: 140 }} onClick={() => navigate("/custom-practice")}>
+                    <span className="custom-card-title">+ Custom Practice</span>
+                    <span className="custom-card-sub">Choose your own scenario and goals</span>
+                  </button>
                 </div>
-                <button className="custom-card" onClick={() => navigate("/custom-practice")}>
-                  <span className="custom-card-title">+ Custom Practice</span>
-                  <span className="custom-card-sub">Choose your own scenario and goals</span>
-                </button>
               </div>
             )}
 
-            <div style={{ height: 80 }} />
+            <div style={{ height: 40 }} />
           </div>
         </>
       )}
