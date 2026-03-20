@@ -12,7 +12,6 @@ import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 import SpeakBetterInterstitial from "@/components/onboarding/SpeakBetterInterstitial";
 import { Footer } from "@/components/ui/footer";
 
-
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
 
@@ -27,88 +26,67 @@ function ScoreRing({ score, label, color }) {
   const circ = 2 * Math.PI * r;
   const offset = circ * (1 - score / 100);
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+    <div className="score-ring">
       <svg width={72} height={72} viewBox="0 0 72 72">
-        <circle cx={36} cy={36} r={r} fill="none" stroke="#e2e2e2" strokeWidth={5} />
-        <circle cx={36} cy={36} r={r} fill="none" stroke={color} strokeWidth={5}
-        strokeLinecap="square" strokeDasharray={circ} strokeDashoffset={offset}
-        style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s ease" }} />
-        <text x={36} y={40} textAnchor="middle" fill="#0a0a0a" fontSize={14}
-        fontFamily="'DM Mono', monospace" fontWeight="300">{score}</text>
+        <circle cx={36} cy={36} r={r} fill="none" stroke="#ebebeb" strokeWidth={4} />
+        <circle cx={36} cy={36} r={r} fill="none" stroke={color} strokeWidth={4}
+          strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={offset}
+          style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s ease" }} />
+        <text x={36} y={40} textAnchor="middle" fill="#111" fontSize={13}
+          fontFamily="'DM Mono', monospace" fontWeight="500">{score}</text>
       </svg>
-      <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#888", fontFamily: "'DM Mono', monospace" }}>{label}</span>
-    </div>);
-
-}
-
-function HistoryRow({ entry, index }) {
-  const score = entry.overall_score ?? entry.overall;
-  const grade = score >= 80 ? "A" : score >= 65 ? "B" : score >= 50 ? "C" : "D";
-  const date = entry.created_at ?
-  new Date(entry.created_at).toLocaleDateString([], { month: "short", day: "numeric" }) :
-  "";
-  return (
-    <div style={{
-      padding: "12px 0", borderBottom: "1px solid #e2e2e2",
-      display: "flex", alignItems: "center", gap: 16
-    }}>
-      <div style={{ fontSize: 22, fontWeight: 300, minWidth: 20, fontFamily: "'DM Mono', monospace", color: "#0a0a0a" }}>{grade}</div>
-      <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 11, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>
-          Session #{index + 1}
-        </div>
-      </div>
-      <div style={{ fontSize: 14, fontWeight: 300, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>{score}</div>
-      <div style={{ fontSize: 9, color: "#888", fontFamily: "'DM Mono', monospace" }}>{date}</div>
-    </div>);
-
+      <span className="ring-label">{label}</span>
+    </div>
+  );
 }
 
 const COMMUNICATION_TIPS = [
-"Speak from your diaphragm for fuller resonance.",
-"Warm up your voice with lip trills and humming.",
-"Chunk long sentences into shorter, clearer phrases.",
-"Place stress on the key word to change emphasis.",
-"Breathe at punctuation to maintain phrasing.",
-"Maintain a steady volume to project confidence.",
-"Use deliberate pacing: aim for clarity over speed.",
-"Reduce upward inflection to avoid sounding unsure.",
-"Record yourself and note where volume drops occur.",
-"Practice reading aloud with exaggerated stress patterns.",
-"Use pauses to allow listeners to process key points.",
-"Avoid trailing questions at the end of statements.",
-"Keep sentences active and concise.",
-"Use vocal variety to keep attention on important words.",
-"Slow down slightly when delivering the main point.",
-"Match the listener's speaking pace to build rapport.",
-"Monitor and reduce filler words like 'um' and 'like'.",
-"Practice sustaining consistent speaking energy for 60s stretches.",
-"Use shorter opening sentences to establish clarity.",
-"End with a clear, downward-inflected close to each idea.",
-"Pause strategically after key points to create impact.",
-"Use downward inflection to signal finality and conviction.",
-"Break complex ideas into small, digestible chunks.",
-"Mirror the other person's tempo briefly to build rapport.",
-"Use silence as a tool — let the other person fill it.",
-"Start important sentences with an anchor word (e.g., 'Consider').",
-"Label emotions neutrally to defuse tension (e.g., 'I hear concern').",
-"Keep your pitch steady when presenting key information.",
-"Use micro-pauses (250–400ms) to sound deliberate, not hesitant.",
-"Ask calibrated questions to engage listeners ('How would you...?').",
-"Summarize key points before moving on to new ideas.",
-"Use consistent terminology to reduce ambiguity.",
-"Record and compare your delivery across sessions."];
+  "Speak from your diaphragm for fuller resonance.",
+  "Warm up your voice with lip trills and humming.",
+  "Chunk long sentences into shorter, clearer phrases.",
+  "Place stress on the key word to change emphasis.",
+  "Breathe at punctuation to maintain phrasing.",
+  "Maintain a steady volume to project confidence.",
+  "Use deliberate pacing: aim for clarity over speed.",
+  "Reduce upward inflection to avoid sounding unsure.",
+  "Record yourself and note where volume drops occur.",
+  "Practice reading aloud with exaggerated stress patterns.",
+  "Use pauses to allow listeners to process key points.",
+  "Avoid trailing questions at the end of statements.",
+  "Keep sentences active and concise.",
+  "Use vocal variety to keep attention on important words.",
+  "Slow down slightly when delivering the main point.",
+  "Match the listener's speaking pace to build rapport.",
+  "Monitor and reduce filler words like 'um' and 'like'.",
+  "Practice sustaining consistent speaking energy for 60s stretches.",
+  "Use shorter opening sentences to establish clarity.",
+  "End with a clear, downward-inflected close to each idea.",
+  "Pause strategically after key points to create impact.",
+  "Use downward inflection to signal finality and conviction.",
+  "Break complex ideas into small, digestible chunks.",
+  "Mirror the other person's tempo briefly to build rapport.",
+  "Use silence as a tool — let the other person fill it.",
+  "Start important sentences with an anchor word (e.g., 'Consider').",
+  "Label emotions neutrally to defuse tension (e.g., 'I hear concern').",
+  "Keep your pitch steady when presenting key information.",
+  "Use micro-pauses (250–400ms) to sound deliberate, not hesitant.",
+  "Ask calibrated questions to engage listeners ('How would you...?').",
+  "Summarize key points before moving on to new ideas.",
+  "Use consistent terminology to reduce ambiguity.",
+  "Record and compare your delivery across sessions.",
+];
 
 const QUIZ_QUESTIONS = [
-{ id: "goal", q: "What do you most want to improve?", options: ["Pace", "Tone/Authority", "Clarity", "Confidence", "Conciseness"] },
-{ id: "experience", q: "How often do you practice speaking exercises?", options: ["Daily", "Weekly", "Monthly", "Rarely", "Never"] },
-{ id: "audience", q: "Who is your most common audience?", options: ["One person", "Small team", "Large group", "Clients/Customers", "Remote calls"] },
-{ id: "nerves", q: "Do you feel nervous when speaking publicly?", options: ["Always", "Often", "Sometimes", "Rarely", "Never"] },
-{ id: "filler", q: "Do you use filler words (um/like) often?", options: ["Very often", "Sometimes", "Occasionally", "Rarely", "Never"] },
-{ id: "goalType", q: "Which result matters most?", options: ["Close deals", "Appear confident", "Be concise", "Be persuasive", "Improve clarity"] }];
+  { id: "goal", q: "What do you most want to improve?", options: ["Pace", "Tone/Authority", "Clarity", "Confidence", "Conciseness"] },
+  { id: "experience", q: "How often do you practice speaking exercises?", options: ["Daily", "Weekly", "Monthly", "Rarely", "Never"] },
+  { id: "audience", q: "Who is your most common audience?", options: ["One person", "Small team", "Large group", "Clients/Customers", "Remote calls"] },
+  { id: "nerves", q: "Do you feel nervous when speaking publicly?", options: ["Always", "Often", "Sometimes", "Rarely", "Never"] },
+  { id: "filler", q: "Do you use filler words (um/like) often?", options: ["Very often", "Sometimes", "Occasionally", "Rarely", "Never"] },
+  { id: "goalType", q: "Which result matters most?", options: ["Close deals", "Appear confident", "Be concise", "Be persuasive", "Improve clarity"] },
+];
 
-function derivePersonalization(answers: Record<string, string>) {
-  const picksComm: string[] = [];
+function derivePersonalization(answers) {
+  const picksComm = [];
   if (answers.goal?.includes("Pace")) picksComm.push(COMMUNICATION_TIPS[6], COMMUNICATION_TIPS[20]);
   if (answers.goal?.includes("Tone")) picksComm.push(COMMUNICATION_TIPS[0], COMMUNICATION_TIPS[21]);
   if (answers.goal?.includes("Clarity")) picksComm.push(COMMUNICATION_TIPS[2], COMMUNICATION_TIPS[22]);
@@ -117,104 +95,78 @@ function derivePersonalization(answers: Record<string, string>) {
   if (answers.filler?.includes("Very") || answers.filler?.includes("Sometimes")) picksComm.push(COMMUNICATION_TIPS[16]);
   if (answers.nerves?.includes("Always") || answers.nerves?.includes("Often")) picksComm.push(COMMUNICATION_TIPS[10]);
   for (let i = 0; picksComm.length < 6; i++) picksComm.push(COMMUNICATION_TIPS[i % COMMUNICATION_TIPS.length]);
-  const goalMap: Record<string, string> = {
+  const goalMap = {
     "Pace": "Optimized for pace & rhythm mastery",
     "Tone/Authority": "Tuned for tone & authority building",
     "Clarity": "Focused on crystal-clear delivery",
     "Confidence": "Designed to build vocal confidence",
-    "Conciseness": "Streamlined for concise impact"
+    "Conciseness": "Streamlined for concise impact",
   };
   const subtitle = goalMap[answers.goal] || "Voice Intelligence Platform";
-  const focusMap: Record<string, string> = {
+  const focusMap = {
     "Close deals": "Close Deals.",
     "Appear confident": "Command the Room.",
     "Be concise": "Say More with Less.",
     "Be persuasive": "Persuade with Precision.",
-    "Improve clarity": "Speak with Clarity."
+    "Improve clarity": "Speak with Clarity.",
   };
   const heroFocus = focusMap[answers.goalType] || "Be Analyzed.";
   return { neg: [], comm: picksComm.slice(0, 6), subtitle, heroFocus };
 }
 
-function OnboardingQuiz({ onFinish }: {onFinish: (result: {neg: string[];comm: string[];answers: Record<string, string>;}) => void;}) {
+function OnboardingQuiz({ onFinish }) {
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState({});
   const q = QUIZ_QUESTIONS[step];
-
   const handleFinish = () => {
     const { neg, comm } = derivePersonalization(answers);
     onFinish({ neg, comm, answers });
     localStorage.setItem("syntera_quiz_completed_at", Date.now().toString());
   };
-
   return (
-    <div style={{ position: "fixed", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(2,6,23,0.5)", zIndex: 60 }}>
-      <div style={{ width: "min(540px, 92vw)", background: "#fff", border: "1px solid #e2e2e2", borderRadius: 0, padding: 28 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-          <div style={{ fontSize: 18, fontWeight: 800, color: "#0a0a0a", fontFamily: "'Syne', sans-serif" }}>Welcome — Quick Setup</div>
-          <div style={{ fontSize: 12, color: "#888", fontFamily: "'DM Mono', monospace" }}>{step + 1}/{QUIZ_QUESTIONS.length}</div>
+    <div className="quiz-overlay">
+      <div className="quiz-modal">
+        <div className="quiz-header">
+          <div className="quiz-title">Welcome — Quick Setup</div>
+          <div className="quiz-step">{step + 1}/{QUIZ_QUESTIONS.length}</div>
         </div>
-        <div style={{ fontSize: 14, color: "#0a0a0a", marginBottom: 12, fontWeight: 500 }}>{q.q}</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
-          {q.options.map((opt) =>
-          <button key={opt} onClick={() => setAnswers((a) => ({ ...a, [q.id]: opt }))}
-          style={{
-            textAlign: "left", padding: "10px 14px", borderRadius: 0, cursor: "pointer",
-            border: answers[q.id] === opt ? "2px solid #0a0a0a" : "1px solid #e2e2e2",
-            background: answers[q.id] === opt ? "#f8f8f8" : "#fff",
-            fontWeight: answers[q.id] === opt ? 600 : 400, fontSize: 13, color: "#0a0a0a",
-            transition: "all .15s", fontFamily: "'DM Mono', monospace"
-          }}>
-              {opt}
-            </button>
-          )}
+        <div className="quiz-question">{q.q}</div>
+        <div className="quiz-options">
+          {q.options.map((opt) => (
+            <button key={opt} onClick={() => setAnswers((a) => ({ ...a, [q.id]: opt }))}
+              className={`quiz-option${answers[q.id] === opt ? " selected" : ""}`}>{opt}</button>
+          ))}
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <button onClick={() => setStep((s) => Math.max(s - 1, 0))} disabled={step === 0}
-          style={{ padding: "10px 18px", borderRadius: 0, border: "1px solid #e2e2e2", background: "transparent", cursor: step === 0 ? "not-allowed" : "pointer", color: "#888", fontSize: 13, fontFamily: "'DM Mono', monospace" }}>
-            Back
-          </button>
-          {step < QUIZ_QUESTIONS.length - 1 ?
-          <button onClick={() => answers[q.id] && setStep((s) => s + 1)} disabled={!answers[q.id]}
-          style={{ padding: "10px 22px", borderRadius: 0, border: "none", background: answers[q.id] ? "#0a0a0a" : "#bbb", color: "#fff", cursor: answers[q.id] ? "pointer" : "not-allowed", fontSize: 13, fontWeight: 600, opacity: answers[q.id] ? 1 : 0.6, transition: "all 0.2s", fontFamily: "'DM Mono', monospace" }}>
-              Next
-            </button> :
-          <button onClick={() => answers[q.id] && handleFinish()} disabled={!answers[q.id]}
-          style={{ padding: "10px 22px", borderRadius: 0, border: "none", background: answers[q.id] ? "#0a0a0a" : "#bbb", color: "#fff", cursor: answers[q.id] ? "pointer" : "not-allowed", fontSize: 13, fontWeight: 600, opacity: answers[q.id] ? 1 : 0.6, transition: "all 0.2s", fontFamily: "'DM Mono', monospace" }}>
-              Finish & Start
-            </button>
+        <div className="quiz-actions">
+          <button onClick={() => setStep((s) => Math.max(s - 1, 0))} disabled={step === 0} className="quiz-btn-secondary">Back</button>
+          {step < QUIZ_QUESTIONS.length - 1
+            ? <button onClick={() => answers[q.id] && setStep((s) => s + 1)} disabled={!answers[q.id]} className="quiz-btn-primary">Next</button>
+            : <button onClick={() => answers[q.id] && handleFinish()} disabled={!answers[q.id]} className="quiz-btn-primary">Finish & Start</button>
           }
         </div>
       </div>
-    </div>);
-
+    </div>
+  );
 }
 
-function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: {onStart: () => void;onStop: () => void;onStopEarly: () => void;phase: string;}) {
+function VoiceMicControl({ onStart, onStop, onStopEarly, phase }) {
   const isRecording = phase === "recording";
   const isAnalyzing = phase === "analyzing";
   return (
-    <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 16 }}>
-      {isRecording ?
-      <button onClick={onStopEarly}
-      style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: "pointer", background: "#0a0a0a", color: "#fff", fontWeight: 500, borderRadius: 0, transition: "all 0.2s", fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
-          STOP RECORDING
-        </button> :
-      <button onClick={!isAnalyzing ? onStart : undefined} disabled={isAnalyzing}
-      style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: isAnalyzing ? "not-allowed" : "pointer", background: "#0a0a0a", color: "#fff", fontWeight: 500, borderRadius: 0, opacity: isAnalyzing ? 0.6 : 1, transition: "all 0.2s", fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
-          {phase === "idle" ? "START RECORDING" : phase === "analyzing" ? "ANALYZING..." : "RECORD AGAIN"}
-        </button>
+    <div className="mic-controls">
+      {isRecording
+        ? <button onClick={onStopEarly} className="btn-primary btn-stop">Stop Recording</button>
+        : <button onClick={!isAnalyzing ? onStart : undefined} disabled={isAnalyzing} className="btn-primary">
+            {phase === "idle" ? "Start Recording" : phase === "analyzing" ? "Analyzing…" : "Record Again"}
+          </button>
       }
-      <button onClick={onStop}
-      style={{ fontSize: 11, padding: "14px 18px", background: "none", border: "1px solid #e2e2e2", color: "#888", cursor: "pointer", transition: "all 0.2s", borderRadius: 0, fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em" }}>
-        Reset
-      </button>
-    </div>);
-
+      <button onClick={onStop} className="btn-ghost">Reset</button>
+    </div>
+  );
 }
 
 export default function Negotium() {
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const { sidebarWidth } = useSidebarState();
   const isMobile = useIsMobile();
   const [phase, setPhase] = useState("idle");
@@ -222,23 +174,20 @@ export default function Negotium() {
   const [timeLeft, setTimeLeft] = useState(DEFAULT_DURATION);
   const [metrics, setMetrics] = useState(null);
   const [feedback, setFeedback] = useState(null);
-  const [history, setHistory] = useState<any[]>([]);
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
     if (!user) return;
-    const loadHistory = async () => {
-      const { data } = await (supabase as any).from("voice_sessions").select("*").order("created_at", { ascending: false }).limit(20);
+    (async () => {
+      const { data } = await (supabase).from("voice_sessions").select("*").order("created_at", { ascending: false }).limit(20);
       if (data) setHistory(data);
-    };
-    loadHistory();
+    })();
   }, [user]);
 
   const navigate = useNavigate();
   const [waveData, setWaveData] = useState(new Array(80).fill(0.5));
   const [micError, setMicError] = useState("");
-  const [theme, setTheme] = useState(() => localStorage.getItem("syntera_theme") || "light");
-  const [spacingMode, setSpacingMode] = useState("airy");
-  const [recCommTips, setRecCommTips] = useState<string[]>([]);
+  const [recCommTips, setRecCommTips] = useState([]);
   const [userSubtitle, setUserSubtitle] = useState("Voice Intelligence Platform");
   const [heroFocus, setHeroFocus] = useState("Be Analyzed.");
   const [isPremium, setIsPremium] = useState(() => localStorage.getItem("syntera_premium") === "true");
@@ -248,31 +197,21 @@ export default function Negotium() {
   const [showIntro, setShowIntro] = useState(() => localStorage.getItem("syntera_premium") === "true" ? false : !localStorage.getItem("syntera_intro_done_v2"));
   const [showForcedPaywall, setShowForcedPaywall] = useState(false);
   const [showInterstitial, setShowInterstitial] = useState(false);
+  const [quizVisible, setQuizVisible] = useState(() => {
+    if (localStorage.getItem("syntera_premium") === "true") return false;
+    try { if (localStorage.getItem("negotium_quiz_v2")) return false; } catch (_) {}
+    return false;
+  });
+  const [livePace, setLivePace] = useState(0);
+  const [liveEnergy, setLiveEnergy] = useState(0);
 
   const completedCategoriesToday = useMemo(() => {
     const todayStr = new Date().toLocaleDateString();
-    const todaySessions = history.filter((s) => {
-      if (!s.created_at) return false;
-      return new Date(s.created_at).toLocaleDateString() === todayStr;
-    });
-    const cats: string[] = [];
-    todaySessions.forEach((s) => {
-      const fb = s.feedback as any;
-      if (fb?.scenario_category && !cats.includes(fb.scenario_category)) {
-        cats.push(fb.scenario_category);
-      }
-    });
+    const cats = [];
+    history.filter((s) => s.created_at && new Date(s.created_at).toLocaleDateString() === todayStr)
+      .forEach((s) => { const fb = s.feedback; if (fb?.scenario_category && !cats.includes(fb.scenario_category)) cats.push(fb.scenario_category); });
     return cats;
   }, [history]);
-
-  const [quizVisible, setQuizVisible] = useState(() => {
-    if (localStorage.getItem("syntera_premium") === "true") return false;
-    try {
-      const saved = localStorage.getItem("negotium_quiz_v2");
-      if (saved) return false;
-    } catch (_) {}
-    return false;
-  });
 
   useEffect(() => {
     const quizDone = localStorage.getItem("negotium_quiz_v2");
@@ -280,8 +219,7 @@ export default function Negotium() {
     if (!quizDone || tipShownToday || quizVisible) return;
     const delay = 5000 + Math.random() * 10000;
     const timer = setTimeout(() => {
-      const randomTip = COMMUNICATION_TIPS[Math.floor(Math.random() * COMMUNICATION_TIPS.length)];
-      setTipText(randomTip);
+      setTipText(COMMUNICATION_TIPS[Math.floor(Math.random() * COMMUNICATION_TIPS.length)]);
       setShowTipPopup(true);
       localStorage.setItem("syntera_tip_shown_date", new Date().toDateString());
     }, delay);
@@ -301,33 +239,31 @@ export default function Negotium() {
     } catch (_) {}
   }, []);
 
-  const analyserRef = useRef<AnalyserNode | null>(null);
-  const animFrameRef = useRef<number | null>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const analysisTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const analyserRef = useRef(null);
+  const animFrameRef = useRef(null);
+  const timerRef = useRef(null);
+  const analysisTimeoutRef = useRef(null);
   const isAnalyzingRef = useRef(false);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const volumeRef = useRef<number[]>([]);
+  const mediaRecorderRef = useRef(null);
+  const audioCtxRef = useRef(null);
+  const volumeRef = useRef([]);
   const silenceRef = useRef(0);
   const framesRef = useRef(0);
   const transcriptRef = useRef("");
-  const recognitionRef = useRef<any>(null);
-  const recordingStartRef = useRef<number>(0);
-  const [livePace, setLivePace] = useState(0);
-  const [liveEnergy, setLiveEnergy] = useState(0);
+  const recognitionRef = useRef(null);
+  const recordingStartRef = useRef(0);
 
   const ringOffset = CIRCUMFERENCE * (timeLeft / selectedDuration);
 
   const stopAll = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    if (analysisTimeoutRef.current) {clearTimeout(analysisTimeoutRef.current);analysisTimeoutRef.current = null;}
+    if (analysisTimeoutRef.current) { clearTimeout(analysisTimeoutRef.current); analysisTimeoutRef.current = null; }
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
       mediaRecorderRef.current.stop();
       mediaRecorderRef.current.stream?.getTracks().forEach((t) => t.stop());
     }
-    try {audioCtxRef.current?.close();} catch (_) {}
+    try { audioCtxRef.current?.close(); } catch (_) {}
   }, []);
 
   const analyzeVoice = useCallback(async () => {
@@ -339,75 +275,49 @@ export default function Negotium() {
     const volVar = getVariance(vols);
     const durationSeconds = Math.round((Date.now() - recordingStartRef.current) / 1000);
     const transcript = transcriptRef.current.trim();
-    try {(recognitionRef.current as any)?._stopAutoRestart?.();} catch (_) {}
-    try {recognitionRef.current?.stop();} catch (_) {}
+    try { recognitionRef.current?._stopAutoRestart?.(); } catch (_) {}
+    try { recognitionRef.current?.stop(); } catch (_) {}
     if (!transcript || transcript.length < 5) {
       setMicError("Could not detect speech. Please speak clearly and try again.");
-      setPhase("idle");
-      isAnalyzingRef.current = false;
-      return;
+      setPhase("idle"); isAnalyzingRef.current = false; return;
     }
     setPhase("analyzing");
     try {
       const { data, error } = await supabase.functions.invoke("analyze-voice", {
-        body: { transcript, audioMetrics: { averageVolume: avgVol, silenceRatio: silRatio, volumeVariance: volVar, totalFrames: framesRef.current, durationSeconds } }
+        body: { transcript, audioMetrics: { averageVolume: avgVol, silenceRatio: silRatio, volumeVariance: volVar, totalFrames: framesRef.current, durationSeconds } },
       });
       if (error) {
         let errorMessage = "AI analysis failed. Please try again.";
-        const responseContext = (error as any)?.context;
+        const responseContext = error?.context;
         if (responseContext && typeof responseContext.text === "function") {
           const responseText = await responseContext.text();
-          try {const parsed = JSON.parse(responseText);if (parsed?.error) errorMessage = parsed.error;} catch {if (responseText?.trim()) errorMessage = responseText;}
+          try { const parsed = JSON.parse(responseText); if (parsed?.error) errorMessage = parsed.error; } catch { if (responseText?.trim()) errorMessage = responseText; }
         }
-        if ((error as any)?.message?.includes("402")) errorMessage = "AI credits are exhausted.";
-        setMicError(errorMessage);
-        setPhase("idle");
-        return;
+        if (error?.message?.includes("402")) errorMessage = "AI credits are exhausted.";
+        setMicError(errorMessage); setPhase("idle"); return;
       }
-      if (data?.error) {setMicError(data.error);setPhase("idle");return;}
+      if (data?.error) { setMicError(data.error); setPhase("idle"); return; }
       const { scores, analysis, tags, communicationTips, techniques, fillerWords, hedgingInstances, powerWords, wordChoiceScore, persuasionScore } = data;
       const finalWpm = durationSeconds > 0 ? transcript.trim().split(/\s+/).filter(Boolean).length / durationSeconds * 60 : 0;
       const measuredPace = finalWpm < 100 ? 20 : finalWpm <= 119 ? 45 : finalWpm <= 139 ? 70 : finalWpm <= 160 ? 100 : finalWpm <= 180 ? 80 : finalWpm <= 200 ? 55 : 30;
-      setMetrics({
-        pace: scores.pace, conf: scores.confidence, clar: scores.clarity,
-        delivery: scores.delivery || scores.overall, overall: scores.overall,
-        measuredPace, wpm: Math.round(finalWpm),
-        wordChoice: wordChoiceScore || 0, persuasion: persuasionScore || 0
-      });
-      setFeedback({
-        overallTxt: analysis.overall, paceTxt: analysis.pace, toneTxt: analysis.tone,
-        deliveryTxt: analysis.delivery || "", strengthTxt: analysis.strength,
-        weaknessTxt: analysis.weakness || "", recTxt: analysis.recommendation,
-        clarityTxt: analysis.clarity || "",
-        tags: (tags || []).map((t: any) => ({ label: t.label, t: t.type })),
-        transcript,
-        techniques: techniques || [],
-        fillerWords: fillerWords || { count: 0, words: [], percentage: 0 },
-        hedgingInstances: hedgingInstances || [],
-        powerWords: powerWords || []
-      });
+      setMetrics({ pace: scores.pace, conf: scores.confidence, clar: scores.clarity, delivery: scores.delivery || scores.overall, overall: scores.overall, measuredPace, wpm: Math.round(finalWpm), wordChoice: wordChoiceScore || 0, persuasion: persuasionScore || 0 });
+      setFeedback({ overallTxt: analysis.overall, paceTxt: analysis.pace, toneTxt: analysis.tone, deliveryTxt: analysis.delivery || "", strengthTxt: analysis.strength, weaknessTxt: analysis.weakness || "", recTxt: analysis.recommendation, clarityTxt: analysis.clarity || "", tags: (tags || []).map((t) => ({ label: t.label, t: t.type })), transcript, techniques: techniques || [], fillerWords: fillerWords || { count: 0, words: [], percentage: 0 }, hedgingInstances: hedgingInstances || [], powerWords: powerWords || [] });
       setRecCommTips(communicationTips || []);
-      const sessionRow = {
-        user_id: user?.id, overall_score: scores.overall, pace_score: scores.pace,
-        confidence_score: scores.confidence, clarity_score: scores.clarity, transcript,
-        feedback: { analysis, tags, scenario_category: localStorage.getItem("syntera_active_scenario_category") || null },
-        negotiation_tips: [], communication_tips: communicationTips || [], duration_seconds: durationSeconds
-      };
-      const { data: inserted } = await (supabase as any).from("voice_sessions").insert(sessionRow).select().single();
-      if (inserted) setHistory((h: any) => [inserted, ...h.slice(0, 19)]);
+      const sessionRow = { user_id: user?.id, overall_score: scores.overall, pace_score: scores.pace, confidence_score: scores.confidence, clarity_score: scores.clarity, transcript, feedback: { analysis, tags, scenario_category: localStorage.getItem("syntera_active_scenario_category") || null }, negotiation_tips: [], communication_tips: communicationTips || [], duration_seconds: durationSeconds };
+      const { data: inserted } = await (supabase).from("voice_sessions").insert(sessionRow).select().single();
+      if (inserted) setHistory((h) => [inserted, ...h.slice(0, 19)]);
       setPhase("done");
-    } catch (err: any) {
-      setMicError("Analysis failed. Please try again.");
-      setPhase("idle");
+    } catch {
+      setMicError("Analysis failed. Please try again."); setPhase("idle");
     } finally {
-      if (analysisTimeoutRef.current) {clearTimeout(analysisTimeoutRef.current);analysisTimeoutRef.current = null;}
+      if (analysisTimeoutRef.current) { clearTimeout(analysisTimeoutRef.current); analysisTimeoutRef.current = null; }
       isAnalyzingRef.current = false;
     }
   }, [user?.id]);
 
   const scheduleAnalyze = useCallback(() => {
     if (analysisTimeoutRef.current) clearTimeout(analysisTimeoutRef.current);
-    analysisTimeoutRef.current = setTimeout(() => {void analyzeVoice();}, 1500);
+    analysisTimeoutRef.current = setTimeout(() => { void analyzeVoice(); }, 1500);
   }, [analyzeVoice]);
 
   const todaySessionCount = useMemo(() => {
@@ -416,536 +326,484 @@ export default function Negotium() {
   }, [history]);
 
   const startRecording = useCallback(async () => {
-    if (!isPremium && todaySessionCount >= 1) {setShowPricing(true);return;}
-    setMicError("");
-    transcriptRef.current = "";
+    if (!isPremium && todaySessionCount >= 1) { setShowPricing(true); return; }
+    setMicError(""); transcriptRef.current = "";
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const audioCtx = new AudioContext();
       const analyser = audioCtx.createAnalyser();
       analyser.fftSize = 1024;
       audioCtx.createMediaStreamSource(stream).connect(analyser);
-      audioCtxRef.current = audioCtx;
-      analyserRef.current = analyser;
-      volumeRef.current = [];
-      silenceRef.current = 0;
-      framesRef.current = 0;
-      recordingStartRef.current = Date.now();
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      audioCtxRef.current = audioCtx; analyserRef.current = analyser;
+      volumeRef.current = []; silenceRef.current = 0; framesRef.current = 0; recordingStartRef.current = Date.now();
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = "en-US";
-        recognition.maxAlternatives = 3;
-        let finalTranscript = "";
-        let isRecognitionActive = true;
-        recognition.onresult = (event: any) => {
+        recognition.continuous = true; recognition.interimResults = true; recognition.lang = "en-US"; recognition.maxAlternatives = 3;
+        let finalTranscript = ""; let isRecognitionActive = true;
+        recognition.onresult = (event) => {
           let interim = "";
           for (let i = event.resultIndex; i < event.results.length; i++) {
-            if (event.results[i].isFinal) {
-              let bestAlt = event.results[i][0];
-              for (let j = 1; j < event.results[i].length; j++) {
-                if (event.results[i][j].confidence > bestAlt.confidence) bestAlt = event.results[i][j];
-              }
-              finalTranscript += bestAlt.transcript + " ";
-            } else {interim += event.results[i][0].transcript;}
+            if (event.results[i].isFinal) { let bestAlt = event.results[i][0]; for (let j = 1; j < event.results[i].length; j++) { if (event.results[i][j].confidence > bestAlt.confidence) bestAlt = event.results[i][j]; } finalTranscript += bestAlt.transcript + " "; } else { interim += event.results[i][0].transcript; }
           }
           transcriptRef.current = finalTranscript + interim;
         };
-        recognition.onerror = (e: any) => {
-          if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) {
-            try {setTimeout(() => {if (isRecognitionActive) recognition.start();}, 300);} catch (_) {}
-          }
-        };
-        recognition.onend = () => {
-          if (isRecognitionActive) {
-            try {setTimeout(() => {if (isRecognitionActive) recognition.start();}, 200);} catch (_) {}
-          }
-        };
-        recognition.start();
-        recognitionRef.current = recognition;
-        (recognitionRef.current as any)._stopAutoRestart = () => {isRecognitionActive = false;};
+        recognition.onerror = (e) => { if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) { try { setTimeout(() => { if (isRecognitionActive) recognition.start(); }, 300); } catch (_) {} } };
+        recognition.onend = () => { if (isRecognitionActive) { try { setTimeout(() => { if (isRecognitionActive) recognition.start(); }, 200); } catch (_) {} } };
+        recognition.start(); recognitionRef.current = recognition;
+        recognitionRef.current._stopAutoRestart = () => { isRecognitionActive = false; };
       }
-      const mr = new MediaRecorder(stream);
-      mediaRecorderRef.current = mr;
-      mr.start();
-      setPhase("recording");
-      setTimeLeft(selectedDuration);
-      setMetrics(null);
-      setFeedback(null);
+      const mr = new MediaRecorder(stream); mediaRecorderRef.current = mr; mr.start();
+      setPhase("recording"); setTimeLeft(selectedDuration); setMetrics(null); setFeedback(null);
       const animate = () => {
-        const data = new Uint8Array(analyser.fftSize);
-        analyser.getByteTimeDomainData(data);
+        const data = new Uint8Array(analyser.fftSize); analyser.getByteTimeDomainData(data);
         setWaveData(Array.from({ length: 80 }, (_, i) => data[Math.floor(i / 80 * data.length)] / 255));
-        let sum = 0;
-        for (let i = 0; i < data.length; i++) sum += Math.abs(data[i] - 128);
-        const avg = sum / data.length;
-        volumeRef.current.push(avg);
-        if (avg < 3) silenceRef.current++;
-        framesRef.current++;
-        const recent = volumeRef.current.slice(-30);
-        const recentAvg = recent.reduce((a, b) => a + b, 0) / recent.length;
+        let sum = 0; for (let i = 0; i < data.length; i++) sum += Math.abs(data[i] - 128); const avg = sum / data.length;
+        volumeRef.current.push(avg); if (avg < 3) silenceRef.current++; framesRef.current++;
+        const recent = volumeRef.current.slice(-30); const recentAvg = recent.reduce((a, b) => a + b, 0) / recent.length;
         setLiveEnergy(Math.min(100, Math.round(recentAvg * 3.5)));
         const elapsedSec = (Date.now() - recordingStartRef.current) / 1000;
         const wordCount = transcriptRef.current.trim().split(/\s+/).filter(Boolean).length;
         const currentWpm = elapsedSec > 1 ? wordCount / elapsedSec * 60 : 0;
-        const paceScore = currentWpm < 100 ? 20 : currentWpm <= 119 ? 45 : currentWpm <= 139 ? 70 : currentWpm <= 160 ? 100 : currentWpm <= 180 ? 80 : currentWpm <= 200 ? 55 : 30;
-        setLivePace(paceScore);
+        setLivePace(currentWpm < 100 ? 20 : currentWpm <= 119 ? 45 : currentWpm <= 139 ? 70 : currentWpm <= 160 ? 100 : currentWpm <= 180 ? 80 : currentWpm <= 200 ? 55 : 30);
         animFrameRef.current = requestAnimationFrame(animate);
       };
       animate();
       let t = selectedDuration;
       timerRef.current = setInterval(() => {
-        t--;
-        setTimeLeft(t);
+        t--; setTimeLeft(t);
         if (t <= 0) {
           if (timerRef.current) clearInterval(timerRef.current);
           if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-          mr.stop();
-          try {stream.getTracks().forEach((tr) => tr.stop());} catch (_) {}
-          try {audioCtx.close();} catch (_) {}
-          try {(recognitionRef.current as any)?._stopAutoRestart?.();} catch (_) {}
-          try {recognitionRef.current?.stop();} catch (_) {}
-          setWaveData(new Array(80).fill(0.5));
-          scheduleAnalyze();
+          mr.stop(); try { stream.getTracks().forEach((tr) => tr.stop()); } catch (_) {}
+          try { audioCtx.close(); } catch (_) {}
+          try { recognitionRef.current?._stopAutoRestart?.(); } catch (_) {}
+          try { recognitionRef.current?.stop(); } catch (_) {}
+          setWaveData(new Array(80).fill(0.5)); scheduleAnalyze();
         }
       }, 1000);
-    } catch (e: any) {
-      setMicError(e?.message || "Microphone access denied.");
-    }
+    } catch (e) { setMicError(e?.message || "Microphone access denied."); }
   }, [scheduleAnalyze, selectedDuration, isPremium, todaySessionCount]);
 
   const reset = useCallback(() => {
     stopAll();
-    try {(recognitionRef.current as any)?._stopAutoRestart?.();} catch (_) {}
-    try {recognitionRef.current?.stop();} catch (_) {}
-    transcriptRef.current = "";
-    setPhase("idle");
-    setTimeLeft(selectedDuration);
-    setMetrics(null);
-    setFeedback(null);
-    setWaveData(new Array(80).fill(0.5));
-    setMicError("");
+    try { recognitionRef.current?._stopAutoRestart?.(); } catch (_) {}
+    try { recognitionRef.current?.stop(); } catch (_) {}
+    transcriptRef.current = ""; setPhase("idle"); setTimeLeft(selectedDuration);
+    setMetrics(null); setFeedback(null); setWaveData(new Array(80).fill(0.5)); setMicError("");
   }, [stopAll, selectedDuration]);
 
-  const tagColor = (t) => t === "pos" ? "#0a0a0a" : t === "warn" ? "#555" : "#888";
+  const tagColor = (t) => t === "pos" ? "#111" : t === "warn" ? "#555" : "#999";
+  const tagBg = (t) => t === "pos" ? "#f0f0f0" : t === "warn" ? "#f7f7f7" : "#fafafa";
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
-
   const isOverlay = showIntro || showForcedPaywall || showInterstitial || quizVisible;
 
-  const handlePaywallDone = () => {
-    setShowForcedPaywall(false);
-    localStorage.setItem("syntera_intro_done_v2", "true");
-    setShowIntro(false);
-    setShowInterstitial(true);
-  };
-
-  const handleInterstitialComplete = () => {
-    setShowInterstitial(false);
-    if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true);
-  };
+  const handlePaywallDone = () => { setShowForcedPaywall(false); localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); setShowInterstitial(true); };
+  const handleInterstitialComplete = () => { setShowInterstitial(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f8f8f8", color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>
-      {/* Intro */}
-      {showIntro && !isPremium &&
-      <IntroExperience
-        onComplete={() => {localStorage.setItem("syntera_intro_done_v2", "true");setShowIntro(false);if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true);}}
-        onForcePaywall={() => setShowForcedPaywall(true)} />
-      }
-      {showForcedPaywall && !isPremium &&
-      <ForcedPaywall
-        onSubscribe={() => {localStorage.setItem("syntera_premium", "true");setIsPremium(true);handlePaywallDone();}}
-        onSkip={() => {handlePaywallDone();}} />
-      }
-      {showInterstitial &&
-      <SpeakBetterInterstitial onComplete={handleInterstitialComplete} />
-      }
-      {!showIntro && !showForcedPaywall && !showInterstitial && quizVisible &&
-      <OnboardingQuiz onFinish={({ neg, comm, answers }) => {localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers }));const p = derivePersonalization(answers);setRecCommTips([...new Set([...(neg || []), ...(comm || [])].slice(0, 6))]);setUserSubtitle(p.subtitle);setHeroFocus(p.heroFocus);setQuizVisible(false);}} />
-      }
+    <div className="app-root">
+      {showIntro && !isPremium && <IntroExperience onComplete={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }} onForcePaywall={() => setShowForcedPaywall(true)} />}
+      {showForcedPaywall && !isPremium && <ForcedPaywall onSubscribe={() => { localStorage.setItem("syntera_premium", "true"); setIsPremium(true); handlePaywallDone(); }} onSkip={handlePaywallDone} />}
+      {showInterstitial && <SpeakBetterInterstitial onComplete={handleInterstitialComplete} />}
+      {!showIntro && !showForcedPaywall && !showInterstitial && quizVisible && (
+        <OnboardingQuiz onFinish={({ neg, comm, answers }) => { localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers })); const p = derivePersonalization(answers); setRecCommTips([...new Set([...(neg || []), ...(comm || [])].slice(0, 6))]); setUserSubtitle(p.subtitle); setHeroFocus(p.heroFocus); setQuizVisible(false); }} />
+      )}
 
-      {/* Tip Popup */}
-      {showTipPopup &&
-      <div style={{ position: "fixed", inset: 0, zIndex: 55, display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 40, background: "rgba(0,0,0,0.15)" }} onClick={() => setShowTipPopup(false)}>
-          <div onClick={(e) => e.stopPropagation()} style={{ width: "min(420px, 90vw)", background: "#fff", borderRadius: 0, padding: "28px 24px", border: "1px solid #e2e2e2", position: "relative" }}>
-            <button onClick={() => setShowTipPopup(false)} style={{ position: "absolute", top: 12, right: 14, background: "none", border: "none", fontSize: 18, color: "#888", cursor: "pointer" }}>✕</button>
-            <div style={{ fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase", color: "#888", textAlign: "center", marginBottom: 8, fontWeight: 700, fontFamily: "'DM Mono', monospace" }}>Tip of the Day</div>
-            <div style={{ fontSize: 15, color: "#0a0a0a", lineHeight: 1.7, textAlign: "center", fontWeight: 500 }}>{tipText}</div>
-            <button onClick={() => setShowTipPopup(false)} style={{ marginTop: 20, width: "100%", padding: "12px", fontSize: 13, fontWeight: 700, background: "#0a0a0a", color: "#fff", border: "none", borderRadius: 0, cursor: "pointer", fontFamily: "'DM Mono', monospace" }}>
-              Got it
-            </button>
+      {showTipPopup && (
+        <div className="tip-overlay" onClick={() => setShowTipPopup(false)}>
+          <div className="tip-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="tip-close" onClick={() => setShowTipPopup(false)}>✕</button>
+            <div className="tip-eyebrow">Tip of the Day</div>
+            <div className="tip-text">{tipText}</div>
+            <button className="btn-primary" style={{ width: "100%", marginTop: 20 }} onClick={() => setShowTipPopup(false)}>Got it</button>
           </div>
         </div>
-      }
+      )}
 
-      {!isOverlay &&
-      <>
+      {!isOverlay && (
+        <>
           <AppSidebar userSubtitle={userSubtitle} onOpenSetup={() => setQuizVisible(true)} />
-          <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
-            {/* Top bar */}
-            <div style={{ padding: "20px 48px", borderBottom: "1px solid #e2e2e2", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ width: 1 }} />
-              {avgHistory !== null &&
-            <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 9, color: "#888", letterSpacing: "0.2em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>Avg Score</div>
-                  <div style={{ fontSize: 28, fontWeight: 300, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>{avgHistory}</div>
+          <div className="page-shell" style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4,0,0.2,1)" }}>
+
+            <header className="topbar">
+              <div />
+              {avgHistory !== null && (
+                <div className="topbar-avg">
+                  <span className="topbar-avg-label">Avg Score</span>
+                  <span className="topbar-avg-value">{avgHistory}</span>
                 </div>
-            }
-            </div>
+              )}
+            </header>
 
-            {/* Two-column layout */}
-            {
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 400px", gap: 40, padding: isMobile ? "24px 16px" : "40px 48px" }}>
-                {/* Left column — recording */}
-                <div>
-                  {/* Hero */}
-                  <div style={{ marginBottom: 48 }}>
-                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: "#0a0a0a", lineHeight: 0.9, fontWeight: 400, letterSpacing: "-0.04em" }}>Practice.
-
+            <main className={`main-grid${isMobile ? " mobile" : ""}`}>
+              {/* LEFT: Recording */}
+              <section className="record-panel">
+                <div className="hero-heading">
+                  <h1>Practice.</h1>
+                  <h1 className="hero-sub">{heroFocus}</h1>
                 </div>
-                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: "#0a0a0a", lineHeight: 0.9, fontWeight: 400, letterSpacing: "-0.04em", opacity: 0.45 }}>
-                     {heroFocus}
-                    </div>
+
+                <div className={`waveform${phase === "recording" ? " active" : ""}`}>
+                  {waveData.map((v, i) => (
+                    <div key={i} className="wave-bar" style={{ height: `${Math.max(3, Math.abs(v - 0.5) * 120)}px`, opacity: phase === "recording" ? 0.45 + Math.abs(v - 0.5) : 0.3, background: phase === "recording" ? "#111" : "#ccc" }} />
+                  ))}
+                </div>
+
+                <div className="timer-wrap">
+                  <svg width={140} height={140} viewBox="0 0 160 160">
+                    <circle cx={80} cy={80} r={70} fill="none" stroke="#ebebeb" strokeWidth={1.5} />
+                    <circle cx={80} cy={80} r={70} fill="none" stroke="#111" strokeWidth={1.5}
+                      strokeLinecap="round" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={ringOffset}
+                      style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
+                  </svg>
+                  <div className="timer-inner">
+                    <div className="timer-count">{timeLeft}</div>
+                    <div className="timer-label">sec</div>
+                    {phase === "recording" && <div className="rec-dot" />}
                   </div>
+                </div>
 
-
-                  {/* Waveform */}
-                  <div style={{ marginBottom: 32 }}>
-                    <div style={{ height: 64, background: "#f0f0f0", border: "1px solid #e2e2e2", borderRadius: 0, display: "flex", alignItems: "center", padding: "0 8px", gap: 2 }}>
-                      {waveData.map((v, i) =>
-                  <div key={i} style={{
-                    flex: 1,
-                    background: phase === "recording" ? "#0a0a0a" : "#d8d8d8",
-                    height: `${Math.max(4, Math.abs(v - 0.5) * 128)}px`,
-                    borderRadius: 0,
-                    transition: "height 0.05s, background 0.2s",
-                    opacity: phase === "recording" ? 0.5 + Math.abs(v - 0.5) : 0.5
-                  }} />
-                  )}
+                {phase === "idle" && (
+                  <div className="duration-wrap">
+                    <div className="duration-row">
+                      <span className="duration-bound">5s</span>
+                      <span className="duration-current">{selectedDuration}s</span>
+                      <span className="duration-bound">45s</span>
                     </div>
+                    <input type="range" min={5} max={45} step={1} value={selectedDuration}
+                      onChange={(e) => { const v = Number(e.target.value); setSelectedDuration(v); setTimeLeft(v); }}
+                      className="duration-slider" />
                   </div>
+                )}
 
-                  {/* Timer Ring */}
-                  <div style={{ display: "flex", justifyContent: "center", marginBottom: 32 }}>
-                    <div style={{ position: "relative", width: 140, height: 140 }}>
-                      <svg width={140} height={140} viewBox="0 0 160 160">
-                        <circle cx={80} cy={80} r={70} fill="none" stroke="#e2e2e2" strokeWidth={1} />
-                        <circle cx={80} cy={80} r={70} fill="none" stroke="#0a0a0a" strokeWidth={1}
-                    strokeLinecap="square" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={ringOffset}
-                    style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
-                      </svg>
-                      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                        <div style={{ fontSize: 48, fontWeight: 300, color: "#0a0a0a", lineHeight: 1, fontFamily: "'DM Mono', monospace" }}>{timeLeft}</div>
-                        <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#888", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>seconds</div>
-                        {phase === "recording" && <div style={{ marginTop: 6, width: 8, height: 8, borderRadius: 0, background: "#0a0a0a", animation: "pulse 1s infinite" }} />}
+                {phase === "recording" && (
+                  <div className="live-metrics">
+                    {[{ label: "Pace", val: livePace }, { label: "Energy", val: liveEnergy }].map(({ label, val }) => (
+                      <div key={label} className="live-metric-card">
+                        <div className="live-metric-label">{label}</div>
+                        <div className="live-bar-track"><div className="live-bar-fill" style={{ width: val + "%" }} /></div>
+                        <div className="live-metric-num">{val}</div>
                       </div>
+                    ))}
+                  </div>
+                )}
+
+                <VoiceMicControl onStart={startRecording} onStop={reset}
+                  onStopEarly={() => { if (phase !== "recording") return; stopAll(); setWaveData(new Array(80).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
+                  phase={phase} />
+
+                {micError && <p className="mic-error">{micError}</p>}
+                {phase === "analyzing" && <p className="analyzing-msg">Analyzing your speech patterns…</p>}
+              </section>
+
+              {/* RIGHT: Scenarios / Results */}
+              <aside className="results-panel">
+                {!isMobile && (phase === "idle" || phase === "recording") && (
+                  <div className="scenarios-wrap">
+                    <div className="section-label">Today's Practice</div>
+                    <div className="scenarios-list">
+                      {SCENARIO_CATEGORIES.map((cat) => {
+                        const todayItem = getTodayScenario(cat);
+                        const done = completedCategoriesToday.includes(cat.category);
+                        return (
+                          <button key={cat.slug} onClick={() => navigate(`/scenarios/${cat.slug}`)} className={`scenario-card${done ? " done" : ""}`}>
+                            <div>
+                              <div className="scenario-cat">{cat.category}{done && <span className="scenario-done-badge">✓</span>}</div>
+                              <div className="scenario-title">{todayItem.title}</div>
+                            </div>
+                            <div className="scenario-diff" style={{ color: diffColor(todayItem.difficulty) }}>{todayItem.difficulty}</div>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
+                )}
 
-                  {/* Duration slider */}
-                  {phase === "idle" &&
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, marginBottom: 20, width: "100%", maxWidth: 280, margin: "0 auto 20px" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", width: "100%", fontSize: 11, color: "#888", fontFamily: "'DM Mono', monospace" }}>
-                        <span>5s</span>
-                        <span style={{ fontWeight: 500, color: "#0a0a0a", fontSize: 13 }}>{selectedDuration}s</span>
-                        <span>45s</span>
+                {phase === "done" && metrics && feedback && (
+                  <div className="results-wrap">
+                    {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
+                    <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" } : {}}>
+                      <div className="score-rings">
+                        <ScoreRing score={metrics.overall} label="Overall" color={metrics.overall >= 80 ? "#111" : metrics.overall >= 60 ? "#555" : "#999"} />
+                        <ScoreRing score={metrics.delivery} label="Delivery" color="#555" />
+                        <ScoreRing score={metrics.pace} label="Pace" color="#555" />
+                        <ScoreRing score={metrics.conf} label="Confidence" color="#555" />
+                        <ScoreRing score={metrics.clar} label="Clarity" color="#555" />
                       </div>
-                      <input type="range" min={5} max={45} step={1} value={selectedDuration}
-                onChange={(e) => {const v = Number(e.target.value);setSelectedDuration(v);setTimeLeft(v);}}
-                style={{ width: "100%", cursor: "pointer" }} />
-                    </div>
-              }
 
-                  {/* Live metrics */}
-                  {phase === "recording" &&
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8, marginBottom: 24 }}>
-                      {["Pace", "Energy"].map((label, i) => {
-                  const val = i === 0 ? livePace : liveEnergy;
-                  return (
-                    <div key={label} style={{ border: "1px solid #e2e2e2", padding: "10px 12px", borderRadius: 0, background: "#fff" }}>
-                            <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>{label}</div>
-                            <div style={{ height: 1, background: "#e2e2e2" }}>
-                              <div style={{ height: "100%", width: val + "%", background: "#0a0a0a", transition: "width 0.1s" }} />
+                      <div className="result-section">
+                        <div className="metric-bars">
+                          {[{ label: "Word Choice", value: metrics.wordChoice }, { label: "Persuasion", value: metrics.persuasion }].map(({ label, value }) => (
+                            <div key={label} className="metric-bar-item">
+                              <div className="metric-bar-header"><span className="section-label">{label}</span><span className="metric-bar-num">{value}</span></div>
+                              <div className="bar-track"><div className="bar-fill" style={{ width: `${value}%` }} /></div>
                             </div>
-                          </div>);
-
-                })}
-                    </div>
-              }
-
-                  <VoiceMicControl onStart={startRecording} onStop={reset} onStopEarly={() => {if (phase !== "recording") return;stopAll();setWaveData(new Array(80).fill(0.5));setPhase("analyzing");scheduleAnalyze();}} phase={phase} />
-
-                  {micError && <div style={{ textAlign: "center", fontSize: 11, color: "#0a0a0a", marginBottom: 16, lineHeight: 1.6 }}>{micError}</div>}
-                  {phase === "analyzing" && <div style={{ textAlign: "center", fontSize: 11, color: "#888", marginBottom: 24, fontFamily: "'DM Mono', monospace" }}>Analyzing your speech patterns...</div>}
-
-                </div>
-
-                {/* Right column — results / history */}
-                <div>
-                  {!isMobile && (phase === "idle" || phase === "recording") &&
-              <div>
-                      <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 12, fontFamily: "'DM Mono', monospace" }}>Today's Practice</div>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                        {SCENARIO_CATEGORIES.map((cat) => {
-                    const todayItem = getTodayScenario(cat);
-                    const done = completedCategoriesToday.includes(cat.category);
-                    return (
-                      <button
-                        key={cat.slug}
-                        onClick={() => navigate(`/scenarios/${cat.slug}`)}
-                        style={{
-                          width: "100%",
-                          background: done ? "#f5f5f5" : "#fff",
-                          border: "1px solid #e2e2e2",
-                          borderRadius: 0,
-                          padding: "12px 14px",
-                          textAlign: "left",
-                          cursor: "pointer",
-                          transition: "all 0.2s ease",
-                          opacity: done ? 0.6 : 1,
-                          fontFamily: "'DM Mono', monospace"
-                        }}>
-                        
-                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <div>
-                                  <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", marginBottom: 4 }}>
-                                    {cat.category}
-                                    {done && <span style={{ marginLeft: 6, color: "#555" }}>[DONE]</span>}
-                                  </div>
-                                  <div style={{ fontSize: 12, fontWeight: 600, color: "#0a0a0a", fontFamily: "'Syne', sans-serif" }}>
-                                    {todayItem.title}
-                                  </div>
-                                </div>
-                                <div style={{ fontSize: 9, fontWeight: 500, color: diffColor(todayItem.difficulty), letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                                  {todayItem.difficulty}
-                                </div>
-                              </div>
-                            </button>);
-
-                  })}
+                          ))}
+                        </div>
                       </div>
-                    </div>
-              }
 
-                  {phase === "done" && metrics && feedback &&
-              <div style={{ animation: "fadeUp 0.5s ease", position: "relative" }}>
-                      {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
-                      <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" } : {}}>
-                        {/* Score rings */}
-                        <div style={{ display: "flex", justifyContent: "space-around", paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
-                          <ScoreRing score={metrics.overall} label="Overall" color={metrics.overall >= 80 ? "#0a0a0a" : metrics.overall >= 60 ? "#555" : "#888"} />
-                          <ScoreRing score={metrics.delivery} label="Delivery" color="#555" />
-                          <ScoreRing score={metrics.pace} label="Pace" color="#555" />
-                          <ScoreRing score={metrics.conf} label="Confidence" color="#555" />
-                          <ScoreRing score={metrics.clar} label="Clarity" color="#555" />
-                        </div>
-
-                        {/* Delivery Breakdown */}
-                        <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
-                          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
-                            {[
-                      { label: "Word Choice", value: metrics.wordChoice, color: metrics.wordChoice >= 55 ? "#0a0a0a" : metrics.wordChoice >= 30 ? "#555" : "#888" },
-                      { label: "Persuasion", value: metrics.persuasion, color: metrics.persuasion >= 55 ? "#0a0a0a" : metrics.persuasion >= 30 ? "#555" : "#888" }].
-                      map(({ label, value, color }) =>
-                      <div key={label}>
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
-                                  <span style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>{label}</span>
-                                  <span style={{ fontSize: 18, fontWeight: 300, color, fontFamily: "'DM Mono', monospace" }}>{value}</span>
-                                </div>
-                                <div style={{ height: 4, background: "#e2e2e2", borderRadius: 0 }}>
-                                  <div style={{ height: "100%", width: `${value}%`, background: color, borderRadius: 0, transition: "width 0.5s ease" }} />
-                                </div>
-                              </div>
-                      )}
-                          </div>
-                        </div>
-
-                        {/* Measured Pace */}
-                        <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
-                            <span style={{ fontSize: 9, letterSpacing: "0.2em", color: "#888", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>Measured Pace</span>
-                            <span style={{ fontSize: 14, fontWeight: 500, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>{metrics.wpm} WPM</span>
-                          </div>
-                          <div style={{ height: 4, background: "#e2e2e2", borderRadius: 0, marginBottom: 6 }}>
-                            <div style={{ height: "100%", width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "#0a0a0a" : "#555", borderRadius: 0, transition: "width 0.5s ease" }} />
-                          </div>
-                          <div style={{ fontSize: 10, color: "#888", fontFamily: "'DM Mono', monospace" }}>Ideal: 130–160 WPM</div>
-                        </div>
-
-                        {/* Tags */}
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
-                          {feedback.tags.map((tag, i) =>
-                    <span key={i} style={{ fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase", padding: "4px 10px", border: `1px solid ${tagColor(tag.t)}`, color: tagColor(tag.t), borderRadius: 0, fontFamily: "'DM Mono', monospace" }}>
-                              {tag.label}
-                            </span>
-                    )}
-                        </div>
-
-                        {/* Transcript */}
-                        {feedback.transcript &&
-                  <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
-                            <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Your Speech</div>
-                            <div style={{ fontSize: 13, lineHeight: 1.8, color: "#0a0a0a", fontStyle: "italic" }}>"{feedback.transcript}"</div>
-                          </div>
-                  }
-
-                        {/* Feedback sections */}
-                        {[
-                  { title: "Overall Assessment", text: feedback.overallTxt },
-                  { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
-                  { title: "Pace & Rhythm", text: feedback.paceTxt },
-                  { title: "Tone & Authority", text: feedback.toneTxt },
-                  { title: "Clarity & Structure", text: feedback.clarityTxt },
-                  { title: "Key Strength", text: feedback.strengthTxt },
-                  { title: "Key Weakness", text: feedback.weaknessTxt },
-                  { title: "Recommendation", text: feedback.recTxt }].
-                  filter(({ text }) => text).map(({ title, text }) =>
-                  <div key={title} style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
-                            <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>{title}</div>
-                            <div style={{ fontSize: 13, lineHeight: 1.8, color: "#0a0a0a" }}>{text}</div>
-                          </div>
-                  )}
-
-                        {/* Techniques */}
-                        {feedback.techniques?.length > 0 &&
-                  <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
-                            <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
-                              Techniques Detected ({feedback.techniques.length})
-                            </div>
-                            <div style={{ display: "grid", gap: 8 }}>
-                              {feedback.techniques.map((t: any, i: number) =>
-                      <div key={i} style={{ border: `1px solid ${t.impact === "pos" ? "#0a0a0a" : t.impact === "neg" ? "#888" : "#e2e2e2"}`, borderRadius: 0, padding: "10px 12px" }}>
-                                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                                    <span style={{ fontSize: 11, fontWeight: 700, color: "#0a0a0a" }}>{t.name}</span>
-                                    <span style={{ fontSize: 9, padding: "2px 8px", borderRadius: 0, background: t.impact === "pos" ? "#0a0a0a" : t.impact === "neg" ? "#f0f0f0" : "#f5f5f5", color: t.impact === "pos" ? "#fff" : t.impact === "neg" ? "#0a0a0a" : "#888", fontFamily: "'DM Mono', monospace" }}>
-                                      {t.impact === "pos" ? "EFFECTIVE" : t.impact === "neg" ? "NEEDS WORK" : "NEUTRAL"}
-                                    </span>
-                                  </div>
-                                  <div style={{ fontSize: 12, fontStyle: "italic", color: "#888", marginBottom: 4 }}>"{t.quote}"</div>
-                                  <div style={{ fontSize: 11, color: "#0a0a0a", lineHeight: 1.5 }}>{t.explanation}</div>
-                                </div>
-                      )}
-                            </div>
-                          </div>
-                  }
-
-                        {/* Filler & Power Words */}
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
-                          <div>
-                            <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Filler Words</div>
-                            <div style={{ fontSize: 28, fontWeight: 300, color: "#0a0a0a", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>{feedback.fillerWords?.count || 0}</div>
-                            <div style={{ fontSize: 10, color: "#888", fontFamily: "'DM Mono', monospace" }}>{feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}</div>
-                            {feedback.fillerWords?.words?.length > 0 &&
-                      <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
-                                {feedback.fillerWords.words.map((w: string, i: number) =>
-                        <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#f0f0f0", color: "#0a0a0a", borderRadius: 0, fontFamily: "'DM Mono', monospace" }}>{w}</span>
-                        )}
-                              </div>
-                      }
-                          </div>
-                          <div>
-                            <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Power Words</div>
-                            <div style={{ fontSize: 28, fontWeight: 300, color: "#0a0a0a", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>{feedback.powerWords?.length || 0}</div>
-                            {feedback.powerWords?.length > 0 &&
-                      <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
-                                {feedback.powerWords.map((w: string, i: number) =>
-                        <span key={i} style={{ fontSize: 9, padding: "2px 6px", background: "#0a0a0a", color: "#fff", borderRadius: 0, fontFamily: "'DM Mono', monospace" }}>{w}</span>
-                        )}
-                              </div>
-                      }
-                          </div>
-                        </div>
-
-                        {/* Hedging */}
-                        {feedback.hedgingInstances?.length > 0 &&
-                  <div style={{ paddingBottom: 20, borderBottom: "1px solid #e2e2e2", marginBottom: 20 }}>
-                            <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
-                              Hedging → Stronger Alternatives
-                            </div>
-                            <div style={{ display: "grid", gap: 6 }}>
-                              {feedback.hedgingInstances.map((h: any, i: number) =>
-                      <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
-                                  <span style={{ color: "#888", textDecoration: "line-through" }}>"{h.phrase}"</span>
-                                  <span style={{ color: "#bbb" }}>→</span>
-                                  <span style={{ color: "#0a0a0a", fontWeight: 600 }}>"{h.suggestion}"</span>
-                                </div>
-                      )}
-                            </div>
-                          </div>
-                  }
-
-                        {/* Communication Tips */}
-                        {recCommTips.length > 0 &&
-                  <div>
-                            <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
-                              Recommended Tips
-                            </div>
-                            <div style={{ display: "grid", gap: 8 }}>
-                              {recCommTips.map((t, i) =>
-                      <div key={i} style={{ border: "1px solid #e2e2e2", borderRadius: 0, padding: "10px 12px", fontSize: 12, color: "#0a0a0a", lineHeight: 1.6 }}>
-                                  {t}
-                                </div>
-                      )}
-                            </div>
-                          </div>
-                  }
+                      <div className="result-section">
+                        <div className="metric-bar-header"><span className="section-label">Measured Pace</span><span className="metric-bar-num">{metrics.wpm} WPM</span></div>
+                        <div className="bar-track"><div className="bar-fill" style={{ width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "#111" : "#888" }} /></div>
+                        <div className="bar-hint">Ideal: 130–160 WPM</div>
                       </div>
-                    </div>
-              }
-                </div>
-              </div>
-          }
 
-            {/* Quote + Custom Practice — side by side, tall & narrow */}
-            {phase === "idle" &&
-          <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: 16, padding: isMobile ? "40px 16px 0" : "60px 48px 0" }}>
-                <div style={{
-              flex: 1, padding: "64px 28px", border: "1px solid #e2e2e2",
-              textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14
-            }}>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, color: "#0a0a0a", fontWeight: 300 }}>
-                    Great speakers aren't born. They're trained.
+                      <div className="result-section tags-row">
+                        {feedback.tags.map((tag, i) => (
+                          <span key={i} className="tag" style={{ color: tagColor(tag.t), background: tagBg(tag.t), borderColor: tagColor(tag.t) }}>{tag.label}</span>
+                        ))}
+                      </div>
+
+                      {feedback.transcript && (
+                        <div className="result-section">
+                          <div className="section-label">Your Speech</div>
+                          <p className="transcript-text">"{feedback.transcript}"</p>
+                        </div>
+                      )}
+
+                      {[
+                        { title: "Overall Assessment", text: feedback.overallTxt },
+                        { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
+                        { title: "Pace & Rhythm", text: feedback.paceTxt },
+                        { title: "Tone & Authority", text: feedback.toneTxt },
+                        { title: "Clarity & Structure", text: feedback.clarityTxt },
+                        { title: "Key Strength", text: feedback.strengthTxt },
+                        { title: "Key Weakness", text: feedback.weaknessTxt },
+                        { title: "Recommendation", text: feedback.recTxt },
+                      ].filter(({ text }) => text).map(({ title, text }) => (
+                        <div key={title} className="result-section">
+                          <div className="section-label">{title}</div>
+                          <p className="feedback-text">{text}</p>
+                        </div>
+                      ))}
+
+                      {feedback.techniques?.length > 0 && (
+                        <div className="result-section">
+                          <div className="section-label">Techniques Detected ({feedback.techniques.length})</div>
+                          <div className="techniques-list">
+                            {feedback.techniques.map((t, i) => (
+                              <div key={i} className={`technique-card impact-${t.impact}`}>
+                                <div className="technique-header">
+                                  <span className="technique-name">{t.name}</span>
+                                  <span className={`technique-badge impact-${t.impact}`}>{t.impact === "pos" ? "Effective" : t.impact === "neg" ? "Needs Work" : "Neutral"}</span>
+                                </div>
+                                <p className="technique-quote">"{t.quote}"</p>
+                                <p className="technique-explanation">{t.explanation}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="result-section word-stats">
+                        <div>
+                          <div className="section-label">Filler Words</div>
+                          <div className="word-stat-num">{feedback.fillerWords?.count || 0}</div>
+                          <div className="word-stat-sub">{feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}</div>
+                          {feedback.fillerWords?.words?.length > 0 && <div className="word-chips">{feedback.fillerWords.words.map((w, i) => <span key={i} className="chip chip-neutral">{w}</span>)}</div>}
+                        </div>
+                        <div>
+                          <div className="section-label">Power Words</div>
+                          <div className="word-stat-num">{feedback.powerWords?.length || 0}</div>
+                          {feedback.powerWords?.length > 0 && <div className="word-chips">{feedback.powerWords.map((w, i) => <span key={i} className="chip chip-strong">{w}</span>)}</div>}
+                        </div>
+                      </div>
+
+                      {feedback.hedgingInstances?.length > 0 && (
+                        <div className="result-section">
+                          <div className="section-label">Hedging → Stronger Alternatives</div>
+                          <div className="hedging-list">
+                            {feedback.hedgingInstances.map((h, i) => (
+                              <div key={i} className="hedging-row"><span className="hedge-weak">"{h.phrase}"</span><span className="hedge-arrow">→</span><span className="hedge-strong">"{h.suggestion}"</span></div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {recCommTips.length > 0 && (
+                        <div className="result-section">
+                          <div className="section-label">Recommended Tips</div>
+                          <div className="tips-list">{recCommTips.map((t, i) => <div key={i} className="tip-item">{t}</div>)}</div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div style={{
-                fontFamily: "'DM Mono', monospace", fontSize: 10, color: "#888",
-                letterSpacing: "0.2em", textTransform: "uppercase"
-              }}>
-                    — Unknown
-                  </div>
+                )}
+              </aside>
+            </main>
+
+            {phase === "idle" && (
+              <div className={`bottom-cards${isMobile ? " mobile" : ""}`}>
+                <div className="quote-card">
+                  <p className="quote-text">Great speakers aren't born. They're trained.</p>
+                  <span className="quote-attr">— Unknown</span>
                 </div>
-                <button
-              onClick={() => navigate("/custom-practice")}
-              style={{
-                flex: 1, padding: "64px 28px", background: "#fff", border: "1px solid #e2e2e2",
-                cursor: "pointer", fontFamily: "'DM Mono', monospace", textAlign: "left",
-                transition: "all 0.2s", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"
-              }}
-              onMouseEnter={(e) => {e.currentTarget.style.borderColor = "#0a0a0a";}}
-              onMouseLeave={(e) => {e.currentTarget.style.borderColor = "#e2e2e2";}}>
-              
-                  <div style={{ fontSize: 14, fontWeight: 600, color: "#0a0a0a", marginBottom: 4 }}>+ Add Custom Practice</div>
-                  <div style={{ fontSize: 10, color: "#888", letterSpacing: "0.1em" }}>Choose your own scenario and goals</div>
+                <button className="custom-card" onClick={() => navigate("/custom-practice")}>
+                  <span className="custom-card-title">+ Custom Practice</span>
+                  <span className="custom-card-sub">Choose your own scenario and goals</span>
                 </button>
               </div>
-          }
+            )}
 
-            {/* Massive spacer before footer */}
-            <div style={{ height: 200 }} />
+            <div style={{ height: 80 }} />
           </div>
         </>
-      }
+      )}
 
-      {showPricing && <PricingModal onClose={() => setShowPricing(false)} onSubscribe={() => {localStorage.setItem("syntera_premium", "true");setIsPremium(true);setShowPricing(false);}} />}
-
+      {showPricing && <PricingModal onClose={() => setShowPricing(false)} onSubscribe={() => { localStorage.setItem("syntera_premium", "true"); setIsPremium(true); setShowPricing(false); }} />}
       <Footer />
 
       <style>{`
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-        * { box-sizing: border-box; }
-      `}</style>
-    </div>);
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+        .app-root { min-height: 100vh; background: #fafafa; color: #111; font-family: 'DM Mono', monospace; }
+
+        .topbar { display: flex; align-items: center; justify-content: space-between; padding: 18px 48px; border-bottom: 1px solid #e8e8e8; background: #fafafa; }
+        .topbar-avg { text-align: right; }
+        .topbar-avg-label { display: block; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #aaa; margin-bottom: 2px; }
+        .topbar-avg-value { font-size: 26px; font-weight: 300; color: #111; line-height: 1; }
+
+        .main-grid { display: grid; grid-template-columns: 1fr 380px; gap: 48px; padding: 40px 48px; }
+        .main-grid.mobile { grid-template-columns: 1fr; padding: 24px 20px; gap: 32px; }
+
+        .record-panel { display: flex; flex-direction: column; }
+
+        .hero-heading { margin-bottom: 40px; }
+        .hero-heading h1 { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1; color: #111; }
+        .hero-heading h1.hero-sub { color: #bbb; margin-top: 2px; }
+
+        .waveform { height: 60px; background: #f0f0f0; border: 1px solid #e8e8e8; border-radius: 4px; display: flex; align-items: center; padding: 0 10px; gap: 2px; margin-bottom: 32px; transition: border-color 0.3s; }
+        .waveform.active { border-color: #ccc; }
+        .wave-bar { flex: 1; border-radius: 1px; transition: height 0.05s, background 0.2s, opacity 0.2s; }
+
+        .timer-wrap { position: relative; width: 140px; height: 140px; margin: 0 auto 28px; }
+        .timer-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+        .timer-count { font-size: 46px; font-weight: 300; color: #111; line-height: 1; }
+        .timer-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: #bbb; }
+        .rec-dot { width: 7px; height: 7px; border-radius: 50%; background: #111; margin-top: 6px; animation: pulse 1s infinite; }
+
+        .duration-wrap { max-width: 260px; margin: 0 auto 20px; }
+        .duration-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+        .duration-bound { font-size: 10px; color: #bbb; }
+        .duration-current { font-size: 13px; font-weight: 500; color: #111; }
+        .duration-slider { width: 100%; cursor: pointer; accent-color: #111; }
+
+        .live-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+        .live-metric-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 6px; padding: 12px 14px; }
+        .live-metric-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #aaa; margin-bottom: 8px; }
+        .live-bar-track { height: 3px; background: #ebebeb; border-radius: 2px; margin-bottom: 6px; }
+        .live-bar-fill { height: 100%; background: #111; border-radius: 2px; transition: width 0.1s; }
+        .live-metric-num { font-size: 11px; color: #555; }
+
+        .mic-controls { display: flex; gap: 10px; justify-content: center; margin-bottom: 16px; }
+
+        .btn-primary { padding: 13px 32px; background: #111; color: #fff; border: none; border-radius: 6px; font-size: 12px; font-weight: 500; letter-spacing: 0.05em; cursor: pointer; font-family: 'DM Mono', monospace; transition: background 0.15s, transform 0.1s; }
+        .btn-primary:hover { background: #222; }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-primary.btn-stop { background: #444; }
+        .btn-primary.btn-stop:hover { background: #222; }
+        .btn-ghost { padding: 13px 18px; background: transparent; border: 1px solid #e0e0e0; border-radius: 6px; color: #999; font-size: 12px; cursor: pointer; font-family: 'DM Mono', monospace; transition: border-color 0.15s, color 0.15s; }
+        .btn-ghost:hover { border-color: #bbb; color: #555; }
+
+        .mic-error { font-size: 11px; color: #555; text-align: center; margin-bottom: 12px; line-height: 1.6; }
+        .analyzing-msg { font-size: 11px; color: #aaa; text-align: center; margin-bottom: 20px; letter-spacing: 0.05em; }
+
+        .section-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #aaa; margin-bottom: 10px; display: block; }
+        .scenarios-list { display: flex; flex-direction: column; gap: 6px; }
+        .scenario-card { width: 100%; background: #fff; border: 1px solid #e8e8e8; border-radius: 6px; padding: 12px 14px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'DM Mono', monospace; transition: border-color 0.15s, box-shadow 0.15s; }
+        .scenario-card:hover { border-color: #bbb; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .scenario-card.done { opacity: 0.55; background: #f7f7f7; }
+        .scenario-cat { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: #bbb; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .scenario-done-badge { font-size: 9px; color: #888; background: #f0f0f0; padding: 1px 5px; border-radius: 3px; }
+        .scenario-title { font-size: 12px; font-weight: 500; color: #111; font-family: 'Syne', sans-serif; }
+        .scenario-diff { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+
+        .score-rings { display: flex; justify-content: space-around; padding-bottom: 20px; border-bottom: 1px solid #ebebeb; margin-bottom: 20px; }
+        .score-ring { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .ring-label { font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: #bbb; }
+
+        .results-wrap { animation: fadeUp 0.4s ease; }
+        .result-section { padding-bottom: 18px; border-bottom: 1px solid #ebebeb; margin-bottom: 18px; }
+
+        .metric-bars { display: grid; gap: 12px; }
+        .metric-bar-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+        .metric-bar-num { font-size: 16px; font-weight: 300; color: #111; }
+        .bar-track { height: 3px; background: #ebebeb; border-radius: 2px; }
+        .bar-fill { height: 100%; background: #111; border-radius: 2px; transition: width 0.6s ease; }
+        .bar-hint { font-size: 9px; color: #bbb; margin-top: 5px; }
+
+        .tags-row { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 10px; border: 1px solid; border-radius: 3px; }
+
+        .transcript-text { font-size: 13px; line-height: 1.8; color: #555; font-style: italic; }
+        .feedback-text { font-size: 13px; line-height: 1.8; color: #333; }
+
+        .techniques-list { display: grid; gap: 8px; }
+        .technique-card { border: 1px solid #ebebeb; border-radius: 6px; padding: 12px; }
+        .technique-card.impact-pos { border-color: #d0d0d0; }
+        .technique-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .technique-name { font-size: 12px; font-weight: 600; color: #111; }
+        .technique-badge { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; font-family: 'DM Mono', monospace; }
+        .technique-badge.impact-pos { background: #111; color: #fff; }
+        .technique-badge.impact-neg { background: #f0f0f0; color: #555; }
+        .technique-badge.impact-neutral { background: #f5f5f5; color: #aaa; }
+        .technique-quote { font-size: 11px; font-style: italic; color: #999; margin-bottom: 5px; }
+        .technique-explanation { font-size: 11px; line-height: 1.6; color: #444; }
+
+        .word-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .word-stat-num { font-size: 26px; font-weight: 300; color: #111; margin: 4px 0; }
+        .word-stat-sub { font-size: 10px; color: #bbb; }
+        .word-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+        .chip { font-size: 9px; padding: 2px 7px; border-radius: 3px; font-family: 'DM Mono', monospace; }
+        .chip-neutral { background: #f0f0f0; color: #555; }
+        .chip-strong { background: #111; color: #fff; }
+
+        .hedging-list { display: grid; gap: 8px; }
+        .hedging-row { display: flex; align-items: center; gap: 8px; font-size: 12px; flex-wrap: wrap; }
+        .hedge-weak { color: #bbb; text-decoration: line-through; }
+        .hedge-arrow { color: #ddd; }
+        .hedge-strong { color: #111; font-weight: 600; }
+
+        .tips-list { display: grid; gap: 8px; }
+        .tip-item { border: 1px solid #ebebeb; border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #333; line-height: 1.6; }
+
+        .bottom-cards { display: flex; gap: 16px; padding: 0 48px; margin-top: 8px; }
+        .bottom-cards.mobile { flex-direction: column; padding: 0 20px; }
+        .quote-card { flex: 1; padding: 40px 28px; border: 1px solid #e8e8e8; border-radius: 8px; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; }
+        .quote-text { font-size: 13px; font-weight: 400; color: #555; line-height: 1.7; }
+        .quote-attr { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #ccc; }
+        .custom-card { flex: 1; padding: 40px 28px; background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; cursor: pointer; font-family: 'DM Mono', monospace; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: border-color 0.15s, box-shadow 0.15s; }
+        .custom-card:hover { border-color: #bbb; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+        .custom-card-title { font-size: 14px; font-weight: 600; color: #111; }
+        .custom-card-sub { font-size: 10px; color: #bbb; letter-spacing: 0.08em; }
+
+        .quiz-overlay { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; background: rgba(10,10,10,0.4); backdrop-filter: blur(4px); }
+        .quiz-modal { width: min(520px, 92vw); background: #fff; border-radius: 10px; padding: 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
+        .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .quiz-title { font-size: 17px; font-weight: 700; color: #111; font-family: 'Syne', sans-serif; }
+        .quiz-step { font-size: 11px; color: #bbb; }
+        .quiz-question { font-size: 14px; color: #111; font-weight: 500; margin-bottom: 14px; line-height: 1.5; }
+        .quiz-options { display: flex; flex-direction: column; gap: 7px; margin-bottom: 22px; }
+        .quiz-option { text-align: left; padding: 10px 14px; border: 1px solid #e8e8e8; border-radius: 6px; background: #fff; cursor: pointer; font-size: 13px; color: #333; font-family: 'DM Mono', monospace; transition: all 0.15s; }
+        .quiz-option:hover { border-color: #bbb; }
+        .quiz-option.selected { border-color: #111; background: #fafafa; color: #111; font-weight: 500; }
+        .quiz-actions { display: flex; justify-content: space-between; }
+        .quiz-btn-secondary { padding: 10px 18px; border: 1px solid #e8e8e8; border-radius: 6px; background: transparent; cursor: pointer; color: #bbb; font-size: 12px; font-family: 'DM Mono', monospace; }
+        .quiz-btn-secondary:disabled { cursor: not-allowed; opacity: 0.4; }
+        .quiz-btn-primary { padding: 10px 24px; border: none; border-radius: 6px; background: #111; color: #fff; cursor: pointer; font-size: 12px; font-weight: 600; font-family: 'DM Mono', monospace; transition: background 0.15s; }
+        .quiz-btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+
+        .tip-overlay { position: fixed; inset: 0; z-index: 55; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 40px; background: rgba(0,0,0,0.15); backdrop-filter: blur(2px); }
+        .tip-modal { width: min(400px, 90vw); background: #fff; border-radius: 10px; padding: 28px 24px; box-shadow: 0 16px 40px rgba(0,0,0,0.1); position: relative; }
+        .tip-close { position: absolute; top: 12px; right: 14px; background: none; border: none; font-size: 16px; color: #bbb; cursor: pointer; }
+        .tip-eyebrow { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: #bbb; text-align: center; margin-bottom: 10px; font-weight: 600; }
+        .tip-text { font-size: 14px; color: #111; line-height: 1.7; text-align: center; font-weight: 400; }
+
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+      `}</style>
+    </div>
+  );
 }
