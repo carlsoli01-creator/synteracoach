@@ -30,10 +30,10 @@ function ScoreRing({ score, label, color }) {
       <svg width={72} height={72} viewBox="0 0 72 72">
         <circle cx={36} cy={36} r={r} fill="none" strokeWidth={4} style={{ stroke: 'var(--pg-border-soft)' }} />
         <circle cx={36} cy={36} r={r} fill="none" stroke={color} strokeWidth={4}
-          strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={offset}
+          strokeLinecap="square" strokeDasharray={circ} strokeDashoffset={offset}
           style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s ease" }} />
-        <text x={36} y={40} textAnchor="middle" fontSize={13}
-          fontFamily="'DM Mono', monospace" fontWeight="500" style={{ fill: 'var(--pg-text)' }}>{score}</text>
+        <text x={36} y={40} textAnchor="middle" fontSize={16}
+          fontFamily="'Bebas Neue', sans-serif" fontWeight="400" letterSpacing="0.04em" style={{ fill: 'var(--pg-text)' }}>{score}</text>
       </svg>
       <span className="ring-label">{label}</span>
     </div>
