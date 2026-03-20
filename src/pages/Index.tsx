@@ -446,16 +446,16 @@ export default function Negotium() {
 
                 <div className={`waveform${phase === "recording" ? " active" : ""}`}>
                   {waveData.map((v, i) => (
-                    <div key={i} className="wave-bar" style={{ height: `${Math.max(3, Math.abs(v - 0.5) * 120)}px`, opacity: phase === "recording" ? 0.45 + Math.abs(v - 0.5) : 0.3, background: phase === "recording" ? "#111" : "#ccc" }} />
+                    <div key={i} className="wave-bar" style={{ height: `${Math.max(3, Math.abs(v - 0.5) * 120)}px`, opacity: phase === "recording" ? 0.45 + Math.abs(v - 0.5) : 0.3, background: phase === "recording" ? "var(--pg-text)" : "var(--pg-subtle)" }} />
                   ))}
                 </div>
 
                 <div className="timer-wrap">
                   <svg width={140} height={140} viewBox="0 0 160 160">
-                    <circle cx={80} cy={80} r={70} fill="none" stroke="#ebebeb" strokeWidth={1.5} />
-                    <circle cx={80} cy={80} r={70} fill="none" stroke="#111" strokeWidth={1.5}
+                    <circle cx={80} cy={80} r={70} fill="none" strokeWidth={1.5} style={{ stroke: 'var(--pg-border-soft)' }} />
+                    <circle cx={80} cy={80} r={70} fill="none" strokeWidth={1.5}
                       strokeLinecap="round" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={ringOffset}
-                      style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
+                      style={{ stroke: 'var(--pg-text)', transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
                   </svg>
                   <div className="timer-inner">
                     <div className="timer-count">{timeLeft}</div>
