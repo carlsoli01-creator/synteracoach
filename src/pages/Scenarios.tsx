@@ -5,12 +5,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Scenarios() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { sidebarWidth } = useSidebarState();
+  const { isDark } = useTheme();
   const [completedCategoriesToday, setCompletedCategoriesToday] = useState<string[]>([]);
+
+  const bg = isDark ? "#0a0a0a" : "#f8f8f8";
+  const text = isDark ? "#e8e8e8" : "#0a0a0a";
+  const muted = isDark ? "#666" : "#888";
+  const border = isDark ? "#222" : "#e2e2e2";
+  const card = isDark ? "#141414" : "#fff";
+  const cardDone = isDark ? "#0e0e0e" : "#f5f5f5";
 
   useEffect(() => {
     if (!user) return;
@@ -34,74 +43,54 @@ export default function Scenarios() {
   }, [user]);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f8f8f8", fontFamily: "'DM Mono', monospace" }}>
+    <div style={{ minHeight: "100vh", background: bg, fontFamily: "'DM Mono', monospace" }}>
       <AppSidebar />
       <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
         <div style={{ padding: "40px 48px 24px" }}>
-          <div style={{ fontSize: 22, fontWeight: 700, color: "#0a0a0a", fontFamily: "'Syne', sans-serif" }}>
+          <div style={{ fontSize: 22, fontWeight: 700, color: text, fontFamily: "'Syne', sans-serif" }}>
             Practice
           </div>
-          <div style={{ fontSize: 11, letterSpacing: "0.14em", color: "#888", textTransform: "uppercase", marginTop: 6, fontFamily: "'DM Mono', monospace" }}>
+          <div style={{ fontSize: 11, letterSpacing: "0.14em", color: muted, textTransform: "uppercase", marginTop: 6, fontFamily: "'DM Mono', monospace" }}>
             One scenario per category each day · New scenarios rotate daily
           </div>
         </div>
 
         <div style={{
-          padding: "0 48px",
-          paddingBottom: 80,
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-          gap: 12,
+          padding: "0 48px", paddingBottom: 80,
+          display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12,
         }}>
           {SCENARIO_CATEGORIES.map((cat) => {
             const todayItem = getTodayScenario(cat);
             const done = completedCategoriesToday.includes(cat.category);
-
             return (
               <button
                 key={cat.slug}
                 onClick={() => navigate(`/scenarios/${cat.slug}`)}
                 style={{
-                  background: done ? "#f5f5f5" : "#fff",
-                  border: "1px solid #e2e2e2",
-                  borderRadius: 0,
-                  padding: 24,
-                  textAlign: "left",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  opacity: done ? 0.6 : 1,
-                  fontFamily: "'DM Mono', monospace",
+                  background: done ? cardDone : card,
+                  border: `1px solid ${border}`, borderRadius: 0, padding: 24,
+                  textAlign: "left", cursor: "pointer", transition: "all 0.2s ease",
+                  opacity: done ? 0.6 : 1, fontFamily: "'DM Mono', monospace",
                 }}
               >
-                <div style={{ fontSize: 9, letterSpacing: "0.28em", color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
+                <div style={{ fontSize: 9, letterSpacing: "0.28em", color: muted, textTransform: "uppercase", marginBottom: 8 }}>
                   {cat.category}
-                  {done && <span style={{ marginLeft: 8, color: "#555" }}>[DONE]</span>}
+                  {done && <span style={{ marginLeft: 8, color: isDark ? "#999" : "#555" }}>[DONE]</span>}
                 </div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: "#0a0a0a", fontFamily: "'Syne', sans-serif", marginBottom: 8 }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: text, fontFamily: "'Syne', sans-serif", marginBottom: 8 }}>
                   {cat.category}
                 </div>
-                <div style={{ fontSize: 13, color: "#888", lineHeight: 1.7, marginBottom: 14 }}>
+                <div style={{ fontSize: 13, color: muted, lineHeight: 1.7, marginBottom: 14 }}>
                   {cat.description}
                 </div>
                 <div style={{
-                  borderTop: "1px solid #e2e2e2",
-                  paddingTop: 12,
-                  marginTop: 14,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  borderTop: `1px solid ${border}`, paddingTop: 12, marginTop: 14,
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
                 }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: "#0a0a0a", fontFamily: "'Syne', sans-serif" }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: text, fontFamily: "'Syne', sans-serif" }}>
                     {todayItem.title}
                   </div>
-                  <div style={{
-                    fontSize: 9,
-                    fontWeight: 500,
-                    color: diffColor(todayItem.difficulty),
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase" as const,
-                    fontFamily: "'DM Mono', monospace",
-                  }}>
+                  <div style={{ fontSize: 9, fontWeight: 500, color: diffColor(todayItem.difficulty), letterSpacing: "0.1em", textTransform: "uppercase" as const, fontFamily: "'DM Mono', monospace" }}>
                     {todayItem.difficulty}
                   </div>
                 </div>

@@ -65,10 +65,10 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
   };
 
   const metrics = [
-    { key: "pace_score", color: "#888", label: "Pace" },
-    { key: "confidence_score", color: "#555", label: "Confidence" },
-    { key: "clarity_score", color: "#444", label: "Clarity" },
-    { key: "overall_score", color: "#0a0a0a", label: "Overall" },
+    { key: "pace_score", color: c.muted, label: "Pace" },
+    { key: "confidence_score", color: c.muted, label: "Confidence" },
+    { key: "clarity_score", color: c.muted, label: "Clarity" },
+    { key: "overall_score", color: c.text, label: "Overall" },
   ];
 
   const statCards = stats ? [
@@ -125,10 +125,10 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
-              { label: "Overall", value: stats.avgOverall, color: "#0a0a0a" },
-              { label: "Pace", value: stats.avgPace, color: "#555" },
-              { label: "Confidence", value: stats.avgConfidence, color: "#555" },
-              { label: "Clarity", value: stats.avgClarity, color: "#555" },
+              { label: "Overall", value: stats.avgOverall, color: c.text },
+              { label: "Pace", value: stats.avgPace, color: c.muted },
+              { label: "Confidence", value: stats.avgConfidence, color: c.muted },
+              { label: "Clarity", value: stats.avgClarity, color: c.muted },
             ].map(({ label, value, color }) => (
               <div key={label}>
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 4 }}>
