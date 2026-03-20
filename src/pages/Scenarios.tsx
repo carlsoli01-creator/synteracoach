@@ -1,25 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { useMemo, useState, useEffect } from "react";
-import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenarios";
+import { useState, useEffect } from "react";
+import { SCENARIO_CATEGORIES, getTodayScenario, diffColor as _dc } from "@/data/scenarios";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
-import { useTheme } from "@/contexts/ThemeContext";
+
+const diffColor = (d: string) =>
+  d === "Easy" ? "#6b8f4e" : d === "Medium" ? "#c8a030" : "#c85040";
 
 export default function Scenarios() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { sidebarWidth } = useSidebarState();
-  const { isDark } = useTheme();
   const [completedCategoriesToday, setCompletedCategoriesToday] = useState<string[]>([]);
-
-  const bg = isDark ? "#0a0a0a" : "#f8f8f8";
-  const text = isDark ? "#e8e8e8" : "#0a0a0a";
-  const muted = isDark ? "#666" : "#888";
-  const border = isDark ? "#222" : "#e2e2e2";
-  const card = isDark ? "#141414" : "#fff";
-  const cardDone = isDark ? "#0e0e0e" : "#f5f5f5";
 
   useEffect(() => {
     if (!user) return;
@@ -27,8 +21,7 @@ export default function Scenarios() {
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
       const { data } = await (supabase as any)
-        .from("voice_sessions")
-        .select("feedback")
+        .from("voice_sessions").select("feedback")
         .gte("created_at", todayStart.toISOString());
       if (data) {
         const cats: string[] = [];
@@ -43,56 +36,69 @@ export default function Scenarios() {
   }, [user]);
 
   return (
-    <div style={{ minHeight: "100vh", background: bg, fontFamily: "'DM Mono', monospace" }}>
+    <div style={{ minHeight: "100vh", background: "#0c0c0e", fontFamily: "'IBM Plex Mono', monospace" }}>
       <AppSidebar />
-      <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
-        <div style={{ padding: "40px 48px 24px" }}>
-          <div style={{ fontSize: 22, fontWeight: 700, color: text, fontFamily: "'Syne', sans-serif" }}>
-            Practice
-          </div>
-          <div style={{ fontSize: 11, letterSpacing: "0.14em", color: muted, textTransform: "uppercase", marginTop: 6, fontFamily: "'DM Mono', monospace" }}>
+      <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4,0,0.2,1)" }}>
+        <div style={{ padding: "48px 48px 24px" }}>
+          <h1 style={{ fontSize: 48, fontFamily: "'Bebas Neue', sans-serif", color: "#e6e6e0", letterSpacing: "0.06em", lineHeight: 1, margin: 0 }}>
+            PRACTICE
+          </h1>
+          <div style={{ fontSize: 10, letterSpacing: "0.14em", color: "#555", textTransform: "uppercase", marginTop: 8 }}>
             One scenario per category each day · New scenarios rotate daily
           </div>
         </div>
 
+        {/* Grid with 1px gap on dark border bg */}
         <div style={{
-          padding: "0 48px", paddingBottom: 80,
-          display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12,
+          margin: "0 48px 80px", background: "#1a1a1c",
+          display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 1,
         }}>
-          {SCENARIO_CATEGORIES.map((cat) => {
+          {SCENARIO_CATEGORIES.map((cat, idx) => {
             const todayItem = getTodayScenario(cat);
             const done = completedCategoriesToday.includes(cat.category);
+            const num = String(idx + 1).padStart(2, "0");
             return (
               <button
                 key={cat.slug}
                 onClick={() => navigate(`/scenarios/${cat.slug}`)}
                 style={{
-                  background: done ? cardDone : card,
-                  border: `1px solid ${border}`, borderRadius: 0, padding: 24,
-                  textAlign: "left", cursor: "pointer", transition: "all 0.2s ease",
-                  opacity: done ? 0.6 : 1, fontFamily: "'DM Mono', monospace",
+                  background: done ? "#0a0a0c" : "#111113",
+                  border: "none", borderRadius: 0, padding: 28,
+                  textAlign: "left", cursor: "pointer",
+                  transition: "background 0.15s ease",
+                  opacity: done ? 0.5 : 1,
+                  fontFamily: "'IBM Plex Mono', monospace",
                 }}
+                onMouseEnter={e => !done && (e.currentTarget.style.background = "#161618")}
+                onMouseLeave={e => !done && (e.currentTarget.style.background = "#111113")}
               >
-                <div style={{ fontSize: 9, letterSpacing: "0.28em", color: muted, textTransform: "uppercase", marginBottom: 8 }}>
-                  {cat.category}
-                  {done && <span style={{ marginLeft: 8, color: isDark ? "#999" : "#555" }}>[DONE]</span>}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                  <span style={{ fontSize: 28, fontFamily: "'Bebas Neue', sans-serif", color: "#333", letterSpacing: "0.04em" }}>
+                    {num}
+                  </span>
+                  {done && <span style={{ fontSize: 9, letterSpacing: "0.12em", color: "#c8ff00", textTransform: "uppercase" }}>DONE</span>}
                 </div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: text, fontFamily: "'Syne', sans-serif", marginBottom: 8 }}>
+                <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#555", textTransform: "uppercase", marginBottom: 6 }}>
                   {cat.category}
                 </div>
-                <div style={{ fontSize: 13, color: muted, lineHeight: 1.7, marginBottom: 14 }}>
+                <div style={{ fontSize: 13, color: "#888", lineHeight: 1.6, marginBottom: 16 }}>
                   {cat.description}
                 </div>
                 <div style={{
-                  borderTop: `1px solid ${border}`, paddingTop: 12, marginTop: 14,
+                  borderTop: "1px solid #1a1a1c", paddingTop: 14,
                   display: "flex", justifyContent: "space-between", alignItems: "center",
                 }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: text, fontFamily: "'Syne', sans-serif" }}>
+                  <div style={{ fontSize: 11, fontWeight: 500, color: "#e6e6e0" }}>
                     {todayItem.title}
                   </div>
-                  <div style={{ fontSize: 9, fontWeight: 500, color: diffColor(todayItem.difficulty), letterSpacing: "0.1em", textTransform: "uppercase" as const, fontFamily: "'DM Mono', monospace" }}>
+                  <span style={{
+                    fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase",
+                    color: diffColor(todayItem.difficulty),
+                    border: `1px solid ${diffColor(todayItem.difficulty)}`,
+                    padding: "2px 8px",
+                  }}>
                     {todayItem.difficulty}
-                  </div>
+                  </span>
                 </div>
               </button>
             );

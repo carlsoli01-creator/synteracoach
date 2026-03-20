@@ -18,11 +18,13 @@ interface Props {
     text: string;
     muted: string;
     card: string;
+    accent?: string;
   };
 }
 
 export default function ProgressDashboard({ history, colors: c }: Props) {
   const sessions = useMemo(() => [...history].reverse(), [history]);
+  const accent = c.accent || "#c8ff00";
 
   const stats = useMemo(() => {
     if (!sessions.length) return null;
@@ -45,8 +47,8 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
   if (!sessions.length) {
     return (
       <div style={{ padding: 60, color: c.muted }}>
-        <div style={{ fontSize: 13, fontWeight: 800, fontFamily: "'Syne', sans-serif" }}>No sessions yet</div>
-        <div style={{ fontSize: 11, marginTop: 4, fontFamily: "'DM Mono', monospace" }}>Complete your first recording to see progress charts</div>
+        <div style={{ fontSize: 24, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em", color: c.text }}>No sessions yet</div>
+        <div style={{ fontSize: 11, marginTop: 4, fontFamily: "'IBM Plex Mono', monospace" }}>Complete your first recording to see progress charts</div>
       </div>
     );
   }
@@ -68,7 +70,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
     { key: "pace_score", color: c.muted, label: "Pace" },
     { key: "confidence_score", color: c.muted, label: "Confidence" },
     { key: "clarity_score", color: c.muted, label: "Clarity" },
-    { key: "overall_score", color: c.text, label: "Overall" },
+    { key: "overall_score", color: accent, label: "Overall" },
   ];
 
   const statCards = stats ? [
@@ -79,21 +81,18 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
   ] : [];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 1, background: c.border }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1 }}>
         {statCards.map(({ label, value }) => (
-          <div key={label} style={{
-            background: c.card, border: `1px solid ${c.border}`,
-            borderRadius: 0, padding: "20px 24px",
-          }}>
-            <div style={{ fontSize: 32, fontWeight: 300, color: c.text, fontFamily: "'DM Mono', monospace" }}>{value}</div>
-            <div style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase", marginTop: 4, fontFamily: "'DM Mono', monospace" }}>{label}</div>
+          <div key={label} style={{ background: c.card, padding: "20px 24px" }}>
+            <div style={{ fontSize: 36, color: c.text, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em" }}>{value}</div>
+            <div style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase", marginTop: 4, fontFamily: "'IBM Plex Mono', monospace" }}>{label}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ background: c.card, border: `1px solid ${c.border}`, borderRadius: 0, padding: 28 }}>
-        <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 12, fontFamily: "'DM Mono', monospace" }}>
+      <div style={{ background: c.card, padding: 28 }}>
+        <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 12, fontFamily: "'IBM Plex Mono', monospace" }}>
           Score Trends
         </div>
         <svg viewBox={`0 0 ${chartW} ${chartH}`} style={{ width: "100%", height: 140 }}>
@@ -102,7 +101,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
             return (
               <g key={v}>
                 <line x1={pad} y1={y} x2={chartW - pad} y2={y} stroke={c.border} strokeWidth={0.5} />
-                <text x={pad - 6} y={y + 3} textAnchor="end" fill={c.muted} fontSize={8} fontFamily="'DM Mono', monospace">{v}</text>
+                <text x={pad - 6} y={y + 3} textAnchor="end" fill={c.muted} fontSize={8} fontFamily="'IBM Plex Mono', monospace">{v}</text>
               </g>
             );
           })}
@@ -110,8 +109,8 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
         </svg>
         <div style={{ display: "flex", gap: 16, justifyContent: "center", marginTop: 8 }}>
           {metrics.map(m => (
-            <div key={m.key} style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: c.muted, fontFamily: "'DM Mono', monospace" }}>
-              <div style={{ width: 10, height: 3, background: m.color, borderRadius: 0 }} />
+            <div key={m.key} style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: c.muted, fontFamily: "'IBM Plex Mono', monospace" }}>
+              <div style={{ width: 10, height: 3, background: m.color }} />
               {m.label}
             </div>
           ))}
@@ -119,27 +118,24 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
       </div>
 
       {stats && (
-        <div style={{ background: c.card, border: `1px solid ${c.border}`, borderRadius: 0, padding: 28 }}>
-          <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'DM Mono', monospace" }}>
+        <div style={{ background: c.card, padding: 28 }}>
+          <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'IBM Plex Mono', monospace" }}>
             Average Scores
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
-              { label: "Overall", value: stats.avgOverall, color: c.text },
+              { label: "Overall", value: stats.avgOverall, color: accent },
               { label: "Pace", value: stats.avgPace, color: c.muted },
               { label: "Confidence", value: stats.avgConfidence, color: c.muted },
               { label: "Clarity", value: stats.avgClarity, color: c.muted },
             ].map(({ label, value, color }) => (
               <div key={label}>
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 4 }}>
-                  <span style={{ color: c.muted, fontFamily: "'DM Mono', monospace" }}>{label}</span>
-                  <span style={{ color: c.text, fontWeight: 500, fontFamily: "'DM Mono', monospace" }}>{value}%</span>
+                  <span style={{ color: c.muted, fontFamily: "'IBM Plex Mono', monospace" }}>{label}</span>
+                  <span style={{ color: c.text, fontWeight: 500, fontFamily: "'IBM Plex Mono', monospace" }}>{value}%</span>
                 </div>
-                <div style={{ height: 4, background: c.border, borderRadius: 0, overflow: "hidden" }}>
-                  <div style={{
-                    height: "100%", width: `${value}%`,
-                    background: color, borderRadius: 0, transition: "width 0.8s ease",
-                  }} />
+                <div style={{ height: 4, background: c.border, overflow: "hidden" }}>
+                  <div style={{ height: "100%", width: `${value}%`, background: color, transition: "width 0.8s ease" }} />
                 </div>
               </div>
             ))}
