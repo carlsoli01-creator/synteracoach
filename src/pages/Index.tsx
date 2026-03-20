@@ -336,7 +336,7 @@ export default function Negotium() {
       audioCtx.createMediaStreamSource(stream).connect(analyser);
       audioCtxRef.current = audioCtx; analyserRef.current = analyser;
       volumeRef.current = []; silenceRef.current = 0; framesRef.current = 0; recordingStartRef.current = Date.now();
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = true; recognition.interimResults = true; recognition.lang = "en-US"; recognition.maxAlternatives = 3;
