@@ -89,7 +89,7 @@ export default function StreakBadges({ history, colors: c }: Props) {
           {streakDots.map((active, i) => (
             <div key={i} style={{
               width: 12, height: 12, borderRadius: 0,
-              background: active ? "#0a0a0a" : c.border,
+              background: active ? c.text : c.border,
               transition: "background 0.2s ease",
             }} />
           ))}
@@ -114,26 +114,26 @@ export default function StreakBadges({ history, colors: c }: Props) {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
           {badges.map(badge => (
             <div key={badge.id} style={{
-              background: badge.earned ? "#0a0a0a" : "#f8f8f8",
-              border: `1px solid ${badge.earned ? "#0a0a0a" : c.border}`,
+              background: badge.earned ? c.text : c.bg,
+              border: `1px solid ${badge.earned ? c.text : c.border}`,
               borderRadius: 0, padding: "16px 10px", textAlign: "center",
               transition: "all 0.2s ease", position: "relative",
             }}>
               <div style={{
                 fontSize: 20, marginBottom: 4, fontWeight: 300,
-                color: badge.earned ? "#fff" : "#bbb",
+                color: badge.earned ? c.bg : c.muted,
                 fontFamily: "'DM Mono', monospace",
               }}>
                 {badge.abbr}
               </div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: badge.earned ? "#fff" : "#bbb", marginBottom: 2, fontFamily: "'Syne', sans-serif" }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: badge.earned ? c.bg : c.muted, marginBottom: 2, fontFamily: "'Syne', sans-serif" }}>
                 {badge.title}
               </div>
-              <div style={{ fontSize: 9, color: badge.earned ? "rgba(255,255,255,0.6)" : "#bbb", lineHeight: 1.4, fontFamily: "'DM Mono', monospace" }}>
+              <div style={{ fontSize: 9, color: badge.earned ? c.border : c.muted, lineHeight: 1.4, fontFamily: "'DM Mono', monospace" }}>
                 {badge.description}
               </div>
               {badge.earned && (
-                <div style={{ position: "absolute", top: 6, right: 6, fontSize: 10, color: "#fff", fontFamily: "'DM Mono', monospace" }}>✓</div>
+                <div style={{ position: "absolute", top: 6, right: 6, fontSize: 10, color: c.bg, fontFamily: "'DM Mono', monospace" }}>✓</div>
               )}
             </div>
           ))}

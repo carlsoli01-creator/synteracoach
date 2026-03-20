@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function TermsOfService() {
   const navigate = useNavigate();
-  const theme = localStorage.getItem("syntera_theme") || "light";
-  const isDark = theme === "dark";
+  const { isDark } = useTheme();
   const bg = isDark ? "#000" : "#fff";
   const text = isDark ? "#e8e0d0" : "#0b0b0b";
   const muted = isDark ? "#666" : "#999";

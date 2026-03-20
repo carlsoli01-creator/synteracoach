@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { SCENARIO_CATEGORIES, getTodayScenario, type Scenario, type GoalOption, type SubgoalOption } from "@/data/scenarios";
 
 const CIRCUMFERENCE = 2 * Math.PI * 70;
@@ -14,21 +15,23 @@ function getVariance(arr: number[]) {
   return arr.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / arr.length;
 }
 
-function ScoreRing({ score, label, color }: { score: number; label: string; color: string }) {
+function ScoreRing({ score, label, color, isDark }: { score: number; label: string; color: string; isDark: boolean }) {
   const r = 28;
   const circ = 2 * Math.PI * r;
   const offset = circ * (1 - score / 100);
+  const trackColor = isDark ? "#222" : "#e2e2e2";
+  const textColor = isDark ? "#e8e8e8" : "#0a0a0a";
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
       <svg width={72} height={72} viewBox="0 0 72 72">
-        <circle cx={36} cy={36} r={r} fill="none" stroke="#e2e2e2" strokeWidth={5} />
+        <circle cx={36} cy={36} r={r} fill="none" stroke={trackColor} strokeWidth={5} />
         <circle cx={36} cy={36} r={r} fill="none" stroke={color} strokeWidth={5}
           strokeLinecap="square" strokeDasharray={circ} strokeDashoffset={offset}
           style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s ease" }} />
-        <text x={36} y={40} textAnchor="middle" fill="#0a0a0a" fontSize={14}
+        <text x={36} y={40} textAnchor="middle" fill={textColor} fontSize={14}
           fontFamily="'DM Mono', monospace" fontWeight="300">{score}</text>
       </svg>
-      <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "#888", fontFamily: "'DM Mono', monospace" }}>{label}</span>
+      <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: isDark ? "#666" : "#888", fontFamily: "'DM Mono', monospace" }}>{label}</span>
     </div>
   );
 }
@@ -45,9 +48,17 @@ interface ScenarioRecordingProps {
 function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, customSubGoals, customNotes }: ScenarioRecordingProps) {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { isDark } = useTheme();
   const goal = customGoal || scenario.goal;
   const subGoals = customSubGoals || scenario.subGoals;
   const duration = scenario.durationSeconds;
+
+  const bg = isDark ? "#0a0a0a" : "#f8f8f8";
+  const text = isDark ? "#e8e8e8" : "#0a0a0a";
+  const muted = isDark ? "#666" : "#888";
+  const border = isDark ? "#222" : "#e2e2e2";
+  const card = isDark ? "#141414" : "#fff";
+  const surface = isDark ? "#111" : "#f0f0f0";
 
   const [phase, setPhase] = useState<"idle" | "recording" | "analyzing" | "done">("idle");
   const [timeLeft, setTimeLeft] = useState(duration);
@@ -114,18 +125,13 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
           customNotes: customNotes || "",
         }
       });
-      if (error) {
-        setMicError("Analysis failed. Please try again.");
-        setPhase("idle");
-        return;
-      }
+      if (error) { setMicError("Analysis failed. Please try again."); setPhase("idle"); return; }
       if (data?.error) { setMicError(data.error); setPhase("idle"); return; }
 
       const { scores, goalAnalysis } = data;
       setMetrics(scores);
       setFeedback({ ...data, goalAnalysis });
 
-      // Save session
       const sessionRow = {
         user_id: user?.id,
         overall_score: scores.overall,
@@ -268,36 +274,32 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
 
   return (
     <div style={{ maxWidth: 800, margin: "0 auto", padding: "0 24px 80px" }}>
-      {/* Header */}
       <div style={{ marginBottom: 32 }}>
-        <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
+        <div style={{ fontSize: 9, letterSpacing: "0.25em", color: muted, textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
           {isCustom ? "Custom Practice" : categoryName}
         </div>
-        <div style={{ fontSize: 24, fontWeight: 700, color: "#0a0a0a", fontFamily: "'Syne', sans-serif", marginBottom: 8 }}>
+        <div style={{ fontSize: 24, fontWeight: 700, color: text, fontFamily: "'Syne', sans-serif", marginBottom: 8 }}>
           {scenario.title}
         </div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 220px", gap: 32 }}>
-        {/* Left — Recording */}
         <div>
-          {/* Scenario prompt */}
           {phase === "idle" && (
             <div style={{
-              fontSize: 13, color: "#0a0a0a", lineHeight: 1.8, padding: 20,
-              background: "#f0f0f0", border: "1px solid #e2e2e2", marginBottom: 24, fontStyle: "italic",
+              fontSize: 13, color: text, lineHeight: 1.8, padding: 20,
+              background: surface, border: `1px solid ${border}`, marginBottom: 24, fontStyle: "italic",
             }}>
               "{scenario.prompt}"
             </div>
           )}
 
-          {/* Waveform */}
           <div style={{ marginBottom: 24 }}>
-            <div style={{ height: 56, background: "#f0f0f0", border: "1px solid #e2e2e2", display: "flex", alignItems: "center", padding: "0 6px", gap: 2 }}>
+            <div style={{ height: 56, background: surface, border: `1px solid ${border}`, display: "flex", alignItems: "center", padding: "0 6px", gap: 2 }}>
               {waveData.map((v, i) =>
                 <div key={i} style={{
                   flex: 1,
-                  background: phase === "recording" ? "#0a0a0a" : "#d8d8d8",
+                  background: phase === "recording" ? text : (isDark ? "#444" : "#d8d8d8"),
                   height: `${Math.max(4, Math.abs(v - 0.5) * 128)}px`,
                   transition: "height 0.05s, background 0.2s",
                   opacity: phase === "recording" ? 0.5 + Math.abs(v - 0.5) : 0.5
@@ -306,126 +308,110 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
             </div>
           </div>
 
-          {/* Timer Ring */}
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
             <div style={{ position: "relative", width: 120, height: 120 }}>
               <svg width={120} height={120} viewBox="0 0 160 160">
-                <circle cx={80} cy={80} r={70} fill="none" stroke="#e2e2e2" strokeWidth={1} />
-                <circle cx={80} cy={80} r={70} fill="none" stroke="#0a0a0a" strokeWidth={1}
+                <circle cx={80} cy={80} r={70} fill="none" stroke={border} strokeWidth={1} />
+                <circle cx={80} cy={80} r={70} fill="none" stroke={text} strokeWidth={1}
                   strokeLinecap="square" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={ringOffset}
                   style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
               </svg>
               <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                <div style={{ fontSize: 36, fontWeight: 300, color: "#0a0a0a", lineHeight: 1, fontFamily: "'DM Mono', monospace" }}>{timeLeft}</div>
-                <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#888", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>seconds</div>
-                {phase === "recording" && <div style={{ marginTop: 4, width: 8, height: 8, background: "#0a0a0a", animation: "pulse 1s infinite" }} />}
+                <div style={{ fontSize: 36, fontWeight: 300, color: text, lineHeight: 1, fontFamily: "'DM Mono', monospace" }}>{timeLeft}</div>
+                <div style={{ fontSize: 9, letterSpacing: "0.3em", color: muted, textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>seconds</div>
+                {phase === "recording" && <div style={{ marginTop: 4, width: 8, height: 8, background: text, animation: "pulse 1s infinite" }} />}
               </div>
             </div>
           </div>
 
-          {/* Controls */}
           <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 16 }}>
             {phase === "recording" ? (
               <button onClick={() => { stopAll(); setWaveData(new Array(60).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
-                style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: "pointer", background: "#0a0a0a", color: "#fff", fontWeight: 500, fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
+                style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: "pointer", background: text, color: bg, fontWeight: 500, fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
                 STOP RECORDING
               </button>
             ) : (
               <button onClick={phase !== "analyzing" ? startRecording : undefined} disabled={phase === "analyzing"}
-                style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: phase === "analyzing" ? "not-allowed" : "pointer", background: "#0a0a0a", color: "#fff", fontWeight: 500, opacity: phase === "analyzing" ? 0.6 : 1, fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
+                style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: phase === "analyzing" ? "not-allowed" : "pointer", background: text, color: bg, fontWeight: 500, opacity: phase === "analyzing" ? 0.6 : 1, fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
                 {phase === "idle" ? "START RECORDING" : phase === "analyzing" ? "ANALYZING..." : "RECORD AGAIN"}
               </button>
             )}
             <button onClick={reset}
-              style={{ fontSize: 11, padding: "14px 18px", background: "none", border: "1px solid #e2e2e2", color: "#888", cursor: "pointer", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em" }}>
+              style={{ fontSize: 11, padding: "14px 18px", background: "none", border: `1px solid ${border}`, color: muted, cursor: "pointer", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em" }}>
               Reset
             </button>
           </div>
 
-          {micError && <div style={{ textAlign: "center", fontSize: 11, color: "#0a0a0a", marginBottom: 16, lineHeight: 1.6 }}>{micError}</div>}
-          {phase === "analyzing" && <div style={{ textAlign: "center", fontSize: 11, color: "#888", marginBottom: 24, fontFamily: "'DM Mono', monospace" }}>Analyzing goal performance...</div>}
+          {micError && <div style={{ textAlign: "center", fontSize: 11, color: text, marginBottom: 16, lineHeight: 1.6 }}>{micError}</div>}
+          {phase === "analyzing" && <div style={{ textAlign: "center", fontSize: 11, color: muted, marginBottom: 24, fontFamily: "'DM Mono', monospace" }}>Analyzing goal performance...</div>}
         </div>
 
-        {/* Right — Goals sidebar */}
         <div>
-          <div style={{ border: "1px solid #e2e2e2", background: "#fff", padding: 20 }}>
-            <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 12, fontFamily: "'DM Mono', monospace" }}>
+          <div style={{ border: `1px solid ${border}`, background: card, padding: 20 }}>
+            <div style={{ fontSize: 9, letterSpacing: "0.25em", color: muted, textTransform: "uppercase", marginBottom: 12, fontFamily: "'DM Mono', monospace" }}>
               Goals
             </div>
-
-            {/* Main goal */}
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 9, letterSpacing: "0.15em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Primary</div>
-              <div style={{ padding: "8px 12px", border: "1px solid #0a0a0a", background: "#0a0a0a", color: "#fff", fontSize: 11, fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>
+              <div style={{ fontSize: 9, letterSpacing: "0.15em", color: muted, textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Primary</div>
+              <div style={{ padding: "8px 12px", border: `1px solid ${text}`, background: text, color: bg, fontSize: 11, fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>
                 {goal}
               </div>
             </div>
-
-            {/* Sub-goals */}
             <div>
-              <div style={{ fontSize: 9, letterSpacing: "0.15em", color: "#888", textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Sub-Goals</div>
+              <div style={{ fontSize: 9, letterSpacing: "0.15em", color: muted, textTransform: "uppercase", marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Sub-Goals</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 {subGoals.map((sg) => (
-                  <div key={sg} style={{ padding: "6px 12px", border: "1px solid #e2e2e2", fontSize: 10, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>
+                  <div key={sg} style={{ padding: "6px 12px", border: `1px solid ${border}`, fontSize: 10, color: text, fontFamily: "'DM Mono', monospace" }}>
                     {sg}
                   </div>
                 ))}
               </div>
             </div>
-
-            {/* Duration */}
-            <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid #e2e2e2" }}>
-              <div style={{ fontSize: 9, letterSpacing: "0.15em", color: "#888", textTransform: "uppercase", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>Duration</div>
-              <div style={{ fontSize: 18, fontWeight: 300, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>{duration}s</div>
+            <div style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${border}` }}>
+              <div style={{ fontSize: 9, letterSpacing: "0.15em", color: muted, textTransform: "uppercase", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>Duration</div>
+              <div style={{ fontSize: 18, fontWeight: 300, color: text, fontFamily: "'DM Mono', monospace" }}>{duration}s</div>
             </div>
-
             {customNotes && (
-              <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid #e2e2e2" }}>
-                <div style={{ fontSize: 9, letterSpacing: "0.15em", color: "#888", textTransform: "uppercase", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>Notes</div>
-                <div style={{ fontSize: 11, color: "#0a0a0a", lineHeight: 1.6 }}>{customNotes}</div>
+              <div style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${border}` }}>
+                <div style={{ fontSize: 9, letterSpacing: "0.15em", color: muted, textTransform: "uppercase", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>Notes</div>
+                <div style={{ fontSize: 11, color: text, lineHeight: 1.6 }}>{customNotes}</div>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Results */}
       {phase === "done" && feedback && metrics && (
         <div style={{ marginTop: 32, animation: "fadeUp 0.5s ease" }}>
-          {/* Goal Achievement */}
           {feedback.goalAnalysis && (
-            <div style={{ border: "1px solid #e2e2e2", background: "#fff", padding: 24, marginBottom: 24 }}>
-              <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 16, fontFamily: "'DM Mono', monospace" }}>
+            <div style={{ border: `1px solid ${border}`, background: card, padding: 24, marginBottom: 24 }}>
+              <div style={{ fontSize: 9, letterSpacing: "0.25em", color: muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'DM Mono', monospace" }}>
                 Goal Achievement
               </div>
-
-              {/* Primary goal score */}
               <div style={{ marginBottom: 20 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-                  <span style={{ fontSize: 12, fontWeight: 600, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>{goal}</span>
-                  <span style={{ fontSize: 24, fontWeight: 300, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>{feedback.goalAnalysis.goalScore ?? 0}</span>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: text, fontFamily: "'DM Mono', monospace" }}>{goal}</span>
+                  <span style={{ fontSize: 24, fontWeight: 300, color: text, fontFamily: "'DM Mono', monospace" }}>{feedback.goalAnalysis.goalScore ?? 0}</span>
                 </div>
-                <div style={{ height: 4, background: "#e2e2e2" }}>
-                  <div style={{ height: "100%", width: `${feedback.goalAnalysis.goalScore ?? 0}%`, background: "#0a0a0a", transition: "width 0.5s ease" }} />
+                <div style={{ height: 4, background: border }}>
+                  <div style={{ height: "100%", width: `${feedback.goalAnalysis.goalScore ?? 0}%`, background: text, transition: "width 0.5s ease" }} />
                 </div>
                 {feedback.goalAnalysis.goalFeedback && (
-                  <div style={{ fontSize: 12, color: "#0a0a0a", lineHeight: 1.7, marginTop: 8 }}>{feedback.goalAnalysis.goalFeedback}</div>
+                  <div style={{ fontSize: 12, color: text, lineHeight: 1.7, marginTop: 8 }}>{feedback.goalAnalysis.goalFeedback}</div>
                 )}
               </div>
-
-              {/* Sub-goal scores */}
               {feedback.goalAnalysis.subGoalScores && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   {feedback.goalAnalysis.subGoalScores.map((sg: any) => (
                     <div key={sg.name}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
-                        <span style={{ fontSize: 10, color: "#555", fontFamily: "'DM Mono', monospace" }}>{sg.name}</span>
-                        <span style={{ fontSize: 14, fontWeight: 300, color: "#0a0a0a", fontFamily: "'DM Mono', monospace" }}>{sg.score}</span>
+                        <span style={{ fontSize: 10, color: muted, fontFamily: "'DM Mono', monospace" }}>{sg.name}</span>
+                        <span style={{ fontSize: 14, fontWeight: 300, color: text, fontFamily: "'DM Mono', monospace" }}>{sg.score}</span>
                       </div>
-                      <div style={{ height: 2, background: "#e2e2e2" }}>
-                        <div style={{ height: "100%", width: `${sg.score}%`, background: "#555", transition: "width 0.5s ease" }} />
+                      <div style={{ height: 2, background: border }}>
+                        <div style={{ height: "100%", width: `${sg.score}%`, background: muted, transition: "width 0.5s ease" }} />
                       </div>
-                      {sg.feedback && <div style={{ fontSize: 11, color: "#888", lineHeight: 1.5, marginTop: 4 }}>{sg.feedback}</div>}
+                      {sg.feedback && <div style={{ fontSize: 11, color: muted, lineHeight: 1.5, marginTop: 4 }}>{sg.feedback}</div>}
                     </div>
                   ))}
                 </div>
@@ -433,22 +419,20 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
             </div>
           )}
 
-          {/* Standard scores */}
-          <div style={{ border: "1px solid #e2e2e2", background: "#fff", padding: 24, marginBottom: 24 }}>
-            <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 16, fontFamily: "'DM Mono', monospace" }}>
+          <div style={{ border: `1px solid ${border}`, background: card, padding: 24, marginBottom: 24 }}>
+            <div style={{ fontSize: 9, letterSpacing: "0.25em", color: muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'DM Mono', monospace" }}>
               Performance Overview
             </div>
             <div style={{ display: "flex", justifyContent: "space-around" }}>
-              <ScoreRing score={metrics.overall} label="Overall" color="#0a0a0a" />
-              <ScoreRing score={metrics.pace} label="Pace" color="#555" />
-              <ScoreRing score={metrics.confidence} label="Confidence" color="#555" />
-              <ScoreRing score={metrics.clarity} label="Clarity" color="#555" />
+              <ScoreRing score={metrics.overall} label="Overall" color={text} isDark={isDark} />
+              <ScoreRing score={metrics.pace} label="Pace" color={muted} isDark={isDark} />
+              <ScoreRing score={metrics.confidence} label="Confidence" color={muted} isDark={isDark} />
+              <ScoreRing score={metrics.clarity} label="Clarity" color={muted} isDark={isDark} />
             </div>
           </div>
 
-          {/* Analysis text */}
           {feedback.analysis && (
-            <div style={{ border: "1px solid #e2e2e2", background: "#fff", padding: 24, marginBottom: 24 }}>
+            <div style={{ border: `1px solid ${border}`, background: card, padding: 24, marginBottom: 24 }}>
               {[
                 { title: "Overall", text: feedback.analysis.overall },
                 { title: "Strength", text: feedback.analysis.strength },
@@ -456,15 +440,15 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
                 { title: "Recommendation", text: feedback.analysis.recommendation },
               ].filter(s => s.text).map(s => (
                 <div key={s.title} style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 9, letterSpacing: "0.25em", color: "#888", textTransform: "uppercase", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>{s.title}</div>
-                  <div style={{ fontSize: 13, lineHeight: 1.8, color: "#0a0a0a" }}>{s.text}</div>
+                  <div style={{ fontSize: 9, letterSpacing: "0.25em", color: muted, textTransform: "uppercase", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>{s.title}</div>
+                  <div style={{ fontSize: 13, lineHeight: 1.8, color: text }}>{s.text}</div>
                 </div>
               ))}
             </div>
           )}
 
           <button onClick={() => navigate(-1)}
-            style={{ width: "100%", padding: "14px", background: "#0a0a0a", color: "#fff", border: "none", fontSize: 11, fontWeight: 500, cursor: "pointer", letterSpacing: "0.15em", fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
+            style={{ width: "100%", padding: "14px", background: text, color: bg, border: "none", fontSize: 11, fontWeight: 500, cursor: "pointer", letterSpacing: "0.15em", fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
             BACK TO SCENARIOS
           </button>
         </div>
@@ -482,15 +466,20 @@ export default function ScenarioRecording() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { sidebarWidth } = useSidebarState();
+  const { isDark } = useTheme();
+
+  const bg = isDark ? "#0a0a0a" : "#f8f8f8";
+  const text = isDark ? "#e8e8e8" : "#0a0a0a";
+  const muted = isDark ? "#666" : "#888";
 
   const category = SCENARIO_CATEGORIES.find((c) => c.slug === slug);
 
   if (!category) {
     return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Mono', monospace" }}>
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Mono', monospace", background: bg }}>
         <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 18, fontWeight: 800, color: "#0a0a0a", marginBottom: 8, fontFamily: "'Syne', sans-serif" }}>Category not found</div>
-          <button onClick={() => navigate("/scenarios")} style={{ fontSize: 12, color: "#888", background: "none", border: "none", cursor: "pointer", textDecoration: "underline", fontFamily: "'DM Mono', monospace" }}>
+          <div style={{ fontSize: 18, fontWeight: 800, color: text, marginBottom: 8, fontFamily: "'Syne', sans-serif" }}>Category not found</div>
+          <button onClick={() => navigate("/scenarios")} style={{ fontSize: 12, color: muted, background: "none", border: "none", cursor: "pointer", textDecoration: "underline", fontFamily: "'DM Mono', monospace" }}>
             Back to scenarios
           </button>
         </div>
@@ -501,12 +490,12 @@ export default function ScenarioRecording() {
   const todayScenario = getTodayScenario(category);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f8f8f8", fontFamily: "'DM Mono', monospace" }}>
+    <div style={{ minHeight: "100vh", background: bg, fontFamily: "'DM Mono', monospace" }}>
       <AppSidebar />
       <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
         <div style={{ padding: "20px 48px 0" }}>
           <button onClick={() => navigate(`/scenarios/${slug}`)}
-            style={{ background: "none", border: "none", color: "#888", fontSize: 12, cursor: "pointer", padding: 0, fontFamily: "'DM Mono', monospace" }}>
+            style={{ background: "none", border: "none", color: muted, fontSize: 12, cursor: "pointer", padding: 0, fontFamily: "'DM Mono', monospace" }}>
             ← Back to {category.category}
           </button>
         </div>
@@ -518,5 +507,4 @@ export default function ScenarioRecording() {
   );
 }
 
-// Exported for custom practice use
 export { ScenarioRecordingInner };
