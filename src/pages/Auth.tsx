@@ -215,6 +215,7 @@ export default function Auth() {
 
       {/* Login Section */}
       <div
+        id="auth-section"
         className="flex items-center justify-center"
         style={{
           minHeight: "100vh",
