@@ -166,9 +166,13 @@ export default function Auth() {
   return (
     <div style={{ background: "#080808", minHeight: "100vh", overflowY: "auto" }}>
       {/* Hero Section with RetroGrid */}
-      <div className="relative flex items-center justify-center" style={{ height: "100vh" }}>
+      <div
+        className="relative flex items-center justify-center"
+        style={{ height: "100vh", cursor: "pointer" }}
+        onClick={() => document.getElementById("auth-section")?.scrollIntoView({ behavior: "smooth" })}
+      >
         <RetroGrid angle={65} />
-        <div className="relative z-10 text-center">
+        <div className="relative z-10 text-center pointer-events-none">
           <h1
             className="font-heading"
             style={{
@@ -193,7 +197,6 @@ export default function Auth() {
           >
             Speak with clarity
           </p>
-          {/* Scroll indicator */}
           <div
             className="animate-bounce"
             style={{
@@ -212,6 +215,7 @@ export default function Auth() {
 
       {/* Login Section */}
       <div
+        id="auth-section"
         className="flex items-center justify-center"
         style={{
           minHeight: "100vh",
