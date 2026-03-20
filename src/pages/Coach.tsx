@@ -4,8 +4,8 @@ import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Send, Lock, ArrowLeft } from "lucide-react";
-import { Footer } from "@/components/ui/footer";
+import { Lock, ArrowLeft } from "lucide-react";
+import { AIInput } from "@/components/ui/ai-input";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -60,10 +60,10 @@ async function streamChat({
 function SimpleMarkdown({ text }: { text: string }) {
   const lines = text.split("\n");
   return (
-    <div style={{ whiteSpace: "pre-wrap", lineHeight: 1.7 }}>
+    <div className="whitespace-pre-wrap leading-relaxed">
       {lines.map((line, i) => {
-        let processed: React.ReactNode = line.replace(/\*\*(.*?)\*\*/g, "§BOLD§$1§/BOLD§");
-        const parts = (processed as string).split(/(§BOLD§.*?§\/BOLD§)/g);
+        const processed: string = line.replace(/\*\*(.*?)\*\*/g, "§BOLD§$1§/BOLD§");
+        const parts = processed.split(/(§BOLD§.*?§\/BOLD§)/g);
         const rendered = parts.map((p, j) => {
           if (p.startsWith("§BOLD§")) {
             return <strong key={j}>{p.replace("§BOLD§", "").replace("§/BOLD§", "")}</strong>;
@@ -71,10 +71,10 @@ function SimpleMarkdown({ text }: { text: string }) {
           return p;
         });
         if (line.trim().startsWith("• ") || line.trim().startsWith("- ")) {
-          return <div key={i} style={{ paddingLeft: 16 }}>{rendered}</div>;
+          return <div key={i} className="pl-4">{rendered}</div>;
         }
         if (/^\d+\.\s/.test(line.trim())) {
-          return <div key={i} style={{ paddingLeft: 16 }}>{rendered}</div>;
+          return <div key={i} className="pl-4">{rendered}</div>;
         }
         return <div key={i}>{rendered}</div>;
       })}
@@ -89,30 +89,19 @@ export default function Coach() {
   const isMobile = useIsMobile();
   const { isDark } = useTheme();
   const [messages, setMessages] = useState<Msg[]>([]);
-  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
-
-  const bg = isDark ? "#0a0a0a" : "#fff";
-  const text = isDark ? "#e8e8e8" : "#0a0a0a";
-  const muted = isDark ? "#666" : "#888";
-  const border = isDark ? "#222" : "#e2e2e2";
-  const card = isDark ? "#141414" : "#f5f5f5";
-  const inputBg = isDark ? "#111" : "#fafafa";
-  const userBubble = isDark ? "#e8e8e8" : "#0a0a0a";
-  const userBubbleText = isDark ? "#0a0a0a" : "#fff";
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const send = async () => {
-    if (!input.trim() || loading) return;
-    const userMsg: Msg = { role: "user", content: input.trim() };
+  const send = async (value: string) => {
+    if (!value.trim() || loading) return;
+    const userMsg: Msg = { role: "user", content: value.trim() };
     const newMsgs = [...messages, userMsg];
     setMessages(newMsgs);
-    setInput("");
     setLoading(true);
     setError("");
     let assistantSoFar = "";
@@ -137,25 +126,19 @@ export default function Coach() {
     return (
       <>
         <AppSidebar />
-        <div style={{
-          marginLeft: isMobile ? 0 : sidebarWidth,
-          transition: "margin-left 0.25s cubic-bezier(0.4,0,0.2,1)",
-          minHeight: "100vh", display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center", padding: 32,
-          fontFamily: "'DM Mono', monospace", background: bg,
-        }}>
-          <Lock size={48} strokeWidth={1.5} color={isDark ? "#444" : "#ccc"} />
-          <div style={{ fontSize: 22, fontWeight: 800, marginTop: 20, fontFamily: "'Syne', sans-serif", color: text }}>
-            Elite Feature
-          </div>
-          <div style={{ fontSize: 13, color: muted, marginTop: 8, textAlign: "center", maxWidth: 360, lineHeight: 1.7 }}>
+        <div
+          className="min-h-screen flex flex-col items-center justify-center p-8 font-sans bg-background text-foreground transition-[margin-left] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+          style={{ marginLeft: isMobile ? 0 : sidebarWidth }}
+        >
+          <Lock size={48} strokeWidth={1.5} className="text-muted-foreground/40" />
+          <h2 className="text-xl font-heading font-extrabold mt-5">Elite Feature</h2>
+          <p className="text-sm text-muted-foreground mt-2 text-center max-w-[360px] leading-relaxed">
             Your personal Feedback Coach is available on the Elite plan. Upgrade to get unlimited, personalized AI coaching.
-          </div>
-          <button onClick={() => navigate("/")} style={{
-            marginTop: 24, padding: "12px 28px", background: text, color: bg,
-            border: "none", fontSize: 12, letterSpacing: "0.12em", cursor: "pointer",
-            fontFamily: "'DM Mono', monospace", textTransform: "uppercase",
-          }}>
+          </p>
+          <button
+            onClick={() => navigate("/")}
+            className="mt-6 px-7 py-3 bg-foreground text-background text-xs tracking-widest uppercase font-mono hover:opacity-90 active:scale-[0.97] transition-all"
+          >
             Go Back
           </button>
         </div>
@@ -166,41 +149,40 @@ export default function Coach() {
   return (
     <>
       <AppSidebar />
-      <div style={{
-        marginLeft: isMobile ? 0 : sidebarWidth,
-        transition: "margin-left 0.25s cubic-bezier(0.4,0,0.2,1)",
-        minHeight: "100vh", display: "flex", flexDirection: "column",
-        background: bg, fontFamily: "'DM Mono', monospace",
-      }}>
-        <div style={{
-          padding: "24px 28px 16px", borderBottom: `1px solid ${border}`,
-          display: "flex", alignItems: "center", gap: 12,
-        }}>
-          <button onClick={() => navigate("/")} style={{ background: "none", border: "none", cursor: "pointer", color: muted, display: "flex" }}>
+      <div
+        className="min-h-screen flex flex-col bg-background font-sans transition-[margin-left] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+        style={{ marginLeft: isMobile ? 0 : sidebarWidth }}
+      >
+        {/* Header */}
+        <div className="px-7 pt-6 pb-4 border-b border-border flex items-center gap-3">
+          <button
+            onClick={() => navigate("/")}
+            className="bg-transparent border-none cursor-pointer text-muted-foreground flex hover:text-foreground transition-colors"
+          >
             <ArrowLeft size={18} />
           </button>
           <div>
-            <div style={{ fontSize: 16, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: text }}>
+            <h1 className="text-base font-heading font-extrabold text-foreground">
               Feedback Coach
-            </div>
-            <div style={{ fontSize: 10, color: muted, letterSpacing: "0.15em", textTransform: "uppercase" }}>
+            </h1>
+            <p className="text-[10px] text-muted-foreground tracking-[0.15em] uppercase">
               Your personal AI speaking coach
-            </div>
+            </p>
           </div>
-          <div style={{
-            marginLeft: "auto", fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase",
-            background: text, color: bg, padding: "4px 10px", fontWeight: 500,
-          }}>
+          <span className="ml-auto text-[8px] tracking-[0.2em] uppercase bg-foreground text-background px-2.5 py-1 font-medium">
             ELITE
-          </div>
+          </span>
         </div>
 
-        <div style={{ flex: 1, overflowY: "auto", padding: "20px 28px", display: "flex", flexDirection: "column", gap: 16 }}>
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto px-7 py-5 flex flex-col gap-4">
           {messages.length === 0 && (
-            <div style={{ textAlign: "center", color: muted, marginTop: 60, fontSize: 13 }}>
-              <div style={{ fontSize: 32, marginBottom: 12 }}>🎤</div>
-              <div style={{ fontWeight: 500, color: isDark ? "#999" : "#555", marginBottom: 6 }}>Ask me anything about speaking</div>
-              <div style={{ fontSize: 11, lineHeight: 1.7 }}>
+            <div className="text-center text-muted-foreground mt-16 text-sm">
+              <div className="text-3xl mb-3">🎤</div>
+              <div className="font-medium text-muted-foreground/80 mb-1.5">
+                Ask me anything about speaking
+              </div>
+              <div className="text-xs leading-relaxed text-muted-foreground/60">
                 "How do I reduce filler words?"<br />
                 "Give me a 2-minute warm-up routine"<br />
                 "My pace score is 62 — what should I work on?"
@@ -209,30 +191,26 @@ export default function Coach() {
           )}
 
           {messages.map((msg, i) => (
-            <div key={i} style={{
-              alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-              maxWidth: "80%", padding: "12px 16px",
-              background: msg.role === "user" ? userBubble : card,
-              color: msg.role === "user" ? userBubbleText : text,
-              fontSize: 13, lineHeight: 1.6, borderRadius: 0,
-              border: msg.role === "user" ? "none" : `1px solid ${border}`,
-            }}>
+            <div
+              key={i}
+              className={
+                msg.role === "user"
+                  ? "self-end max-w-[80%] px-4 py-3 bg-foreground text-background text-sm leading-relaxed rounded-2xl rounded-br-sm"
+                  : "self-start max-w-[80%] px-4 py-3 bg-muted text-foreground text-sm leading-relaxed rounded-2xl rounded-bl-sm border border-border"
+              }
+            >
               {msg.role === "assistant" ? <SimpleMarkdown text={msg.content} /> : msg.content}
             </div>
           ))}
 
           {loading && messages[messages.length - 1]?.role !== "assistant" && (
-            <div style={{
-              alignSelf: "flex-start", padding: "12px 16px",
-              background: card, border: `1px solid ${border}`,
-              fontSize: 13, color: muted,
-            }}>
-              Thinking…
+            <div className="self-start px-4 py-3 bg-muted border border-border text-sm text-muted-foreground rounded-2xl rounded-bl-sm">
+              <span className="animate-pulse">Thinking…</span>
             </div>
           )}
 
           {error && (
-            <div style={{ alignSelf: "center", color: "#c44", fontSize: 12, padding: "8px 16px", background: isDark ? "#1a0505" : "#fff5f5", border: `1px solid ${isDark ? "#3a1111" : "#fdd"}` }}>
+            <div className="self-center text-xs px-4 py-2 text-destructive bg-destructive/10 border border-destructive/20 rounded-lg">
               {error}
             </div>
           )}
@@ -240,34 +218,14 @@ export default function Coach() {
           <div ref={endRef} />
         </div>
 
-        <div style={{
-          padding: "16px 28px", borderTop: `1px solid ${border}`,
-          display: "flex", gap: 10, background: bg,
-        }}>
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
+        {/* Input */}
+        <div className="px-7 py-4 border-t border-border bg-background">
+          <AIInput
             placeholder="Ask your coach…"
-            style={{
-              flex: 1, padding: "12px 14px",
-              border: `1px solid ${border}`, background: inputBg,
-              fontSize: 13, fontFamily: "'DM Mono', monospace",
-              outline: "none", color: text,
-            }}
+            onSubmit={send}
+            disabled={loading}
           />
-          <button onClick={send} disabled={loading || !input.trim()} style={{
-            padding: "12px 16px",
-            background: loading || !input.trim() ? (isDark ? "#333" : "#ccc") : text,
-            color: bg, border: "none",
-            cursor: loading || !input.trim() ? "not-allowed" : "pointer",
-            display: "flex", alignItems: "center", transition: "background 0.2s",
-          }}>
-            <Send size={16} />
-          </button>
         </div>
-
-        <Footer />
       </div>
     </>
   );
