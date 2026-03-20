@@ -525,7 +525,7 @@ export default function Negotium() {
                     {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
                     <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" } : {}}>
                       <div className="score-rings">
-                        <ScoreRing score={metrics.overall} label="Overall" color={metrics.overall >= 80 ? "#111" : metrics.overall >= 60 ? "#555" : "#999"} />
+                        <ScoreRing score={metrics.overall} label="Overall" color="#c8ff00" />
                         <ScoreRing score={metrics.delivery} label="Delivery" color="#555" />
                         <ScoreRing score={metrics.pace} label="Pace" color="#555" />
                         <ScoreRing score={metrics.conf} label="Confidence" color="#555" />
