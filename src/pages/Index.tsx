@@ -635,7 +635,8 @@ export default function Negotium() {
 
             {phase === "idle" && (
               <>
-                <button className="custom-card" style={{ minHeight: 100, maxWidth: 420, margin: '32px auto 0', display: 'flex' }} onClick={() => navigate("/custom-practice")}>
+                <div style={{ height: 280 }} />
+                <button className="custom-card" style={{ minHeight: 100, maxWidth: 420, margin: '0 auto', display: 'flex' }} onClick={() => navigate("/custom-practice")}>
                   <span className="custom-card-title">+ Custom Practice</span>
                   <span className="custom-card-sub">Choose your own scenario and goals</span>
                 </button>
