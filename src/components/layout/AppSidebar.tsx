@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSidebarState } from "@/contexts/SidebarContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
@@ -24,7 +25,16 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
   const location = useLocation();
   const { signOut } = useAuth();
   const { expanded, toggle } = useSidebarState();
+  const { isDark } = useTheme();
   const isMobile = useIsMobile();
+
+  const bg = isDark ? "#0c0c0e" : "#f8f8f6";
+  const borderColor = isDark ? "#1a1a1c" : "#e2e2e0";
+  const text = isDark ? "#e6e6e0" : "#1a1a1c";
+  const accent = isDark ? "#c8ff00" : "#6b9900";
+  const inactiveColor = isDark ? "#555" : "#999";
+  const dimColor = isDark ? "#444" : "#aaa";
+  const overlayBg = isDark ? "rgba(0,0,0,0.4)" : "rgba(0,0,0,0.15)";
 
   return (
     <>
@@ -36,7 +46,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
           display: "flex", alignItems: "center", justifyContent: "center",
           background: "transparent", border: "none", borderRadius: 0,
           cursor: "pointer", transition: "left 0.25s cubic-bezier(0.4,0,0.2,1)",
-          color: "#e6e6e0",
+          color: text,
         }}
         aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
       >
@@ -44,18 +54,18 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
       </button>
 
       {expanded && (
-        <div onClick={toggle} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", zIndex: 199, transition: "opacity 0.25s" }} />
+        <div onClick={toggle} style={{ position: "fixed", inset: 0, background: overlayBg, zIndex: 199, transition: "opacity 0.25s" }} />
       )}
 
       <div style={{
         position: "fixed", top: 0, left: 0, bottom: 0, width: 220,
-        background: "#0c0c0e", borderRight: "1px solid #1a1a1c", zIndex: 200,
+        background: bg, borderRight: `1px solid ${borderColor}`, zIndex: 200,
         display: "flex", flexDirection: "column", fontFamily: "'IBM Plex Mono', monospace",
         transform: expanded ? "translateX(0)" : "translateX(-100%)",
         transition: "transform 0.25s cubic-bezier(0.4,0,0.2,1)",
       }}>
         <div style={{ padding: "32px 28px 24px" }}>
-          <div style={{ fontSize: 22, letterSpacing: "0.08em", color: "#c8ff00", fontFamily: "'Bebas Neue', sans-serif", whiteSpace: "nowrap" }}>
+          <div style={{ fontSize: 22, letterSpacing: "0.08em", color: accent, fontFamily: "'Bebas Neue', sans-serif", whiteSpace: "nowrap" }}>
             SYNTERA
           </div>
         </div>
@@ -71,9 +81,9 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
                   display: "flex", alignItems: "center", gap: 12,
                   width: "100%", padding: "11px 24px",
                   border: "none", borderRadius: 0,
-                  borderLeft: active ? "2px solid #c8ff00" : "2px solid transparent",
-                  background: active ? "rgba(200,255,0,0.04)" : "transparent",
-                  color: active ? "#c8ff00" : "#555",
+                  borderLeft: active ? `2px solid ${accent}` : "2px solid transparent",
+                  background: active ? (isDark ? "rgba(200,255,0,0.04)" : "rgba(107,153,0,0.06)") : "transparent",
+                  color: active ? accent : inactiveColor,
                   fontSize: 11, fontWeight: 400,
                   letterSpacing: "0.12em", textTransform: "uppercase" as const,
                   textAlign: "left" as const, cursor: "pointer",
@@ -89,14 +99,14 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
           })}
         </nav>
 
-        <div style={{ marginTop: "auto", padding: "16px 0", borderTop: "1px solid #1a1a1c", display: "flex", flexDirection: "column", gap: 0 }}>
+        <div style={{ marginTop: "auto", padding: "16px 0", borderTop: `1px solid ${borderColor}`, display: "flex", flexDirection: "column", gap: 0 }}>
           {onOpenSetup && (
             <button
               onClick={() => { toggle(); onOpenSetup(); }}
               style={{
                 display: "block", width: "100%", padding: "11px 24px",
                 border: "none", borderRadius: 0, background: "transparent",
-                color: "#444", fontSize: 10, letterSpacing: "0.12em",
+                color: dimColor, fontSize: 10, letterSpacing: "0.12em",
                 textTransform: "uppercase" as const, textAlign: "left" as const, cursor: "pointer",
                 fontFamily: "'IBM Plex Mono', monospace", whiteSpace: "nowrap" as const,
               }}
@@ -109,7 +119,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
             style={{
               display: "block", width: "100%", padding: "11px 24px",
               border: "none", borderRadius: 0, background: "transparent",
-              color: "#444", fontSize: 10, letterSpacing: "0.12em",
+              color: dimColor, fontSize: 10, letterSpacing: "0.12em",
               textAlign: "left" as const, cursor: "pointer",
               fontFamily: "'IBM Plex Mono', monospace", whiteSpace: "nowrap" as const,
             }}
