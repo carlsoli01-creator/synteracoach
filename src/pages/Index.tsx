@@ -517,6 +517,10 @@ export default function Negotium() {
                         );
                       })}
                     </div>
+                    <button className="custom-card" style={{ minHeight: 160, width: '100%', marginTop: 16, display: 'flex' }} onClick={() => navigate("/custom-practice")}>
+                      <span className="custom-card-title">+ Custom Practice</span>
+                      <span className="custom-card-sub">Choose your own scenario and goals</span>
+                    </button>
                   </div>
                 )}
 
@@ -635,14 +639,8 @@ export default function Negotium() {
 
             {phase === "idle" && (
               <>
-                <div style={{ height: 280 }} />
-                <button className="custom-card" style={{ minHeight: 100, maxWidth: 420, margin: '0 auto', display: 'flex' }} onClick={() => navigate("/custom-practice")}>
-                  <span className="custom-card-title">+ Custom Practice</span>
-                  <span className="custom-card-sub">Choose your own scenario and goals</span>
-                </button>
-
-                <div style={{ marginTop: 120, paddingBottom: 40 }}>
-                  <div className="quote-card" style={{ minHeight: 140, maxWidth: '100%', margin: '0 48px', border: 'none', background: 'transparent' }}>
+                <div style={{ marginTop: 60, paddingBottom: 40 }}>
+                  <div className="quote-card" style={{ minHeight: 140, maxWidth: '100%', margin: '0 24px', border: 'none', background: 'transparent' }}>
                     <p className="quote-text">Great speakers aren't born. They're trained.</p>
                     <span className="quote-attr">— Unknown</span>
                   </div>
