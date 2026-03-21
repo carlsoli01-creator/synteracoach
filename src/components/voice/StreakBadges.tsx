@@ -18,6 +18,7 @@ interface Props {
     muted: string;
     card: string;
   };
+  isDark?: boolean;
 }
 
 interface Badge {
@@ -42,7 +43,7 @@ function getStreak(sessions: Session[]): number {
   return streak;
 }
 
-export default function StreakBadges({ history, colors: c }: Props) {
+export default function StreakBadges({ history, colors: c, isDark = true }: Props) {
   const sessions = useMemo(() => [...history], [history]);
   const streak = useMemo(() => getStreak(sessions), [sessions]);
 
@@ -74,7 +75,11 @@ export default function StreakBadges({ history, colors: c }: Props) {
 
   const earned = badges.filter(b => b.earned).length;
   const streakDots = Array.from({ length: 7 }, (_, i) => i < streak);
-  const accent = "#c8ff00";
+  const accent = isDark ? "#c8ff00" : "#6b9900";
+  const earnedCardBg = isDark ? "#111113" : "#f4f4f2";
+  const unearnedText = isDark ? "#333" : "#ccc";
+  const unearnedDescColor = isDark ? "#333" : "#bbb";
+  const earnedDescColor = isDark ? "#444" : "#888";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 1, background: c.border }}>
@@ -112,21 +117,21 @@ export default function StreakBadges({ history, colors: c }: Props) {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: c.border }}>
           {badges.map(badge => (
             <div key={badge.id} style={{
-              background: badge.earned ? "#111113" : c.bg,
+              background: badge.earned ? earnedCardBg : c.bg,
               padding: "16px 10px", textAlign: "center",
               position: "relative",
             }}>
               <div style={{
                 fontSize: 24, marginBottom: 4,
-                color: badge.earned ? accent : "#333",
+                color: badge.earned ? accent : unearnedText,
                 fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em",
               }}>
                 {badge.abbr}
               </div>
-              <div style={{ fontSize: 11, fontWeight: 500, color: badge.earned ? c.text : "#444", marginBottom: 2, fontFamily: "'IBM Plex Mono', monospace" }}>
+              <div style={{ fontSize: 11, fontWeight: 500, color: badge.earned ? c.text : earnedDescColor, marginBottom: 2, fontFamily: "'IBM Plex Mono', monospace" }}>
                 {badge.title}
               </div>
-              <div style={{ fontSize: 9, color: badge.earned ? c.muted : "#333", lineHeight: 1.4, fontFamily: "'IBM Plex Mono', monospace" }}>
+              <div style={{ fontSize: 9, color: badge.earned ? earnedDescColor : unearnedDescColor, lineHeight: 1.4, fontFamily: "'IBM Plex Mono', monospace" }}>
                 {badge.description}
               </div>
               {badge.earned && (

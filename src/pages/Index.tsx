@@ -661,11 +661,11 @@ export default function Negotium() {
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         .app-root {
-          --pg-bg: #0c0c0e; --pg-text: #e6e6e0; --pg-card: #111113; --pg-border: #1a1a1c;
-          --pg-border-soft: #161618; --pg-muted: #555; --pg-dim: #666; --pg-subtle: #444;
-          --pg-faint: #888; --pg-mid: #aaa; --pg-accent: #161618; --pg-surface: #131315;
-          --pg-surface-alt: #0e0e10; --pg-overlay: rgba(0,0,0,0.6);
-          --pg-green: #c8ff00;
+          --pg-bg: #f8f8f6; --pg-text: #1a1a1c; --pg-card: #ffffff; --pg-border: #e2e2e0;
+          --pg-border-soft: #ececea; --pg-muted: #888; --pg-dim: #777; --pg-subtle: #aaa;
+          --pg-faint: #666; --pg-mid: #555; --pg-accent: #f0f0ee; --pg-surface: #f4f4f2;
+          --pg-surface-alt: #fafaf8; --pg-overlay: rgba(0,0,0,0.3);
+          --pg-green: #6b9900;
           min-height: 100vh; background: var(--pg-bg); color: var(--pg-text); font-family: 'IBM Plex Mono', monospace;
         }
         .dark .app-root {
