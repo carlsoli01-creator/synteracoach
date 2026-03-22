@@ -165,20 +165,19 @@ export default function Auth() {
 
   return (
     <div style={{ background: "#080808", minHeight: "100vh", overflowY: "auto" }}>
-      {/* Hero Section with RetroGrid */}
+      {/* Hero Banner with RetroGrid */}
       <div
         className="relative flex items-center justify-center"
-        style={{ height: "100vh", cursor: "pointer" }}
-        onClick={() => document.getElementById("auth-section")?.scrollIntoView({ behavior: "smooth" })}
+        style={{ height: 220, overflow: "hidden" }}
       >
         <RetroGrid angle={65} />
         <div className="relative z-10 text-center pointer-events-none">
           <h1
             className="font-heading"
             style={{
-              fontSize: isMobile ? 48 : 80,
+              fontSize: isMobile ? 36 : 52,
               fontWeight: 800,
-              color: "#fff",
+              color: "#080808",
               letterSpacing: "0.1em",
               lineHeight: 1,
             }}
@@ -187,39 +186,25 @@ export default function Auth() {
           </h1>
           <p
             style={{
-              fontSize: 13,
-              color: "rgba(255,255,255,0.35)",
+              fontSize: 11,
+              color: "rgba(0,0,0,0.5)",
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              marginTop: 16,
+              marginTop: 10,
               fontFamily: "'DM Mono', monospace",
             }}
           >
-            Speak with clarity
+            Speak with clarity.
           </p>
-          <div
-            className="animate-bounce"
-            style={{
-              marginTop: 48,
-              color: "rgba(255,255,255,0.25)",
-              fontSize: 12,
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              fontFamily: "'DM Mono', monospace",
-            }}
-          >
-            ↓
-          </div>
         </div>
       </div>
 
       {/* Login Section */}
       <div
-        id="auth-section"
         className="flex items-center justify-center"
         style={{
-          minHeight: "100vh",
-          padding: isMobile ? "60px 24px 32px" : "80px 44px",
+          minHeight: "calc(100vh - 220px)",
+          padding: isMobile ? "40px 24px 32px" : "60px 44px",
         }}
       >
         <div style={{ width: "100%", maxWidth: 420, fontFamily: "'DM Mono', monospace" }}>
