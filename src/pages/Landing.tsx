@@ -174,12 +174,12 @@ export default function Landing() {
             AI Voice Coach — Now in Beta
           </div>
           <h1>
-            {[0, 1, 2].map((i) => <span key={i} className="lp-word text-secondary-foreground" ref={(el) => {titleRefs.current[i] = el;}} />)}
+            {[0, 1, 2].map((i) => <span key={i} className="lp-word bg-primary-foreground text-secondary-foreground" ref={(el) => {titleRefs.current[i] = el;}} />)}
             <br />
-            {[3, 4].map((i) => <span key={i} className="lp-word" ref={(el) => {titleRefs.current[i] = el;}} />)}
+            {[3, 4].map((i) => <span key={i} className="lp-word text-7xl" ref={(el) => {titleRefs.current[i] = el;}} />)}
           </h1>
           <p className="lp-hero-sub text-secondary-foreground">
-            Syntera analyzes your voice across 7 dimensions — pace, tone, clarity, confidence, filler words, power words, and persuasion — then coaches you to get better, fast.
+            ​
           </p>
           <div className="lp-hero-actions">
             <button onClick={goAuth} className="lp-btn-primary">
