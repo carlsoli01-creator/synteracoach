@@ -458,8 +458,8 @@ const landingStyles = `
   animation: lp-letterUp 0.55s ease both; animation-delay: var(--d, 0s);
 }
 .lp-accent-letter {
-  background: linear-gradient(160deg, var(--lp-accent) 0%, rgba(232,255,71,0.65) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  color: var(--lp-white);
+  -webkit-text-fill-color: var(--lp-white);
   animation: lp-letterUp 0.55s ease both; animation-delay: var(--d, 0s);
 }
 @keyframes lp-letterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
