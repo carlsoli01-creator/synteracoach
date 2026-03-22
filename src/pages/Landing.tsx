@@ -18,18 +18,18 @@ export default function Landing() {
   useEffect(() => {
     const svg = svgRef.current;
     if (!svg) return;
-    const allPaths: { el: SVGPathElement; speed: number; offset: number }[] = [];
+    const allPaths: {el: SVGPathElement;speed: number;offset: number;}[] = [];
 
-    [-1, 1].forEach(pos => {
+    [-1, 1].forEach((pos) => {
       for (let i = 0; i < 36; i++) {
         const d =
-          `M-${380 - i * 5 * pos} -${189 + i * 6}` +
-          `C-${380 - i * 5 * pos} -${189 + i * 6}` +
-          ` -${312 - i * 5 * pos} ${216 - i * 6}` +
-          ` ${152 - i * 5 * pos} ${343 - i * 6}` +
-          `C${616 - i * 5 * pos} ${470 - i * 6}` +
-          ` ${684 - i * 5 * pos} ${875 - i * 6}` +
-          ` ${684 - i * 5 * pos} ${875 - i * 6}`;
+        `M-${380 - i * 5 * pos} -${189 + i * 6}` +
+        `C-${380 - i * 5 * pos} -${189 + i * 6}` +
+        ` -${312 - i * 5 * pos} ${216 - i * 6}` +
+        ` ${152 - i * 5 * pos} ${343 - i * 6}` +
+        `C${616 - i * 5 * pos} ${470 - i * 6}` +
+        ` ${684 - i * 5 * pos} ${875 - i * 6}` +
+        ` ${684 - i * 5 * pos} ${875 - i * 6}`;
         const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         p.setAttribute('d', d);
         p.setAttribute('stroke', 'white');
@@ -47,8 +47,8 @@ export default function Landing() {
     let last = performance.now();
     let animId: number;
     const tick = (now: number) => {
-      const dt = now - last; last = now;
-      allPaths.forEach(p => {
+      const dt = now - last;last = now;
+      allPaths.forEach((p) => {
         p.offset -= p.speed * dt * 0.1;
         if (p.offset < -2200) p.offset = 400;
         p.el.style.strokeDashoffset = String(p.offset);
@@ -68,7 +68,7 @@ export default function Landing() {
       const el = titleRefs.current[wi];
       if (!el) return;
       el.innerHTML = '';
-      word.split('').forEach(ch => {
+      word.split('').forEach((ch) => {
         const s = document.createElement('span');
         s.className = 'lp-letter' + (accents.includes(wi) ? ' lp-accent-letter' : '');
         s.style.setProperty('--d', delay.toFixed(2) + 's');
@@ -115,25 +115,25 @@ export default function Landing() {
 
   // Scroll reveal + counter
   useEffect(() => {
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
         if (e.isIntersecting) {
           e.target.classList.add('lp-visible');
-          e.target.querySelectorAll<HTMLElement>('[data-w]').forEach(b => setTimeout(() => b.style.width = b.dataset.w!, 300));
+          e.target.querySelectorAll<HTMLElement>('[data-w]').forEach((b) => setTimeout(() => b.style.width = b.dataset.w!, 300));
         }
       });
     }, { threshold: 0.12 });
-    document.querySelectorAll('.lp-reveal').forEach(el => obs.observe(el));
+    document.querySelectorAll('.lp-reveal').forEach((el) => obs.observe(el));
 
     const sc = document.querySelector('.lp-score-card');
     const ce = document.getElementById('lp-overall-counter');
     if (sc && ce) {
-      const co = new IntersectionObserver(entries => {
-        entries.forEach(e => {
+      const co = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
           if (e.isIntersecting) {
-            document.querySelectorAll<HTMLElement>('[data-w]').forEach(b => setTimeout(() => b.style.width = b.dataset.w!, 400));
+            document.querySelectorAll<HTMLElement>('[data-w]').forEach((b) => setTimeout(() => b.style.width = b.dataset.w!, 400));
             let n = 0;
-            const t = setInterval(() => { n += 2; if (n >= 84) { n = 84; clearInterval(t); } ce.textContent = String(n); }, 18);
+            const t = setInterval(() => {n += 2;if (n >= 84) {n = 84;clearInterval(t);}ce.textContent = String(n);}, 18);
             co.disconnect();
           }
         });
@@ -174,16 +174,16 @@ export default function Landing() {
             AI Voice Coach — Now in Beta
           </div>
           <h1>
-            {[0,1,2].map(i => <span key={i} className="lp-word" ref={el => { titleRefs.current[i] = el; }} />)}
+            {[0, 1, 2].map((i) => <span key={i} className="lp-word text-secondary-foreground" ref={(el) => {titleRefs.current[i] = el;}} />)}
             <br />
-            {[3,4].map(i => <span key={i} className="lp-word" ref={el => { titleRefs.current[i] = el; }} />)}
+            {[3, 4].map((i) => <span key={i} className="lp-word" ref={(el) => {titleRefs.current[i] = el;}} />)}
           </h1>
-          <p className="lp-hero-sub">
+          <p className="lp-hero-sub text-secondary-foreground">
             Syntera analyzes your voice across 7 dimensions — pace, tone, clarity, confidence, filler words, power words, and persuasion — then coaches you to get better, fast.
           </p>
           <div className="lp-hero-actions">
             <button onClick={goAuth} className="lp-btn-primary">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" /></svg>
               Start coaching — it's free
             </button>
             <a href="#how" className="lp-btn-secondary">See how it works ↓</a>
@@ -218,17 +218,17 @@ export default function Landing() {
                     </div>
                   </div>
                   {[
-                    { label: 'PACE', val: 88, cls: 'hi' },
-                    { label: 'CONFIDENCE', val: 91, cls: 'hi' },
-                    { label: 'CLARITY', val: 76, cls: '' },
-                    { label: 'FILLER WORDS', val: 62, cls: 'lo' },
-                    { label: 'PERSUASION', val: 84, cls: 'hi' },
-                  ].map(s => (
-                    <div key={s.label} className="lp-score-row">
+                  { label: 'PACE', val: 88, cls: 'hi' },
+                  { label: 'CONFIDENCE', val: 91, cls: 'hi' },
+                  { label: 'CLARITY', val: 76, cls: '' },
+                  { label: 'FILLER WORDS', val: 62, cls: 'lo' },
+                  { label: 'PERSUASION', val: 84, cls: 'hi' }].
+                  map((s) =>
+                  <div key={s.label} className="lp-score-row">
                       <div className="lp-score-row-top"><span className="lp-score-row-label">{s.label}</span><span className="lp-score-row-val">{s.val}</span></div>
                       <div className="lp-bar-track"><div className={`lp-bar-fill ${s.cls}`} style={{ width: '0%' }} data-w={`${s.val}%`} /></div>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </div>
@@ -243,17 +243,17 @@ export default function Landing() {
           <div className="lp-sec-title">Three steps to <span style={{ color: 'var(--lp-white)' }}>a better speaker</span></div>
           <div className="lp-steps lp-reveal">
             <div className="lp-step">
-              <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+              <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" /></svg>
               <h3>Record 15–45s</h3>
               <p>Hit record and speak on any topic — a pitch, a presentation, a job interview answer. No script required.</p>
             </div>
             <div className="lp-step">
-              <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m7 16 4-4 4 4 4-6"/></svg>
+              <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18" /><path d="m7 16 4-4 4 4 4-6" /></svg>
               <h3>AI Scores Your Delivery</h3>
               <p>Our model analyzes 7 dimensions of your speech in real time — not just what you said, but how you said it.</p>
             </div>
             <div className="lp-step">
-              <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
               <h3>Get Coached & Improve</h3>
               <p>Receive specific, actionable feedback and track your progress across sessions with streaks, badges, and scores.</p>
             </div>
@@ -267,12 +267,12 @@ export default function Landing() {
           <div className="lp-sec-label">7 Dimensions</div>
           <div className="lp-sec-title">Every layer of <span style={{ color: 'var(--lp-white)' }}>your voice, scored</span></div>
           <div className="lp-dims-grid lp-reveal">
-            {['Overall Score','Pace & Rhythm','Confidence','Clarity','Filler Words','Power Words','Persuasion'].map((label, i) => (
-              <div key={label} className="lp-dim-card">
+            {['Overall Score', 'Pace & Rhythm', 'Confidence', 'Clarity', 'Filler Words', 'Power Words', 'Persuasion'].map((label, i) =>
+            <div key={label} className="lp-dim-card">
                 <div className="lp-dim-label">{label}</div>
-                <div className="lp-dim-bar" ref={el => { dimRefs.current[i] = el; }} />
+                <div className="lp-dim-bar" ref={(el) => {dimRefs.current[i] = el;}} />
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -286,7 +286,7 @@ export default function Landing() {
             <div className="lp-feat lp-feat-wide lp-reveal">
               <div>
                 <div className="lp-feat-label">AI Coach</div>
-                <h3>Your personal voice<br/>coach, always on</h3>
+                <h3>Your personal voice<br />coach, always on</h3>
                 <p>Chat with your AI coach after every session. Ask why you scored low on clarity and get a specific, honest answer with drills to fix it.</p>
               </div>
               <div className="lp-feat-visual">
@@ -301,12 +301,12 @@ export default function Landing() {
               <h3>Real-world scenarios</h3>
               <p>Practice job interviews, sales pitches, TEDx-style talks, and client presentations — all with instant AI scoring.</p>
               <div className="lp-scenario-list">
-                {['Job Interview Answer','Investor Pitch (60s)','TEDx-style Talk','Sales Call Opener'].map((name, i) => (
-                  <div key={name} className="lp-scenario-item">
+                {['Job Interview Answer', 'Investor Pitch (60s)', 'TEDx-style Talk', 'Sales Call Opener'].map((name, i) =>
+                <div key={name} className="lp-scenario-item">
                     <span className="lp-sc-name">{name}</span>
                     {i === 0 && <span className="lp-sc-go">START →</span>}
                   </div>
-                ))}
+                )}
               </div>
             </div>
 
@@ -316,12 +316,12 @@ export default function Landing() {
               <p>See your scores trend over days and weeks. Streaks, badges, and history keep you accountable and motivated to improve.</p>
               <div className="lp-feat-visual" style={{ marginTop: 28 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 6, height: 80, paddingBottom: 10, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  {[{h:28,l:'M'},{h:38,l:'T'},{h:44,l:'W',op:0.1},{h:34,l:'T'},{h:52,l:'F',op:0.16},{h:60,l:'S',op:0.24},{h:72,l:'S',op:0.38}].map((bar, i) => (
-                    <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flex: 1 }}>
+                  {[{ h: 28, l: 'M' }, { h: 38, l: 'T' }, { h: 44, l: 'W', op: 0.1 }, { h: 34, l: 'T' }, { h: 52, l: 'F', op: 0.16 }, { h: 60, l: 'S', op: 0.24 }, { h: 72, l: 'S', op: 0.38 }].map((bar, i) =>
+                  <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flex: 1 }}>
                       <div style={{ width: '100%', background: `rgba(255,255,255,${bar.op || 0.07})`, borderRadius: '2px 2px 0 0', height: bar.h }} />
                       <span style={{ fontFamily: "'DM Mono',monospace", fontSize: '0.55rem', color: bar.op && bar.op > 0.3 ? 'rgba(255,255,255,0.45)' : 'var(--lp-muted)' }}>{bar.l}</span>
                     </div>
-                  ))}
+                  )}
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 14 }}>
                   <span style={{ fontFamily: "'DM Mono',monospace", fontSize: '0.65rem', color: 'var(--lp-muted)' }}>This week</span>
@@ -340,11 +340,11 @@ export default function Landing() {
           <div className="lp-sec-title">Used by speakers <span style={{ color: 'var(--lp-white)' }}>who mean business</span></div>
           <div className="lp-testi-grid lp-reveal">
             {[
-              { text: '"I used to say \'um\' constantly in presentations. After two weeks with Syntera, my filler word count dropped from 18 to 4 per minute. My manager noticed."', name: 'Jordan K.', role: 'Product Manager · Series B Startup', initials: 'JK' },
-              { text: '"The 7-dimension breakdown is insane. I always knew I spoke fast, but seeing my confidence score jump from 64 to 89 after 10 sessions? That\'s real data."', name: 'Rachel L.', role: 'Sales Director · Fortune 500', initials: 'RL' },
-              { text: '"Pitched to investors last month. Used Syntera to practice 20+ times beforehand. Got the term sheet. Probably a coincidence, but probably not."', name: 'Marcus T.', role: 'Founder · YC W25', initials: 'MT' },
-            ].map(t => (
-              <div key={t.name} className="lp-testi">
+            { text: '"I used to say \'um\' constantly in presentations. After two weeks with Syntera, my filler word count dropped from 18 to 4 per minute. My manager noticed."', name: 'Jordan K.', role: 'Product Manager · Series B Startup', initials: 'JK' },
+            { text: '"The 7-dimension breakdown is insane. I always knew I spoke fast, but seeing my confidence score jump from 64 to 89 after 10 sessions? That\'s real data."', name: 'Rachel L.', role: 'Sales Director · Fortune 500', initials: 'RL' },
+            { text: '"Pitched to investors last month. Used Syntera to practice 20+ times beforehand. Got the term sheet. Probably a coincidence, but probably not."', name: 'Marcus T.', role: 'Founder · YC W25', initials: 'MT' }].
+            map((t) =>
+            <div key={t.name} className="lp-testi">
                 <div className="lp-stars">★★★★★</div>
                 <p className="lp-testi-text">{t.text}</p>
                 <div className="lp-testi-author">
@@ -355,7 +355,7 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -368,8 +368,8 @@ export default function Landing() {
         </div>
         <div className="lp-footer-copy">© 2026 Syntera. All rights reserved.</div>
       </footer>
-    </div>
-  );
+    </div>);
+
 }
 
 const landingStyles = `
