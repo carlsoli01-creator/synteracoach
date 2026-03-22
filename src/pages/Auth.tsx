@@ -168,7 +168,7 @@ export default function Auth() {
       {/* Hero Banner with RetroGrid */}
       <div
         className="relative flex items-center justify-center"
-        style={{ height: 220, overflow: "hidden", background: "#ffffff" }}
+        style={{ height: 220, overflow: "hidden", background: "#0a0a0a" }}
       >
         <RetroGrid angle={65} />
         <div className="relative z-10 text-center pointer-events-none">
@@ -177,7 +177,7 @@ export default function Auth() {
             style={{
               fontSize: isMobile ? 36 : 52,
               fontWeight: 800,
-              color: "#080808",
+              color: "#ffffff",
               letterSpacing: "0.1em",
               lineHeight: 1,
             }}
@@ -187,7 +187,7 @@ export default function Auth() {
           <p
             style={{
               fontSize: 11,
-              color: "rgba(0,0,0,0.5)",
+              color: "rgba(255,255,255,0.45)",
               letterSpacing: "0.18em",
               textTransform: "uppercase",
               marginTop: 10,
