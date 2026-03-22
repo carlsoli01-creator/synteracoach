@@ -788,8 +788,8 @@ export default function Negotium() {
         .bottom-cards { display: flex; gap: 16px; padding: 0 48px; margin-top: 8px; }
         .bottom-cards.mobile { flex-direction: column; padding: 0 20px; }
         .quote-card { flex: 1; padding: 40px 28px; border: 1px solid var(--pg-border); border-radius: 0; background: var(--pg-card); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; }
-        .quote-text { font-size: 15px; font-family: 'Instrument Serif', serif; font-style: italic; color: var(--pg-faint); line-height: 1.7; }
-        .quote-attr { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--pg-subtle); font-family: 'IBM Plex Mono', monospace; }
+        .quote-text { font-size: 15px; font-family: 'Instrument Serif', serif; font-style: italic; color: var(--pg-text); line-height: 1.7; }
+        .quote-attr { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--pg-text); font-family: 'IBM Plex Mono', monospace; opacity: 0.7; }
         .custom-card { flex: 1; padding: 40px 28px; background: var(--pg-card); border: 1px solid var(--pg-border); border-radius: 0; cursor: pointer; font-family: 'IBM Plex Mono', monospace; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: border-color 0.15s; }
         .custom-card:hover { border-color: var(--pg-green); }
         .custom-card-title { font-size: 14px; font-weight: 600; color: var(--pg-text); }
