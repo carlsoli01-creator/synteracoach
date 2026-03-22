@@ -186,7 +186,7 @@ export default function Landing() {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" /></svg>
               Start coaching — it's free
             </button>
-            <a href="#how" className="lp-btn-secondary">See how it works ↓</a>
+            <a href="#how" className="lp-btn-secondary bg-secondary-foreground text-primary-foreground">See how it works ↓</a>
           </div>
 
           {/* Hero Visual */}
