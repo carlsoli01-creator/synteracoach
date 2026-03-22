@@ -408,7 +408,14 @@ export default function Negotium() {
       {showForcedPaywall && !isPremium && <ForcedPaywall onSubscribe={() => { localStorage.setItem("syntera_premium", "true"); setIsPremium(true); handlePaywallDone(); }} onSkip={handlePaywallDone} />}
       {showInterstitial && <SpeakBetterInterstitial onComplete={handleInterstitialComplete} />}
       {!showIntro && !showForcedPaywall && !showInterstitial && quizVisible && (
-        <OnboardingQuiz onFinish={({ neg, comm, answers }) => { localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers })); const p = derivePersonalization(answers); setRecCommTips([...new Set([...(neg || []), ...(comm || [])].slice(0, 6))]); setUserSubtitle(p.subtitle); setHeroFocus(p.heroFocus); setQuizVisible(false); }} />
+        <MobileQuizAndInstall onFinish={(answers) => {
+          localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers }));
+          const p = derivePersonalization(answers);
+          setRecCommTips([...new Set([...(p.comm || [])].slice(0, 6))]);
+          setUserSubtitle(p.subtitle);
+          setHeroFocus(p.heroFocus);
+          setQuizVisible(false);
+        }} />
       )}
 
       {showTipPopup && (
