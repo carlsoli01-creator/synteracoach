@@ -204,7 +204,7 @@ export default function Landing() {
         /* HERO */
         .lp-hero { position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:130px 24px 100px; overflow:hidden; }
         .lp-paths-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
-        .lp-hero-content { position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; }
+        .lp-hero-content { position:relative; z-index:10; display:flex; flex-direction:column; align-items:center; }
         .lp-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:2px; margin-bottom:40px; animation:lpFadeUp 0.7s ease both; }
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
