@@ -22,18 +22,18 @@ export default function Landing() {
   useEffect(() => {
     const svg = svgRef.current;
     if (!svg) return;
-    const allPaths: { el: SVGPathElement; speed: number; offset: number }[] = [];
+    const allPaths: {el: SVGPathElement;speed: number;offset: number;}[] = [];
 
     [-1, 1].forEach((pos) => {
       for (let i = 0; i < 36; i++) {
         const d =
-          `M-${380 - i * 5 * pos} -${189 + i * 6}` +
-          `C-${380 - i * 5 * pos} -${189 + i * 6}` +
-          ` -${312 - i * 5 * pos} ${216 - i * 6}` +
-          ` ${152 - i * 5 * pos} ${343 - i * 6}` +
-          `C${616 - i * 5 * pos} ${470 - i * 6}` +
-          ` ${684 - i * 5 * pos} ${875 - i * 6}` +
-          ` ${684 - i * 5 * pos} ${875 - i * 6}`;
+        `M-${380 - i * 5 * pos} -${189 + i * 6}` +
+        `C-${380 - i * 5 * pos} -${189 + i * 6}` +
+        ` -${312 - i * 5 * pos} ${216 - i * 6}` +
+        ` ${152 - i * 5 * pos} ${343 - i * 6}` +
+        `C${616 - i * 5 * pos} ${470 - i * 6}` +
+        ` ${684 - i * 5 * pos} ${875 - i * 6}` +
+        ` ${684 - i * 5 * pos} ${875 - i * 6}`;
         const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
         p.setAttribute("d", d);
         p.setAttribute("stroke", "white");
@@ -130,7 +130,7 @@ export default function Landing() {
           if (e.isIntersecting) {
             e.target.classList.add("lp-visible");
             e.target.querySelectorAll<HTMLElement>("[data-w]").forEach((b) =>
-              setTimeout(() => (b.style.width = b.dataset.w || "0%"), 300)
+            setTimeout(() => b.style.width = b.dataset.w || "0%", 300)
             );
           }
         });
@@ -148,12 +148,12 @@ export default function Landing() {
           entries.forEach((e) => {
             if (e.isIntersecting) {
               document.querySelectorAll<HTMLElement>("[data-w]").forEach((b) =>
-                setTimeout(() => (b.style.width = b.dataset.w || "0%"), 400)
+              setTimeout(() => b.style.width = b.dataset.w || "0%", 400)
               );
               let n = 0;
               const t = setInterval(() => {
                 n += 2;
-                if (n >= 84) { n = 84; clearInterval(t); }
+                if (n >= 84) {n = 84;clearInterval(t);}
                 ce.textContent = String(n);
               }, 18);
               co.disconnect();
@@ -163,7 +163,7 @@ export default function Landing() {
         { threshold: 0.3 }
       );
       co.observe(sc);
-      return () => { obs.disconnect(); co.disconnect(); };
+      return () => {obs.disconnect();co.disconnect();};
     }
     return () => obs.disconnect();
   }, []);
@@ -370,16 +370,43 @@ export default function Landing() {
           </div>
 
           <h1 className="lp-hero-title">
-            {["Speak", "with", "conviction.", "Not", "guesswork."].map((_, i) => (
-              <span key={i}>
-                <span className="lp-word" ref={(el) => { titleRefs.current[i] = el; }} />
+            {["Speak", "with", "conviction.", "Not", "guesswork."].map((_, i) =>
+            <span key={i}>
+                <span className="lp-word" ref={(el) => {titleRefs.current[i] = el;}} />
                 {i === 2 && <br />}
               </span>
-            ))}
+            )}
           </h1>
 
           <p className="lp-hero-sub">
-            Syntera analyzes your voice across 7 dimensions — pace, tone, clarity, confidence, filler words, power words, and persuasion — then coaches you to get better, fast.
+            ​
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
           </p>
 
           <div className="lp-hero-actions">
@@ -417,14 +444,7 @@ export default function Landing() {
                       <div className="lp-overall-label">Overall Score</div>
                     </div>
                   </div>
-                  {[
-                    { label: "PACE", val: "88", w: "88%", cls: "hi" },
-                    { label: "CONFIDENCE", val: "91", w: "91%", cls: "hi" },
-                    { label: "CLARITY", val: "76", w: "76%", cls: "" },
-                    { label: "FILLER WORDS", val: "62", w: "62%", cls: "lo" },
-                    { label: "PERSUASION", val: "84", w: "84%", cls: "hi" },
-                  ].map((s) => (
-                    <div className="lp-score-row" key={s.label}>
+                  {[{ label: "PACE", val: "88", w: "88%", cls: "hi" }, { label: "CONFIDENCE", val: "91", w: "91%", cls: "hi" }, { label: "CLARITY", val: "76", w: "76%", cls: "" }, { label: "FILLER WORDS", val: "62", w: "62%", cls: "lo" }, { label: "PERSUASION", val: "84", w: "84%", cls: "hi" }].map((s) => <div className="lp-score-row" key={s.label}>
                       <div className="lp-score-row-top">
                         <span className="lp-score-row-label">{s.label}</span>
                         <span className="lp-score-row-val">{s.val}</span>
@@ -432,8 +452,7 @@ export default function Landing() {
                       <div className="lp-bar-track">
                         <div className={`lp-bar-fill ${s.cls}`} style={{ width: "0%" }} data-w={s.w} />
                       </div>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </div>
             </div>
@@ -472,12 +491,10 @@ export default function Landing() {
           <div className="lp-sec-label">7 Dimensions</div>
           <div className="lp-sec-title">Every layer of <span className="wh">your voice, scored</span></div>
           <div className="lp-dims-grid lp-reveal">
-            {dimLabels.map((label, i) => (
-              <div className="lp-dim-card" key={label}>
+            {dimLabels.map((label, i) => <div className="lp-dim-card" key={label}>
                 <div className="lp-dim-label">{label}</div>
-                <div className="lp-dim-bar" ref={(el) => { dimRefs.current[i] = el; }} />
-              </div>
-            ))}
+                <div className="lp-dim-bar" ref={(el) => {dimRefs.current[i] = el;}} />
+              </div>)}
           </div>
         </div>
       </section>
@@ -517,18 +534,11 @@ export default function Landing() {
               <h3>Real-world scenarios</h3>
               <p>Practice job interviews, sales pitches, TEDx-style talks, and client presentations — all with instant AI scoring.</p>
               <div className="lp-scenario-list">
-                {[
-                  { name: "Job Interview Answer", icon: <><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></>, go: true },
-                  { name: "Investor Pitch (60s)", icon: <><path d="M5 12h14M12 5l7 7-7 7" /></> },
-                  { name: "TEDx-style Talk", icon: <><circle cx="12" cy="12" r="10" /><path d="M12 8v8M8 12h8" /></> },
-                  { name: "Sales Call Opener", icon: <><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.13 12 19.79 19.79 0 0 1 1.08 3.24 2 2 0 0 1 3.05 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91" /></> },
-                ].map((s) => (
-                  <div className="lp-scenario-item" key={s.name}>
+                {[{ name: "Job Interview Answer", icon: <><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></>, go: true }, { name: "Investor Pitch (60s)", icon: <><path d="M5 12h14M12 5l7 7-7 7" /></> }, { name: "TEDx-style Talk", icon: <><circle cx="12" cy="12" r="10" /><path d="M12 8v8M8 12h8" /></> }, { name: "Sales Call Opener", icon: <><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.13 12 19.79 19.79 0 0 1 1.08 3.24 2 2 0 0 1 3.05 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91" /></> }].map((s) => <div className="lp-scenario-item" key={s.name}>
                     <svg className="lp-sc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">{s.icon}</svg>
                     <span className="lp-sc-name">{s.name}</span>
                     {s.go && <span className="lp-sc-go">START →</span>}
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
 
@@ -539,16 +549,10 @@ export default function Landing() {
               <p>See your scores trend over days and weeks. Streaks, badges, and history keep you accountable and motivated to improve.</p>
               <div className="lp-feat-visual" style={{ marginTop: 28 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 6, height: 80, paddingBottom: 10, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                  {[
-                    { h: 28, d: "M" }, { h: 38, d: "T" }, { h: 44, d: "W", o: 0.1 },
-                    { h: 34, d: "T" }, { h: 52, d: "F", o: 0.16 }, { h: 60, d: "S", o: 0.24 },
-                    { h: 72, d: "S", o: 0.38, tc: "rgba(255,255,255,0.45)" },
-                  ].map((bar, i) => (
-                    <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, flex: 1 }}>
+                  {[{ h: 28, d: "M" }, { h: 38, d: "T" }, { h: 44, d: "W", o: 0.1 }, { h: 34, d: "T" }, { h: 52, d: "F", o: 0.16 }, { h: 60, d: "S", o: 0.24 }, { h: 72, d: "S", o: 0.38, tc: "rgba(255,255,255,0.45)" }].map((bar, i) => <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, flex: 1 }}>
                       <div style={{ width: "100%", background: `rgba(255,255,255,${bar.o || 0.07})`, borderRadius: "2px 2px 0 0", height: bar.h }} />
                       <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "0.55rem", color: bar.tc || "var(--lp-muted)" }}>{bar.d}</span>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: 14 }}>
                   <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "0.65rem", color: "var(--lp-muted)" }}>This week</span>
@@ -566,12 +570,8 @@ export default function Landing() {
           <div className="lp-sec-label">What people say</div>
           <div className="lp-sec-title">Used by speakers <span className="wh">who mean business</span></div>
           <div className="lp-testi-grid lp-reveal">
-            {[
-              { text: "I used to say 'um' constantly in presentations. After two weeks with Syntera, my filler word count dropped from 18 to 4 per minute. My manager noticed.", initials: "JK", name: "Jordan K.", role: "Product Manager · Series B Startup" },
-              { text: "The 7-dimension breakdown is insane. I always knew I spoke fast, but seeing my confidence score jump from 64 to 89 after 10 sessions? That's real data.", initials: "RL", name: "Rachel L.", role: "Sales Director · Fortune 500" },
-              { text: "Pitched to investors last month. Used Syntera to practice 20+ times beforehand. Got the term sheet. Probably a coincidence, but probably not.", initials: "MT", name: "Marcus T.", role: "Founder · YC W25" },
-            ].map((t) => (
-              <div className="lp-testi" key={t.initials}>
+            {[{ text: "I used to say 'um' constantly in presentations. After two weeks with Syntera, my filler word count dropped from 18 to 4 per minute. My manager noticed.", initials: "JK", name: "Jordan K.", role: "Product Manager · Series B Startup" }, { text: "The 7-dimension breakdown is insane. I always knew I spoke fast, but seeing my confidence score jump from 64 to 89 after 10 sessions? That's real data.", initials: "RL", name: "Rachel L.", role: "Sales Director · Fortune 500" }, { text: "Pitched to investors last month. Used Syntera to practice 20+ times beforehand. Got the term sheet. Probably a coincidence, but probably not.", initials: "MT", name: "Marcus T.", role: "Founder · YC W25" }].map((t) =>
+            <div className="lp-testi" key={t.initials}>
                 <div className="lp-stars">★★★★★</div>
                 <p className="lp-testi-text">"{t.text}"</p>
                 <div className="lp-testi-author">
@@ -582,7 +582,7 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -597,6 +597,6 @@ export default function Landing() {
         </div>
         <div className="lp-footer-copy">© 2026 Syntera. All rights reserved.</div>
       </footer>
-    </div>
-  );
+    </div>);
+
 }
