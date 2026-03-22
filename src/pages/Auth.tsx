@@ -201,11 +201,10 @@ export default function Auth() {
 
       {/* Login Section */}
       <div
-        id="auth-section"
         className="flex items-center justify-center"
         style={{
-          minHeight: "100vh",
-          padding: isMobile ? "60px 24px 32px" : "80px 44px",
+          minHeight: "calc(100vh - 220px)",
+          padding: isMobile ? "40px 24px 32px" : "60px 44px",
         }}
       >
         <div style={{ width: "100%", maxWidth: 420, fontFamily: "'DM Mono', monospace" }}>
