@@ -542,11 +542,11 @@ const landingStyles = `
 .lp-step p { font-size:0.9rem; color:var(--lp-muted); line-height:1.8; }
 
 /* DIMENSIONS */
-.lp-dims-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-top:100px; }
-.lp-dim-card { background:var(--lp-surface); border:1px solid var(--lp-border); border-radius:10px; padding:24px 14px; text-align:center; transition:border-color 0.3s, transform 0.3s; }
+.lp-dims-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:14px; margin-top:100px; }
+.lp-dim-card { background:var(--lp-surface); border:1px solid var(--lp-border); border-radius:10px; padding:36px 18px; text-align:center; transition:border-color 0.3s, transform 0.3s; }
 .lp-dim-card:hover { border-color:var(--lp-border2); transform:translateY(-3px); }
-.lp-dim-label { font-family:'DM Mono',monospace; font-size:0.58rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.28); line-height:1.5; margin-bottom:16px; }
-.lp-dim-bar { height:40px; display:flex; align-items:flex-end; justify-content:center; gap:1.5px; }
+.lp-dim-label { font-family:'DM Mono',monospace; font-size:0.72rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.28); line-height:1.5; margin-bottom:20px; }
+.lp-dim-bar { height:52px; display:flex; align-items:flex-end; justify-content:center; gap:1.5px; }
 .lp-dim-mini { width:3px; border-radius:2px 2px 0 0; background:rgba(255,255,255,0.22); animation:lp-dimwave var(--d,0.6s) ease-in-out infinite alternate; animation-delay:var(--dl,0s); }
 @keyframes lp-dimwave { from{transform:scaleY(0.2);opacity:0.15} to{transform:scaleY(1);opacity:0.55} }
 
