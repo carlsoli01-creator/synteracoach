@@ -4,28 +4,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/icon-512.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#050507" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Syntera" />
     <title>Syntera — AI Voice Coach</title>
-    <meta name="description" content="AI-powered voice coaching for confident negotiations">
-    <meta name="author" content="Lovable" />
+    <meta name="description" content="AI-powered voice coaching for confident communication">
+    <meta name="author" content="Syntera" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/97d533dc-35ee-4582-94bc-74806311befa/id-preview-adb14ee2--6fda6617-2e1d-44cc-ba4a-390b6b39a859.lovable.app-1772887513685.png">
-
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@Lovable" />
     <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/97d533dc-35ee-4582-94bc-74806311befa/id-preview-adb14ee2--6fda6617-2e1d-44cc-ba4a-390b6b39a859.lovable.app-1772887513685.png">
     <meta property="og:title" content="Syntera — AI Voice Coach">
-  <meta name="twitter:title" content="Syntera — AI Voice Coach">
-  <meta property="og:description" content="AI-powered voice coaching for confident negotiations">
-  <meta name="twitter:description" content="AI-powered voice coaching for confident negotiations">
-</head>
-
+    <meta name="twitter:title" content="Syntera — AI Voice Coach">
+    <meta property="og:description" content="AI-powered voice coaching for confident negotiations">
+    <meta name="twitter:description" content="AI-powered voice coaching for confident negotiations">
+  </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('SW registered:', reg.scope))
+            .catch(err => console.log('SW error:', err));
+        });
+      }
+    </script>
   </body>
 </html>
