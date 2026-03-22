@@ -168,7 +168,7 @@ export default function Auth() {
       {/* Hero Banner with RetroGrid */}
       <div
         className="relative flex items-center justify-center"
-        style={{ height: 220, overflow: "hidden" }}
+        style={{ height: 220, overflow: "hidden", background: "#ffffff" }}
       >
         <RetroGrid angle={65} />
         <div className="relative z-10 text-center pointer-events-none">
