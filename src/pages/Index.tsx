@@ -11,6 +11,7 @@ import IntroExperience from "@/components/onboarding/IntroExperience";
 import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 import SpeakBetterInterstitial from "@/components/onboarding/SpeakBetterInterstitial";
 import { Footer } from "@/components/ui/footer";
+import MobileQuizAndInstall from "@/components/onboarding/MobileQuizAndInstall";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
