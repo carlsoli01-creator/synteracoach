@@ -595,7 +595,7 @@ export default function Landing() {
           <a href="/terms">Terms</a>
           <a href="/cookies">Cookies</a>
         </div>
-        <div className="lp-footer-copy">© 2026 Syntera. All rights reserved.</div>
+        <div className="lp-footer-copy">© 2026 Synterica. All rights reserved.</div>
       </footer>
     </div>);
 
