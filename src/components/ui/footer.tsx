@@ -20,7 +20,7 @@ interface FooterProps {
 }
 
 const Footer = ({
-  logoTitle = "SYNTERA",
+  logoTitle = "SYNTERICA",
   tagline = "Speak. Persuade with Precision.",
   menuItems = [
     {
