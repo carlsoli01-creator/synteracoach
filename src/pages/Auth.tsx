@@ -7,7 +7,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
-import { RetroGrid } from "@/components/ui/retro-grid";
+
 import { Footer } from "@/components/ui/footer";
 
 const emailSchema = z.string().trim()
