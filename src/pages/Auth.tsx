@@ -182,7 +182,7 @@ export default function Auth() {
               lineHeight: 1,
             }}
           >
-            SYNTERA
+            SYNTERICA
           </h1>
           <p
             style={{
