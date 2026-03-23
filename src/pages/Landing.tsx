@@ -421,7 +421,7 @@ export default function Landing() {
             <div className="lp-score-card" ref={scoreCardRef}>
               <div className="lp-score-topbar">
                 <div className="lp-tl-row"><div className="lp-tl lp-tl-r" /><div className="lp-tl lp-tl-y" /><div className="lp-tl lp-tl-g" /></div>
-                <span className="lp-topbar-label">syntera — live analysis</span>
+                <span className="lp-topbar-label">synterica — live analysis</span>
               </div>
               <div className="lp-score-body">
                 <div className="lp-waveform-area">
