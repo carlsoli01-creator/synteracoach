@@ -25,15 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
-
-        // Only reset onboarding flags for brand-new signups, never on returning sign-ins
-        if (event === "SIGNED_UP" && session?.user) {
-          localStorage.removeItem("syntera_intro_done_v2");
-          localStorage.removeItem("negotium_quiz_v2");
-          localStorage.removeItem("syntera_premium");
-          localStorage.removeItem("syntera_quiz_completed_at");
-          localStorage.removeItem("syntera_tip_shown_date");
-        }
+        // Onboarding flags are only cleared on explicit signup in Auth.tsx
       }
     );
 
