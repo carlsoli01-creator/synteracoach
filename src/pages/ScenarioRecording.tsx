@@ -48,6 +48,7 @@ interface ScenarioRecordingProps {
 function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, customSubGoals, customNotes }: ScenarioRecordingProps) {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [showFirstPracticePopup, setShowFirstPracticePopup] = useState(false);
   const { isDark } = useTheme();
   const goal = customGoal || scenario.goal;
   const subGoals = customSubGoals || scenario.subGoals;
