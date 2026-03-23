@@ -272,7 +272,7 @@ export default function Profile() {
           display: "flex", gap: 4, marginBottom: 28, overflowX: "auto",
           borderBottom: `1px solid ${c.border}`, paddingBottom: 0,
         }}>
-          {TABS.map((tab) => (
+          {TABS.filter(tab => !tab.premiumOnly || isPremium).map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
