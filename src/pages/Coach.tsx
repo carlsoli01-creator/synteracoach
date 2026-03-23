@@ -4,7 +4,7 @@ import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Lock, ArrowLeft } from "lucide-react";
+import { Lock } from "lucide-react";
 import { AIInput } from "@/components/ui/ai-input";
 
 type Msg = {role: "user" | "assistant";content: string;};
