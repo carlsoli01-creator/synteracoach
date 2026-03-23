@@ -10,11 +10,12 @@ import { useTheme } from "@/contexts/ThemeContext";
 
 const nameSchema = z.string().trim().max(100, "Name must be less than 100 characters");
 
-type Tab = "profile" | "preferences" | "subscription" | "data" | "about";
+type Tab = "profile" | "preferences" | "projects" | "subscription" | "data" | "about";
 
-const TABS: { id: Tab; label: string; icon: string }[] = [
+const TABS: { id: Tab; label: string; icon: string; premiumOnly?: boolean }[] = [
   { id: "profile", label: "Profile", icon: "👤" },
   { id: "preferences", label: "Preferences", icon: "⚙️" },
+  { id: "projects", label: "Projects", icon: "📁", premiumOnly: true },
   { id: "subscription", label: "Subscription", icon: "💎" },
   { id: "data", label: "Data & Privacy", icon: "🔒" },
   { id: "about", label: "About", icon: "ℹ️" },
