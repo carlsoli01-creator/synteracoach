@@ -10,11 +10,12 @@ import { useTheme } from "@/contexts/ThemeContext";
 
 const nameSchema = z.string().trim().max(100, "Name must be less than 100 characters");
 
-type Tab = "profile" | "preferences" | "subscription" | "data" | "about";
+type Tab = "profile" | "preferences" | "projects" | "subscription" | "data" | "about";
 
-const TABS: { id: Tab; label: string; icon: string }[] = [
+const TABS: { id: Tab; label: string; icon: string; premiumOnly?: boolean }[] = [
   { id: "profile", label: "Profile", icon: "👤" },
   { id: "preferences", label: "Preferences", icon: "⚙️" },
+  { id: "projects", label: "Projects", icon: "📁", premiumOnly: true },
   { id: "subscription", label: "Subscription", icon: "💎" },
   { id: "data", label: "Data & Privacy", icon: "🔒" },
   { id: "about", label: "About", icon: "ℹ️" },
@@ -271,7 +272,7 @@ export default function Profile() {
           display: "flex", gap: 4, marginBottom: 28, overflowX: "auto",
           borderBottom: `1px solid ${c.border}`, paddingBottom: 0,
         }}>
-          {TABS.map((tab) => (
+          {TABS.filter(tab => !tab.premiumOnly || isPremium).map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
@@ -425,6 +426,69 @@ export default function Profile() {
               }}>
                 Reset All Preferences
               </button>
+            </div>
+          )}
+
+          {/* ===== PROJECTS TAB ===== */}
+          {activeTab === "projects" && isPremium && (
+            <div>
+              <SectionLabel color={c.sectionLabel}>Your Projects</SectionLabel>
+              <div style={{ fontSize: 11, color: c.muted, marginBottom: 20, lineHeight: 1.6 }}>
+                Custom practice sessions you've created. Start a new one from the Custom Practice builder.
+              </div>
+              {(() => {
+                const projects = JSON.parse(localStorage.getItem("syntera_projects") || "[]");
+                if (projects.length === 0) return (
+                  <div style={{
+                    padding: "40px 24px", borderRadius: 14, background: c.card,
+                    border: `1px solid ${c.cardBorder}`, textAlign: "center",
+                  }}>
+                    <div style={{ fontSize: 32, marginBottom: 12 }}>📁</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: c.text, marginBottom: 6 }}>No projects yet</div>
+                    <div style={{ fontSize: 11, color: c.muted, marginBottom: 20 }}>Create a custom practice session to see it here.</div>
+                    <button onClick={() => navigate("/custom-practice")} style={{
+                      padding: "12px 24px", fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
+                      background: c.btnPrimary, color: c.btnPrimaryText, border: "none",
+                      borderRadius: 8, cursor: "pointer", textTransform: "uppercase",
+                    }}>
+                      New Project
+                    </button>
+                  </div>
+                );
+                return (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {projects.map((p: any) => (
+                      <div key={p.id} style={{
+                        padding: "16px 20px", borderRadius: 12, background: c.card,
+                        border: `1px solid ${c.cardBorder}`, display: "flex", alignItems: "center",
+                        justifyContent: "space-between", cursor: "pointer", transition: "all 0.15s",
+                      }}
+                      onClick={() => navigate("/custom-practice")}
+                      >
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: c.text, marginBottom: 3 }}>
+                            {p.name}
+                          </div>
+                          <div style={{ fontSize: 10, color: c.muted }}>
+                            {p.goal} · {p.subGoals?.join(", ")} · {p.duration >= 60 ? `${Math.floor(p.duration / 60)}:${String(p.duration % 60).padStart(2, '0')}` : `${p.duration}s`}
+                          </div>
+                          <div style={{ fontSize: 9, color: isDark ? "#555" : "#bbb", marginTop: 4 }}>
+                            {new Date(p.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
+                          </div>
+                        </div>
+                        <div style={{ fontSize: 11, color: c.muted }}>→</div>
+                      </div>
+                    ))}
+                    <button onClick={() => navigate("/custom-practice")} style={{
+                      width: "100%", padding: "14px", marginTop: 8, fontSize: 11, fontWeight: 600,
+                      letterSpacing: "0.1em", background: c.btnPrimary, color: c.btnPrimaryText,
+                      border: "none", borderRadius: 8, cursor: "pointer", textTransform: "uppercase",
+                    }}>
+                      + New Project
+                    </button>
+                  </div>
+                );
+              })()}
             </div>
           )}
 

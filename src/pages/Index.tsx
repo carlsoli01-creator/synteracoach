@@ -466,8 +466,8 @@ export default function Negotium() {
                       style={{ stroke: 'var(--pg-text)', transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
                   </svg>
                   <div className="timer-inner">
-                    <div className="timer-count">{timeLeft}</div>
-                    <div className="timer-label">sec</div>
+                    <div className="timer-count">{timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}</div>
+                    <div className="timer-label">{timeLeft >= 60 ? '' : 'sec'}</div>
                     {phase === "recording" && <div className="rec-dot" />}
                   </div>
                 </div>
@@ -475,11 +475,11 @@ export default function Negotium() {
                 {phase === "idle" && (
                   <div className="duration-wrap">
                     <div className="duration-row">
-                      <span className="duration-bound">5s</span>
-                      <span className="duration-current">{selectedDuration}s</span>
-                      <span className="duration-bound">45s</span>
+                      <span className="duration-bound">15s</span>
+                      <span className="duration-current">{selectedDuration >= 60 ? `${Math.floor(selectedDuration / 60)}:${String(selectedDuration % 60).padStart(2, '0')}` : `${selectedDuration}s`}</span>
+                      <span className="duration-bound">5:00</span>
                     </div>
-                    <input type="range" min={5} max={45} step={1} value={selectedDuration}
+                    <input type="range" min={15} max={300} step={15} value={selectedDuration}
                       onChange={(e) => { const v = Number(e.target.value); setSelectedDuration(v); setTimeLeft(v); }}
                       className="duration-slider" />
                   </div>

@@ -131,3 +131,29 @@ input[type="range"]::-moz-range-thumb {
   border: none;
   cursor: pointer;
 }
+
+/* Glow effects */
+.dark .timer-wrap svg circle:last-child {
+  filter: drop-shadow(0 0 8px hsl(72 100% 50% / 0.4));
+}
+.dark .rec-dot {
+  box-shadow: 0 0 12px 4px hsl(72 100% 50% / 0.5);
+}
+.dark .hero-heading h1:first-child {
+  text-shadow: 0 0 40px hsl(72 100% 50% / 0.15);
+}
+.dark .score-ring svg circle:last-child {
+  filter: drop-shadow(0 0 6px currentColor);
+}
+.dark .wave-bar {
+  box-shadow: 0 0 6px hsl(72 100% 50% / 0.2);
+}
+.dark .live-bar-fill {
+  box-shadow: 0 0 8px hsl(72 100% 50% / 0.3);
+}
+.dark .btn-primary {
+  box-shadow: 0 0 20px hsl(72 100% 50% / 0.15);
+}
+.dark .topbar-avg-value {
+  text-shadow: 0 0 12px hsl(72 100% 50% / 0.3);
+}
