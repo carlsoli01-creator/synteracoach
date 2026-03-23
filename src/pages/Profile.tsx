@@ -593,7 +593,7 @@ export default function Profile() {
               }}>
                 <div style={{ fontSize: 32, marginBottom: 12 }}>🎙️</div>
                 <div style={{ fontSize: 20, fontWeight: 900, letterSpacing: "-0.01em", marginBottom: 6 }}>
-                  Syntera
+                  Synterica
                 </div>
                 <div style={{ fontSize: 10, letterSpacing: "0.3em", color: c.muted, textTransform: "uppercase", marginBottom: 16 }}>
                   AI Voice Coach
