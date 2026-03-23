@@ -83,13 +83,6 @@ export default function CustomPractice() {
     <div style={{ minHeight: "100vh", background: bg, fontFamily: "'DM Mono', monospace" }}>
       <AppSidebar />
       <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
-        <div style={{ padding: "20px 48px 0" }}>
-          <button onClick={() => navigate("/")}
-            style={{ background: "none", border: "none", color: muted, fontSize: 12, cursor: "pointer", padding: 0, fontFamily: "'DM Mono', monospace" }}>
-            ← Back to home
-          </button>
-        </div>
-
         <div style={{ maxWidth: 560, margin: "0 auto", padding: "40px 24px 80px" }}>
           <div style={{ fontSize: 9, letterSpacing: "0.25em", color: muted, textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
             Custom Practice

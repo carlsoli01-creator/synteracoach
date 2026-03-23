@@ -350,7 +350,7 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
           </div>
 
           {micError && <div style={{ textAlign: "center", fontSize: 11, color: text, marginBottom: 16, lineHeight: 1.6 }}>{micError}</div>}
-          {phase === "analyzing" && <div style={{ textAlign: "center", fontSize: 11, color: muted, marginBottom: 24, fontFamily: "'DM Mono', monospace" }}>Analyzing goal performance...</div>}
+          {phase === "analyzing" && <AnalyzingWait durationSeconds={duration - timeLeft} isDark={isDark} muted={muted} />}
         </div>
 
         <div>
