@@ -77,7 +77,7 @@ function AnalyzingWait({ durationSeconds, isDark, muted }: { durationSeconds: nu
   );
 }
 
-
+interface ScenarioRecordingProps {
   scenario: Scenario;
   categoryName: string;
   isCustom?: boolean;
