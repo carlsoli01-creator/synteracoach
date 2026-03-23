@@ -34,6 +34,21 @@ export default function CustomPractice() {
 
   const canStart = selectedGoal && selectedSubGoals.length > 0;
 
+  const saveProject = () => {
+    const project = {
+      id: Date.now().toString(),
+      name: projectName.trim() || `${selectedGoal} Practice`,
+      goal: selectedGoal,
+      subGoals: selectedSubGoals,
+      notes,
+      duration,
+      createdAt: new Date().toISOString(),
+    };
+    const existing = JSON.parse(localStorage.getItem("syntera_projects") || "[]");
+    existing.unshift(project);
+    localStorage.setItem("syntera_projects", JSON.stringify(existing.slice(0, 50)));
+  };
+
   if (step === "recording" && selectedGoal) {
     const customScenario: Scenario = {
       title: "Custom Practice",
