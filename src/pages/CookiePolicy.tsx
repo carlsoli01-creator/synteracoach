@@ -24,7 +24,7 @@ export default function CookiePolicy() {
           { t: "6. Third-Party Cookies", p: "Some cookies may be set by third-party services we use (e.g., analytics providers). These are governed by the respective third party's privacy policy." },
           { t: "7. Managing Cookies", p: "You can manage cookies through your browser settings. Disabling certain cookies may affect the functionality of the Service." },
           { t: "8. Changes", p: "We may update this Cookie Policy from time to time. Changes will be posted on this page with an updated revision date." },
-          { t: "9. Contact", p: "For questions about our use of cookies, contact us at privacy@syntera.ai." },
+          { t: "9. Contact", p: "For questions about our use of cookies, contact us at privacy@synterica.ai." },
         ].map((s, i) => (
           <div key={i} style={{ marginBottom: 24 }}>
             <h2 style={{ fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{s.t}</h2>

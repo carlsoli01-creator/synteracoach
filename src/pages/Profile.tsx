@@ -244,7 +244,7 @@ export default function Profile() {
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.01em", marginBottom: 2 }}>
-              {fullName || "Syntera User"}
+              {fullName || "Synterica User"}
             </div>
             <div style={{ fontSize: 11, color: c.muted, marginBottom: 6 }}>{user?.email}</div>
             <div style={{ display: "flex", gap: 16 }}>

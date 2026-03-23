@@ -5,9 +5,9 @@ import { Mic, BarChart3, Search, CheckCircle, Lock, Zap } from "lucide-react";
 const INTRO_STEPS = [
   {
     icon: "mic",
-    title: "Welcome to Syntera",
+    title: "Welcome to Synterica",
     subtitle: "YOUR AI VOICE COACH",
-    body: "Syntera listens to how you speak — not just what you say. We analyze pace, tone, confidence, clarity, and word choice to give you actionable coaching in real time.",
+    body: "Synterica listens to how you speak — not just what you say. We analyze pace, tone, confidence, clarity, and word choice to give you actionable coaching in real time.",
     cta: "How it works →",
   },
   {

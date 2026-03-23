@@ -259,7 +259,7 @@ export default function MobileQuizAndInstall({ onFinish }: Props) {
               color: "#ffffff", letterSpacing: "-0.02em",
               marginBottom: 16, lineHeight: 1.15,
             }}>
-              Add Syntera<br />to your home screen.
+              Add Synterica<br />to your home screen.
             </div>
 
             <div style={{

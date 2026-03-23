@@ -84,7 +84,7 @@ export default function AppDrawer({ theme: themeProp, setTheme: setThemeProp, sp
         }}
       >
         <div style={{ padding: "28px 20px 20px", borderBottom: `1px solid ${borderColor}` }}>
-          <div style={{ fontSize: 22, fontWeight: 800, color: textColor, letterSpacing: "0.08em", fontFamily: "'Syne', sans-serif" }}>SYNTERA</div>
+          <div style={{ fontSize: 22, fontWeight: 800, color: textColor, letterSpacing: "0.08em", fontFamily: "'Syne', sans-serif" }}>SYNTERICA</div>
           <div style={{ fontSize: 10, color: "#888", letterSpacing: "0.14em", marginTop: 2 }}>Voice Intelligence</div>
         </div>
 

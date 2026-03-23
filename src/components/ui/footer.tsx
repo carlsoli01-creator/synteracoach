@@ -41,7 +41,7 @@ const Footer = ({
       ],
     },
   ],
-  copyright = "© 2026 Syntera. All rights reserved.",
+  copyright = "© 2026 Synterica. All rights reserved.",
   bottomLinks = [
     { text: "Terms", url: "/terms" },
     { text: "Privacy", url: "/privacy" },

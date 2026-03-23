@@ -66,7 +66,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
       }}>
         <div style={{ padding: "32px 28px 24px" }}>
           <div style={{ fontSize: 22, letterSpacing: "0.08em", color: accent, fontFamily: "'Bebas Neue', sans-serif", whiteSpace: "nowrap" }}>
-            SYNTERA
+            SYNTERICA
           </div>
         </div>
 
