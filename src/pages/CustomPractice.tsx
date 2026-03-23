@@ -15,6 +15,7 @@ export default function CustomPractice() {
   const [selectedSubGoals, setSelectedSubGoals] = useState<SubgoalOption[]>([]);
   const [notes, setNotes] = useState("");
   const [duration, setDuration] = useState(45);
+  const [projectName, setProjectName] = useState("");
 
   const bg = isDark ? "#0a0a0a" : "#f8f8f8";
   const text = isDark ? "#e8e8e8" : "#0a0a0a";
