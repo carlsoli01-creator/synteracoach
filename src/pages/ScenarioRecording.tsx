@@ -465,6 +465,28 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
       `}</style>
+
+      {showFirstPracticePopup && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 999, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.5)" }}
+          onClick={() => setShowFirstPracticePopup(false)}>
+          <div onClick={e => e.stopPropagation()} style={{
+            background: isDark ? "#141414" : "#fff", border: `1px solid ${border}`, padding: "32px 28px",
+            maxWidth: 340, width: "90%", textAlign: "center", animation: "fadeUp 0.3s ease",
+          }}>
+            <div style={{ fontSize: 28, marginBottom: 12 }}>🎉</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: text, fontFamily: "'Syne', sans-serif", marginBottom: 8 }}>
+              Nice work!
+            </div>
+            <div style={{ fontSize: 12, color: muted, lineHeight: 1.6, fontFamily: "'DM Mono', monospace", marginBottom: 20 }}>
+              Your training can be viewed in your profile.
+            </div>
+            <button onClick={() => setShowFirstPracticePopup(false)}
+              style={{ padding: "10px 28px", background: text, color: isDark ? "#0a0a0a" : "#fff", border: "none", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace", cursor: "pointer" }}>
+              GOT IT
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
