@@ -586,7 +586,7 @@ export default function Profile() {
           {/* ===== ABOUT TAB ===== */}
           {activeTab === "about" && (
             <div>
-              <SectionLabel color={c.sectionLabel}>About Syntera</SectionLabel>
+              <SectionLabel color={c.sectionLabel}>About Synterica</SectionLabel>
               <div style={{
                 padding: "28px 24px", borderRadius: 14, background: c.card,
                 border: `1px solid ${c.cardBorder}`, marginBottom: 24, textAlign: "center",
