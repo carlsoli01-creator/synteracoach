@@ -4,7 +4,7 @@ import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Lock, ArrowLeft } from "lucide-react";
+import { Lock } from "lucide-react";
 import { AIInput } from "@/components/ui/ai-input";
 
 type Msg = {role: "user" | "assistant";content: string;};
@@ -155,12 +155,6 @@ export default function Coach() {
         
         {/* Header */}
         <div className="px-7 pt-6 pb-4 border-b border-border flex items-center gap-3">
-          <button
-            onClick={() => navigate("/")}
-            className="bg-transparent border-none cursor-pointer text-muted-foreground flex hover:text-foreground transition-colors">
-            
-            <ArrowLeft size={18} />
-          </button>
           <div>
             <h1 className="text-base font-heading font-extrabold text-foreground">
               Feedback Coach
