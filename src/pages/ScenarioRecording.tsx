@@ -154,6 +154,12 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
       };
       await (supabase as any).from("voice_sessions").insert(sessionRow);
       setPhase("done");
+
+      // Show first-practice popup once
+      if (!localStorage.getItem("syntera_first_practice_seen")) {
+        localStorage.setItem("syntera_first_practice_seen", "true");
+        setShowFirstPracticePopup(true);
+      }
     } catch {
       setMicError("Analysis failed. Please try again.");
       setPhase("idle");

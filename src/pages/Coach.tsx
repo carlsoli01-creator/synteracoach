@@ -155,12 +155,6 @@ export default function Coach() {
         
         {/* Header */}
         <div className="px-7 pt-6 pb-4 border-b border-border flex items-center gap-3">
-          <button
-            onClick={() => navigate("/")}
-            className="bg-transparent border-none cursor-pointer text-muted-foreground flex hover:text-foreground transition-colors">
-            
-            <ArrowLeft size={18} />
-          </button>
           <div>
             <h1 className="text-base font-heading font-extrabold text-foreground">
               Feedback Coach

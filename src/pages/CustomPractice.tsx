@@ -64,12 +64,6 @@ export default function CustomPractice() {
       <div style={{ minHeight: "100vh", background: bg, fontFamily: "'DM Mono', monospace" }}>
         <AppSidebar />
         <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)" }}>
-          <div style={{ padding: "20px 48px 0" }}>
-            <button onClick={() => setStep("setup")}
-              style={{ background: "none", border: "none", color: muted, fontSize: 12, cursor: "pointer", padding: 0, fontFamily: "'DM Mono', monospace" }}>
-              ← Back to setup
-            </button>
-          </div>
           <div style={{ padding: "24px 0" }}>
             <ScenarioRecordingInner
               scenario={customScenario}
