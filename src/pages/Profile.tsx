@@ -244,7 +244,7 @@ export default function Profile() {
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.01em", marginBottom: 2 }}>
-              {fullName || "Syntera User"}
+              {fullName || "Synterica User"}
             </div>
             <div style={{ fontSize: 11, color: c.muted, marginBottom: 6 }}>{user?.email}</div>
             <div style={{ display: "flex", gap: 16 }}>
@@ -586,20 +586,20 @@ export default function Profile() {
           {/* ===== ABOUT TAB ===== */}
           {activeTab === "about" && (
             <div>
-              <SectionLabel color={c.sectionLabel}>About Syntera</SectionLabel>
+              <SectionLabel color={c.sectionLabel}>About Synterica</SectionLabel>
               <div style={{
                 padding: "28px 24px", borderRadius: 14, background: c.card,
                 border: `1px solid ${c.cardBorder}`, marginBottom: 24, textAlign: "center",
               }}>
                 <div style={{ fontSize: 32, marginBottom: 12 }}>🎙️</div>
                 <div style={{ fontSize: 20, fontWeight: 900, letterSpacing: "-0.01em", marginBottom: 6 }}>
-                  Syntera
+                  Synterica
                 </div>
                 <div style={{ fontSize: 10, letterSpacing: "0.3em", color: c.muted, textTransform: "uppercase", marginBottom: 16 }}>
                   AI Voice Coach
                 </div>
                 <div style={{ fontSize: 12, color: c.dimText, lineHeight: 1.8, maxWidth: 360, margin: "0 auto" }}>
-                  Syntera analyzes your speech across 7 dimensions — pace, tone, confidence, clarity,
+                  Synterica analyzes your speech across 7 dimensions — pace, tone, confidence, clarity,
                   word choice, filler words, and persuasion — to help you become a more powerful communicator.
                 </div>
               </div>
@@ -639,7 +639,7 @@ export default function Profile() {
               ))}
 
               <div style={{ textAlign: "center", marginTop: 32, fontSize: 10, color: c.muted, letterSpacing: "0.1em" }}>
-                © 2026 Syntera. All rights reserved.
+                © 2026 Synterica. All rights reserved.
               </div>
             </div>
           )}

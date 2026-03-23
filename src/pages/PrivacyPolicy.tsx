@@ -26,7 +26,7 @@ export default function PrivacyPolicy() {
           { t: "8. Cookies", p: "We use cookies and similar technologies as described in our Cookie Policy to enhance your experience and analyze usage patterns." },
           { t: "9. Children's Privacy", p: "The Service is not intended for users under 16. We do not knowingly collect data from children." },
           { t: "10. Changes", p: "We may update this Privacy Policy periodically. We will notify you of material changes via email or in-app notification." },
-          { t: "11. Contact", p: "For privacy-related inquiries, contact us at privacy@syntera.ai." },
+          { t: "11. Contact", p: "For privacy-related inquiries, contact us at privacy@synterica.ai." },
         ].map((s, i) => (
           <div key={i} style={{ marginBottom: 24 }}>
             <h2 style={{ fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{s.t}</h2>

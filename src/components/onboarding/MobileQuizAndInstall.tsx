@@ -146,7 +146,7 @@ export default function MobileQuizAndInstall({ onFinish }: Props) {
                 fontFamily: "'Syne', sans-serif", fontSize: "1.1rem",
                 fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase",
                 color: "rgba(255,255,255,0.9)",
-              }}>SYNTERA</div>
+              }}>SYNTERICA</div>
               <div style={{ fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", marginTop: 4 }}>
                 QUICK SETUP — {step + 1} of {QUESTIONS.length}
               </div>
@@ -259,7 +259,7 @@ export default function MobileQuizAndInstall({ onFinish }: Props) {
               color: "#ffffff", letterSpacing: "-0.02em",
               marginBottom: 16, lineHeight: 1.15,
             }}>
-              Add Syntera<br />to your home screen.
+              Add Synterica<br />to your home screen.
             </div>
 
             <div style={{

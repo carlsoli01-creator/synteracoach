@@ -182,7 +182,7 @@ export default function Auth() {
               lineHeight: 1,
             }}
           >
-            SYNTERA
+            SYNTERICA
           </h1>
           <p
             style={{
@@ -420,7 +420,7 @@ export default function Auth() {
           </div>
 
           <div style={{ marginTop: 32, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
-            By continuing, you agree to Syntera's Terms of Service
+            By continuing, you agree to Synterica's Terms of Service
           </div>
         </div>
       </div>

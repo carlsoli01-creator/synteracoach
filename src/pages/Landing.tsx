@@ -421,7 +421,7 @@ export default function Landing() {
             <div className="lp-score-card" ref={scoreCardRef}>
               <div className="lp-score-topbar">
                 <div className="lp-tl-row"><div className="lp-tl lp-tl-r" /><div className="lp-tl lp-tl-y" /><div className="lp-tl lp-tl-g" /></div>
-                <span className="lp-topbar-label">syntera — live analysis</span>
+                <span className="lp-topbar-label">synterica — live analysis</span>
               </div>
               <div className="lp-score-body">
                 <div className="lp-waveform-area">
@@ -570,7 +570,7 @@ export default function Landing() {
           <div className="lp-sec-label">What people say</div>
           <div className="lp-sec-title">Used by speakers <span className="wh">who mean business</span></div>
           <div className="lp-testi-grid lp-reveal">
-            {[{ text: "I used to say 'um' constantly in presentations. After two weeks with Syntera, my filler word count dropped from 18 to 4 per minute. My manager noticed.", initials: "JK", name: "Jordan K.", role: "Product Manager · Series B Startup" }, { text: "The 7-dimension breakdown is insane. I always knew I spoke fast, but seeing my confidence score jump from 64 to 89 after 10 sessions? That's real data.", initials: "RL", name: "Rachel L.", role: "Sales Director · Fortune 500" }, { text: "Pitched to investors last month. Used Syntera to practice 20+ times beforehand. Got the term sheet. Probably a coincidence, but probably not.", initials: "MT", name: "Marcus T.", role: "Founder · YC W25" }].map((t) =>
+            {[{ text: "I used to say 'um' constantly in presentations. After two weeks with Synterica, my filler word count dropped from 18 to 4 per minute. My manager noticed.", initials: "JK", name: "Jordan K.", role: "Product Manager · Series B Startup" }, { text: "The 7-dimension breakdown is insane. I always knew I spoke fast, but seeing my confidence score jump from 64 to 89 after 10 sessions? That's real data.", initials: "RL", name: "Rachel L.", role: "Sales Director · Fortune 500" }, { text: "Pitched to investors last month. Used Synterica to practice 20+ times beforehand. Got the term sheet. Probably a coincidence, but probably not.", initials: "MT", name: "Marcus T.", role: "Founder · YC W25" }].map((t) =>
             <div className="lp-testi" key={t.initials}>
                 <div className="lp-stars">★★★★★</div>
                 <p className="lp-testi-text">"{t.text}"</p>
@@ -589,13 +589,13 @@ export default function Landing() {
 
       {/* FOOTER */}
       <footer className="lp-footer">
-        <div className="lp-footer-logo">SYNTERA</div>
+        <div className="lp-footer-logo">SYNTERICA</div>
         <div className="lp-footer-links">
           <a href="/privacy">Privacy</a>
           <a href="/terms">Terms</a>
           <a href="/cookies">Cookies</a>
         </div>
-        <div className="lp-footer-copy">© 2026 Syntera. All rights reserved.</div>
+        <div className="lp-footer-copy">© 2026 Synterica. All rights reserved.</div>
       </footer>
     </div>);
 

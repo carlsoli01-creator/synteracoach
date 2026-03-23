@@ -20,7 +20,7 @@ interface FooterProps {
 }
 
 const Footer = ({
-  logoTitle = "SYNTERA",
+  logoTitle = "SYNTERICA",
   tagline = "Speak. Persuade with Precision.",
   menuItems = [
     {
@@ -41,7 +41,7 @@ const Footer = ({
       ],
     },
   ],
-  copyright = "© 2026 Syntera. All rights reserved.",
+  copyright = "© 2026 Synterica. All rights reserved.",
   bottomLinks = [
     { text: "Terms", url: "/terms" },
     { text: "Privacy", url: "/privacy" },
