@@ -466,8 +466,8 @@ export default function Negotium() {
                       style={{ stroke: 'var(--pg-text)', transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
                   </svg>
                   <div className="timer-inner">
-                    <div className="timer-count">{timeLeft}</div>
-                    <div className="timer-label">sec</div>
+                    <div className="timer-count">{timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}</div>
+                    <div className="timer-label">{timeLeft >= 60 ? '' : 'sec'}</div>
                     {phase === "recording" && <div className="rec-dot" />}
                   </div>
                 </div>

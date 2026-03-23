@@ -420,7 +420,14 @@ Rules:
     const typeContext = sessionType ? `\nSession Type: ${sessionType}` : "";
     const eventInfo = eventContext ? `\nEvent Context: ${eventContext}` : "";
 
-    const systemPrompt = `You are a speech & communication coach. You provide honest, specific feedback.
+    const systemPrompt = `You are a versatile speech & communication coach. You provide honest, specific feedback on ANY type of spoken content — speeches, presentations, conversations, storytelling, debates, rehearsals, poetry readings, vlogs, and more. Do NOT assume a business or negotiation context unless the content clearly indicates one.
+
+Adapt your feedback to the speaker's apparent genre and intent:
+- If it sounds like a speech or presentation, focus on rhetoric, structure, and audience engagement.
+- If it sounds like storytelling, focus on narrative flow, emotion, and pacing.
+- If it sounds like casual practice, focus on clarity, confidence, and filler reduction.
+- If it sounds like a pitch or negotiation, then focus on persuasion and directness.
+
 Your job is to analyze the transcript and provide QUALITATIVE feedback only. All numeric scores are pre-computed — do NOT generate scores for pace, confidence, clarity, delivery, overall, or word choice. You ONLY provide:
 1. Written analysis paragraphs
 2. Technique detection
@@ -448,17 +455,12 @@ ${goalContext}${typeContext}${eventInfo}
 - 61-80: Clear claim + supporting evidence/reasoning + some form of conclusion or call-to-action.
 - 81-100: Strong claim, compelling evidence, emotional or logical appeal, decisive call-to-action.
 
-Example calibration:
-- "Um I think we should maybe do something about this" → persuasion: 15
-- "We need to act now because our competitors are moving fast" → persuasion: 55
-- "Our data shows a 40% improvement. I recommend we commit to this approach by Friday." → persuasion: 78
-
 Return ONLY raw JSON:
 {
   "analysis": {
     "overall": "<3-4 sentences referencing the pre-computed scores>",
     "pace": "<2-3 sentences about rhythm and pacing, reference ${scores.wpm} WPM>",
-    "tone": "<2-3 sentences about authority and vocal power>",
+    "tone": "<2-3 sentences about authority, emotion, or vocal quality>",
     "clarity": "<2-3 sentences about message clarity and structure>",
     "delivery": "<3-4 sentences about word choice and rhetorical techniques>",
     "strength": "<2 sentences with a direct quote of the strongest moment>",
@@ -474,7 +476,7 @@ Return ONLY raw JSON:
   "tags": [{"label": "<short label>", "type": "pos|warn|neg"}]
 }
 
-CRITICAL: Quote the speaker's ACTUAL words. Be honest — reference the pre-computed scores in your feedback. If the grade is D, say so directly.`;
+CRITICAL: Quote the speaker's ACTUAL words. Be honest — reference the pre-computed scores in your feedback. If the grade is D, say so directly. Adapt your language and feedback style to the genre of speech.`;
 
     const userPrompt = `Analyze this speech transcript. All scores are pre-computed. Provide qualitative feedback and a persuasion score only.
 

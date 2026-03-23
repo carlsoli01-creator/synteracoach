@@ -165,45 +165,11 @@ export default function Auth() {
 
   return (
     <div style={{ background: "#080808", minHeight: "100vh", overflowY: "auto" }}>
-      {/* Hero Banner with RetroGrid */}
-      <div
-        className="relative flex items-center justify-center"
-        style={{ height: 220, overflow: "hidden", background: "#0a0a0a" }}
-      >
-        <RetroGrid angle={65} />
-        <div className="relative z-10 text-center pointer-events-none">
-          <h1
-            className="font-heading"
-            style={{
-              fontSize: isMobile ? 36 : 52,
-              fontWeight: 800,
-              color: "#ffffff",
-              letterSpacing: "0.1em",
-              lineHeight: 1,
-            }}
-          >
-            SYNTERICA
-          </h1>
-          <p
-            style={{
-              fontSize: 11,
-              color: "rgba(255,255,255,0.45)",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              marginTop: 10,
-              fontFamily: "'DM Mono', monospace",
-            }}
-          >
-            Speak with clarity.
-          </p>
-        </div>
-      </div>
-
       {/* Login Section */}
       <div
         className="flex items-center justify-center"
         style={{
-          minHeight: "calc(100vh - 220px)",
+          minHeight: "100vh",
           padding: isMobile ? "40px 24px 32px" : "60px 44px",
         }}
       >

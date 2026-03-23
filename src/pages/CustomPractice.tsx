@@ -135,14 +135,30 @@ export default function CustomPractice() {
 
           <div style={{ marginBottom: 28 }}>
             <div style={{ fontSize: 9, letterSpacing: "0.2em", color: muted, textTransform: "uppercase", marginBottom: 10, fontFamily: "'DM Mono', monospace" }}>
-              Duration — {duration}s
+              Project Name (optional)
+            </div>
+            <input
+              type="text"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
+              placeholder="e.g. TED Talk Practice, Wedding Speech..."
+              style={{
+                width: "100%", padding: 12, border: `1px solid ${border}`, background: card,
+                fontSize: 12, fontFamily: "'DM Mono', monospace", color: text, outline: "none",
+              }}
+            />
+          </div>
+
+          <div style={{ marginBottom: 28 }}>
+            <div style={{ fontSize: 9, letterSpacing: "0.2em", color: muted, textTransform: "uppercase", marginBottom: 10, fontFamily: "'DM Mono', monospace" }}>
+              Duration — {duration >= 60 ? `${Math.floor(duration / 60)}:${String(duration % 60).padStart(2, '0')}` : `${duration}s`}
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ fontSize: 10, color: muted, fontFamily: "'DM Mono', monospace" }}>5s</span>
-              <input type="range" min={5} max={45} step={1} value={duration}
+              <span style={{ fontSize: 10, color: muted, fontFamily: "'DM Mono', monospace" }}>15s</span>
+              <input type="range" min={15} max={300} step={15} value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
                 style={{ flex: 1, cursor: "pointer" }} />
-              <span style={{ fontSize: 10, color: muted, fontFamily: "'DM Mono', monospace" }}>45s</span>
+              <span style={{ fontSize: 10, color: muted, fontFamily: "'DM Mono', monospace" }}>5:00</span>
             </div>
           </div>
 
