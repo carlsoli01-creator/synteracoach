@@ -639,7 +639,7 @@ export default function Profile() {
               ))}
 
               <div style={{ textAlign: "center", marginTop: 32, fontSize: 10, color: c.muted, letterSpacing: "0.1em" }}>
-                © 2026 Syntera. All rights reserved.
+                © 2026 Synterica. All rights reserved.
               </div>
             </div>
           )}
