@@ -599,7 +599,7 @@ export default function Profile() {
                   AI Voice Coach
                 </div>
                 <div style={{ fontSize: 12, color: c.dimText, lineHeight: 1.8, maxWidth: 360, margin: "0 auto" }}>
-                  Syntera analyzes your speech across 7 dimensions — pace, tone, confidence, clarity,
+                  Synterica analyzes your speech across 7 dimensions — pace, tone, confidence, clarity,
                   word choice, filler words, and persuasion — to help you become a more powerful communicator.
                 </div>
               </div>
