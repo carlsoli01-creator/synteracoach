@@ -194,7 +194,7 @@ export default function CustomPractice() {
           </div>
 
           <button
-            onClick={() => canStart && setStep("recording")}
+            onClick={() => { if (canStart) { saveProject(); setStep("recording"); } }}
             disabled={!canStart}
             style={{
               width: "100%", padding: "16px", background: canStart ? text : disabledText, color: bg,
