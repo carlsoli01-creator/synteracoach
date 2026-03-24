@@ -242,7 +242,7 @@ export default function Landing() {
         .lp-tag-row { display:flex; gap:6px; flex-wrap:wrap; }
         .lp-tag { font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.08em; padding:3px 9px; border-radius:2px; border:1px solid rgba(255,255,255,0.07); color:rgba(255,255,255,0.3); }
         .lp-tag.on { border-color:rgba(255,255,255,0.14); color:rgba(255,255,255,0.55); }
-        .lp-tag.warn { border-color:rgba(255,100,80,0.18); color:rgba(255,100,80,0.55); }
+        .lp-tag.warn { border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.3); }
         .lp-scores-area { display:flex; flex-direction:column; gap:16px; }
         .lp-overall-score { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
         .lp-overall-num { font-family:'Syne',sans-serif; font-size:4.2rem; font-weight:800; line-height:1; color:var(--lp-white); }
