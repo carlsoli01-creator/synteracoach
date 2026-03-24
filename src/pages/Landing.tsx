@@ -223,7 +223,7 @@ export default function Landing() {
         .lp-btn-secondary:hover { border-color:rgba(255,255,255,0.18); color:var(--lp-text); }
 
         /* HERO VISUAL */
-        .lp-hero-visual { margin-top:80px; width:100%; max-width:860px; animation:lpFadeUp 0.8s 0.8s ease both; }
+        .lp-hero-visual { margin-top:100px; width:100%; max-width:860px; animation:lpFadeUp 0.8s 0.8s ease both; }
         .lp-score-card { background:rgba(12,12,15,0.92); border:1px solid var(--lp-border); border-radius:14px; overflow:hidden; box-shadow:0 48px 100px rgba(0,0,0,0.8),inset 0 1px 0 rgba(255,255,255,0.04); backdrop-filter:blur(16px); }
         .lp-score-topbar { background:rgba(8,8,11,0.9); border-bottom:1px solid var(--lp-border); padding:13px 20px; display:flex; align-items:center; gap:10px; }
         .lp-tl { width:10px; height:10px; border-radius:50%; }
