@@ -50,7 +50,6 @@ function AnalyzingWait({ durationSeconds, isDark }: { durationSeconds: number; i
 
   return <AILoader text="Analyzing" estimatedSeconds={remaining} isDark={isDark} size={140} />;
 }
-}
 
 interface ScenarioRecordingProps {
   scenario: Scenario;
