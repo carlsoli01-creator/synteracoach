@@ -526,7 +526,7 @@ export default function Negotium() {
                         );
                       })}
                     </div>
-                    <button className="custom-card" style={{ minHeight: 160, width: '100%', marginTop: 16, display: 'flex' }} onClick={() => navigate("/custom-practice")}>
+                    <button className="custom-card bg-primary-foreground" style={{ minHeight: 160, width: '100%', marginTop: 16, display: 'flex' }} onClick={() => navigate("/custom-practice")}>
                       <span className="custom-card-title">+ Custom Practice</span>
                       <span className="custom-card-sub">Choose your own scenario and goals</span>
                     </button>
