@@ -25,6 +25,38 @@ function getVariance(arr: number[]) {
   return arr.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / arr.length;
 }
 
+function IntroAnalyzingWait() {
+  const [elapsed, setElapsed] = useState(0);
+  const estimatedTotal = Math.max(3, Math.round(10 * 0.12 + 4)); // ~5s for 10s recording
+
+  useEffect(() => {
+    const start = Date.now();
+    const iv = setInterval(() => setElapsed(Math.floor((Date.now() - start) / 1000)), 500);
+    return () => clearInterval(iv);
+  }, []);
+
+  const remaining = Math.max(0, estimatedTotal - elapsed);
+
+  return (
+    <>
+      <div style={{ marginBottom: 20 }}><Search size={48} color="#fff" /></div>
+      <div style={{ fontSize: 24, fontWeight: 900, color: "#fff", lineHeight: 1.2, marginBottom: 12, fontFamily: "'Inter', system-ui, sans-serif" }}>Analyzing your speech...</div>
+      <div style={{ fontSize: 12, color: "#666", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 16px" }}>Our AI is breaking down your delivery across multiple dimensions.</div>
+      {remaining > 0 && (
+        <div style={{
+          fontSize: 14, fontWeight: 500, fontFamily: "'DM Mono', monospace", marginBottom: 16,
+          background: "linear-gradient(90deg, #c8ff00, #e8e8e8)",
+          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+          animation: "analyzeGlow 2s ease-in-out infinite alternate",
+        }}>
+          ~{remaining}s remaining
+        </div>
+      )}
+      <div style={{ width: 24, height: 24, border: "2px solid #333", borderTop: "2px solid #fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto" }} />
+    </>
+  );
+}
+
 interface IntroExperienceProps {
   onComplete: () => void;
   onForcePaywall: () => void;
@@ -95,12 +127,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
     if (!transcript || transcript.length < 5) {
       setAnalysisResult({
-        scores: { overall: 5, pace: 3, confidence: 5, clarity: 4, delivery: 5 },
+        scores: { overall: 12, pace: 10, confidence: 12, clarity: 10, delivery: 12 },
         analysis: {
-          overall: "Nothing. We got nothing. You either didn't speak or whispered into the void. In a real meeting, this would be career-damaging silence — the kind that makes people question whether you belong in the room.",
-          strength: "None detected. Showing up isn't a strength — it's the bare minimum, and you barely did that.",
-          weakness: "You produced no measurable speech. Zero words means zero scores. There is nothing to analyze because you gave us nothing to work with.",
-          recommendation: "Open your mouth. Speak words. Literally any sentence spoken with audible volume would score 10x higher than this. This is a 5 out of 100 — rock bottom.",
+          overall: "We didn't pick up enough speech to analyze. This could be a mic issue or low volume — try speaking a bit louder next time.",
+          strength: "You showed up and pressed record — that's the first step. Most people never get this far.",
+          weakness: "We need more audio to give you meaningful feedback. Make sure your mic is working and speak at a normal volume.",
+          recommendation: "Try again — speak naturally for the full 10 seconds. Even a simple self-introduction will give us enough to score you properly.",
         },
         fillerWords: { count: 0, words: [] },
         powerWords: [],
@@ -128,12 +160,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
       if (error || data?.error) {
         setAnalysisResult({
-          scores: { overall: 25, pace: 20, confidence: 22, clarity: 28, delivery: 24 },
+          scores: { overall: 30, pace: 28, confidence: 30, clarity: 32, delivery: 28 },
           analysis: {
-            overall: "Processing failed, but let's be real — if your delivery was strong, we'd have plenty to work with. The fact that analysis choked on your input isn't a great sign.",
-            strength: "You pressed the button. Congratulations. That's about all we can credit you for right now.",
-            weakness: "We couldn't fully process this, which usually means the audio quality or speech volume was poor. That alone tells us something.",
-            recommendation: "Get into the full app and record properly. Speak up, speak clearly, and give us something worth analyzing.",
+            overall: "We ran into a processing issue. This sometimes happens with shorter recordings or background noise — don't worry, the full app handles this much better.",
+            strength: "You completed a recording, which is a great start. That takes more courage than most people realize.",
+            weakness: "The audio quality may have been low, or there was too much background noise for accurate analysis.",
+            recommendation: "Head into the full app for a better experience — longer recordings with clearer audio give dramatically better results.",
           },
         });
       } else {
@@ -142,12 +174,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       setTestPhase("done");
     } catch {
       setAnalysisResult({
-        scores: { overall: 20, pace: 18, confidence: 22, clarity: 20, delivery: 18 },
+        scores: { overall: 25, pace: 22, confidence: 25, clarity: 24, delivery: 22 },
         analysis: {
-          overall: "Technical failure aside — most people's first recordings are painful to listen to. Yours probably isn't the exception. The question is whether you have the discipline to come back and actually improve.",
-          strength: "You tried. That puts you marginally ahead of people who didn't. Marginally.",
-          weakness: "We couldn't process this recording. Whether that's our fault or yours, the result is the same: no data, no improvement.",
-          recommendation: "Try again in the main dashboard. Next time, speak like someone who expects to be taken seriously.",
+          overall: "Something went wrong on our end — this wasn't your fault. First recordings are always a learning experience, and the full app will give you much more detailed coaching.",
+          strength: "You took the first step and recorded yourself. That alone puts you ahead of most people.",
+          weakness: "We hit a technical issue processing this recording. The full app is much more reliable.",
+          recommendation: "Jump into the main dashboard and try a full session — you'll get detailed scoring across all 7 dimensions.",
         },
       });
       setTestPhase("done");
@@ -373,12 +405,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
         )}
 
         {testPhase === "analyzing" && (
-          <>
-            <div style={{ marginBottom: 20 }}><Search size={48} color="#fff" /></div>
-            <div style={{ fontSize: 24, fontWeight: 900, color: "#fff", lineHeight: 1.2, marginBottom: 12, fontFamily: "'Inter', system-ui, sans-serif" }}>Analyzing your speech...</div>
-            <div style={{ fontSize: 12, color: "#666", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 28px" }}>Our AI is breaking down your delivery across multiple dimensions.</div>
-            <div style={{ width: 24, height: 24, border: "2px solid #333", borderTop: "2px solid #fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto" }} />
-          </>
+          <IntroAnalyzingWait />
         )}
 
         {testPhase === "done" && analysisResult && (
@@ -399,7 +426,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 800, color: "#fff" }}>Overall Score</div>
                   <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
-                    {analysisResult.scores.overall >= 80 ? "Surprisingly competent — don't let it go to your head" : analysisResult.scores.overall >= 60 ? "Mediocre. You'd lose the room in under 2 minutes." : analysisResult.scores.overall >= 40 ? "Weak. This is the kind of delivery people tune out of." : "Brutal. If this were a pitch, you'd be shown the door."}
+                    {analysisResult.scores.overall >= 80 ? "Strong start — there's real potential here" : analysisResult.scores.overall >= 60 ? "Decent foundation. The full app will help you level up." : analysisResult.scores.overall >= 40 ? "Room to grow — that's what practice is for." : "Everyone starts somewhere. Let's build from here."}
                   </div>
                 </div>
               </div>
