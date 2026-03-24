@@ -349,7 +349,7 @@ export default function Landing() {
 
       {/* NAV */}
       <nav className="lp-nav">
-        <span className="lp-logo">SYNT<span>E</span>RA</span>
+        <span className="lp-logo">SYNTERICA</span>
         <ul className="lp-nav-links">
           <li><a href="#how">How it works</a></li>
           <li><a href="#features">Features</a></li>
