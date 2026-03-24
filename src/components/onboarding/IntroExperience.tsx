@@ -373,12 +373,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
         )}
 
         {testPhase === "analyzing" && (
-          <>
-            <div style={{ marginBottom: 20 }}><Search size={48} color="#fff" /></div>
-            <div style={{ fontSize: 24, fontWeight: 900, color: "#fff", lineHeight: 1.2, marginBottom: 12, fontFamily: "'Inter', system-ui, sans-serif" }}>Analyzing your speech...</div>
-            <div style={{ fontSize: 12, color: "#666", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 28px" }}>Our AI is breaking down your delivery across multiple dimensions.</div>
-            <div style={{ width: 24, height: 24, border: "2px solid #333", borderTop: "2px solid #fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto" }} />
-          </>
+          <IntroAnalyzingWait />
         )}
 
         {testPhase === "done" && analysisResult && (
