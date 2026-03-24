@@ -213,7 +213,9 @@ export default function Landing() {
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
         .lp-letter { display:inline-block; background:linear-gradient(160deg,#ffffff 0%,rgba(255,255,255,0.6) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
-        .lp-hero-sub { margin-top:32px; color:var(--lp-muted); font-size:1.05rem; max-width:460px; line-height:1.8; animation:lpFadeUp 0.75s 0.6s ease both; }
+        .lp-hero-sub { margin-top:32px; color:#ffffff; font-size:1.05rem; max-width:460px; line-height:1.8; animation:lpFadeUp 0.75s 0.6s ease both; }
+        .lp-typewriter-cursor { display:inline-block; width:2px; height:1em; background:rgba(255,255,255,0.6); margin-left:2px; animation:lpBlink 1s step-end infinite; vertical-align:text-bottom; }
+        @keyframes lpBlink { 0%,100%{opacity:1} 50%{opacity:0} }
         .lp-hero-actions { margin-top:48px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
         .lp-btn-primary { display:inline-flex; align-items:center; gap:10px; background:var(--lp-white); color:#050507; font-family:'DM Mono',monospace; font-size:0.78rem; font-weight:500; letter-spacing:0.06em; padding:14px 28px; border-radius:3px; text-decoration:none; border:none; cursor:pointer; transition:opacity 0.2s,transform 0.2s; }
         .lp-btn-primary:hover { transform:translateY(-2px); opacity:0.88; }
