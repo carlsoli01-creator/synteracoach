@@ -394,7 +394,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 800, color: "#fff" }}>Overall Score</div>
                   <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
-                    {analysisResult.scores.overall >= 80 ? "Surprisingly competent — don't let it go to your head" : analysisResult.scores.overall >= 60 ? "Mediocre. You'd lose the room in under 2 minutes." : analysisResult.scores.overall >= 40 ? "Weak. This is the kind of delivery people tune out of." : "Brutal. If this were a pitch, you'd be shown the door."}
+                    {analysisResult.scores.overall >= 80 ? "Strong start — there's real potential here" : analysisResult.scores.overall >= 60 ? "Decent foundation. The full app will help you level up." : analysisResult.scores.overall >= 40 ? "Room to grow — that's what practice is for." : "Everyone starts somewhere. Let's build from here."}
                   </div>
                 </div>
               </div>

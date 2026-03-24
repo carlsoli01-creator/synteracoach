@@ -50,14 +50,12 @@ function AnalyzingWait({ durationSeconds, isDark, muted }: { durationSeconds: nu
     return () => clearInterval(iv);
   }, []);
 
-  const showEstimate = durationSeconds > 50;
-
   return (
     <div style={{ textAlign: "center", marginBottom: 24, fontFamily: "'DM Mono', monospace" }}>
-      <div style={{ fontSize: 11, color: muted, marginBottom: showEstimate ? 8 : 0 }}>
+      <div style={{ fontSize: 11, color: muted, marginBottom: remaining > 0 ? 8 : 0 }}>
         Analyzing your performance...
       </div>
-      {showEstimate && remaining > 0 && (
+      {remaining > 0 && (
         <div
           style={{
             fontSize: 13,
