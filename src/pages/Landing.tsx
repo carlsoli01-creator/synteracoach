@@ -1,6 +1,46 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+
+const TYPEWRITER_PHRASES = [
+  "Speak Better. Be Heard.",
+  "Own the Room.",
+  "No More Filler Words.",
+  "Pitch with Power.",
+  "Sound Like a Leader.",
+];
+
+function HeroTypewriter() {
+  const [phraseIdx, setPhraseIdx] = useState(0);
+  const [charIdx, setCharIdx] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const phrase = TYPEWRITER_PHRASES[phraseIdx];
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!deleting && charIdx < phrase.length) {
+      timeout = setTimeout(() => setCharIdx(c => c + 1), 45 + Math.random() * 35);
+    } else if (!deleting && charIdx === phrase.length) {
+      timeout = setTimeout(() => setDeleting(true), 2200);
+    } else if (deleting && charIdx > 0) {
+      timeout = setTimeout(() => setCharIdx(c => c - 1), 25);
+    } else if (deleting && charIdx === 0) {
+      setDeleting(false);
+      setPhraseIdx(i => (i + 1) % TYPEWRITER_PHRASES.length);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [charIdx, deleting, phraseIdx]);
+
+  const text = TYPEWRITER_PHRASES[phraseIdx].slice(0, charIdx);
+
+  return (
+    <p className="lp-hero-sub">
+      {text}<span className="lp-typewriter-cursor" />
+    </p>
+  );
+}
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -190,7 +230,7 @@ export default function Landing() {
 
         /* NAV */
         .lp-nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 56px; height:68px; background:rgba(5,5,7,0.8); backdrop-filter:blur(28px); border-bottom:1px solid var(--lp-border); }
-        .lp-logo { font-family:'Syne',sans-serif; font-size:1.15rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--lp-text); text-decoration:none; cursor:pointer; }
+        .lp-logo { font-family:'Syne',sans-serif; font-size:1.15rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--lp-text); text-decoration:none; cursor:pointer; }
         .lp-logo span { color:var(--lp-white); }
         .lp-nav-links { display:flex; gap:36px; list-style:none; padding:0; margin:0; }
         .lp-nav-links a { color:var(--lp-muted); text-decoration:none; font-size:0.85rem; transition:color 0.2s; }
@@ -203,16 +243,19 @@ export default function Landing() {
 
         /* HERO */
         .lp-hero { position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:130px 24px 100px; overflow:hidden; }
-        .lp-paths-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1; }
-        .lp-hero-content { position:relative; z-index:10; display:flex; flex-direction:column; align-items:center; }
+        .lp-paths-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; transition:opacity 0.3s ease; }
+        .lp-hero-content { position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; }
+        .lp-hero-content, .lp-section, .lp-footer { position:relative; z-index:1; }
         .lp-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:2px; margin-bottom:40px; animation:lpFadeUp 0.7s ease both; }
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(3rem,8vw,6.5rem); font-weight:400; line-height:0.96; letter-spacing:-0.04em; max-width:900px; }
+        .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(2.4rem,6.5vw,5.4rem); font-weight:600; line-height:0.98; letter-spacing:-0.01em; max-width:900px; }
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
-        .lp-letter { display:inline-block; background:linear-gradient(160deg,#ffffff 0%,rgba(255,255,255,0.7) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
+        .lp-letter { display:inline-block; background:linear-gradient(160deg,#ffffff 0%,rgba(255,255,255,0.6) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
-        .lp-hero-sub { margin-top:32px; color:var(--lp-muted); font-size:1.05rem; max-width:460px; line-height:1.8; animation:lpFadeUp 0.75s 0.6s ease both; }
+        .lp-hero-sub { margin-top:32px; color:#ffffff; font-size:1.05rem; max-width:460px; line-height:1.8; animation:lpFadeUp 0.75s 0.6s ease both; }
+        .lp-typewriter-cursor { display:inline-block; width:2px; height:1em; background:rgba(255,255,255,0.6); margin-left:2px; animation:lpBlink 1s step-end infinite; vertical-align:text-bottom; }
+        @keyframes lpBlink { 0%,100%{opacity:1} 50%{opacity:0} }
         .lp-hero-actions { margin-top:48px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
         .lp-btn-primary { display:inline-flex; align-items:center; gap:10px; background:var(--lp-white); color:#050507; font-family:'DM Mono',monospace; font-size:0.78rem; font-weight:500; letter-spacing:0.06em; padding:14px 28px; border-radius:3px; text-decoration:none; border:none; cursor:pointer; transition:opacity 0.2s,transform 0.2s; }
         .lp-btn-primary:hover { transform:translateY(-2px); opacity:0.88; }
@@ -220,11 +263,11 @@ export default function Landing() {
         .lp-btn-secondary:hover { border-color:rgba(255,255,255,0.18); color:var(--lp-text); }
 
         /* HERO VISUAL */
-        .lp-hero-visual { margin-top:80px; width:100%; max-width:860px; animation:lpFadeUp 0.8s 0.8s ease both; }
+        .lp-hero-visual { margin-top:100px; width:100%; max-width:860px; animation:lpFadeUp 0.8s 0.8s ease both; }
         .lp-score-card { background:rgba(12,12,15,0.92); border:1px solid var(--lp-border); border-radius:14px; overflow:hidden; box-shadow:0 48px 100px rgba(0,0,0,0.8),inset 0 1px 0 rgba(255,255,255,0.04); backdrop-filter:blur(16px); }
         .lp-score-topbar { background:rgba(8,8,11,0.9); border-bottom:1px solid var(--lp-border); padding:13px 20px; display:flex; align-items:center; gap:10px; }
         .lp-tl { width:10px; height:10px; border-radius:50%; }
-        .lp-tl-r{background:#ff5f57} .lp-tl-y{background:#ffbd2e} .lp-tl-g{background:#28c840}
+        .lp-tl-r{background:rgba(255,255,255,0.15)} .lp-tl-y{background:rgba(255,255,255,0.1)} .lp-tl-g{background:rgba(255,255,255,0.07)}
         .lp-tl-row { display:flex; gap:6px; }
         .lp-topbar-label { font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--lp-muted2); letter-spacing:0.1em; margin-left:auto; }
         .lp-score-body { padding:36px; display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:start; }
@@ -239,7 +282,7 @@ export default function Landing() {
         .lp-tag-row { display:flex; gap:6px; flex-wrap:wrap; }
         .lp-tag { font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.08em; padding:3px 9px; border-radius:2px; border:1px solid rgba(255,255,255,0.07); color:rgba(255,255,255,0.3); }
         .lp-tag.on { border-color:rgba(255,255,255,0.14); color:rgba(255,255,255,0.55); }
-        .lp-tag.warn { border-color:rgba(255,100,80,0.18); color:rgba(255,100,80,0.55); }
+        .lp-tag.warn { border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.3); }
         .lp-scores-area { display:flex; flex-direction:column; gap:16px; }
         .lp-overall-score { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
         .lp-overall-num { font-family:'Syne',sans-serif; font-size:4.2rem; font-weight:800; line-height:1; color:var(--lp-white); }
@@ -346,7 +389,7 @@ export default function Landing() {
 
       {/* NAV */}
       <nav className="lp-nav">
-        <span className="lp-logo">SYNT<span>E</span>RA</span>
+        <span className="lp-logo">SYNTERICA</span>
         <ul className="lp-nav-links">
           <li><a href="#how">How it works</a></li>
           <li><a href="#features">Features</a></li>
@@ -378,36 +421,7 @@ export default function Landing() {
             )}
           </h1>
 
-          <p className="lp-hero-sub">
-            ​
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-          </p>
+          <HeroTypewriter />
 
           <div className="lp-hero-actions">
             <button className="lp-btn-primary" onClick={goAuth}>
