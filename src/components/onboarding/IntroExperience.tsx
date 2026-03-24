@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import { AILoader } from "@/components/ui/ai-loader";
 import { supabase } from "@/integrations/supabase/client";
 import { Power, BarChart3, Search, CheckCircle, Lock, Zap, Mic } from "lucide-react";
 
