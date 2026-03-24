@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Mic, BarChart3, Search, CheckCircle, Lock, Zap } from "lucide-react";
+import { Power, BarChart3, Search, CheckCircle, Lock, Zap, Mic } from "lucide-react";
 
 const INTRO_STEPS = [
   {
@@ -367,7 +367,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       }}>
         {testPhase === "idle" && (
           <>
-            <div style={{ marginBottom: 24 }}><Mic size={48} color="#fff" /></div>
+            <div style={{ marginBottom: 24 }}><Power size={48} color="#fff" /></div>
             <div style={{ fontSize: 10, letterSpacing: "0.4em", color: "#666", textTransform: "uppercase", marginBottom: 16, fontWeight: 700 }}>YOUR FIRST TEST</div>
             <div style={{ fontSize: 28, fontWeight: 900, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 16, fontFamily: "'Inter', system-ui, sans-serif" }}>Say anything for 10 seconds.</div>
             <div style={{ fontSize: 13, color: "#666", lineHeight: 1.8, maxWidth: 340, margin: "0 auto 36px" }}>Introduce yourself, read something aloud, or just talk freely. We'll show you how the analysis works.</div>
