@@ -142,12 +142,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       setTestPhase("done");
     } catch {
       setAnalysisResult({
-        scores: { overall: 20, pace: 18, confidence: 22, clarity: 20, delivery: 18 },
+        scores: { overall: 25, pace: 22, confidence: 25, clarity: 24, delivery: 22 },
         analysis: {
-          overall: "Technical failure aside — most people's first recordings are painful to listen to. Yours probably isn't the exception. The question is whether you have the discipline to come back and actually improve.",
-          strength: "You tried. That puts you marginally ahead of people who didn't. Marginally.",
-          weakness: "We couldn't process this recording. Whether that's our fault or yours, the result is the same: no data, no improvement.",
-          recommendation: "Try again in the main dashboard. Next time, speak like someone who expects to be taken seriously.",
+          overall: "Something went wrong on our end — this wasn't your fault. First recordings are always a learning experience, and the full app will give you much more detailed coaching.",
+          strength: "You took the first step and recorded yourself. That alone puts you ahead of most people.",
+          weakness: "We hit a technical issue processing this recording. The full app is much more reliable.",
+          recommendation: "Jump into the main dashboard and try a full session — you'll get detailed scoring across all 7 dimensions.",
         },
       });
       setTestPhase("done");
