@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Mic, BarChart3, Search, CheckCircle, Lock, Zap } from "lucide-react";
+import { Power, BarChart3, Search, CheckCircle, Lock, Zap, Mic } from "lucide-react";
 
 const INTRO_STEPS = [
   {
