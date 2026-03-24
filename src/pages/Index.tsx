@@ -341,7 +341,7 @@ export default function Negotium() {
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = true; recognition.interimResults = true; recognition.lang = "en-US"; recognition.maxAlternatives = 3;
-        let finalTranscript = ""; let isRecognitionActive = true;
+        let finalTranscript = ""; let isRecognitionActive = true; let isRecognitionRunning = false;
         recognition.onresult = (event) => {
           let interim = "";
           for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -349,10 +349,11 @@ export default function Negotium() {
           }
           transcriptRef.current = finalTranscript + interim;
         };
-        recognition.onerror = (e) => { if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) { try { setTimeout(() => { if (isRecognitionActive) recognition.start(); }, 300); } catch (_) {} } };
-        recognition.onend = () => { if (isRecognitionActive) { try { setTimeout(() => { if (isRecognitionActive) recognition.start(); }, 200); } catch (_) {} } };
-        recognition.start(); recognitionRef.current = recognition;
-        recognitionRef.current._stopAutoRestart = () => { isRecognitionActive = false; };
+        const safeStart = () => { if (isRecognitionActive && !isRecognitionRunning) { try { isRecognitionRunning = true; recognition.start(); } catch (_) { isRecognitionRunning = false; } } };
+        recognition.onerror = (e) => { isRecognitionRunning = false; if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) { setTimeout(safeStart, 300); } };
+        recognition.onend = () => { isRecognitionRunning = false; if (isRecognitionActive) { setTimeout(safeStart, 200); } };
+        safeStart(); recognitionRef.current = recognition;
+        recognitionRef.current._stopAutoRestart = () => { isRecognitionActive = false; isRecognitionRunning = false; };
       }
       const mr = new MediaRecorder(stream); mediaRecorderRef.current = mr; mr.start();
       setPhase("recording"); setTimeLeft(selectedDuration); setMetrics(null); setFeedback(null);
