@@ -445,7 +445,7 @@ export default function Negotium() {
               )}
             </header>
 
-            <main className={`main-grid${isMobile ? " mobile" : ""}`}>
+            <main className={`main-grid${isMobile ? " mobile" : ""}${phase === "done" ? " stacked" : ""}`}>
               {/* LEFT: Recording */}
               <section className="record-panel">
                 <div className="hero-heading">
@@ -691,7 +691,7 @@ export default function Negotium() {
         .topbar-avg-value { font-size: 28px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
 
         .main-grid { display: grid; grid-template-columns: 1fr 360px; gap: 1px; padding: 0; background: var(--pg-border); border-top: none; min-height: calc(100vh - 53px); }
-        .main-grid.mobile { grid-template-columns: 1fr; background: var(--pg-bg); gap: 0; padding: 0; }
+        .main-grid.mobile, .main-grid.stacked { grid-template-columns: 1fr; background: var(--pg-bg); gap: 0; padding: 0; }
 
         .record-panel { display: flex; flex-direction: column; padding: 48px 48px 40px; background: var(--pg-bg); }
 
