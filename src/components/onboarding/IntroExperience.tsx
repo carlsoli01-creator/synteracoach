@@ -25,6 +25,38 @@ function getVariance(arr: number[]) {
   return arr.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / arr.length;
 }
 
+function IntroAnalyzingWait() {
+  const [elapsed, setElapsed] = useState(0);
+  const estimatedTotal = Math.max(3, Math.round(10 * 0.12 + 4)); // ~5s for 10s recording
+
+  useEffect(() => {
+    const start = Date.now();
+    const iv = setInterval(() => setElapsed(Math.floor((Date.now() - start) / 1000)), 500);
+    return () => clearInterval(iv);
+  }, []);
+
+  const remaining = Math.max(0, estimatedTotal - elapsed);
+
+  return (
+    <>
+      <div style={{ marginBottom: 20 }}><Search size={48} color="#fff" /></div>
+      <div style={{ fontSize: 24, fontWeight: 900, color: "#fff", lineHeight: 1.2, marginBottom: 12, fontFamily: "'Inter', system-ui, sans-serif" }}>Analyzing your speech...</div>
+      <div style={{ fontSize: 12, color: "#666", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 16px" }}>Our AI is breaking down your delivery across multiple dimensions.</div>
+      {remaining > 0 && (
+        <div style={{
+          fontSize: 14, fontWeight: 500, fontFamily: "'DM Mono', monospace", marginBottom: 16,
+          background: "linear-gradient(90deg, #c8ff00, #e8e8e8)",
+          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+          animation: "analyzeGlow 2s ease-in-out infinite alternate",
+        }}>
+          ~{remaining}s remaining
+        </div>
+      )}
+      <div style={{ width: 24, height: 24, border: "2px solid #333", borderTop: "2px solid #fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto" }} />
+    </>
+  );
+}
+
 interface IntroExperienceProps {
   onComplete: () => void;
   onForcePaywall: () => void;
