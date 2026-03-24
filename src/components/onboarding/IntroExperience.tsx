@@ -128,12 +128,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
       if (error || data?.error) {
         setAnalysisResult({
-          scores: { overall: 25, pace: 20, confidence: 22, clarity: 28, delivery: 24 },
+          scores: { overall: 30, pace: 28, confidence: 30, clarity: 32, delivery: 28 },
           analysis: {
-            overall: "Processing failed, but let's be real — if your delivery was strong, we'd have plenty to work with. The fact that analysis choked on your input isn't a great sign.",
-            strength: "You pressed the button. Congratulations. That's about all we can credit you for right now.",
-            weakness: "We couldn't fully process this, which usually means the audio quality or speech volume was poor. That alone tells us something.",
-            recommendation: "Get into the full app and record properly. Speak up, speak clearly, and give us something worth analyzing.",
+            overall: "We ran into a processing issue. This sometimes happens with shorter recordings or background noise — don't worry, the full app handles this much better.",
+            strength: "You completed a recording, which is a great start. That takes more courage than most people realize.",
+            weakness: "The audio quality may have been low, or there was too much background noise for accurate analysis.",
+            recommendation: "Head into the full app for a better experience — longer recordings with clearer audio give dramatically better results.",
           },
         });
       } else {
