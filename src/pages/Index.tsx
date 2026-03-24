@@ -445,7 +445,7 @@ export default function Negotium() {
               )}
             </header>
 
-            <main className={`main-grid${isMobile ? " mobile" : ""}`}>
+            <main className={`main-grid${isMobile ? " mobile" : ""}${phase === "done" ? " stacked" : ""}`}>
               {/* LEFT: Recording */}
               <section className="record-panel">
                 <div className="hero-heading">
