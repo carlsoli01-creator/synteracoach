@@ -449,11 +449,11 @@ export default function Negotium() {
               {/* LEFT: Recording */}
               <section className="record-panel">
                 <div className="hero-heading">
-                  <h1>Practice.</h1>
-                  <h1 className="hero-sub">{heroFocus}</h1>
+                  <h1 className="text-3xl font-serif">Practice.</h1>
+                  <h1 className="hero-sub font-serif font-normal">{heroFocus}</h1>
                 </div>
 
-                <div className={`waveform${phase === "recording" ? " active" : ""}`}>
+                <div className={`waveform bg-primary-foreground${phase === "recording" ? " active" : ""}`}>
                   {waveData.map((v, i) => (
                     <div key={i} className="wave-bar" style={{ height: `${Math.max(3, Math.abs(v - 0.5) * 120)}px`, opacity: phase === "recording" ? 0.45 + Math.abs(v - 0.5) : 0.3, background: phase === "recording" ? "var(--pg-text)" : "var(--pg-subtle)" }} />
                   ))}
@@ -467,7 +467,7 @@ export default function Negotium() {
                       style={{ stroke: 'var(--pg-text)', transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
                   </svg>
                   <div className="timer-inner">
-                    <div className="timer-count">{timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}</div>
+                    <div className="timer-count font-mono">{timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}</div>
                     <div className="timer-label">{timeLeft >= 60 ? '' : 'sec'}</div>
                     {phase === "recording" && <div className="rec-dot" />}
                   </div>
@@ -507,7 +507,7 @@ export default function Negotium() {
               </section>
 
               {/* RIGHT: Scenarios / Results */}
-              <aside className="results-panel">
+              <aside className="results-panel bg-primary-foreground">
                 {!isMobile && (phase === "idle" || phase === "recording") && (
                   <div className="scenarios-wrap">
                     <div className="section-label">Today's Practice</div>
@@ -526,7 +526,7 @@ export default function Negotium() {
                         );
                       })}
                     </div>
-                    <button className="custom-card" style={{ minHeight: 160, width: '100%', marginTop: 16, display: 'flex' }} onClick={() => navigate("/custom-practice")}>
+                    <button className="custom-card bg-primary-foreground" style={{ minHeight: 160, width: '100%', marginTop: 16, display: 'flex' }} onClick={() => navigate("/custom-practice")}>
                       <span className="custom-card-title">+ Custom Practice</span>
                       <span className="custom-card-sub">Choose your own scenario and goals</span>
                     </button>
