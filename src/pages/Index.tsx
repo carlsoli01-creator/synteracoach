@@ -278,8 +278,8 @@ export default function Negotium() {
     const transcript = transcriptRef.current.trim();
     try { recognitionRef.current?._stopAutoRestart?.(); } catch (_) {}
     try { recognitionRef.current?.stop(); } catch (_) {}
-    if (!transcript || transcript.length < 5) {
-      setMicError("Could not detect speech. Please speak clearly and try again.");
+    if (!transcript || transcript.trim().split(/\s+/).filter(Boolean).length < 2) {
+      setMicError("We didn't pick up enough speech. Make sure your mic is working and speak clearly.");
       setPhase("idle"); isAnalyzingRef.current = false; return;
     }
     setPhase("analyzing");
