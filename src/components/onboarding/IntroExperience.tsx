@@ -95,12 +95,12 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
     if (!transcript || transcript.length < 5) {
       setAnalysisResult({
-        scores: { overall: 5, pace: 3, confidence: 5, clarity: 4, delivery: 5 },
+        scores: { overall: 12, pace: 10, confidence: 12, clarity: 10, delivery: 12 },
         analysis: {
-          overall: "Nothing. We got nothing. You either didn't speak or whispered into the void. In a real meeting, this would be career-damaging silence — the kind that makes people question whether you belong in the room.",
-          strength: "None detected. Showing up isn't a strength — it's the bare minimum, and you barely did that.",
-          weakness: "You produced no measurable speech. Zero words means zero scores. There is nothing to analyze because you gave us nothing to work with.",
-          recommendation: "Open your mouth. Speak words. Literally any sentence spoken with audible volume would score 10x higher than this. This is a 5 out of 100 — rock bottom.",
+          overall: "We didn't pick up enough speech to analyze. This could be a mic issue or low volume — try speaking a bit louder next time.",
+          strength: "You showed up and pressed record — that's the first step. Most people never get this far.",
+          weakness: "We need more audio to give you meaningful feedback. Make sure your mic is working and speak at a normal volume.",
+          recommendation: "Try again — speak naturally for the full 10 seconds. Even a simple self-introduction will give us enough to score you properly.",
         },
         fillerWords: { count: 0, words: [] },
         powerWords: [],
