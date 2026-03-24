@@ -449,11 +449,11 @@ export default function Negotium() {
               {/* LEFT: Recording */}
               <section className="record-panel">
                 <div className="hero-heading">
-                  <h1>Practice.</h1>
-                  <h1 className="hero-sub">{heroFocus}</h1>
+                  <h1 className="text-3xl font-serif">Practice.</h1>
+                  <h1 className="hero-sub font-serif font-normal">{heroFocus}</h1>
                 </div>
 
-                <div className={`waveform${phase === "recording" ? " active" : ""}`}>
+                <div className={`waveform bg-primary-foreground${phase === "recording" ? " active" : ""}`}>
                   {waveData.map((v, i) => (
                     <div key={i} className="wave-bar" style={{ height: `${Math.max(3, Math.abs(v - 0.5) * 120)}px`, opacity: phase === "recording" ? 0.45 + Math.abs(v - 0.5) : 0.3, background: phase === "recording" ? "var(--pg-text)" : "var(--pg-subtle)" }} />
                   ))}
