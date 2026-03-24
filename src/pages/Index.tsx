@@ -507,7 +507,7 @@ export default function Negotium() {
               </section>
 
               {/* RIGHT: Scenarios / Results */}
-              <aside className="results-panel">
+              <aside className="results-panel bg-primary-foreground">
                 {!isMobile && (phase === "idle" || phase === "recording") && (
                   <div className="scenarios-wrap">
                     <div className="section-label">Today's Practice</div>
