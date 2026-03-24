@@ -278,8 +278,8 @@ export default function Negotium() {
     const transcript = transcriptRef.current.trim();
     try { recognitionRef.current?._stopAutoRestart?.(); } catch (_) {}
     try { recognitionRef.current?.stop(); } catch (_) {}
-    if (!transcript || transcript.length < 5) {
-      setMicError("Could not detect speech. Please speak clearly and try again.");
+    if (!transcript || transcript.trim().split(/\s+/).filter(Boolean).length < 2) {
+      setMicError("We didn't pick up enough speech. Make sure your mic is working and speak clearly.");
       setPhase("idle"); isAnalyzingRef.current = false; return;
     }
     setPhase("analyzing");
@@ -366,8 +366,8 @@ export default function Negotium() {
         setLiveEnergy(Math.min(100, Math.round(recentAvg * 3.5)));
         const elapsedSec = (Date.now() - recordingStartRef.current) / 1000;
         const wordCount = transcriptRef.current.trim().split(/\s+/).filter(Boolean).length;
-        const currentWpm = elapsedSec > 1 ? wordCount / elapsedSec * 60 : 0;
-        setLivePace(currentWpm < 100 ? 20 : currentWpm <= 119 ? 45 : currentWpm <= 139 ? 70 : currentWpm <= 160 ? 100 : currentWpm <= 180 ? 80 : currentWpm <= 200 ? 55 : 30);
+        const currentWpm = elapsedSec > 2 ? wordCount / elapsedSec * 60 : 0;
+        setLivePace(currentWpm === 0 ? 0 : Math.min(100, Math.round(currentWpm / 1.8)));
         animFrameRef.current = requestAnimationFrame(animate);
       };
       animate();
