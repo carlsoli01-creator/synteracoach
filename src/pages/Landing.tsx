@@ -2,6 +2,46 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
+const TYPEWRITER_PHRASES = [
+  "Speak Better. Be Heard.",
+  "Own the Room.",
+  "No More Filler Words.",
+  "Pitch with Power.",
+  "Sound Like a Leader.",
+];
+
+function HeroTypewriter() {
+  const [phraseIdx, setPhraseIdx] = useState(0);
+  const [charIdx, setCharIdx] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const phrase = TYPEWRITER_PHRASES[phraseIdx];
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!deleting && charIdx < phrase.length) {
+      timeout = setTimeout(() => setCharIdx(c => c + 1), 45 + Math.random() * 35);
+    } else if (!deleting && charIdx === phrase.length) {
+      timeout = setTimeout(() => setDeleting(true), 2200);
+    } else if (deleting && charIdx > 0) {
+      timeout = setTimeout(() => setCharIdx(c => c - 1), 25);
+    } else if (deleting && charIdx === 0) {
+      setDeleting(false);
+      setPhraseIdx(i => (i + 1) % TYPEWRITER_PHRASES.length);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [charIdx, deleting, phraseIdx]);
+
+  const text = TYPEWRITER_PHRASES[phraseIdx].slice(0, charIdx);
+
+  return (
+    <p className="lp-hero-sub">
+      {text}<span className="lp-typewriter-cursor" />
+    </p>
+  );
+}
+
 export default function Landing() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
