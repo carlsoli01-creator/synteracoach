@@ -381,36 +381,7 @@ export default function Landing() {
             )}
           </h1>
 
-          <p className="lp-hero-sub">
-            ​
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-          </p>
+          <HeroTypewriter />
 
           <div className="lp-hero-actions">
             <button className="lp-btn-primary" onClick={goAuth}>
