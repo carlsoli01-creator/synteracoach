@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
+import { AILoader } from "@/components/ui/ai-loader";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
@@ -503,7 +504,12 @@ export default function Negotium() {
                   phase={phase} />
 
                 {micError && <p className="mic-error">{micError}</p>}
-                {phase === "analyzing" && <p className="analyzing-msg">Analyzing your speech patterns…</p>}
+                {phase === "analyzing" && (() => {
+                  const recDuration = selectedDuration - timeLeft;
+                  const est = Math.max(3, Math.round(recDuration * 0.12 + 4));
+                  const dark = document.documentElement.classList.contains("dark");
+                  return <AILoader text="Analyzing" volume={liveEnergy / 100} estimatedSeconds={est} isDark={dark} size={140} />;
+                })()}
               </section>
 
               {/* RIGHT: Scenarios / Results */}

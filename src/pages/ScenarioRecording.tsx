@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import { AILoader } from "@/components/ui/ai-loader";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -36,43 +37,18 @@ function ScoreRing({ score, label, color, isDark }: { score: number; label: stri
   );
 }
 
-function AnalyzingWait({ durationSeconds, isDark, muted }: { durationSeconds: number; isDark: boolean; muted: string }) {
+function AnalyzingWait({ durationSeconds, isDark }: { durationSeconds: number; isDark: boolean; muted?: string }) {
   const [elapsed, setElapsed] = useState(0);
   const estimatedTotal = Math.max(3, Math.round(durationSeconds * 0.12 + 4));
   const remaining = Math.max(0, estimatedTotal - elapsed);
 
   useEffect(() => {
     const start = Date.now();
-    const iv = setInterval(() => {
-      const s = Math.floor((Date.now() - start) / 1000);
-      setElapsed(s);
-    }, 500);
+    const iv = setInterval(() => setElapsed(Math.floor((Date.now() - start) / 1000)), 500);
     return () => clearInterval(iv);
   }, []);
 
-  return (
-    <div style={{ textAlign: "center", marginBottom: 24, fontFamily: "'DM Mono', monospace" }}>
-      <div style={{ fontSize: 11, color: muted, marginBottom: remaining > 0 ? 8 : 0 }}>
-        Analyzing your performance...
-      </div>
-      {remaining > 0 && (
-        <div
-          style={{
-            fontSize: 13,
-            fontWeight: 500,
-            fontFamily: "'DM Mono', monospace",
-            background: `linear-gradient(90deg, ${isDark ? "#c8ff00" : "#5a7a00"}, ${isDark ? "#e8e8e8" : "#0a0a0a"})`,
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            animation: "analyzeGlow 2s ease-in-out infinite alternate",
-          }}
-        >
-          ~{remaining}s remaining
-        </div>
-      )}
-    </div>
-  );
+  return <AILoader text="Analyzing" estimatedSeconds={remaining} isDark={isDark} size={140} />;
 }
 
 interface ScenarioRecordingProps {

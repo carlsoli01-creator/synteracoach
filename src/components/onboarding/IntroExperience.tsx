@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import { AILoader } from "@/components/ui/ai-loader";
 import { supabase } from "@/integrations/supabase/client";
 import { Power, BarChart3, Search, CheckCircle, Lock, Zap, Mic } from "lucide-react";
 
@@ -27,7 +28,8 @@ function getVariance(arr: number[]) {
 
 function IntroAnalyzingWait() {
   const [elapsed, setElapsed] = useState(0);
-  const estimatedTotal = Math.max(3, Math.round(10 * 0.12 + 4)); // ~5s for 10s recording
+  const estimatedTotal = Math.max(3, Math.round(10 * 0.12 + 4));
+  const remaining = Math.max(0, estimatedTotal - elapsed);
 
   useEffect(() => {
     const start = Date.now();
@@ -35,26 +37,7 @@ function IntroAnalyzingWait() {
     return () => clearInterval(iv);
   }, []);
 
-  const remaining = Math.max(0, estimatedTotal - elapsed);
-
-  return (
-    <>
-      <div style={{ marginBottom: 20 }}><Search size={48} color="#fff" /></div>
-      <div style={{ fontSize: 24, fontWeight: 900, color: "#fff", lineHeight: 1.2, marginBottom: 12, fontFamily: "'Inter', system-ui, sans-serif" }}>Analyzing your speech...</div>
-      <div style={{ fontSize: 12, color: "#666", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 16px" }}>Our AI is breaking down your delivery across multiple dimensions.</div>
-      {remaining > 0 && (
-        <div style={{
-          fontSize: 14, fontWeight: 500, fontFamily: "'DM Mono', monospace", marginBottom: 16,
-          background: "linear-gradient(90deg, #c8ff00, #e8e8e8)",
-          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-          animation: "analyzeGlow 2s ease-in-out infinite alternate",
-        }}>
-          ~{remaining}s remaining
-        </div>
-      )}
-      <div style={{ width: 24, height: 24, border: "2px solid #333", borderTop: "2px solid #fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto" }} />
-    </>
-  );
+  return <AILoader text="Analyzing" estimatedSeconds={remaining} isDark={true} size={120} />;
 }
 
 interface IntroExperienceProps {
