@@ -737,7 +737,7 @@ export default function Negotium() {
                 )}
 
                 <VoiceMicControl onStart={startRecording} onStop={reset}
-                  onStopEarly={() => { if (phase !== "recording") return; stopAll(); setWaveData(new Array(80).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
+                  onStopEarly={() => { stopAll(); setWaveData(new Array(80).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
                   phase={phase} />
 
                 {micError && <p className="mic-error">{micError}</p>}
