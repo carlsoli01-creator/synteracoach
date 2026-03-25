@@ -790,7 +790,10 @@ export default function Negotium() {
         .topbar-avg-value { font-size: 20px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
 
         /* Orbital main area */
-        .orbital-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: calc(100vh - 50px); }
+        .orbital-main { flex: 1; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
+
+        /* Orbital area - takes up space for the tree */
+        .orbital-area { position: relative; width: 100%; height: min(60vh, 500px); flex-shrink: 0; }
 
         /* Orbital timeline container */
         .orbital-timeline-container { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: opacity 0.6s ease, transform 0.6s ease; }
@@ -805,7 +808,8 @@ export default function Negotium() {
 
         .orbital-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; }
 
-        .orbital-center-recording { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
+        .orbital-center-brand { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .orbital-center-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); background: var(--pg-card); border: 1px solid var(--pg-border); padding: 8px 16px; }
 
         .orbital-node { position: absolute; top: 50%; left: 50%; display: flex; flex-direction: column; align-items: center; gap: 6px; background: var(--pg-card); border: 1px solid var(--pg-border); padding: 14px 18px; cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); min-width: 90px; z-index: 10; font-family: 'DM Mono', monospace; }
         .orbital-node:hover { border-color: var(--pg-text); background: var(--pg-accent); }
@@ -813,21 +817,18 @@ export default function Negotium() {
         .orbital-node-label { font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pg-text); white-space: nowrap; }
         .orbital-node-desc { font-size: 8px; color: var(--pg-muted); max-width: 120px; text-align: center; line-height: 1.5; white-space: normal; animation: fadeUp 0.2s ease; }
 
-        /* Active session view */
-        .active-session-view { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease, transform 0.5s ease; z-index: 15; padding: 24px; overflow-y: auto; }
+        /* Recording section - separate panel */
+        .recording-section { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 40px 24px 48px; border-top: 1px solid var(--pg-border); width: 100%; background: var(--pg-bg); }
 
-        .recording-fullscreen { display: flex; flex-direction: column; align-items: center; gap: 24px; }
-        .analyzing-fullscreen { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-
-        .orb-container-large { position: relative; width: 240px; height: 240px; display: flex; align-items: center; justify-content: center; }
-        .orb-canvas, .orb-canvas-large { width: 200px; height: 200px; }
-        .orb-canvas-large { width: 240px; height: 240px; }
+        .orb-container { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
+        .orb-canvas { width: 200px; height: 200px; }
         .orb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; pointer-events: none; }
 
-        .timer-count, .timer-count-large { font-size: 48px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
-        .timer-count-large { font-size: 56px; }
+        .timer-count { font-size: 48px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
         .timer-label { font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
         .rec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); margin-top: 6px; animation: pulse 1s infinite; }
+
+        .analyzing-inline { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 
         .recording-indicator { display: flex; align-items: center; gap: 8px; justify-content: center; }
         .rec-dot-inline { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); animation: pulse 1s infinite; }
