@@ -12,7 +12,6 @@ import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 import SpeakBetterInterstitial from "@/components/onboarding/SpeakBetterInterstitial";
 import { Footer } from "@/components/ui/footer";
 import MobileQuizAndInstall from "@/components/onboarding/MobileQuizAndInstall";
-import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
@@ -127,37 +126,6 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: { onStart: () 
   );
 }
 
-// Build orbital nodes from scenario categories + extras
-const ORBITAL_NODES = [
-  ...SCENARIO_CATEGORIES.map((cat) => ({
-    id: cat.slug,
-    label: cat.category,
-    icon: cat.icon,
-    description: cat.description,
-    slug: `/scenarios/${cat.slug}`,
-  })),
-  {
-    id: "custom",
-    label: "Custom",
-    icon: "✏️",
-    description: "Create your own practice scenario",
-    slug: "/custom-practice",
-  },
-  {
-    id: "progress",
-    label: "Progress",
-    icon: "📈",
-    description: "Track your improvement over time",
-    slug: "/progress",
-  },
-  {
-    id: "coach",
-    label: "AI Coach",
-    icon: "🧠",
-    description: "Get personalized AI coaching",
-    slug: "/coach",
-  },
-];
 
 export default function Negotium() {
   const { user } = useAuth();
