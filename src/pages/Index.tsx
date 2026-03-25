@@ -530,67 +530,73 @@ export default function Negotium() {
             </div>
           </header>
 
-          {/* Main orbital view */}
           <main className="orbital-main">
             {/* The orbital timeline - visible only in idle state */}
-            <RadialOrbitalTimeline
-              nodes={ORBITAL_NODES}
-              onNodeClick={(node) => navigate(node.slug)}
-              visible={showOrbital}
-              centerContent={
-                <div className="orbital-center-recording">
-                  <canvas ref={orbCanvasRef} className="orb-canvas" />
-                  <div className="orb-overlay">
-                    <div className="timer-count font-serif">
-                      {timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}
-                    </div>
-                    <div className="timer-label font-serif">{timeLeft >= 60 ? '' : 'sec'}</div>
+            <div className="orbital-area">
+              <RadialOrbitalTimeline
+                nodes={ORBITAL_NODES}
+                onNodeClick={(node) => navigate(node.slug)}
+                visible={showOrbital}
+                centerContent={
+                  <div className="orbital-center-brand">
+                    <div className="orbital-center-label">FREE RECORD</div>
                   </div>
+                }
+              />
+            </div>
+
+            {/* Recording section - always visible, separate from orbital */}
+            <section className="recording-section">
+              {/* Orb + timer */}
+              <div className="orb-container">
+                <canvas ref={orbCanvasRef} className="orb-canvas" />
+                <div className="orb-overlay">
+                  <div className="timer-count font-serif">
+                    {timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}
+                  </div>
+                  <div className="timer-label font-serif">{timeLeft >= 60 ? '' : 'sec'}</div>
+                  {phase === "recording" && <div className="rec-dot" />}
                 </div>
-              }
-            />
+              </div>
 
-            {/* Full-screen recording/analyzing/done view */}
-            <div
-              className="active-session-view"
-              style={{
-                opacity: isActive ? 1 : 0,
-                pointerEvents: isActive ? "auto" : "none",
-                transform: isActive ? "scale(1)" : "scale(0.9)",
-              }}
-            >
-              {/* Recording state */}
+              {/* Duration slider - idle only */}
+              {phase === "idle" && (
+                <div className="duration-wrap">
+                  <div className="duration-row">
+                    <span className="duration-bound">15s</span>
+                    <span className="duration-current">{selectedDuration >= 60 ? `${Math.floor(selectedDuration / 60)}:${String(selectedDuration % 60).padStart(2, '0')}` : `${selectedDuration}s`}</span>
+                    <span className="duration-bound">5:00</span>
+                  </div>
+                  <input type="range" min={15} max={300} step={15} value={selectedDuration}
+                    onChange={(e) => { const v = Number(e.target.value); setSelectedDuration(v); setTimeLeft(v); }}
+                    className="duration-slider" />
+                </div>
+              )}
+
+              {/* Live metrics - recording only */}
               {phase === "recording" && (
-                <div className="recording-fullscreen">
-                  <div className="orb-container-large">
-                    <canvas ref={orbCanvasRef} className="orb-canvas-large" />
-                    <div className="orb-overlay">
-                      <div className="timer-count-large font-serif">
-                        {timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}
-                      </div>
-                      <div className="timer-label font-serif">{timeLeft >= 60 ? '' : 'sec'}</div>
-                      <div className="rec-dot" />
+                <div className="live-metrics">
+                  {[{ label: "Pace", val: livePace }, { label: "Energy", val: liveEnergy }].map(({ label, val }) => (
+                    <div key={label} className="live-metric-card">
+                      <div className="live-metric-label">{label}</div>
+                      <div className="live-bar-track"><div className="live-bar-fill" style={{ width: val + "%" }} /></div>
+                      <div className="live-metric-num">{val}</div>
                     </div>
-                  </div>
+                  ))}
+                </div>
+              )}
 
-                  <div className="live-metrics">
-                    {[{ label: "Pace", val: livePace }, { label: "Energy", val: liveEnergy }].map(({ label, val }) => (
-                      <div key={label} className="live-metric-card">
-                        <div className="live-metric-label">{label}</div>
-                        <div className="live-bar-track"><div className="live-bar-fill" style={{ width: val + "%" }} /></div>
-                        <div className="live-metric-num">{val}</div>
-                      </div>
-                    ))}
-                  </div>
+              {/* Mic controls */}
+              <VoiceMicControl onStart={startRecording} onStop={reset}
+                onStopEarly={() => { if (phase !== "recording") return; stopAll(); setWaveData(new Array(80).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
+                phase={phase} />
 
-                  <VoiceMicControl onStart={startRecording} onStop={reset}
-                    onStopEarly={() => { if (phase !== "recording") return; stopAll(); setWaveData(new Array(80).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
-                    phase={phase} />
+              {micError && <p className="mic-error">{micError}</p>}
 
-                  <div className="recording-indicator">
-                    <span className="rec-dot-inline" />
-                    <span className="recording-label">Recording</span>
-                  </div>
+              {phase === "recording" && (
+                <div className="recording-indicator">
+                  <span className="rec-dot-inline" />
+                  <span className="recording-label">Recording</span>
                 </div>
               )}
 
@@ -600,148 +606,124 @@ export default function Negotium() {
                 const est = Math.max(3, Math.round(recDuration * 0.12 + 4));
                 const dark = document.documentElement.classList.contains("dark");
                 return (
-                  <div className="analyzing-fullscreen">
-                    <AILoader text="Analyzing" volume={liveEnergy / 100} estimatedSeconds={est} isDark={dark} size={160} />
-                    <button onClick={reset} className="btn-reset" style={{ marginTop: 24 }}>Cancel</button>
+                  <div className="analyzing-inline">
+                    <AILoader text="Analyzing" volume={liveEnergy / 100} estimatedSeconds={est} isDark={dark} size={140} />
+                    <button onClick={reset} className="btn-reset" style={{ marginTop: 16 }}>Cancel</button>
                   </div>
                 );
               })()}
+            </section>
 
-              {/* Done state — results */}
-              {phase === "done" && metrics && feedback && (
-                <section className="results-section">
-                  {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
-                  <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" } : {}}>
-                    <div className="score-rings">
-                      <ScoreRing score={metrics.overall} label="Overall" color="var(--pg-text)" />
-                      <ScoreRing score={metrics.delivery} label="Delivery" color="var(--pg-subtle)" />
-                      <ScoreRing score={metrics.pace} label="Pace" color="var(--pg-subtle)" />
-                      <ScoreRing score={metrics.conf} label="Confidence" color="var(--pg-subtle)" />
-                      <ScoreRing score={metrics.clar} label="Clarity" color="var(--pg-subtle)" />
+            {/* Done state — results below */}
+            {phase === "done" && metrics && feedback && (
+              <section className="results-section">
+                {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
+                <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" } : {}}>
+                  <div className="score-rings">
+                    <ScoreRing score={metrics.overall} label="Overall" color="var(--pg-text)" />
+                    <ScoreRing score={metrics.delivery} label="Delivery" color="var(--pg-subtle)" />
+                    <ScoreRing score={metrics.pace} label="Pace" color="var(--pg-subtle)" />
+                    <ScoreRing score={metrics.conf} label="Confidence" color="var(--pg-subtle)" />
+                    <ScoreRing score={metrics.clar} label="Clarity" color="var(--pg-subtle)" />
+                  </div>
+
+                  <div className="result-section">
+                    <div className="metric-bars">
+                      {[{ label: "Word Choice", value: metrics.wordChoice }, { label: "Persuasion", value: metrics.persuasion }].map(({ label, value }) => (
+                        <div key={label} className="metric-bar-item">
+                          <div className="metric-bar-header"><span className="section-label">{label}</span><span className="metric-bar-num">{value}</span></div>
+                          <div className="bar-track"><div className="bar-fill" style={{ width: `${value}%` }} /></div>
+                        </div>
+                      ))}
                     </div>
+                  </div>
 
+                  <div className="result-section">
+                    <div className="metric-bar-header"><span className="section-label">Measured Pace</span><span className="metric-bar-num">{metrics.wpm} WPM</span></div>
+                    <div className="bar-track"><div className="bar-fill" style={{ width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "var(--pg-text)" : "var(--pg-subtle)" }} /></div>
+                    <div className="bar-hint">Ideal: 130–160 WPM</div>
+                  </div>
+
+                  <div className="result-section tags-row">
+                    {feedback.tags.map((tag: any, i: number) => (
+                      <span key={i} className="tag" style={{ color: tagColor(tag.t), background: tagBg(tag.t), borderColor: tagColor(tag.t) }}>{tag.label}</span>
+                    ))}
+                  </div>
+
+                  {feedback.transcript && (
                     <div className="result-section">
-                      <div className="metric-bars">
-                        {[{ label: "Word Choice", value: metrics.wordChoice }, { label: "Persuasion", value: metrics.persuasion }].map(({ label, value }) => (
-                          <div key={label} className="metric-bar-item">
-                            <div className="metric-bar-header"><span className="section-label">{label}</span><span className="metric-bar-num">{value}</span></div>
-                            <div className="bar-track"><div className="bar-fill" style={{ width: `${value}%` }} /></div>
+                      <div className="section-label">Your Speech</div>
+                      <p className="transcript-text">"{feedback.transcript}"</p>
+                    </div>
+                  )}
+
+                  {[
+                    { title: "Overall Assessment", text: feedback.overallTxt },
+                    { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
+                    { title: "Pace & Rhythm", text: feedback.paceTxt },
+                    { title: "Tone & Authority", text: feedback.toneTxt },
+                    { title: "Clarity & Structure", text: feedback.clarityTxt },
+                    { title: "Key Strength", text: feedback.strengthTxt },
+                    { title: "Key Weakness", text: feedback.weaknessTxt },
+                    { title: "Recommendation", text: feedback.recTxt },
+                  ].filter(({ text }) => text).map(({ title, text }) => (
+                    <div key={title} className="result-section">
+                      <div className="section-label">{title}</div>
+                      <p className="feedback-text">{text}</p>
+                    </div>
+                  ))}
+
+                  {feedback.techniques?.length > 0 && (
+                    <div className="result-section">
+                      <div className="section-label">Techniques Detected ({feedback.techniques.length})</div>
+                      <div className="techniques-list">
+                        {feedback.techniques.map((t: any, i: number) => (
+                          <div key={i} className={`technique-card impact-${t.impact}`}>
+                            <div className="technique-header">
+                              <span className="technique-name">{t.name}</span>
+                              <span className={`technique-badge impact-${t.impact}`}>{t.impact === "pos" ? "Effective" : t.impact === "neg" ? "Needs Work" : "Neutral"}</span>
+                            </div>
+                            <p className="technique-quote">"{t.quote}"</p>
+                            <p className="technique-explanation">{t.explanation}</p>
                           </div>
                         ))}
                       </div>
                     </div>
+                  )}
 
+                  <div className="result-section word-stats">
+                    <div>
+                      <div className="section-label">Filler Words</div>
+                      <div className="word-stat-num">{feedback.fillerWords?.count || 0}</div>
+                      <div className="word-stat-sub">{feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}</div>
+                      {feedback.fillerWords?.words?.length > 0 && <div className="word-chips">{feedback.fillerWords.words.map((w: string, i: number) => <span key={i} className="chip chip-neutral">{w}</span>)}</div>}
+                    </div>
+                    <div>
+                      <div className="section-label">Power Words</div>
+                      <div className="word-stat-num">{feedback.powerWords?.length || 0}</div>
+                      {feedback.powerWords?.length > 0 && <div className="word-chips">{feedback.powerWords.map((w: string, i: number) => <span key={i} className="chip chip-strong">{w}</span>)}</div>}
+                    </div>
+                  </div>
+
+                  {feedback.hedgingInstances?.length > 0 && (
                     <div className="result-section">
-                      <div className="metric-bar-header"><span className="section-label">Measured Pace</span><span className="metric-bar-num">{metrics.wpm} WPM</span></div>
-                      <div className="bar-track"><div className="bar-fill" style={{ width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "var(--pg-text)" : "var(--pg-subtle)" }} /></div>
-                      <div className="bar-hint">Ideal: 130–160 WPM</div>
-                    </div>
-
-                    <div className="result-section tags-row">
-                      {feedback.tags.map((tag: any, i: number) => (
-                        <span key={i} className="tag" style={{ color: tagColor(tag.t), background: tagBg(tag.t), borderColor: tagColor(tag.t) }}>{tag.label}</span>
-                      ))}
-                    </div>
-
-                    {feedback.transcript && (
-                      <div className="result-section">
-                        <div className="section-label">Your Speech</div>
-                        <p className="transcript-text">"{feedback.transcript}"</p>
-                      </div>
-                    )}
-
-                    {[
-                      { title: "Overall Assessment", text: feedback.overallTxt },
-                      { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
-                      { title: "Pace & Rhythm", text: feedback.paceTxt },
-                      { title: "Tone & Authority", text: feedback.toneTxt },
-                      { title: "Clarity & Structure", text: feedback.clarityTxt },
-                      { title: "Key Strength", text: feedback.strengthTxt },
-                      { title: "Key Weakness", text: feedback.weaknessTxt },
-                      { title: "Recommendation", text: feedback.recTxt },
-                    ].filter(({ text }) => text).map(({ title, text }) => (
-                      <div key={title} className="result-section">
-                        <div className="section-label">{title}</div>
-                        <p className="feedback-text">{text}</p>
-                      </div>
-                    ))}
-
-                    {feedback.techniques?.length > 0 && (
-                      <div className="result-section">
-                        <div className="section-label">Techniques Detected ({feedback.techniques.length})</div>
-                        <div className="techniques-list">
-                          {feedback.techniques.map((t: any, i: number) => (
-                            <div key={i} className={`technique-card impact-${t.impact}`}>
-                              <div className="technique-header">
-                                <span className="technique-name">{t.name}</span>
-                                <span className={`technique-badge impact-${t.impact}`}>{t.impact === "pos" ? "Effective" : t.impact === "neg" ? "Needs Work" : "Neutral"}</span>
-                              </div>
-                              <p className="technique-quote">"{t.quote}"</p>
-                              <p className="technique-explanation">{t.explanation}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="result-section word-stats">
-                      <div>
-                        <div className="section-label">Filler Words</div>
-                        <div className="word-stat-num">{feedback.fillerWords?.count || 0}</div>
-                        <div className="word-stat-sub">{feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}</div>
-                        {feedback.fillerWords?.words?.length > 0 && <div className="word-chips">{feedback.fillerWords.words.map((w: string, i: number) => <span key={i} className="chip chip-neutral">{w}</span>)}</div>}
-                      </div>
-                      <div>
-                        <div className="section-label">Power Words</div>
-                        <div className="word-stat-num">{feedback.powerWords?.length || 0}</div>
-                        {feedback.powerWords?.length > 0 && <div className="word-chips">{feedback.powerWords.map((w: string, i: number) => <span key={i} className="chip chip-strong">{w}</span>)}</div>}
+                      <div className="section-label">Hedging → Stronger Alternatives</div>
+                      <div className="hedging-list">
+                        {feedback.hedgingInstances.map((h: any, i: number) => (
+                          <div key={i} className="hedging-row"><span className="hedge-weak">"{h.phrase}"</span><span className="hedge-arrow">→</span><span className="hedge-strong">"{h.suggestion}"</span></div>
+                        ))}
                       </div>
                     </div>
+                  )}
 
-                    {feedback.hedgingInstances?.length > 0 && (
-                      <div className="result-section">
-                        <div className="section-label">Hedging → Stronger Alternatives</div>
-                        <div className="hedging-list">
-                          {feedback.hedgingInstances.map((h: any, i: number) => (
-                            <div key={i} className="hedging-row"><span className="hedge-weak">"{h.phrase}"</span><span className="hedge-arrow">→</span><span className="hedge-strong">"{h.suggestion}"</span></div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {recCommTips.length > 0 && (
-                      <div className="result-section">
-                        <div className="section-label">Recommended Tips</div>
-                        <div className="tips-list">{recCommTips.map((t, i) => <div key={i} className="tip-item">{t}</div>)}</div>
-                      </div>
-                    )}
-                  </div>
-                </section>
-              )}
-            </div>
-
-            {/* Idle state controls (below orbital) */}
-            {showOrbital && (
-              <div className="idle-controls">
-                {phase === "idle" && (
-                  <div className="duration-wrap">
-                    <div className="duration-row">
-                      <span className="duration-bound">15s</span>
-                      <span className="duration-current">{selectedDuration >= 60 ? `${Math.floor(selectedDuration / 60)}:${String(selectedDuration % 60).padStart(2, '0')}` : `${selectedDuration}s`}</span>
-                      <span className="duration-bound">5:00</span>
+                  {recCommTips.length > 0 && (
+                    <div className="result-section">
+                      <div className="section-label">Recommended Tips</div>
+                      <div className="tips-list">{recCommTips.map((t, i) => <div key={i} className="tip-item">{t}</div>)}</div>
                     </div>
-                    <input type="range" min={15} max={300} step={15} value={selectedDuration}
-                      onChange={(e) => { const v = Number(e.target.value); setSelectedDuration(v); setTimeLeft(v); }}
-                      className="duration-slider" />
-                  </div>
-                )}
-
-                <VoiceMicControl onStart={startRecording} onStop={reset}
-                  onStopEarly={() => { stopAll(); setWaveData(new Array(80).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
-                  phase={phase} />
-
-                {micError && <p className="mic-error">{micError}</p>}
-              </div>
+                  )}
+                </div>
+              </section>
             )}
           </main>
 
@@ -808,7 +790,10 @@ export default function Negotium() {
         .topbar-avg-value { font-size: 20px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
 
         /* Orbital main area */
-        .orbital-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: calc(100vh - 50px); }
+        .orbital-main { flex: 1; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
+
+        /* Orbital area - takes up space for the tree */
+        .orbital-area { position: relative; width: 100%; height: min(60vh, 500px); flex-shrink: 0; }
 
         /* Orbital timeline container */
         .orbital-timeline-container { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: opacity 0.6s ease, transform 0.6s ease; }
@@ -823,7 +808,8 @@ export default function Negotium() {
 
         .orbital-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; }
 
-        .orbital-center-recording { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
+        .orbital-center-brand { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .orbital-center-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); background: var(--pg-card); border: 1px solid var(--pg-border); padding: 8px 16px; }
 
         .orbital-node { position: absolute; top: 50%; left: 50%; display: flex; flex-direction: column; align-items: center; gap: 6px; background: var(--pg-card); border: 1px solid var(--pg-border); padding: 14px 18px; cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); min-width: 90px; z-index: 10; font-family: 'DM Mono', monospace; }
         .orbital-node:hover { border-color: var(--pg-text); background: var(--pg-accent); }
@@ -831,28 +817,22 @@ export default function Negotium() {
         .orbital-node-label { font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pg-text); white-space: nowrap; }
         .orbital-node-desc { font-size: 8px; color: var(--pg-muted); max-width: 120px; text-align: center; line-height: 1.5; white-space: normal; animation: fadeUp 0.2s ease; }
 
-        /* Active session view */
-        .active-session-view { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease, transform 0.5s ease; z-index: 15; padding: 24px; overflow-y: auto; }
+        /* Recording section - separate panel */
+        .recording-section { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 40px 24px 48px; border-top: 1px solid var(--pg-border); width: 100%; background: var(--pg-bg); }
 
-        .recording-fullscreen { display: flex; flex-direction: column; align-items: center; gap: 24px; }
-        .analyzing-fullscreen { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-
-        .orb-container-large { position: relative; width: 240px; height: 240px; display: flex; align-items: center; justify-content: center; }
-        .orb-canvas, .orb-canvas-large { width: 200px; height: 200px; }
-        .orb-canvas-large { width: 240px; height: 240px; }
+        .orb-container { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
+        .orb-canvas { width: 200px; height: 200px; }
         .orb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; pointer-events: none; }
 
-        .timer-count, .timer-count-large { font-size: 48px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
-        .timer-count-large { font-size: 56px; }
+        .timer-count { font-size: 48px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
         .timer-label { font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
         .rec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); margin-top: 6px; animation: pulse 1s infinite; }
+
+        .analyzing-inline { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 
         .recording-indicator { display: flex; align-items: center; gap: 8px; justify-content: center; }
         .rec-dot-inline { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); animation: pulse 1s infinite; }
         .recording-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); font-family: 'DM Mono', monospace; }
-
-        /* Idle controls below orbital */
-        .idle-controls { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 16px; z-index: 25; }
 
         .duration-wrap { width: 240px; }
         .duration-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
