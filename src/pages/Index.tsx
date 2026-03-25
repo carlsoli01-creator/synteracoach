@@ -564,7 +564,7 @@ export default function Negotium() {
 
                       <div className="result-section">
                         <div className="metric-bar-header"><span className="section-label">Measured Pace</span><span className="metric-bar-num">{metrics.wpm} WPM</span></div>
-                        <div className="bar-track"><div className="bar-fill" style={{ width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.25)" }} /></div>
+                        <div className="bar-track"><div className="bar-fill" style={{ width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "var(--pg-text)" : "var(--pg-subtle)" }} /></div>
                         <div className="bar-hint">Ideal: 130–160 WPM</div>
                       </div>
 
