@@ -815,24 +815,25 @@ export default function Negotium() {
         .topbar-avg-label { display: block; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 2px; font-family: 'DM Mono', monospace; }
         .topbar-avg-value { font-size: 28px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
 
-        .main-grid { display: grid; grid-template-columns: 1fr 360px; gap: 1px; padding: 0; background: var(--pg-border); border-top: none; min-height: calc(100vh - 53px); }
-        .main-grid.mobile, .main-grid.stacked { grid-template-columns: 1fr; background: var(--pg-bg); gap: 0; padding: 0; }
+        .main-single { display: flex; flex-direction: column; padding: 0; background: var(--pg-bg); min-height: calc(100vh - 53px); }
 
-        .record-panel { display: flex; flex-direction: column; padding: 48px 48px 40px; background: var(--pg-bg); }
+        .record-panel { display: flex; flex-direction: column; align-items: center; padding: 48px 48px 40px; background: var(--pg-bg); }
 
-        .hero-heading { margin-bottom: 48px; }
+        .hero-heading { margin-bottom: 32px; text-align: center; }
         .hero-heading h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.0; color: var(--pg-text); }
         .hero-heading h1.hero-sub { color: var(--pg-hero-sub); font-weight: 400; }
 
-        .waveform { height: 56px; background: var(--pg-accent); border: 1px solid var(--pg-border); border-radius: 0; display: flex; align-items: center; padding: 0 10px; gap: 1.5px; margin-bottom: 36px; transition: border-color 0.3s; }
-        .waveform.active { border-color: var(--pg-wave-active-border); }
-        .wave-bar { flex: 1; border-radius: 1px; transition: height 0.05s, background 0.2s, opacity 0.2s; }
+        .orb-container { position: relative; width: 200px; height: 200px; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; }
+        .orb-canvas { width: 200px; height: 200px; }
+        .orb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; pointer-events: none; }
 
-        .timer-wrap { position: relative; width: 140px; height: 140px; margin: 0 auto 32px; }
-        .timer-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
         .timer-count { font-size: 48px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
         .timer-label { font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
         .rec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); margin-top: 6px; animation: pulse 1s infinite; }
+
+        .recording-indicator { display: flex; align-items: center; gap: 8px; justify-content: center; margin-top: 16px; }
+        .rec-dot-inline { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); animation: pulse 1s infinite; }
+        .recording-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); font-family: 'DM Mono', monospace; }
 
         .duration-wrap { max-width: 240px; margin: 0 auto 24px; }
         .duration-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
