@@ -119,14 +119,14 @@ input[type="range"]::-webkit-slider-thumb {
   appearance: none;
   width: 12px;
   height: 12px;
-  background: hsl(var(--primary));
+  background: hsl(var(--foreground));
   border-radius: 0;
   cursor: pointer;
 }
 input[type="range"]::-moz-range-thumb {
   width: 12px;
   height: 12px;
-  background: hsl(var(--primary));
+  background: hsl(var(--foreground));
   border-radius: 0;
   border: none;
   cursor: pointer;
