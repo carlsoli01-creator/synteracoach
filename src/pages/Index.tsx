@@ -746,12 +746,6 @@ export default function Negotium() {
         /* Main content */
         .main-content { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 24px; overflow-y: auto; }
 
-        /* Nav grid */
-        .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; width: 100%; max-width: 480px; margin-bottom: 32px; }
-        .nav-card { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px 8px; background: var(--pg-card); border: 1px solid var(--pg-border); cursor: pointer; transition: all 0.15s; font-family: 'DM Mono', monospace; }
-        .nav-card:hover { border-color: var(--pg-text); background: var(--pg-accent); }
-        .nav-card-icon { font-size: 20px; line-height: 1; }
-        .nav-card-label { font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pg-text); white-space: nowrap; }
 
         /* Recording section */
         .recording-section { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 24px 24px 48px; width: 100%; }
