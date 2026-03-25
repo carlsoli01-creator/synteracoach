@@ -713,7 +713,7 @@ export default function Negotium() {
           --pg-hover-border: rgba(255,255,255,0.15); --pg-hover-text: var(--pg-faint);
         }
 
-        .topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 48px; border-bottom: 1px solid var(--pg-border); background: rgba(6,6,8,0.9); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 20; }
+        .topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 48px; border-bottom: 1px solid var(--pg-border); background: color-mix(in srgb, var(--pg-bg) 90%, transparent); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 20; }
         .topbar-avg { text-align: right; }
         .topbar-avg-label { display: block; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 2px; font-family: 'DM Mono', monospace; }
         .topbar-avg-value { font-size: 28px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
@@ -725,39 +725,39 @@ export default function Negotium() {
 
         .hero-heading { margin-bottom: 48px; }
         .hero-heading h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.0; color: var(--pg-text); }
-        .hero-heading h1.hero-sub { color: rgba(255,255,255,0.28); font-weight: 400; }
+        .hero-heading h1.hero-sub { color: var(--pg-hero-sub); font-weight: 400; }
 
         .waveform { height: 56px; background: var(--pg-accent); border: 1px solid var(--pg-border); border-radius: 0; display: flex; align-items: center; padding: 0 10px; gap: 1.5px; margin-bottom: 36px; transition: border-color 0.3s; }
-        .waveform.active { border-color: rgba(255,255,255,0.2); }
+        .waveform.active { border-color: var(--pg-wave-active-border); }
         .wave-bar { flex: 1; border-radius: 1px; transition: height 0.05s, background 0.2s, opacity 0.2s; }
 
         .timer-wrap { position: relative; width: 140px; height: 140px; margin: 0 auto 32px; }
         .timer-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
         .timer-count { font-size: 48px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
         .timer-label { font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
-        .rec-dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; margin-top: 6px; animation: pulse 1s infinite; }
+        .rec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); margin-top: 6px; animation: pulse 1s infinite; }
 
         .duration-wrap { max-width: 240px; margin: 0 auto 24px; }
         .duration-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
         .duration-bound { font-size: 9px; color: var(--pg-dim); letter-spacing: 0.08em; }
         .duration-current { font-size: 12px; font-weight: 500; color: var(--pg-text); }
-        .duration-slider { width: 100%; cursor: pointer; accent-color: rgba(255,255,255,0.5); }
+        .duration-slider { width: 100%; cursor: pointer; }
 
         .live-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px; }
         .live-metric-card { background: var(--pg-card); border: 1px solid var(--pg-border); padding: 12px 14px; }
         .live-metric-label { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 8px; font-family: 'DM Mono', monospace; }
         .live-bar-track { height: 2px; background: var(--pg-border); margin-bottom: 6px; }
-        .live-bar-fill { height: 100%; background: rgba(255,255,255,0.5); transition: width 0.1s; }
+        .live-bar-fill { height: 100%; background: var(--pg-bar-fill); transition: width 0.1s; }
         .live-metric-num { font-size: 10px; color: var(--pg-faint); font-family: 'DM Mono', monospace; }
 
         .mic-controls { display: flex; gap: 10px; justify-content: center; margin-bottom: 16px; }
 
-        .btn-primary { padding: 13px 32px; background: #fff; color: #060608; border: none; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-family: 'DM Mono', monospace; transition: opacity 0.15s, transform 0.1s; }
+        .btn-primary { padding: 13px 32px; background: var(--pg-btn-bg); color: var(--pg-btn-text); border: none; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-family: 'DM Mono', monospace; transition: opacity 0.15s, transform 0.1s; }
         .btn-primary:hover { opacity: 0.85; }
         .btn-primary:active { transform: scale(0.97); }
         .btn-primary:disabled { opacity: 0.25; cursor: not-allowed; }
-        .btn-primary.btn-stop { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); border: 1px solid var(--pg-border); }
-        .btn-primary.btn-stop:hover { background: rgba(255,255,255,0.12); opacity: 1; }
+        .btn-primary.btn-stop { background: var(--pg-btn-stop-bg); color: var(--pg-btn-stop-text); border: 1px solid var(--pg-btn-stop-border); }
+        .btn-primary.btn-stop:hover { opacity: 1; }
         .btn-ghost { padding: 13px 18px; background: transparent; border: 1px solid var(--pg-border); color: var(--pg-muted); font-size: 11px; letter-spacing: 0.08em; cursor: pointer; font-family: 'DM Mono', monospace; transition: border-color 0.15s, color 0.15s; }
         .btn-ghost:hover { border-color: var(--pg-dim); color: var(--pg-faint); }
 
@@ -773,7 +773,7 @@ export default function Negotium() {
         .scenario-card:hover { background: var(--pg-accent); }
         .scenario-card.done { opacity: 0.4; }
         .scenario-cat { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-        .scenario-done-badge { font-size: 9px; color: rgba(255,255,255,0.5); }
+        .scenario-done-badge { font-size: 9px; color: var(--pg-scenario-done); }
         .scenario-title { font-size: 12px; font-weight: 500; color: var(--pg-text); }
         .scenario-diff { font-size: 8px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pg-muted); }
 
@@ -788,7 +788,7 @@ export default function Negotium() {
         .metric-bar-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
         .metric-bar-num { font-size: 22px; color: var(--pg-text); font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
         .bar-track { height: 2px; background: var(--pg-border); }
-        .bar-fill { height: 100%; background: rgba(255,255,255,0.5); transition: width 0.8s ease; }
+        .bar-fill { height: 100%; background: var(--pg-bar-fill); transition: width 0.8s ease; }
         .bar-hint { font-size: 8px; color: var(--pg-dim); margin-top: 6px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
 
         .tags-row { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -799,12 +799,12 @@ export default function Negotium() {
 
         .techniques-list { display: grid; gap: 8px; }
         .technique-card { border: 1px solid var(--pg-border); padding: 14px; }
-        .technique-card.impact-pos { border-color: rgba(255,255,255,0.15); }
+        .technique-card.impact-pos { border-color: var(--pg-technique-pos-border); }
         .technique-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .technique-name { font-size: 11px; font-weight: 600; color: var(--pg-text); font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
         .technique-badge { font-size: 7px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; font-family: 'DM Mono', monospace; }
-        .technique-badge.impact-pos { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.15); }
-        .technique-badge.impact-neg { background: rgba(255,255,255,0.04); color: var(--pg-muted); border: 1px solid var(--pg-border); }
+        .technique-badge.impact-pos { background: var(--pg-technique-pos-bg); color: var(--pg-technique-pos-text); border: 1px solid var(--pg-technique-pos-border); }
+        .technique-badge.impact-neg { background: var(--pg-btn-stop-bg); color: var(--pg-muted); border: 1px solid var(--pg-border); }
         .technique-badge.impact-neutral { background: transparent; color: var(--pg-dim); border: 1px solid var(--pg-border); }
         .technique-quote { font-size: 12px; font-family: 'DM Mono', monospace; font-style: italic; color: var(--pg-muted); margin-bottom: 6px; }
         .technique-explanation { font-size: 10px; line-height: 1.7; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
@@ -815,13 +815,13 @@ export default function Negotium() {
         .word-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
         .chip { font-size: 8px; padding: 3px 8px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; }
         .chip-neutral { background: var(--pg-accent); color: var(--pg-faint); border: 1px solid var(--pg-border); }
-        .chip-strong { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.15); }
+        .chip-strong { background: var(--pg-chip-strong-bg); color: var(--pg-chip-strong-text); border: 1px solid var(--pg-chip-strong-border); }
 
         .hedging-list { display: grid; gap: 8px; }
         .hedging-row { display: flex; align-items: center; gap: 8px; font-size: 11px; flex-wrap: wrap; font-family: 'DM Mono', monospace; }
         .hedge-weak { color: var(--pg-dim); text-decoration: line-through; }
         .hedge-arrow { color: var(--pg-subtle); }
-        .hedge-strong { color: rgba(255,255,255,0.75); font-weight: 600; }
+        .hedge-strong { color: var(--pg-hedge-strong); font-weight: 600; }
 
         .tips-list { display: grid; gap: 6px; }
         .tip-item { border: 1px solid var(--pg-border); padding: 10px 12px; font-size: 11px; color: var(--pg-muted); line-height: 1.7; font-family: 'DM Mono', monospace; }
@@ -836,7 +836,7 @@ export default function Negotium() {
         .custom-card-title { font-size: 13px; font-weight: 600; color: var(--pg-text); letter-spacing: 0.02em; }
         .custom-card-sub { font-size: 9px; color: var(--pg-dim); letter-spacing: 0.1em; }
 
-        .quiz-overlay { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
+        .quiz-overlay { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; background: var(--pg-overlay); backdrop-filter: blur(8px); }
         .quiz-modal { width: min(480px, 92vw); background: var(--pg-card); border: 1px solid var(--pg-border); padding: 36px; }
         .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         .quiz-title { font-size: 20px; color: var(--pg-text); font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
@@ -844,18 +844,18 @@ export default function Negotium() {
         .quiz-question { font-size: 13px; color: var(--pg-text); font-weight: 500; margin-bottom: 16px; line-height: 1.6; font-family: 'DM Mono', monospace; }
         .quiz-options { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
         .quiz-option { text-align: left; padding: 11px 14px; border: 1px solid var(--pg-border); background: var(--pg-bg); cursor: pointer; font-size: 12px; color: var(--pg-muted); font-family: 'DM Mono', monospace; transition: all 0.15s; }
-        .quiz-option:hover { border-color: rgba(255,255,255,0.15); color: var(--pg-faint); }
-        .quiz-option.selected { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); color: var(--pg-text); }
+        .quiz-option:hover { border-color: var(--pg-hover-border); color: var(--pg-hover-text); }
+        .quiz-option.selected { border-color: var(--pg-selected-border); background: var(--pg-selected-bg); color: var(--pg-text); }
         .quiz-actions { display: flex; justify-content: space-between; }
         .quiz-btn-secondary { padding: 10px 18px; border: 1px solid var(--pg-border); background: transparent; cursor: pointer; color: var(--pg-dim); font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
         .quiz-btn-secondary:disabled { cursor: not-allowed; opacity: 0.3; }
-        .quiz-btn-primary { padding: 11px 24px; border: none; background: #fff; color: #060608; cursor: pointer; font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; transition: opacity 0.15s; }
+        .quiz-btn-primary { padding: 11px 24px; border: none; background: var(--pg-btn-bg); color: var(--pg-btn-text); cursor: pointer; font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; transition: opacity 0.15s; }
         .quiz-btn-primary:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        .tip-overlay { position: fixed; inset: 0; z-index: 55; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 40px; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); }
+        .tip-overlay { position: fixed; inset: 0; z-index: 55; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 40px; background: var(--pg-overlay); backdrop-filter: blur(6px); }
         .tip-modal { width: min(400px, 90vw); background: var(--pg-card); border: 1px solid var(--pg-border); padding: 28px 24px; position: relative; }
         .tip-close { position: absolute; top: 12px; right: 14px; background: none; border: none; font-size: 14px; color: var(--pg-dim); cursor: pointer; }
-        .tip-eyebrow { font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,255,255,0.4); text-align: center; margin-bottom: 12px; font-weight: 500; font-family: 'DM Mono', monospace; }
+        .tip-eyebrow { font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--pg-muted); text-align: center; margin-bottom: 12px; font-weight: 500; font-family: 'DM Mono', monospace; }
         .tip-text { font-size: 13px; color: var(--pg-text); line-height: 1.75; text-align: center; font-family: 'DM Mono', monospace; font-style: italic; }
 
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
