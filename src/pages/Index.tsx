@@ -467,9 +467,9 @@ export default function Negotium() {
                       strokeLinecap="round" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={ringOffset}
                       style={{ stroke: 'var(--pg-text)', transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
                   </svg>
-                  <div className="timer-inner">
-                    <div className="timer-count font-mono">{timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}</div>
-                    <div className="timer-label">{timeLeft >= 60 ? '' : 'sec'}</div>
+                  <div className="timer-inner font-serif">
+                    <div className="timer-count font-serif">{timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}</div>
+                    <div className="timer-label font-serif">{timeLeft >= 60 ? '' : 'sec'}</div>
                     {phase === "recording" && <div className="rec-dot" />}
                   </div>
                 </div>
