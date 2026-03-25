@@ -535,28 +535,18 @@ export default function Negotium() {
               )}
             </header>
 
-            <main className={`main-grid${isMobile ? " mobile" : ""}${phase === "done" ? " stacked" : ""}`}>
-              {/* LEFT: Recording */}
+            <main className="main-single">
+              {/* Recording Area */}
               <section className="record-panel">
                 <div className="hero-heading">
                   <h1 className="text-3xl font-serif">Practice.</h1>
                   <h1 className="hero-sub font-serif font-normal">{heroFocus}</h1>
                 </div>
 
-                <div className={`waveform text-secondary-foreground bg-primary-foreground${phase === "recording" ? " active" : ""}`}>
-                  {waveData.map((v, i) => (
-                    <div key={i} className="wave-bar" style={{ height: `${Math.max(3, Math.abs(v - 0.5) * 120)}px`, opacity: phase === "recording" ? 0.45 + Math.abs(v - 0.5) : 0.3, background: phase === "recording" ? "var(--pg-text)" : "var(--pg-subtle)" }} />
-                  ))}
-                </div>
-
-                <div className="timer-wrap">
-                  <svg width={140} height={140} viewBox="0 0 160 160">
-                    <circle cx={80} cy={80} r={70} fill="none" strokeWidth={1.5} style={{ stroke: 'var(--pg-border-soft)' }} />
-                    <circle cx={80} cy={80} r={70} fill="none" strokeWidth={1.5}
-                      strokeLinecap="round" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={ringOffset}
-                      style={{ stroke: 'var(--pg-text)', transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
-                  </svg>
-                  <div className="timer-inner font-serif">
+                {/* Canvas Orb */}
+                <div className="orb-container">
+                  <canvas ref={orbCanvasRef} className="orb-canvas" />
+                  <div className="orb-overlay">
                     <div className="timer-count font-serif">{timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}</div>
                     <div className="timer-label font-serif">{timeLeft >= 60 ? '' : 'sec'}</div>
                     {phase === "recording" && <div className="rec-dot" />}
@@ -599,157 +589,175 @@ export default function Negotium() {
                   const dark = document.documentElement.classList.contains("dark");
                   return <AILoader text="Analyzing" volume={liveEnergy / 100} estimatedSeconds={est} isDark={dark} size={140} />;
                 })()}
-              </section>
 
-              {/* RIGHT: Scenarios / Results */}
-              <aside className="results-panel bg-primary-foreground">
-                {!isMobile && (phase === "idle" || phase === "recording") && (
-                  <div className="scenarios-wrap">
-                    <div className="section-label">Today's Practice</div>
-                    <div className="scenarios-list">
-                      {SCENARIO_CATEGORIES.map((cat) => {
-                        const todayItem = getTodayScenario(cat);
-                        const done = completedCategoriesToday.includes(cat.category);
-                        return (
-                          <button key={cat.slug} onClick={() => navigate(`/scenarios/${cat.slug}`)} className={`scenario-card${done ? " done" : ""}`}>
-                            <div>
-                              <div className="scenario-cat">{cat.category}{done && <span className="scenario-done-badge">✓</span>}</div>
-                              <div className="scenario-title">{todayItem.title}</div>
-                            </div>
-                            <div className="scenario-diff" style={{ color: diffColor(todayItem.difficulty) }}>{todayItem.difficulty}</div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                    <button className="custom-card bg-primary-foreground" style={{ minHeight: 160, width: '100%', marginTop: 16, display: 'flex' }} onClick={() => navigate("/custom-practice")}>
-                      <span className="custom-card-title">+ Custom Practice</span>
-                      <span className="custom-card-sub">Choose your own scenario and goals</span>
-                    </button>
+                {phase === "recording" && (
+                  <div className="recording-indicator">
+                    <span className="rec-dot-inline" />
+                    <span className="recording-label">Recording</span>
                   </div>
                 )}
+              </section>
 
-                {phase === "done" && metrics && feedback && (
-                  <div className="results-wrap">
-                    {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
-                    <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" } : {}}>
-                      <div className="score-rings">
-                        <ScoreRing score={metrics.overall} label="Overall" color="var(--pg-text)" />
-                        <ScoreRing score={metrics.delivery} label="Delivery" color="var(--pg-subtle)" />
-                        <ScoreRing score={metrics.pace} label="Pace" color="var(--pg-subtle)" />
-                        <ScoreRing score={metrics.conf} label="Confidence" color="var(--pg-subtle)" />
-                        <ScoreRing score={metrics.clar} label="Clarity" color="var(--pg-subtle)" />
+              {/* Results below recording when done */}
+              {phase === "done" && metrics && feedback && (
+                <section className="results-section">
+                  {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
+                  <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" } : {}}>
+                    <div className="score-rings">
+                      <ScoreRing score={metrics.overall} label="Overall" color="var(--pg-text)" />
+                      <ScoreRing score={metrics.delivery} label="Delivery" color="var(--pg-subtle)" />
+                      <ScoreRing score={metrics.pace} label="Pace" color="var(--pg-subtle)" />
+                      <ScoreRing score={metrics.conf} label="Confidence" color="var(--pg-subtle)" />
+                      <ScoreRing score={metrics.clar} label="Clarity" color="var(--pg-subtle)" />
+                    </div>
+
+                    <div className="result-section">
+                      <div className="metric-bars">
+                        {[{ label: "Word Choice", value: metrics.wordChoice }, { label: "Persuasion", value: metrics.persuasion }].map(({ label, value }) => (
+                          <div key={label} className="metric-bar-item">
+                            <div className="metric-bar-header"><span className="section-label">{label}</span><span className="metric-bar-num">{value}</span></div>
+                            <div className="bar-track"><div className="bar-fill" style={{ width: `${value}%` }} /></div>
+                          </div>
+                        ))}
                       </div>
+                    </div>
 
+                    <div className="result-section">
+                      <div className="metric-bar-header"><span className="section-label">Measured Pace</span><span className="metric-bar-num">{metrics.wpm} WPM</span></div>
+                      <div className="bar-track"><div className="bar-fill" style={{ width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "var(--pg-text)" : "var(--pg-subtle)" }} /></div>
+                      <div className="bar-hint">Ideal: 130–160 WPM</div>
+                    </div>
+
+                    <div className="result-section tags-row">
+                      {feedback.tags.map((tag, i) => (
+                        <span key={i} className="tag" style={{ color: tagColor(tag.t), background: tagBg(tag.t), borderColor: tagColor(tag.t) }}>{tag.label}</span>
+                      ))}
+                    </div>
+
+                    {feedback.transcript && (
                       <div className="result-section">
-                        <div className="metric-bars">
-                          {[{ label: "Word Choice", value: metrics.wordChoice }, { label: "Persuasion", value: metrics.persuasion }].map(({ label, value }) => (
-                            <div key={label} className="metric-bar-item">
-                              <div className="metric-bar-header"><span className="section-label">{label}</span><span className="metric-bar-num">{value}</span></div>
-                              <div className="bar-track"><div className="bar-fill" style={{ width: `${value}%` }} /></div>
+                        <div className="section-label">Your Speech</div>
+                        <p className="transcript-text">"{feedback.transcript}"</p>
+                      </div>
+                    )}
+
+                    {[
+                      { title: "Overall Assessment", text: feedback.overallTxt },
+                      { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
+                      { title: "Pace & Rhythm", text: feedback.paceTxt },
+                      { title: "Tone & Authority", text: feedback.toneTxt },
+                      { title: "Clarity & Structure", text: feedback.clarityTxt },
+                      { title: "Key Strength", text: feedback.strengthTxt },
+                      { title: "Key Weakness", text: feedback.weaknessTxt },
+                      { title: "Recommendation", text: feedback.recTxt },
+                    ].filter(({ text }) => text).map(({ title, text }) => (
+                      <div key={title} className="result-section">
+                        <div className="section-label">{title}</div>
+                        <p className="feedback-text">{text}</p>
+                      </div>
+                    ))}
+
+                    {feedback.techniques?.length > 0 && (
+                      <div className="result-section">
+                        <div className="section-label">Techniques Detected ({feedback.techniques.length})</div>
+                        <div className="techniques-list">
+                          {feedback.techniques.map((t, i) => (
+                            <div key={i} className={`technique-card impact-${t.impact}`}>
+                              <div className="technique-header">
+                                <span className="technique-name">{t.name}</span>
+                                <span className={`technique-badge impact-${t.impact}`}>{t.impact === "pos" ? "Effective" : t.impact === "neg" ? "Needs Work" : "Neutral"}</span>
+                              </div>
+                              <p className="technique-quote">"{t.quote}"</p>
+                              <p className="technique-explanation">{t.explanation}</p>
                             </div>
                           ))}
                         </div>
                       </div>
+                    )}
 
-                      <div className="result-section">
-                        <div className="metric-bar-header"><span className="section-label">Measured Pace</span><span className="metric-bar-num">{metrics.wpm} WPM</span></div>
-                        <div className="bar-track"><div className="bar-fill" style={{ width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "var(--pg-text)" : "var(--pg-subtle)" }} /></div>
-                        <div className="bar-hint">Ideal: 130–160 WPM</div>
+                    <div className="result-section word-stats">
+                      <div>
+                        <div className="section-label">Filler Words</div>
+                        <div className="word-stat-num">{feedback.fillerWords?.count || 0}</div>
+                        <div className="word-stat-sub">{feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}</div>
+                        {feedback.fillerWords?.words?.length > 0 && <div className="word-chips">{feedback.fillerWords.words.map((w, i) => <span key={i} className="chip chip-neutral">{w}</span>)}</div>}
                       </div>
-
-                      <div className="result-section tags-row">
-                        {feedback.tags.map((tag, i) => (
-                          <span key={i} className="tag" style={{ color: tagColor(tag.t), background: tagBg(tag.t), borderColor: tagColor(tag.t) }}>{tag.label}</span>
-                        ))}
+                      <div>
+                        <div className="section-label">Power Words</div>
+                        <div className="word-stat-num">{feedback.powerWords?.length || 0}</div>
+                        {feedback.powerWords?.length > 0 && <div className="word-chips">{feedback.powerWords.map((w, i) => <span key={i} className="chip chip-strong">{w}</span>)}</div>}
                       </div>
-
-                      {feedback.transcript && (
-                        <div className="result-section">
-                          <div className="section-label">Your Speech</div>
-                          <p className="transcript-text">"{feedback.transcript}"</p>
-                        </div>
-                      )}
-
-                      {[
-                        { title: "Overall Assessment", text: feedback.overallTxt },
-                        { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
-                        { title: "Pace & Rhythm", text: feedback.paceTxt },
-                        { title: "Tone & Authority", text: feedback.toneTxt },
-                        { title: "Clarity & Structure", text: feedback.clarityTxt },
-                        { title: "Key Strength", text: feedback.strengthTxt },
-                        { title: "Key Weakness", text: feedback.weaknessTxt },
-                        { title: "Recommendation", text: feedback.recTxt },
-                      ].filter(({ text }) => text).map(({ title, text }) => (
-                        <div key={title} className="result-section">
-                          <div className="section-label">{title}</div>
-                          <p className="feedback-text">{text}</p>
-                        </div>
-                      ))}
-
-                      {feedback.techniques?.length > 0 && (
-                        <div className="result-section">
-                          <div className="section-label">Techniques Detected ({feedback.techniques.length})</div>
-                          <div className="techniques-list">
-                            {feedback.techniques.map((t, i) => (
-                              <div key={i} className={`technique-card impact-${t.impact}`}>
-                                <div className="technique-header">
-                                  <span className="technique-name">{t.name}</span>
-                                  <span className={`technique-badge impact-${t.impact}`}>{t.impact === "pos" ? "Effective" : t.impact === "neg" ? "Needs Work" : "Neutral"}</span>
-                                </div>
-                                <p className="technique-quote">"{t.quote}"</p>
-                                <p className="technique-explanation">{t.explanation}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="result-section word-stats">
-                        <div>
-                          <div className="section-label">Filler Words</div>
-                          <div className="word-stat-num">{feedback.fillerWords?.count || 0}</div>
-                          <div className="word-stat-sub">{feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}</div>
-                          {feedback.fillerWords?.words?.length > 0 && <div className="word-chips">{feedback.fillerWords.words.map((w, i) => <span key={i} className="chip chip-neutral">{w}</span>)}</div>}
-                        </div>
-                        <div>
-                          <div className="section-label">Power Words</div>
-                          <div className="word-stat-num">{feedback.powerWords?.length || 0}</div>
-                          {feedback.powerWords?.length > 0 && <div className="word-chips">{feedback.powerWords.map((w, i) => <span key={i} className="chip chip-strong">{w}</span>)}</div>}
-                        </div>
-                      </div>
-
-                      {feedback.hedgingInstances?.length > 0 && (
-                        <div className="result-section">
-                          <div className="section-label">Hedging → Stronger Alternatives</div>
-                          <div className="hedging-list">
-                            {feedback.hedgingInstances.map((h, i) => (
-                              <div key={i} className="hedging-row"><span className="hedge-weak">"{h.phrase}"</span><span className="hedge-arrow">→</span><span className="hedge-strong">"{h.suggestion}"</span></div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {recCommTips.length > 0 && (
-                        <div className="result-section">
-                          <div className="section-label">Recommended Tips</div>
-                          <div className="tips-list">{recCommTips.map((t, i) => <div key={i} className="tip-item">{t}</div>)}</div>
-                        </div>
-                      )}
                     </div>
+
+                    {feedback.hedgingInstances?.length > 0 && (
+                      <div className="result-section">
+                        <div className="section-label">Hedging → Stronger Alternatives</div>
+                        <div className="hedging-list">
+                          {feedback.hedgingInstances.map((h, i) => (
+                            <div key={i} className="hedging-row"><span className="hedge-weak">"{h.phrase}"</span><span className="hedge-arrow">→</span><span className="hedge-strong">"{h.suggestion}"</span></div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {recCommTips.length > 0 && (
+                      <div className="result-section">
+                        <div className="section-label">Recommended Tips</div>
+                        <div className="tips-list">{recCommTips.map((t, i) => <div key={i} className="tip-item">{t}</div>)}</div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </aside>
+                </section>
+              )}
             </main>
 
-            {phase === "idle" && (
-              <>
-                <div style={{ marginTop: 60, paddingBottom: 40 }}>
-                  <div className="quote-card" style={{ minHeight: 140, maxWidth: '100%', margin: '0 24px', border: 'none', background: 'transparent' }}>
-                    <p className="quote-text">Great speakers aren't born. They're trained.</p>
-                    <span className="quote-attr">— Unknown</span>
+            {/* Tabbed Practice + Quote section below */}
+            {phase !== "done" && (
+              <div className="below-sections">
+                {/* Tabbed Practice Box */}
+                <div className="practice-box">
+                  <div className="practice-tabs-row">
+                    <button className={`practice-tab${practiceTab === "today" ? " active" : ""}`} onClick={() => setPracticeTab("today")}>Today's Practice</button>
+                    <button className={`practice-tab${practiceTab === "custom" ? " active" : ""}`} onClick={() => setPracticeTab("custom")}>Custom Practice</button>
+                  </div>
+                  <div className="practice-content">
+                    {practiceTab === "today" ? (
+                      <div className="scenarios-list-inner">
+                        {SCENARIO_CATEGORIES.map((cat) => {
+                          const todayItem = getTodayScenario(cat);
+                          const done = completedCategoriesToday.includes(cat.category);
+                          return (
+                            <button key={cat.slug} onClick={() => navigate(`/scenarios/${cat.slug}`)} className={`scenario-card${done ? " done" : ""}`}>
+                              <div>
+                                <div className="scenario-cat">{cat.category}{done && <span className="scenario-done-badge">✓</span>}</div>
+                                <div className="scenario-title">{todayItem.title}</div>
+                              </div>
+                              <div className="scenario-diff" style={{ color: diffColor(todayItem.difficulty) }}>{todayItem.difficulty}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <button className="custom-practice-inner" onClick={() => navigate("/custom-practice")}>
+                        <span className="custom-card-title">+ Create Custom Practice</span>
+                        <span className="custom-card-sub">Choose your own scenario, topic, and goals</span>
+                      </button>
+                    )}
                   </div>
                 </div>
-              </>
+
+                {/* Quick Nav Buttons */}
+                <div className="quick-nav">
+                  <button className="quick-nav-btn" onClick={() => navigate("/progress")}>View Progress</button>
+                  <button className="quick-nav-btn" onClick={() => navigate("/coach")}>AI Coach</button>
+                </div>
+
+                {/* Quote */}
+                <div className="quote-section">
+                  <p className="quote-text">Great speakers aren't born. They're trained.</p>
+                  <span className="quote-attr">— Unknown</span>
+                </div>
+              </div>
             )}
 
             <div style={{ height: 40 }} />
