@@ -454,7 +454,7 @@ export default function Negotium() {
                   <h1 className="hero-sub font-serif font-normal">{heroFocus}</h1>
                 </div>
 
-                <div className={`waveform bg-primary-foreground${phase === "recording" ? " active" : ""}`}>
+                <div className={`waveform text-secondary-foreground bg-primary-foreground${phase === "recording" ? " active" : ""}`}>
                   {waveData.map((v, i) => (
                     <div key={i} className="wave-bar" style={{ height: `${Math.max(3, Math.abs(v - 0.5) * 120)}px`, opacity: phase === "recording" ? 0.45 + Math.abs(v - 0.5) : 0.3, background: phase === "recording" ? "var(--pg-text)" : "var(--pg-subtle)" }} />
                   ))}
@@ -467,9 +467,9 @@ export default function Negotium() {
                       strokeLinecap="round" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={ringOffset}
                       style={{ stroke: 'var(--pg-text)', transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
                   </svg>
-                  <div className="timer-inner">
-                    <div className="timer-count font-mono">{timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}</div>
-                    <div className="timer-label">{timeLeft >= 60 ? '' : 'sec'}</div>
+                  <div className="timer-inner font-serif">
+                    <div className="timer-count font-serif">{timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}</div>
+                    <div className="timer-label font-serif">{timeLeft >= 60 ? '' : 'sec'}</div>
                     {phase === "recording" && <div className="rec-dot" />}
                   </div>
                 </div>
