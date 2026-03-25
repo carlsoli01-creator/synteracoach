@@ -6,17 +6,17 @@ import { Power, BarChart3, Search, CheckCircle, Lock, Zap, Mic } from "lucide-re
 const INTRO_STEPS = [
   {
     icon: "mic",
-    title: "Welcome to Synterica",
-    subtitle: "YOUR AI VOICE COACH",
-    body: "Synterica listens to how you speak — not just what you say. We analyze pace, tone, confidence, clarity, and word choice to give you actionable coaching in real time.",
-    cta: "How it works →",
+    title: "Synterica",
+    subtitle: "AI VOICE INTELLIGENCE",
+    body: "We analyze how you speak — pace, tone, confidence, clarity, word choice — and deliver actionable coaching in real time.",
+    cta: "Continue",
   },
   {
     icon: "chart",
     title: "Speak. Get Scored.",
-    subtitle: "REAL-TIME ANALYSIS",
-    body: "Record yourself for 15–45 seconds on any topic. Our AI breaks down your delivery into 7 dimensions — from filler words to persuasion power — and gives you a comprehensive report.",
-    cta: "Let's try it →",
+    subtitle: "7-DIMENSION ANALYSIS",
+    body: "Record 15–45 seconds on any topic. Our AI scores your delivery across 7 dimensions and generates a comprehensive coaching report.",
+    cta: "Try it now",
   },
 ];
 
@@ -307,28 +307,49 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       <div style={{
         position: "fixed", inset: 0, zIndex: 70,
         display: "flex", alignItems: "center", justifyContent: "center",
-        background: "#000",
+        background: "#050505",
       }}>
+        {/* Subtle grid texture */}
         <div style={{
-          width: "min(520px, 92vw)", padding: "60px 40px", textAlign: "center",
+          position: "absolute", inset: 0, opacity: 0.03,
+          backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+        }} />
+        <div style={{
+          position: "relative", width: "min(480px, 88vw)", padding: "72px 40px", textAlign: "center",
           opacity: transitioning ? 0 : 1,
-          transform: transitioning ? "translateY(16px)" : "translateY(0)",
-          transition: "opacity 0.4s ease, transform 0.4s ease",
+          transform: transitioning ? "translateY(12px) scale(0.98)" : "translateY(0) scale(1)",
+          transition: "opacity 0.5s cubic-bezier(.4,0,.2,1), transform 0.5s cubic-bezier(.4,0,.2,1)",
         }}>
-          <div style={{ marginBottom: 24 }}>{s.icon === "mic" ? <Mic size={48} color="#fff" /> : <BarChart3 size={48} color="#fff" />}</div>
-          <div style={{ fontSize: 10, letterSpacing: "0.4em", color: "#666", textTransform: "uppercase", marginBottom: 16, fontWeight: 700 }}>{s.subtitle}</div>
-          <div style={{ fontSize: 32, fontWeight: 900, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.02em", marginBottom: 20, fontFamily: "'Inter', system-ui, sans-serif" }}>{s.title}</div>
-          <div style={{ fontSize: 14, color: "#999", lineHeight: 1.9, maxWidth: 380, margin: "0 auto 40px", letterSpacing: "0.01em" }}>{s.body}</div>
+          <div style={{ marginBottom: 32 }}>
+            {s.icon === "mic"
+              ? <Mic size={28} color="#fff" strokeWidth={1.5} />
+              : <BarChart3 size={28} color="#fff" strokeWidth={1.5} />
+            }
+          </div>
+          <div style={{
+            fontSize: 9, letterSpacing: "0.5em", color: "#555", textTransform: "uppercase",
+            marginBottom: 20, fontFamily: "'IBM Plex Mono', monospace", fontWeight: 500,
+          }}>{s.subtitle}</div>
+          <div style={{
+            fontSize: 48, fontWeight: 400, color: "#fff", lineHeight: 1.05,
+            letterSpacing: "0.04em", marginBottom: 24,
+            fontFamily: "'Bebas Neue', sans-serif",
+          }}>{s.title}</div>
+          <div style={{
+            fontSize: 13, color: "#777", lineHeight: 1.9, maxWidth: 360, margin: "0 auto 48px",
+            fontFamily: "'IBM Plex Mono', monospace", fontWeight: 400,
+          }}>{s.body}</div>
           <button onClick={goNext} style={{
-            padding: "16px 48px", fontSize: 14, fontWeight: 800, letterSpacing: "0.06em",
-            background: "#fff", color: "#000", border: "none", borderRadius: 10, cursor: "pointer",
-            transition: "all 0.2s", boxShadow: "0 0 40px rgba(255,255,255,0.15)",
+            padding: "14px 44px", fontSize: 11, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase",
+            background: "#fff", color: "#000", border: "none", borderRadius: 0, cursor: "pointer",
+            transition: "all 0.25s", fontFamily: "'IBM Plex Mono', monospace",
           }}>{s.cta}</button>
-          <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 32 }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 40 }}>
             {INTRO_STEPS.map((_, i) => (
               <div key={i} style={{
-                width: i === step ? 24 : 8, height: 8, borderRadius: 4,
-                background: i === step ? "#fff" : "#333", transition: "all 0.3s",
+                width: i === step ? 28 : 6, height: 2,
+                background: i === step ? "#fff" : "#333", transition: "all 0.4s",
               }} />
             ))}
           </div>
@@ -350,40 +371,41 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       }}>
         {testPhase === "idle" && (
           <>
-            <div style={{ marginBottom: 24 }}><Power size={48} color="#fff" /></div>
-            <div style={{ fontSize: 10, letterSpacing: "0.4em", color: "#666", textTransform: "uppercase", marginBottom: 16, fontWeight: 700 }}>YOUR FIRST TEST</div>
-            <div style={{ fontSize: 28, fontWeight: 900, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 16, fontFamily: "'Inter', system-ui, sans-serif" }}>Say anything for 10 seconds.</div>
-            <div style={{ fontSize: 13, color: "#666", lineHeight: 1.8, maxWidth: 340, margin: "0 auto 36px" }}>Introduce yourself, read something aloud, or just talk freely. We'll show you how the analysis works.</div>
+            <div style={{ marginBottom: 32 }}><Mic size={28} color="#fff" strokeWidth={1.5} /></div>
+            <div style={{ fontSize: 9, letterSpacing: "0.5em", color: "#555", textTransform: "uppercase", marginBottom: 20, fontFamily: "'IBM Plex Mono', monospace", fontWeight: 500 }}>VOICE TEST</div>
+            <div style={{ fontSize: 44, fontWeight: 400, color: "#fff", lineHeight: 1.05, letterSpacing: "0.04em", marginBottom: 20, fontFamily: "'Bebas Neue', sans-serif" }}>Say Anything.</div>
+            <div style={{ fontSize: 13, color: "#666", lineHeight: 1.8, maxWidth: 340, margin: "0 auto 40px", fontFamily: "'IBM Plex Mono', monospace" }}>10 seconds. Any topic. We'll show you what our analysis looks like.</div>
             <button onClick={startTest} style={{
-              padding: "16px 48px", fontSize: 14, fontWeight: 800, letterSpacing: "0.06em",
-              background: "#fff", color: "#000", border: "none", borderRadius: 10, cursor: "pointer",
-              boxShadow: "0 0 40px rgba(255,255,255,0.15)", transition: "all 0.2s",
-            }}><Mic size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: 6 }} /> Start Recording</button>
-            {micError && <div style={{ marginTop: 16, fontSize: 12, color: "#c04a2a" }}>{micError}</div>}
+              padding: "14px 44px", fontSize: 11, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase",
+              background: "#fff", color: "#000", border: "none", borderRadius: 0, cursor: "pointer",
+              transition: "all 0.25s", fontFamily: "'IBM Plex Mono', monospace",
+            }}>Begin Recording</button>
+            {micError && <div style={{ marginTop: 16, fontSize: 11, color: "#c04a2a", fontFamily: "'IBM Plex Mono', monospace" }}>{micError}</div>}
           </>
         )}
 
         {testPhase === "recording" && (
           <>
-            <div style={{ fontSize: 64, fontWeight: 900, color: "#fff", fontFamily: "'Inter', system-ui, sans-serif", marginBottom: 8 }}>{timeLeft}</div>
-            <div style={{ fontSize: 10, letterSpacing: "0.3em", color: "#666", textTransform: "uppercase", marginBottom: 32 }}>SECONDS REMAINING</div>
-            <div style={{ height: 60, display: "flex", alignItems: "center", gap: 3, justifyContent: "center", marginBottom: 32 }}>
+            <div style={{ fontSize: 72, fontWeight: 400, color: "#fff", fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em", marginBottom: 4 }}>{timeLeft}</div>
+            <div style={{ fontSize: 9, letterSpacing: "0.5em", color: "#555", textTransform: "uppercase", marginBottom: 36, fontFamily: "'IBM Plex Mono', monospace" }}>SECONDS</div>
+            <div style={{ height: 48, display: "flex", alignItems: "center", gap: 2, justifyContent: "center", marginBottom: 36 }}>
               {waveData.map((v, i) => (
                 <div key={i} style={{
-                  width: 3, borderRadius: 2, background: "#fff",
-                  height: `${Math.max(4, Math.abs(v - 0.5) * 120)}px`,
-                  opacity: 0.4 + Math.abs(v - 0.5), transition: "height 0.05s",
+                  width: 2, background: "#fff",
+                  height: `${Math.max(3, Math.abs(v - 0.5) * 100)}px`,
+                  opacity: 0.3 + Math.abs(v - 0.5) * 0.7, transition: "height 0.05s",
                 }} />
               ))}
             </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 28 }}>
-              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#fff", animation: "pulse 1s infinite" }} />
-              <span style={{ fontSize: 11, letterSpacing: "0.2em", color: "#999", textTransform: "uppercase" }}>RECORDING</span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 32 }}>
+              <div style={{ width: 6, height: 6, background: "#fff", animation: "pulse 1s infinite" }} />
+              <span style={{ fontSize: 9, letterSpacing: "0.3em", color: "#666", textTransform: "uppercase", fontFamily: "'IBM Plex Mono', monospace" }}>RECORDING</span>
             </div>
             <button onClick={stopEarly} style={{
-              padding: "12px 32px", fontSize: 13, fontWeight: 700,
-              background: "transparent", color: "#666", border: "1px solid #333", borderRadius: 8, cursor: "pointer", transition: "all 0.2s",
-            }}>Stop Early</button>
+              padding: "10px 28px", fontSize: 10, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase",
+              background: "transparent", color: "#555", border: "1px solid #2a2a2a", borderRadius: 0, cursor: "pointer",
+              transition: "all 0.25s", fontFamily: "'IBM Plex Mono', monospace",
+            }}>Stop</button>
           </>
         )}
 
@@ -393,76 +415,74 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
         {testPhase === "done" && analysisResult && (
           <>
-            <div style={{ marginBottom: 20 }}><CheckCircle size={48} color="#fff" /></div>
-            <div style={{ fontSize: 24, fontWeight: 900, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.02em", marginBottom: 8, fontFamily: "'Inter', system-ui, sans-serif" }}>Your Real Analysis</div>
-            <div style={{ fontSize: 12, color: "#666", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 28px" }}>Premium unlocks the full 7-dimension breakdown with personalized coaching.</div>
+            <div style={{ marginBottom: 24 }}><CheckCircle size={24} color="#fff" strokeWidth={1.5} /></div>
+            <div style={{ fontSize: 36, fontWeight: 400, color: "#fff", lineHeight: 1.05, letterSpacing: "0.04em", marginBottom: 12, fontFamily: "'Bebas Neue', sans-serif" }}>Your Analysis</div>
+            <div style={{ fontSize: 11, color: "#555", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 28px", fontFamily: "'IBM Plex Mono', monospace" }}>Premium unlocks the full 7-dimension breakdown.</div>
 
-            {/* Real score card */}
-            <div style={{ background: "#111", border: "1px solid #222", borderRadius: 14, padding: "28px 24px", textAlign: "left", marginBottom: 24 }}>
+            {/* Score card */}
+            <div style={{ background: "#0a0a0a", border: "1px solid #1a1a1a", borderRadius: 0, padding: "28px 24px", textAlign: "left", marginBottom: 24 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
                 <div style={{
-                  width: 56, height: 56, borderRadius: "50%",
-                  border: `3px solid ${scoreColor(analysisResult.scores.overall)}`,
+                  width: 56, height: 56,
+                  border: `2px solid ${scoreColor(analysisResult.scores.overall)}`,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 22, fontWeight: 900, color: "#fff", fontFamily: "'Inter', system-ui, sans-serif",
+                  fontSize: 26, fontWeight: 400, color: "#fff", fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em",
                 }}>{analysisResult.scores.overall}</div>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: "#fff" }}>Overall Score</div>
-                  <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
-                    {analysisResult.scores.overall >= 80 ? "Strong start — there's real potential here" : analysisResult.scores.overall >= 60 ? "Decent foundation. The full app will help you level up." : analysisResult.scores.overall >= 40 ? "Room to grow — that's what practice is for." : "Everyone starts somewhere. Let's build from here."}
+                  <div style={{ fontSize: 11, fontWeight: 500, color: "#fff", fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase" }}>Overall</div>
+                  <div style={{ fontSize: 10, color: "#555", marginTop: 4, fontFamily: "'IBM Plex Mono', monospace" }}>
+                    {analysisResult.scores.overall >= 80 ? "Strong start" : analysisResult.scores.overall >= 60 ? "Decent foundation" : analysisResult.scores.overall >= 40 ? "Room to grow" : "Building from here"}
                   </div>
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 20 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 20 }}>
                 {[
                   { label: "Pace", score: analysisResult.scores.pace },
                   { label: "Clarity", score: analysisResult.scores.clarity },
                   { label: "Confidence", score: analysisResult.scores.confidence },
                 ].map((s, i) => (
-                  <div key={i} style={{ background: "#0a0a0a", borderRadius: 10, padding: "14px 12px", textAlign: "center", border: "1px solid #1a1a1a" }}>
-                    <div style={{ fontSize: 20, fontWeight: 900, color: scoreColor(s.score) }}>{s.score}</div>
-                    <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#555", marginTop: 4, textTransform: "uppercase" }}>{s.label}</div>
+                  <div key={i} style={{ background: "#111", padding: "14px 10px", textAlign: "center", border: "1px solid #1a1a1a" }}>
+                    <div style={{ fontSize: 22, fontWeight: 400, color: scoreColor(s.score), fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em" }}>{s.score}</div>
+                    <div style={{ fontSize: 8, letterSpacing: "0.3em", color: "#444", marginTop: 4, textTransform: "uppercase", fontFamily: "'IBM Plex Mono', monospace" }}>{s.label}</div>
                   </div>
                 ))}
               </div>
 
-              {/* Real AI insight */}
-              <div style={{ background: "#0a0a0a", borderRadius: 10, padding: "16px", border: "1px solid #1a1a1a" }}>
-                <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#555", textTransform: "uppercase", marginBottom: 8, fontWeight: 700 }}>AI INSIGHT</div>
-                <div style={{ fontSize: 13, color: "#ccc", lineHeight: 1.7 }}>{analysisResult.analysis.overall}</div>
+              <div style={{ background: "#111", padding: "16px", border: "1px solid #1a1a1a" }}>
+                <div style={{ fontSize: 8, letterSpacing: "0.4em", color: "#444", textTransform: "uppercase", marginBottom: 8, fontFamily: "'IBM Plex Mono', monospace" }}>AI INSIGHT</div>
+                <div style={{ fontSize: 12, color: "#999", lineHeight: 1.8, fontFamily: "'IBM Plex Mono', monospace" }}>{analysisResult.analysis.overall}</div>
               </div>
 
-              {/* Strength */}
               {analysisResult.analysis.strength && (
-                <div style={{ background: "#0a0a0a", borderRadius: 10, padding: "16px", border: "1px solid #1a1a1a", marginTop: 12 }}>
-                  <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#4a8c5c", textTransform: "uppercase", marginBottom: 8, fontWeight: 700 }}><Zap size={10} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> STRENGTH</div>
-                  <div style={{ fontSize: 13, color: "#ccc", lineHeight: 1.7 }}>{analysisResult.analysis.strength}</div>
+                <div style={{ background: "#111", padding: "16px", border: "1px solid #1a1a1a", marginTop: 10 }}>
+                  <div style={{ fontSize: 8, letterSpacing: "0.4em", color: "#4a8c5c", textTransform: "uppercase", marginBottom: 8, fontFamily: "'IBM Plex Mono', monospace" }}>STRENGTH</div>
+                  <div style={{ fontSize: 12, color: "#999", lineHeight: 1.8, fontFamily: "'IBM Plex Mono', monospace" }}>{analysisResult.analysis.strength}</div>
                 </div>
               )}
             </div>
 
             {/* Blurred locked teaser */}
-            <div style={{ position: "relative", borderRadius: 10, overflow: "hidden", marginBottom: 16 }}>
+            <div style={{ position: "relative", overflow: "hidden", marginBottom: 16 }}>
               <div style={{
                 filter: "blur(6px)", opacity: 0.4, pointerEvents: "none",
-                background: "#111", padding: "16px", borderRadius: 10,
+                background: "#0a0a0a", padding: "16px",
                 display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8,
               }}>
                 {["Persuasion", "Word Choice", "Filler Words", "Techniques"].map((l, i) => (
-                  <div key={i} style={{ background: "#0a0a0a", borderRadius: 8, padding: "12px", textAlign: "center" }}>
-                    <div style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>{analysisResult.scores.delivery - 5 + i * 3}</div>
-                    <div style={{ fontSize: 8, color: "#666", textTransform: "uppercase", letterSpacing: "0.15em" }}>{l}</div>
+                  <div key={i} style={{ background: "#111", padding: "12px", textAlign: "center" }}>
+                    <div style={{ fontSize: 18, fontWeight: 400, color: "#fff", fontFamily: "'Bebas Neue', sans-serif" }}>{analysisResult.scores.delivery - 5 + i * 3}</div>
+                    <div style={{ fontSize: 7, color: "#555", textTransform: "uppercase", letterSpacing: "0.3em", fontFamily: "'IBM Plex Mono', monospace" }}>{l}</div>
                   </div>
                 ))}
               </div>
               <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.15em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 6 }}><Lock size={12} /> UNLOCK WITH PREMIUM</span>
+                <span style={{ fontSize: 9, fontWeight: 500, color: "#fff", letterSpacing: "0.3em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 6, fontFamily: "'IBM Plex Mono', monospace" }}><Lock size={10} /> PREMIUM</span>
               </div>
             </div>
 
-            <div style={{ fontSize: 11, color: "#444", textAlign: "center" }}>Loading your upgrade options...</div>
-            <div style={{ marginTop: 16, width: 24, height: 24, border: "2px solid #333", borderTop: "2px solid #fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "16px auto 0" }} />
+            <div style={{ fontSize: 10, color: "#333", textAlign: "center", fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "0.1em" }}>Loading upgrade options…</div>
+            <div style={{ marginTop: 16, width: 20, height: 20, border: "1px solid #333", borderTop: "1px solid #fff", animation: "spin 0.8s linear infinite", margin: "16px auto 0" }} />
           </>
         )}
       </div>

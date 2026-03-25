@@ -155,14 +155,17 @@ function OnboardingQuiz({ onFinish }) {
 function VoiceMicControl({ onStart, onStop, onStopEarly, phase }) {
   const isRecording = phase === "recording";
   const isAnalyzing = phase === "analyzing";
+
+  if (isAnalyzing) return null;
+
   return (
     <div className="mic-controls">
       {isRecording
         ? <button onClick={onStopEarly} className="btn-record-toggle recording" aria-label="Stop recording">
             <span className="stop-square" />
           </button>
-        : <button onClick={!isAnalyzing ? onStart : undefined} disabled={isAnalyzing} className="btn-record-toggle" aria-label="Start recording">
-            {phase === "analyzing" ? <span className="toggle-label">Analyzing…</span> : <Mic size={20} />}
+        : <button onClick={onStart} className="btn-record-toggle" aria-label="Start recording">
+            <Mic size={20} />
           </button>
       }
       <button onClick={onStop} className="btn-reset">Reset</button>
@@ -589,7 +592,12 @@ export default function Negotium() {
                   const recDuration = selectedDuration - timeLeft;
                   const est = Math.max(3, Math.round(recDuration * 0.12 + 4));
                   const dark = document.documentElement.classList.contains("dark");
-                  return <AILoader text="Analyzing" volume={liveEnergy / 100} estimatedSeconds={est} isDark={dark} size={140} />;
+                  return (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginTop: 8 }}>
+                      <AILoader text="Analyzing" volume={liveEnergy / 100} estimatedSeconds={est} isDark={dark} size={140} />
+                      <button onClick={reset} className="btn-reset" style={{ marginTop: 8 }}>Cancel</button>
+                    </div>
+                  );
                 })()}
 
                 {phase === "recording" && (
