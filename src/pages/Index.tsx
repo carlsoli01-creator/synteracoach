@@ -439,8 +439,6 @@ export default function Negotium() {
   const handlePaywallDone = () => { setShowForcedPaywall(false); localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
   const handleInterstitialComplete = () => { setShowInterstitial(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
 
-  // Whether the orbital tree should be visible
-  const showOrbital = phase === "idle" && !metrics && !feedback;
   const isActive = phase === "recording" || phase === "analyzing" || phase === "done";
 
   return (
@@ -471,9 +469,8 @@ export default function Negotium() {
       )}
 
       {!isOverlay && (
-        <div className="page-shell-orbital">
-          {/* Top bar with back button when active */}
-          <header className="topbar-orbital">
+        <div className="page-shell">
+          <header className="topbar">
             <div className="topbar-left">
               {isActive && (
                 <button className="back-btn" onClick={reset}>
@@ -498,20 +495,30 @@ export default function Negotium() {
             </div>
           </header>
 
-          <main className="orbital-main">
-            {/* The orbital timeline - visible only in idle state */}
-            <div className="orbital-area">
-              <RadialOrbitalTimeline
-                nodes={ORBITAL_NODES}
-                onNodeClick={(node) => navigate(node.slug)}
-                visible={showOrbital}
-                centerContent={
-                  <div className="orbital-center-brand">
-                    <div className="orbital-center-label">FREE RECORD</div>
-                  </div>
-                }
-              />
-            </div>
+          <main className="main-content">
+            {/* Navigation links - idle only */}
+            {!isActive && (
+              <nav className="nav-grid">
+                {SCENARIO_CATEGORIES.map((cat) => (
+                  <button key={cat.slug} className="nav-card" onClick={() => navigate(`/scenarios/${cat.slug}`)}>
+                    <span className="nav-card-icon">{cat.icon}</span>
+                    <span className="nav-card-label">{cat.category}</span>
+                  </button>
+                ))}
+                <button className="nav-card" onClick={() => navigate("/custom-practice")}>
+                  <span className="nav-card-icon">✏️</span>
+                  <span className="nav-card-label">Custom</span>
+                </button>
+                <button className="nav-card" onClick={() => navigate("/progress")}>
+                  <span className="nav-card-icon">📈</span>
+                  <span className="nav-card-label">Progress</span>
+                </button>
+                <button className="nav-card" onClick={() => navigate("/coach")}>
+                  <span className="nav-card-icon">🧠</span>
+                  <span className="nav-card-label">AI Coach</span>
+                </button>
+              </nav>
+            )}
 
             {/* Recording section - always visible, separate from orbital */}
             <section className="recording-section">
