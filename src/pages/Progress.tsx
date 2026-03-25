@@ -17,7 +17,7 @@ export default function Progress() {
     const load = async () => {
       const { data } = await (supabase as any)
         .from("voice_sessions").select("*")
-        .order("created_at", { ascending: false }).limit(20);
+        .order("created_at", { ascending: false }).limit(100);
       if (data) setHistory(data);
     };
     load();
