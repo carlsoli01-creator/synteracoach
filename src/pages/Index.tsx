@@ -255,6 +255,94 @@ export default function Negotium() {
   const transcriptRef = useRef("");
   const recognitionRef = useRef(null);
   const recordingStartRef = useRef(0);
+  const orbCanvasRef = useRef<HTMLCanvasElement>(null);
+  const orbTimeRef = useRef(0);
+  const orbAnimRef = useRef<number>(0);
+  const [practiceTab, setPracticeTab] = useState<"today" | "custom">("today");
+
+  // Canvas orb drawing effect driven by liveEnergy
+  useEffect(() => {
+    const canvas = orbCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const size = 200;
+    canvas.width = size;
+    canvas.height = size;
+
+    const isDark = document.documentElement.classList.contains("dark");
+    const orbColor = isDark ? "255, 255, 255" : "0, 0, 0";
+
+    const draw = () => {
+      if (!ctx || !canvas) return;
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const baseRadius = 60;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (phase === "recording") {
+        orbTimeRef.current += 0.05;
+        const vol = liveEnergy / 100; // 0-1
+
+        const numBars = 32;
+        const angleStep = (Math.PI * 2) / numBars;
+
+        for (let i = 0; i < numBars; i++) {
+          const angle = i * angleStep - Math.PI / 2;
+          const wave1 = Math.sin(orbTimeRef.current * (2 + vol * 3) + i * 0.5) * 0.5 + 0.5;
+          const wave2 = Math.cos(orbTimeRef.current * (1.5 + vol * 2) + i * 0.3) * 0.5 + 0.5;
+          const amplitude = (wave1 * 0.6 + wave2 * 0.4) * (15 + vol * 35);
+
+          const innerRadius = baseRadius;
+          const outerRadius = baseRadius + amplitude;
+
+          const x1 = centerX + Math.cos(angle) * innerRadius;
+          const y1 = centerY + Math.sin(angle) * innerRadius;
+          const x2 = centerX + Math.cos(angle) * outerRadius;
+          const y2 = centerY + Math.sin(angle) * outerRadius;
+
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.strokeStyle = `rgba(${orbColor}, ${0.3 + amplitude / 50})`;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+
+        const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, baseRadius);
+        gradient.addColorStop(0, `rgba(${orbColor}, ${0.5 + vol * 0.4})`);
+        gradient.addColorStop(0.5, `rgba(${orbColor}, ${0.2 + vol * 0.3})`);
+        gradient.addColorStop(1, `rgba(${orbColor}, 0)`);
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, baseRadius, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Idle / done state - gentle static orb
+        const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, baseRadius);
+        gradient.addColorStop(0, `rgba(${orbColor}, 0.6)`);
+        gradient.addColorStop(0.5, `rgba(${orbColor}, 0.3)`);
+        gradient.addColorStop(1, `rgba(${orbColor}, 0)`);
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, baseRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = `rgba(${orbColor}, 0.4)`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, baseRadius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      orbAnimRef.current = requestAnimationFrame(draw);
+    };
+
+    draw();
+    return () => { if (orbAnimRef.current) cancelAnimationFrame(orbAnimRef.current); };
+  }, [phase, liveEnergy]);
 
   const ringOffset = CIRCUMFERENCE * (timeLeft / selectedDuration);
 
