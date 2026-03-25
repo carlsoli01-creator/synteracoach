@@ -189,7 +189,7 @@ export default function CustomPractice() {
               letterSpacing: "0.15em", fontFamily: "'DM Mono', monospace", textTransform: "uppercase",
               opacity: canStart ? 1 : 0.5, transition: "all 0.2s",
             }}>
-            START RECORDING
+            START SESSION
           </button>
         </div>
       </div>
