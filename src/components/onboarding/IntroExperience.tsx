@@ -419,47 +419,45 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
             <div style={{ fontSize: 36, fontWeight: 400, color: "#fff", lineHeight: 1.05, letterSpacing: "0.04em", marginBottom: 12, fontFamily: "'Bebas Neue', sans-serif" }}>Your Analysis</div>
             <div style={{ fontSize: 11, color: "#555", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 28px", fontFamily: "'IBM Plex Mono', monospace" }}>Premium unlocks the full 7-dimension breakdown.</div>
 
-            {/* Real score card */}
-            <div style={{ background: "#111", border: "1px solid #222", borderRadius: 14, padding: "28px 24px", textAlign: "left", marginBottom: 24 }}>
+            {/* Score card */}
+            <div style={{ background: "#0a0a0a", border: "1px solid #1a1a1a", borderRadius: 0, padding: "28px 24px", textAlign: "left", marginBottom: 24 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
                 <div style={{
-                  width: 56, height: 56, borderRadius: "50%",
-                  border: `3px solid ${scoreColor(analysisResult.scores.overall)}`,
+                  width: 56, height: 56,
+                  border: `2px solid ${scoreColor(analysisResult.scores.overall)}`,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 22, fontWeight: 900, color: "#fff", fontFamily: "'Inter', system-ui, sans-serif",
+                  fontSize: 26, fontWeight: 400, color: "#fff", fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em",
                 }}>{analysisResult.scores.overall}</div>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: "#fff" }}>Overall Score</div>
-                  <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
-                    {analysisResult.scores.overall >= 80 ? "Strong start — there's real potential here" : analysisResult.scores.overall >= 60 ? "Decent foundation. The full app will help you level up." : analysisResult.scores.overall >= 40 ? "Room to grow — that's what practice is for." : "Everyone starts somewhere. Let's build from here."}
+                  <div style={{ fontSize: 11, fontWeight: 500, color: "#fff", fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase" }}>Overall</div>
+                  <div style={{ fontSize: 10, color: "#555", marginTop: 4, fontFamily: "'IBM Plex Mono', monospace" }}>
+                    {analysisResult.scores.overall >= 80 ? "Strong start" : analysisResult.scores.overall >= 60 ? "Decent foundation" : analysisResult.scores.overall >= 40 ? "Room to grow" : "Building from here"}
                   </div>
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 20 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 20 }}>
                 {[
                   { label: "Pace", score: analysisResult.scores.pace },
                   { label: "Clarity", score: analysisResult.scores.clarity },
                   { label: "Confidence", score: analysisResult.scores.confidence },
                 ].map((s, i) => (
-                  <div key={i} style={{ background: "#0a0a0a", borderRadius: 10, padding: "14px 12px", textAlign: "center", border: "1px solid #1a1a1a" }}>
-                    <div style={{ fontSize: 20, fontWeight: 900, color: scoreColor(s.score) }}>{s.score}</div>
-                    <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "#555", marginTop: 4, textTransform: "uppercase" }}>{s.label}</div>
+                  <div key={i} style={{ background: "#111", padding: "14px 10px", textAlign: "center", border: "1px solid #1a1a1a" }}>
+                    <div style={{ fontSize: 22, fontWeight: 400, color: scoreColor(s.score), fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em" }}>{s.score}</div>
+                    <div style={{ fontSize: 8, letterSpacing: "0.3em", color: "#444", marginTop: 4, textTransform: "uppercase", fontFamily: "'IBM Plex Mono', monospace" }}>{s.label}</div>
                   </div>
                 ))}
               </div>
 
-              {/* Real AI insight */}
-              <div style={{ background: "#0a0a0a", borderRadius: 10, padding: "16px", border: "1px solid #1a1a1a" }}>
-                <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#555", textTransform: "uppercase", marginBottom: 8, fontWeight: 700 }}>AI INSIGHT</div>
-                <div style={{ fontSize: 13, color: "#ccc", lineHeight: 1.7 }}>{analysisResult.analysis.overall}</div>
+              <div style={{ background: "#111", padding: "16px", border: "1px solid #1a1a1a" }}>
+                <div style={{ fontSize: 8, letterSpacing: "0.4em", color: "#444", textTransform: "uppercase", marginBottom: 8, fontFamily: "'IBM Plex Mono', monospace" }}>AI INSIGHT</div>
+                <div style={{ fontSize: 12, color: "#999", lineHeight: 1.8, fontFamily: "'IBM Plex Mono', monospace" }}>{analysisResult.analysis.overall}</div>
               </div>
 
-              {/* Strength */}
               {analysisResult.analysis.strength && (
-                <div style={{ background: "#0a0a0a", borderRadius: 10, padding: "16px", border: "1px solid #1a1a1a", marginTop: 12 }}>
-                  <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#4a8c5c", textTransform: "uppercase", marginBottom: 8, fontWeight: 700 }}><Zap size={10} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> STRENGTH</div>
-                  <div style={{ fontSize: 13, color: "#ccc", lineHeight: 1.7 }}>{analysisResult.analysis.strength}</div>
+                <div style={{ background: "#111", padding: "16px", border: "1px solid #1a1a1a", marginTop: 10 }}>
+                  <div style={{ fontSize: 8, letterSpacing: "0.4em", color: "#4a8c5c", textTransform: "uppercase", marginBottom: 8, fontFamily: "'IBM Plex Mono', monospace" }}>STRENGTH</div>
+                  <div style={{ fontSize: 12, color: "#999", lineHeight: 1.8, fontFamily: "'IBM Plex Mono', monospace" }}>{analysisResult.analysis.strength}</div>
                 </div>
               )}
             </div>
