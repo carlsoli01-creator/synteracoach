@@ -834,9 +834,6 @@ export default function Negotium() {
         .rec-dot-inline { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); animation: pulse 1s infinite; }
         .recording-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); font-family: 'DM Mono', monospace; }
 
-        /* Idle controls below orbital */
-        .idle-controls { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 16px; z-index: 25; }
-
         .duration-wrap { width: 240px; }
         .duration-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
         .duration-bound { font-size: 9px; color: var(--pg-dim); letter-spacing: 0.08em; }
