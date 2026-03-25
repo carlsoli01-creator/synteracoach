@@ -12,7 +12,6 @@ import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 import SpeakBetterInterstitial from "@/components/onboarding/SpeakBetterInterstitial";
 import { Footer } from "@/components/ui/footer";
 import MobileQuizAndInstall from "@/components/onboarding/MobileQuizAndInstall";
-import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
@@ -127,37 +126,6 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: { onStart: () 
   );
 }
 
-// Build orbital nodes from scenario categories + extras
-const ORBITAL_NODES = [
-  ...SCENARIO_CATEGORIES.map((cat) => ({
-    id: cat.slug,
-    label: cat.category,
-    icon: cat.icon,
-    description: cat.description,
-    slug: `/scenarios/${cat.slug}`,
-  })),
-  {
-    id: "custom",
-    label: "Custom",
-    icon: "✏️",
-    description: "Create your own practice scenario",
-    slug: "/custom-practice",
-  },
-  {
-    id: "progress",
-    label: "Progress",
-    icon: "📈",
-    description: "Track your improvement over time",
-    slug: "/progress",
-  },
-  {
-    id: "coach",
-    label: "AI Coach",
-    icon: "🧠",
-    description: "Get personalized AI coaching",
-    slug: "/coach",
-  },
-];
 
 export default function Negotium() {
   const { user } = useAuth();
@@ -471,8 +439,6 @@ export default function Negotium() {
   const handlePaywallDone = () => { setShowForcedPaywall(false); localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
   const handleInterstitialComplete = () => { setShowInterstitial(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
 
-  // Whether the orbital tree should be visible
-  const showOrbital = phase === "idle" && !metrics && !feedback;
   const isActive = phase === "recording" || phase === "analyzing" || phase === "done";
 
   return (
@@ -503,9 +469,8 @@ export default function Negotium() {
       )}
 
       {!isOverlay && (
-        <div className="page-shell-orbital">
-          {/* Top bar with back button when active */}
-          <header className="topbar-orbital">
+        <div className="page-shell">
+          <header className="topbar">
             <div className="topbar-left">
               {isActive && (
                 <button className="back-btn" onClick={reset}>
@@ -530,20 +495,30 @@ export default function Negotium() {
             </div>
           </header>
 
-          <main className="orbital-main">
-            {/* The orbital timeline - visible only in idle state */}
-            <div className="orbital-area">
-              <RadialOrbitalTimeline
-                nodes={ORBITAL_NODES}
-                onNodeClick={(node) => navigate(node.slug)}
-                visible={showOrbital}
-                centerContent={
-                  <div className="orbital-center-brand">
-                    <div className="orbital-center-label">FREE RECORD</div>
-                  </div>
-                }
-              />
-            </div>
+          <main className="main-content">
+            {/* Navigation links - idle only */}
+            {!isActive && (
+              <nav className="nav-grid">
+                {SCENARIO_CATEGORIES.map((cat) => (
+                  <button key={cat.slug} className="nav-card" onClick={() => navigate(`/scenarios/${cat.slug}`)}>
+                    <span className="nav-card-icon">{cat.icon}</span>
+                    <span className="nav-card-label">{cat.category}</span>
+                  </button>
+                ))}
+                <button className="nav-card" onClick={() => navigate("/custom-practice")}>
+                  <span className="nav-card-icon">✏️</span>
+                  <span className="nav-card-label">Custom</span>
+                </button>
+                <button className="nav-card" onClick={() => navigate("/progress")}>
+                  <span className="nav-card-icon">📈</span>
+                  <span className="nav-card-label">Progress</span>
+                </button>
+                <button className="nav-card" onClick={() => navigate("/coach")}>
+                  <span className="nav-card-icon">🧠</span>
+                  <span className="nav-card-label">AI Coach</span>
+                </button>
+              </nav>
+            )}
 
             {/* Recording section - always visible, separate from orbital */}
             <section className="recording-section">
@@ -774,10 +749,10 @@ export default function Negotium() {
           --pg-hover-border: rgba(255,255,255,0.15); --pg-hover-text: var(--pg-faint);
         }
 
-        .page-shell-orbital { min-height: 100vh; display: flex; flex-direction: column; }
+        .page-shell { min-height: 100vh; display: flex; flex-direction: column; }
 
         /* Top bar */
-        .topbar-orbital { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; border-bottom: 1px solid var(--pg-border); background: color-mix(in srgb, var(--pg-bg) 90%, transparent); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 30; }
+        .topbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; border-bottom: 1px solid var(--pg-border); background: color-mix(in srgb, var(--pg-bg) 90%, transparent); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 30; }
         .topbar-left { display: flex; align-items: center; gap: 12px; }
         .topbar-right { display: flex; align-items: center; gap: 16px; }
         .topbar-brand { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pg-text); }
@@ -789,36 +764,18 @@ export default function Negotium() {
         .topbar-avg-label { display: block; font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 1px; font-family: 'DM Mono', monospace; }
         .topbar-avg-value { font-size: 20px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
 
-        /* Orbital main area */
-        .orbital-main { flex: 1; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
+        /* Main content */
+        .main-content { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 24px; overflow-y: auto; }
 
-        /* Orbital area - takes up space for the tree */
-        .orbital-area { position: relative; width: 100%; height: min(60vh, 500px); flex-shrink: 0; }
+        /* Nav grid */
+        .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; width: 100%; max-width: 480px; margin-bottom: 32px; }
+        .nav-card { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px 8px; background: var(--pg-card); border: 1px solid var(--pg-border); cursor: pointer; transition: all 0.15s; font-family: 'DM Mono', monospace; }
+        .nav-card:hover { border-color: var(--pg-text); background: var(--pg-accent); }
+        .nav-card-icon { font-size: 20px; line-height: 1; }
+        .nav-card-label { font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pg-text); white-space: nowrap; }
 
-        /* Orbital timeline container */
-        .orbital-timeline-container { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: opacity 0.6s ease, transform 0.6s ease; }
-
-        .orbital-rings { position: absolute; pointer-events: none; }
-        .orbital-ring { border-radius: 50%; border: 1px solid var(--pg-border); position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        .orbital-ring.ring-1 { width: min(56vw, 56vh); height: min(56vw, 56vh); opacity: 0.4; }
-        .orbital-ring.ring-2 { width: min(42vw, 42vh); height: min(42vw, 42vh); opacity: 0.25; border-style: dashed; }
-        .orbital-ring.ring-3 { width: min(28vw, 28vh); height: min(28vw, 28vh); opacity: 0.15; }
-
-        .orbital-lines { position: absolute; width: 100%; height: 100%; max-width: 800px; max-height: 800px; pointer-events: none; }
-
-        .orbital-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; }
-
-        .orbital-center-brand { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .orbital-center-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); background: var(--pg-card); border: 1px solid var(--pg-border); padding: 8px 16px; }
-
-        .orbital-node { position: absolute; top: 50%; left: 50%; display: flex; flex-direction: column; align-items: center; gap: 6px; background: var(--pg-card); border: 1px solid var(--pg-border); padding: 14px 18px; cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); min-width: 90px; z-index: 10; font-family: 'DM Mono', monospace; }
-        .orbital-node:hover { border-color: var(--pg-text); background: var(--pg-accent); }
-        .orbital-node-icon { font-size: 20px; line-height: 1; }
-        .orbital-node-label { font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pg-text); white-space: nowrap; }
-        .orbital-node-desc { font-size: 8px; color: var(--pg-muted); max-width: 120px; text-align: center; line-height: 1.5; white-space: normal; animation: fadeUp 0.2s ease; }
-
-        /* Recording section - separate panel */
-        .recording-section { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 40px 24px 48px; border-top: 1px solid var(--pg-border); width: 100%; background: var(--pg-bg); }
+        /* Recording section */
+        .recording-section { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 24px 24px 48px; width: 100%; }
 
         .orb-container { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
         .orb-canvas { width: 200px; height: 200px; }
