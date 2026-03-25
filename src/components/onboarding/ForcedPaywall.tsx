@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const FREE_FEATURES = [
   { text: "1 recording per day", included: true },
@@ -61,9 +61,9 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
     }, 600);
   };
 
-  useState(() => {
+  useEffect(() => {
     requestAnimationFrame(() => setVisible(true));
-  });
+  }, []);
 
   const FeatureList = ({ features }: { features: { text: string; included: boolean }[] }) => (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
