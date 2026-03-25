@@ -41,7 +41,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
       <button
         onClick={toggle}
         style={{
-          position: "fixed", top: 20, left: expanded ? 224 : 12,
+          position: "fixed", top: "50%", left: expanded ? 224 : 12, transform: "translateY(-50%)",
           zIndex: 301, width: 28, height: 28,
           display: "flex", alignItems: "center", justifyContent: "center",
           background: "transparent", border: "none", borderRadius: 0,

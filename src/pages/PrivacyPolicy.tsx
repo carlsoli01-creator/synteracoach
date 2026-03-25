@@ -30,7 +30,7 @@ export default function PrivacyPolicy() {
         ].map((s, i) => (
           <div key={i} style={{ marginBottom: 24 }}>
             <h2 style={{ fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{s.t}</h2>
-            <p style={{ fontSize: 13, lineHeight: 1.7, color: isDark ? "#aaa" : "#555" }}>{s.p}</p>
+            <p className="text-muted-foreground" style={{ fontSize: 13, lineHeight: 1.7 }}>{s.p}</p>
           </div>
         ))}
       </div>
