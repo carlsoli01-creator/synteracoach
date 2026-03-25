@@ -49,7 +49,17 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
   const [visible, setVisible] = useState(false);
   const [showBetaPopup, setShowBetaPopup] = useState(false);
 
+  const [fadingOut, setFadingOut] = useState(false);
+
   const handlePlanClick = () => setShowBetaPopup(true);
+
+  const handleBetaContinue = () => {
+    setFadingOut(true);
+    setTimeout(() => {
+      setShowBetaPopup(false);
+      onSubscribe();
+    }, 600);
+  };
 
   useState(() => {
     requestAnimationFrame(() => setVisible(true));
