@@ -495,7 +495,7 @@ export default function Negotium() {
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
   const isOverlay = showIntro || showForcedPaywall || showInterstitial || quizVisible;
 
-  const handlePaywallDone = () => { setShowForcedPaywall(false); localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); setShowInterstitial(true); };
+  const handlePaywallDone = () => { setShowForcedPaywall(false); localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
   const handleInterstitialComplete = () => { setShowInterstitial(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
 
   return (

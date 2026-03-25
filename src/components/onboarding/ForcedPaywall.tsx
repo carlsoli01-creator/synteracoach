@@ -49,7 +49,17 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
   const [visible, setVisible] = useState(false);
   const [showBetaPopup, setShowBetaPopup] = useState(false);
 
+  const [fadingOut, setFadingOut] = useState(false);
+
   const handlePlanClick = () => setShowBetaPopup(true);
+
+  const handleBetaContinue = () => {
+    setFadingOut(true);
+    setTimeout(() => {
+      setShowBetaPopup(false);
+      onSubscribe();
+    }, 600);
+  };
 
   useState(() => {
     requestAnimationFrame(() => setVisible(true));
@@ -169,14 +179,19 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
       </div>
 
       {showBetaPopup && (
-        <div onClick={() => { setShowBetaPopup(false); onSubscribe(); }} style={{
+        <div onClick={handleBetaContinue} style={{
           position: "fixed", inset: 0, zIndex: 200,
           display: "flex", alignItems: "center", justifyContent: "center",
           background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)",
+          opacity: fadingOut ? 0 : 1,
+          transition: "opacity 0.6s ease",
         }}>
           <div onClick={(e) => e.stopPropagation()} style={{
             background: "#111", border: "1px solid #1c1c1c", borderRadius: 0,
             padding: "44px 36px", textAlign: "center", maxWidth: 400, width: "90vw",
+            transform: fadingOut ? "scale(0.96)" : "scale(1)",
+            transition: "transform 0.6s ease, opacity 0.6s ease",
+            opacity: fadingOut ? 0 : 1,
           }}>
             <div style={{ fontSize: 40, marginBottom: 16 }}>🎉</div>
             <div style={{ fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 12, lineHeight: 1.3, fontFamily: "'Syne', sans-serif" }}>
@@ -185,7 +200,7 @@ export default function ForcedPaywall({ onSubscribe, onSkip }: ForcedPaywallProp
             <div style={{ fontSize: 13, color: "#aaa", lineHeight: 1.7, marginBottom: 28, fontFamily: "'DM Mono', monospace" }}>
               This is a beta test application — you will be receiving the <span style={{ color: "#fff", fontWeight: 500 }}>Elite Tier</span> subscription for free.
             </div>
-            <button onClick={() => { setShowBetaPopup(false); onSubscribe(); }} style={{
+            <button onClick={handleBetaContinue} style={{
               padding: "14px 40px", fontSize: 13, fontWeight: 500,
               background: "#fff", color: "#000", border: "none", borderRadius: 0,
               cursor: "pointer", letterSpacing: "0.08em",
