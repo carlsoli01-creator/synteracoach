@@ -863,11 +863,11 @@ export default function Negotium() {
         .analyzing-msg { font-size: 10px; color: var(--pg-muted); text-align: center; margin-bottom: 20px; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'DM Mono', monospace; animation: blink 1.4s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-        .results-panel { background: var(--pg-card); padding: 32px 28px; overflow-y: auto; }
+        .results-section { padding: 32px 48px; background: var(--pg-bg); animation: fadeUp 0.5s ease; }
         .section-label { font-size: 8px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 12px; display: block; font-family: 'DM Mono', monospace; }
-        .scenarios-wrap { display: flex; flex-direction: column; gap: 0; }
-        .scenarios-list { display: flex; flex-direction: column; gap: 1px; background: var(--pg-border); border: 1px solid var(--pg-border); margin-bottom: 1px; }
-        .scenario-card { width: 100%; background: var(--pg-bg); border: none; padding: 14px 16px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'DM Mono', monospace; transition: background 0.15s; }
+
+        .scenario-card { width: 100%; background: var(--pg-bg); border: none; border-bottom: 1px solid var(--pg-border); padding: 14px 16px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'DM Mono', monospace; transition: background 0.15s; }
+        .scenario-card:last-child { border-bottom: none; }
         .scenario-card:hover { background: var(--pg-accent); }
         .scenario-card.done { opacity: 0.4; }
         .scenario-cat { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
@@ -879,7 +879,6 @@ export default function Negotium() {
         .score-ring { display: flex; flex-direction: column; align-items: center; gap: 6px; }
         .ring-label { font-size: 7px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); font-family: 'DM Mono', monospace; }
 
-        .results-wrap { animation: fadeUp 0.5s ease; }
         .result-section { padding-bottom: 20px; border-bottom: 1px solid var(--pg-border); margin-bottom: 20px; }
 
         .metric-bars { display: grid; gap: 14px; }
@@ -924,15 +923,29 @@ export default function Negotium() {
         .tips-list { display: grid; gap: 6px; }
         .tip-item { border: 1px solid var(--pg-border); padding: 10px 12px; font-size: 11px; color: var(--pg-muted); line-height: 1.7; font-family: 'DM Mono', monospace; }
 
-        .bottom-cards { display: flex; gap: 1px; background: var(--pg-border); padding: 0 0; margin-top: 1px; }
-        .bottom-cards.mobile { flex-direction: column; padding: 0 20px; background: transparent; gap: 12px; }
-        .quote-card { flex: 1; padding: 40px 32px; border: none; background: var(--pg-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; }
-        .quote-text { font-size: 14px; font-family: 'DM Mono', monospace; font-style: italic; color: var(--pg-muted); line-height: 1.8; }
-        .quote-attr { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
-        .custom-card { flex: 1; padding: 40px 32px; background: var(--pg-card); border: none; cursor: pointer; font-family: 'DM Mono', monospace; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s; }
-        .custom-card:hover { background: var(--pg-accent); }
+        /* Below sections: tabbed practice, quick nav, quote */
+        .below-sections { display: flex; flex-direction: column; gap: 48px; padding: 48px 48px 60px; }
+
+        .practice-box { border: 1px solid var(--pg-border); background: var(--pg-card); }
+        .practice-tabs-row { display: flex; border-bottom: 1px solid var(--pg-border); }
+        .practice-tab { flex: 1; padding: 12px 16px; background: transparent; border: none; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pg-muted); cursor: pointer; font-family: 'DM Mono', monospace; transition: all 0.15s; border-bottom: 2px solid transparent; }
+        .practice-tab.active { color: var(--pg-text); border-bottom-color: var(--pg-text); }
+        .practice-tab:hover { color: var(--pg-faint); }
+        .practice-content { }
+        .scenarios-list-inner { display: flex; flex-direction: column; }
+
+        .custom-practice-inner { width: 100%; padding: 40px 32px; background: transparent; border: none; cursor: pointer; font-family: 'DM Mono', monospace; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s; }
+        .custom-practice-inner:hover { background: var(--pg-accent); }
         .custom-card-title { font-size: 13px; font-weight: 600; color: var(--pg-text); letter-spacing: 0.02em; }
         .custom-card-sub { font-size: 9px; color: var(--pg-dim); letter-spacing: 0.1em; }
+
+        .quick-nav { display: flex; gap: 12px; }
+        .quick-nav-btn { flex: 1; padding: 16px; background: var(--pg-card); border: 1px solid var(--pg-border); color: var(--pg-text); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-family: 'DM Mono', monospace; transition: background 0.15s, border-color 0.15s; }
+        .quick-nav-btn:hover { background: var(--pg-accent); border-color: var(--pg-dim); }
+
+        .quote-section { padding: 40px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .quote-text { font-size: 14px; font-family: 'DM Mono', monospace; font-style: italic; color: var(--pg-muted); line-height: 1.8; }
+        .quote-attr { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
 
         .quiz-overlay { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; background: var(--pg-overlay); backdrop-filter: blur(8px); }
         .quiz-modal { width: min(480px, 92vw); background: var(--pg-card); border: 1px solid var(--pg-border); padding: 36px; }
