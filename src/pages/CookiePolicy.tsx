@@ -9,11 +9,11 @@ export default function CookiePolicy() {
   const muted = isDark ? "#666" : "#999";
 
   return (
-    <div style={{ minHeight: "100vh", background: bg, color: text, fontFamily: "Inter, sans-serif", padding: "0 20px 60px" }}>
+    <div className="min-h-screen bg-background text-foreground" style={{ fontFamily: "Inter, sans-serif", padding: "0 20px 60px" }}>
       <div style={{ maxWidth: 600, margin: "0 auto" }}>
-        <button onClick={() => navigate(-1)} style={{ background: "none", border: "none", color: muted, fontSize: 13, cursor: "pointer", padding: "20px 0" }}>← Back</button>
-        <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Cookie Policy</h1>
-        <p style={{ fontSize: 11, color: muted, marginBottom: 32 }}>Last updated: March 12, 2026</p>
+        <button onClick={() => navigate(-1)} className="text-muted-foreground" style={{ background: "none", border: "none", fontSize: 13, cursor: "pointer", padding: "20px 0" }}>← Back</button>
+        <h1 className="text-foreground" style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Cookie Policy</h1>
+        <p className="text-muted-foreground" style={{ fontSize: 11, marginBottom: 32 }}>Last updated: March 12, 2026</p>
 
         {[
           { t: "1. What Are Cookies", p: "Cookies are small text files stored on your device when you visit a website. They help the site remember your preferences and understand how you use it." },
@@ -28,7 +28,7 @@ export default function CookiePolicy() {
         ].map((s, i) => (
           <div key={i} style={{ marginBottom: 24 }}>
             <h2 style={{ fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{s.t}</h2>
-            <p style={{ fontSize: 13, lineHeight: 1.7, color: isDark ? "#aaa" : "#555" }}>{s.p}</p>
+            <p className="text-muted-foreground" style={{ fontSize: 13, lineHeight: 1.7 }}>{s.p}</p>
           </div>
         ))}
       </div>
