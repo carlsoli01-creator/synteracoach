@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
+import { Mic, MicOff } from "lucide-react";
 import { AILoader } from "@/components/ui/ai-loader";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -254,6 +255,94 @@ export default function Negotium() {
   const transcriptRef = useRef("");
   const recognitionRef = useRef(null);
   const recordingStartRef = useRef(0);
+  const orbCanvasRef = useRef<HTMLCanvasElement>(null);
+  const orbTimeRef = useRef(0);
+  const orbAnimRef = useRef<number>(0);
+  const [practiceTab, setPracticeTab] = useState<"today" | "custom">("today");
+
+  // Canvas orb drawing effect driven by liveEnergy
+  useEffect(() => {
+    const canvas = orbCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const size = 200;
+    canvas.width = size;
+    canvas.height = size;
+
+    const isDark = document.documentElement.classList.contains("dark");
+    const orbColor = isDark ? "255, 255, 255" : "0, 0, 0";
+
+    const draw = () => {
+      if (!ctx || !canvas) return;
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const baseRadius = 60;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (phase === "recording") {
+        orbTimeRef.current += 0.05;
+        const vol = liveEnergy / 100; // 0-1
+
+        const numBars = 32;
+        const angleStep = (Math.PI * 2) / numBars;
+
+        for (let i = 0; i < numBars; i++) {
+          const angle = i * angleStep - Math.PI / 2;
+          const wave1 = Math.sin(orbTimeRef.current * (2 + vol * 3) + i * 0.5) * 0.5 + 0.5;
+          const wave2 = Math.cos(orbTimeRef.current * (1.5 + vol * 2) + i * 0.3) * 0.5 + 0.5;
+          const amplitude = (wave1 * 0.6 + wave2 * 0.4) * (15 + vol * 35);
+
+          const innerRadius = baseRadius;
+          const outerRadius = baseRadius + amplitude;
+
+          const x1 = centerX + Math.cos(angle) * innerRadius;
+          const y1 = centerY + Math.sin(angle) * innerRadius;
+          const x2 = centerX + Math.cos(angle) * outerRadius;
+          const y2 = centerY + Math.sin(angle) * outerRadius;
+
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.strokeStyle = `rgba(${orbColor}, ${0.3 + amplitude / 50})`;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+
+        const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, baseRadius);
+        gradient.addColorStop(0, `rgba(${orbColor}, ${0.5 + vol * 0.4})`);
+        gradient.addColorStop(0.5, `rgba(${orbColor}, ${0.2 + vol * 0.3})`);
+        gradient.addColorStop(1, `rgba(${orbColor}, 0)`);
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, baseRadius, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Idle / done state - gentle static orb
+        const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, baseRadius);
+        gradient.addColorStop(0, `rgba(${orbColor}, 0.6)`);
+        gradient.addColorStop(0.5, `rgba(${orbColor}, 0.3)`);
+        gradient.addColorStop(1, `rgba(${orbColor}, 0)`);
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, baseRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = `rgba(${orbColor}, 0.4)`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, baseRadius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      orbAnimRef.current = requestAnimationFrame(draw);
+    };
+
+    draw();
+    return () => { if (orbAnimRef.current) cancelAnimationFrame(orbAnimRef.current); };
+  }, [phase, liveEnergy]);
 
   const ringOffset = CIRCUMFERENCE * (timeLeft / selectedDuration);
 
@@ -446,28 +535,18 @@ export default function Negotium() {
               )}
             </header>
 
-            <main className={`main-grid${isMobile ? " mobile" : ""}${phase === "done" ? " stacked" : ""}`}>
-              {/* LEFT: Recording */}
+            <main className="main-single">
+              {/* Recording Area */}
               <section className="record-panel">
                 <div className="hero-heading">
                   <h1 className="text-3xl font-serif">Practice.</h1>
                   <h1 className="hero-sub font-serif font-normal">{heroFocus}</h1>
                 </div>
 
-                <div className={`waveform text-secondary-foreground bg-primary-foreground${phase === "recording" ? " active" : ""}`}>
-                  {waveData.map((v, i) => (
-                    <div key={i} className="wave-bar" style={{ height: `${Math.max(3, Math.abs(v - 0.5) * 120)}px`, opacity: phase === "recording" ? 0.45 + Math.abs(v - 0.5) : 0.3, background: phase === "recording" ? "var(--pg-text)" : "var(--pg-subtle)" }} />
-                  ))}
-                </div>
-
-                <div className="timer-wrap">
-                  <svg width={140} height={140} viewBox="0 0 160 160">
-                    <circle cx={80} cy={80} r={70} fill="none" strokeWidth={1.5} style={{ stroke: 'var(--pg-border-soft)' }} />
-                    <circle cx={80} cy={80} r={70} fill="none" strokeWidth={1.5}
-                      strokeLinecap="round" strokeDasharray={CIRCUMFERENCE} strokeDashoffset={ringOffset}
-                      style={{ stroke: 'var(--pg-text)', transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 0.9s linear" }} />
-                  </svg>
-                  <div className="timer-inner font-serif">
+                {/* Canvas Orb */}
+                <div className="orb-container">
+                  <canvas ref={orbCanvasRef} className="orb-canvas" />
+                  <div className="orb-overlay">
                     <div className="timer-count font-serif">{timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}</div>
                     <div className="timer-label font-serif">{timeLeft >= 60 ? '' : 'sec'}</div>
                     {phase === "recording" && <div className="rec-dot" />}
@@ -510,157 +589,175 @@ export default function Negotium() {
                   const dark = document.documentElement.classList.contains("dark");
                   return <AILoader text="Analyzing" volume={liveEnergy / 100} estimatedSeconds={est} isDark={dark} size={140} />;
                 })()}
-              </section>
 
-              {/* RIGHT: Scenarios / Results */}
-              <aside className="results-panel bg-primary-foreground">
-                {!isMobile && (phase === "idle" || phase === "recording") && (
-                  <div className="scenarios-wrap">
-                    <div className="section-label">Today's Practice</div>
-                    <div className="scenarios-list">
-                      {SCENARIO_CATEGORIES.map((cat) => {
-                        const todayItem = getTodayScenario(cat);
-                        const done = completedCategoriesToday.includes(cat.category);
-                        return (
-                          <button key={cat.slug} onClick={() => navigate(`/scenarios/${cat.slug}`)} className={`scenario-card${done ? " done" : ""}`}>
-                            <div>
-                              <div className="scenario-cat">{cat.category}{done && <span className="scenario-done-badge">✓</span>}</div>
-                              <div className="scenario-title">{todayItem.title}</div>
-                            </div>
-                            <div className="scenario-diff" style={{ color: diffColor(todayItem.difficulty) }}>{todayItem.difficulty}</div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                    <button className="custom-card bg-primary-foreground" style={{ minHeight: 160, width: '100%', marginTop: 16, display: 'flex' }} onClick={() => navigate("/custom-practice")}>
-                      <span className="custom-card-title">+ Custom Practice</span>
-                      <span className="custom-card-sub">Choose your own scenario and goals</span>
-                    </button>
+                {phase === "recording" && (
+                  <div className="recording-indicator">
+                    <span className="rec-dot-inline" />
+                    <span className="recording-label">Recording</span>
                   </div>
                 )}
+              </section>
 
-                {phase === "done" && metrics && feedback && (
-                  <div className="results-wrap">
-                    {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
-                    <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" } : {}}>
-                      <div className="score-rings">
-                        <ScoreRing score={metrics.overall} label="Overall" color="var(--pg-text)" />
-                        <ScoreRing score={metrics.delivery} label="Delivery" color="var(--pg-subtle)" />
-                        <ScoreRing score={metrics.pace} label="Pace" color="var(--pg-subtle)" />
-                        <ScoreRing score={metrics.conf} label="Confidence" color="var(--pg-subtle)" />
-                        <ScoreRing score={metrics.clar} label="Clarity" color="var(--pg-subtle)" />
+              {/* Results below recording when done */}
+              {phase === "done" && metrics && feedback && (
+                <section className="results-section">
+                  {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
+                  <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" } : {}}>
+                    <div className="score-rings">
+                      <ScoreRing score={metrics.overall} label="Overall" color="var(--pg-text)" />
+                      <ScoreRing score={metrics.delivery} label="Delivery" color="var(--pg-subtle)" />
+                      <ScoreRing score={metrics.pace} label="Pace" color="var(--pg-subtle)" />
+                      <ScoreRing score={metrics.conf} label="Confidence" color="var(--pg-subtle)" />
+                      <ScoreRing score={metrics.clar} label="Clarity" color="var(--pg-subtle)" />
+                    </div>
+
+                    <div className="result-section">
+                      <div className="metric-bars">
+                        {[{ label: "Word Choice", value: metrics.wordChoice }, { label: "Persuasion", value: metrics.persuasion }].map(({ label, value }) => (
+                          <div key={label} className="metric-bar-item">
+                            <div className="metric-bar-header"><span className="section-label">{label}</span><span className="metric-bar-num">{value}</span></div>
+                            <div className="bar-track"><div className="bar-fill" style={{ width: `${value}%` }} /></div>
+                          </div>
+                        ))}
                       </div>
+                    </div>
 
+                    <div className="result-section">
+                      <div className="metric-bar-header"><span className="section-label">Measured Pace</span><span className="metric-bar-num">{metrics.wpm} WPM</span></div>
+                      <div className="bar-track"><div className="bar-fill" style={{ width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "var(--pg-text)" : "var(--pg-subtle)" }} /></div>
+                      <div className="bar-hint">Ideal: 130–160 WPM</div>
+                    </div>
+
+                    <div className="result-section tags-row">
+                      {feedback.tags.map((tag, i) => (
+                        <span key={i} className="tag" style={{ color: tagColor(tag.t), background: tagBg(tag.t), borderColor: tagColor(tag.t) }}>{tag.label}</span>
+                      ))}
+                    </div>
+
+                    {feedback.transcript && (
                       <div className="result-section">
-                        <div className="metric-bars">
-                          {[{ label: "Word Choice", value: metrics.wordChoice }, { label: "Persuasion", value: metrics.persuasion }].map(({ label, value }) => (
-                            <div key={label} className="metric-bar-item">
-                              <div className="metric-bar-header"><span className="section-label">{label}</span><span className="metric-bar-num">{value}</span></div>
-                              <div className="bar-track"><div className="bar-fill" style={{ width: `${value}%` }} /></div>
+                        <div className="section-label">Your Speech</div>
+                        <p className="transcript-text">"{feedback.transcript}"</p>
+                      </div>
+                    )}
+
+                    {[
+                      { title: "Overall Assessment", text: feedback.overallTxt },
+                      { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
+                      { title: "Pace & Rhythm", text: feedback.paceTxt },
+                      { title: "Tone & Authority", text: feedback.toneTxt },
+                      { title: "Clarity & Structure", text: feedback.clarityTxt },
+                      { title: "Key Strength", text: feedback.strengthTxt },
+                      { title: "Key Weakness", text: feedback.weaknessTxt },
+                      { title: "Recommendation", text: feedback.recTxt },
+                    ].filter(({ text }) => text).map(({ title, text }) => (
+                      <div key={title} className="result-section">
+                        <div className="section-label">{title}</div>
+                        <p className="feedback-text">{text}</p>
+                      </div>
+                    ))}
+
+                    {feedback.techniques?.length > 0 && (
+                      <div className="result-section">
+                        <div className="section-label">Techniques Detected ({feedback.techniques.length})</div>
+                        <div className="techniques-list">
+                          {feedback.techniques.map((t, i) => (
+                            <div key={i} className={`technique-card impact-${t.impact}`}>
+                              <div className="technique-header">
+                                <span className="technique-name">{t.name}</span>
+                                <span className={`technique-badge impact-${t.impact}`}>{t.impact === "pos" ? "Effective" : t.impact === "neg" ? "Needs Work" : "Neutral"}</span>
+                              </div>
+                              <p className="technique-quote">"{t.quote}"</p>
+                              <p className="technique-explanation">{t.explanation}</p>
                             </div>
                           ))}
                         </div>
                       </div>
+                    )}
 
-                      <div className="result-section">
-                        <div className="metric-bar-header"><span className="section-label">Measured Pace</span><span className="metric-bar-num">{metrics.wpm} WPM</span></div>
-                        <div className="bar-track"><div className="bar-fill" style={{ width: `${metrics.measuredPace}%`, background: metrics.wpm >= 120 && metrics.wpm <= 160 ? "var(--pg-text)" : "var(--pg-subtle)" }} /></div>
-                        <div className="bar-hint">Ideal: 130–160 WPM</div>
+                    <div className="result-section word-stats">
+                      <div>
+                        <div className="section-label">Filler Words</div>
+                        <div className="word-stat-num">{feedback.fillerWords?.count || 0}</div>
+                        <div className="word-stat-sub">{feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}</div>
+                        {feedback.fillerWords?.words?.length > 0 && <div className="word-chips">{feedback.fillerWords.words.map((w, i) => <span key={i} className="chip chip-neutral">{w}</span>)}</div>}
                       </div>
-
-                      <div className="result-section tags-row">
-                        {feedback.tags.map((tag, i) => (
-                          <span key={i} className="tag" style={{ color: tagColor(tag.t), background: tagBg(tag.t), borderColor: tagColor(tag.t) }}>{tag.label}</span>
-                        ))}
+                      <div>
+                        <div className="section-label">Power Words</div>
+                        <div className="word-stat-num">{feedback.powerWords?.length || 0}</div>
+                        {feedback.powerWords?.length > 0 && <div className="word-chips">{feedback.powerWords.map((w, i) => <span key={i} className="chip chip-strong">{w}</span>)}</div>}
                       </div>
-
-                      {feedback.transcript && (
-                        <div className="result-section">
-                          <div className="section-label">Your Speech</div>
-                          <p className="transcript-text">"{feedback.transcript}"</p>
-                        </div>
-                      )}
-
-                      {[
-                        { title: "Overall Assessment", text: feedback.overallTxt },
-                        { title: "Delivery & Word Choice", text: feedback.deliveryTxt },
-                        { title: "Pace & Rhythm", text: feedback.paceTxt },
-                        { title: "Tone & Authority", text: feedback.toneTxt },
-                        { title: "Clarity & Structure", text: feedback.clarityTxt },
-                        { title: "Key Strength", text: feedback.strengthTxt },
-                        { title: "Key Weakness", text: feedback.weaknessTxt },
-                        { title: "Recommendation", text: feedback.recTxt },
-                      ].filter(({ text }) => text).map(({ title, text }) => (
-                        <div key={title} className="result-section">
-                          <div className="section-label">{title}</div>
-                          <p className="feedback-text">{text}</p>
-                        </div>
-                      ))}
-
-                      {feedback.techniques?.length > 0 && (
-                        <div className="result-section">
-                          <div className="section-label">Techniques Detected ({feedback.techniques.length})</div>
-                          <div className="techniques-list">
-                            {feedback.techniques.map((t, i) => (
-                              <div key={i} className={`technique-card impact-${t.impact}`}>
-                                <div className="technique-header">
-                                  <span className="technique-name">{t.name}</span>
-                                  <span className={`technique-badge impact-${t.impact}`}>{t.impact === "pos" ? "Effective" : t.impact === "neg" ? "Needs Work" : "Neutral"}</span>
-                                </div>
-                                <p className="technique-quote">"{t.quote}"</p>
-                                <p className="technique-explanation">{t.explanation}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="result-section word-stats">
-                        <div>
-                          <div className="section-label">Filler Words</div>
-                          <div className="word-stat-num">{feedback.fillerWords?.count || 0}</div>
-                          <div className="word-stat-sub">{feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}</div>
-                          {feedback.fillerWords?.words?.length > 0 && <div className="word-chips">{feedback.fillerWords.words.map((w, i) => <span key={i} className="chip chip-neutral">{w}</span>)}</div>}
-                        </div>
-                        <div>
-                          <div className="section-label">Power Words</div>
-                          <div className="word-stat-num">{feedback.powerWords?.length || 0}</div>
-                          {feedback.powerWords?.length > 0 && <div className="word-chips">{feedback.powerWords.map((w, i) => <span key={i} className="chip chip-strong">{w}</span>)}</div>}
-                        </div>
-                      </div>
-
-                      {feedback.hedgingInstances?.length > 0 && (
-                        <div className="result-section">
-                          <div className="section-label">Hedging → Stronger Alternatives</div>
-                          <div className="hedging-list">
-                            {feedback.hedgingInstances.map((h, i) => (
-                              <div key={i} className="hedging-row"><span className="hedge-weak">"{h.phrase}"</span><span className="hedge-arrow">→</span><span className="hedge-strong">"{h.suggestion}"</span></div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {recCommTips.length > 0 && (
-                        <div className="result-section">
-                          <div className="section-label">Recommended Tips</div>
-                          <div className="tips-list">{recCommTips.map((t, i) => <div key={i} className="tip-item">{t}</div>)}</div>
-                        </div>
-                      )}
                     </div>
+
+                    {feedback.hedgingInstances?.length > 0 && (
+                      <div className="result-section">
+                        <div className="section-label">Hedging → Stronger Alternatives</div>
+                        <div className="hedging-list">
+                          {feedback.hedgingInstances.map((h, i) => (
+                            <div key={i} className="hedging-row"><span className="hedge-weak">"{h.phrase}"</span><span className="hedge-arrow">→</span><span className="hedge-strong">"{h.suggestion}"</span></div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {recCommTips.length > 0 && (
+                      <div className="result-section">
+                        <div className="section-label">Recommended Tips</div>
+                        <div className="tips-list">{recCommTips.map((t, i) => <div key={i} className="tip-item">{t}</div>)}</div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </aside>
+                </section>
+              )}
             </main>
 
-            {phase === "idle" && (
-              <>
-                <div style={{ marginTop: 60, paddingBottom: 40 }}>
-                  <div className="quote-card" style={{ minHeight: 140, maxWidth: '100%', margin: '0 24px', border: 'none', background: 'transparent' }}>
-                    <p className="quote-text">Great speakers aren't born. They're trained.</p>
-                    <span className="quote-attr">— Unknown</span>
+            {/* Tabbed Practice + Quote section below */}
+            {phase !== "done" && (
+              <div className="below-sections">
+                {/* Tabbed Practice Box */}
+                <div className="practice-box">
+                  <div className="practice-tabs-row">
+                    <button className={`practice-tab${practiceTab === "today" ? " active" : ""}`} onClick={() => setPracticeTab("today")}>Today's Practice</button>
+                    <button className={`practice-tab${practiceTab === "custom" ? " active" : ""}`} onClick={() => setPracticeTab("custom")}>Custom Practice</button>
+                  </div>
+                  <div className="practice-content">
+                    {practiceTab === "today" ? (
+                      <div className="scenarios-list-inner">
+                        {SCENARIO_CATEGORIES.map((cat) => {
+                          const todayItem = getTodayScenario(cat);
+                          const done = completedCategoriesToday.includes(cat.category);
+                          return (
+                            <button key={cat.slug} onClick={() => navigate(`/scenarios/${cat.slug}`)} className={`scenario-card${done ? " done" : ""}`}>
+                              <div>
+                                <div className="scenario-cat">{cat.category}{done && <span className="scenario-done-badge">✓</span>}</div>
+                                <div className="scenario-title">{todayItem.title}</div>
+                              </div>
+                              <div className="scenario-diff" style={{ color: diffColor(todayItem.difficulty) }}>{todayItem.difficulty}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <button className="custom-practice-inner" onClick={() => navigate("/custom-practice")}>
+                        <span className="custom-card-title">+ Create Custom Practice</span>
+                        <span className="custom-card-sub">Choose your own scenario, topic, and goals</span>
+                      </button>
+                    )}
                   </div>
                 </div>
-              </>
+
+                {/* Quick Nav Buttons */}
+                <div className="quick-nav">
+                  <button className="quick-nav-btn" onClick={() => navigate("/progress")}>View Progress</button>
+                  <button className="quick-nav-btn" onClick={() => navigate("/coach")}>AI Coach</button>
+                </div>
+
+                {/* Quote */}
+                <div className="quote-section">
+                  <p className="quote-text">Great speakers aren't born. They're trained.</p>
+                  <span className="quote-attr">— Unknown</span>
+                </div>
+              </div>
             )}
 
             <div style={{ height: 40 }} />
@@ -718,24 +815,25 @@ export default function Negotium() {
         .topbar-avg-label { display: block; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 2px; font-family: 'DM Mono', monospace; }
         .topbar-avg-value { font-size: 28px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
 
-        .main-grid { display: grid; grid-template-columns: 1fr 360px; gap: 1px; padding: 0; background: var(--pg-border); border-top: none; min-height: calc(100vh - 53px); }
-        .main-grid.mobile, .main-grid.stacked { grid-template-columns: 1fr; background: var(--pg-bg); gap: 0; padding: 0; }
+        .main-single { display: flex; flex-direction: column; padding: 0; background: var(--pg-bg); min-height: calc(100vh - 53px); }
 
-        .record-panel { display: flex; flex-direction: column; padding: 48px 48px 40px; background: var(--pg-bg); }
+        .record-panel { display: flex; flex-direction: column; align-items: center; padding: 48px 48px 40px; background: var(--pg-bg); }
 
-        .hero-heading { margin-bottom: 48px; }
+        .hero-heading { margin-bottom: 32px; text-align: center; }
         .hero-heading h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.0; color: var(--pg-text); }
         .hero-heading h1.hero-sub { color: var(--pg-hero-sub); font-weight: 400; }
 
-        .waveform { height: 56px; background: var(--pg-accent); border: 1px solid var(--pg-border); border-radius: 0; display: flex; align-items: center; padding: 0 10px; gap: 1.5px; margin-bottom: 36px; transition: border-color 0.3s; }
-        .waveform.active { border-color: var(--pg-wave-active-border); }
-        .wave-bar { flex: 1; border-radius: 1px; transition: height 0.05s, background 0.2s, opacity 0.2s; }
+        .orb-container { position: relative; width: 200px; height: 200px; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; }
+        .orb-canvas { width: 200px; height: 200px; }
+        .orb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; pointer-events: none; }
 
-        .timer-wrap { position: relative; width: 140px; height: 140px; margin: 0 auto 32px; }
-        .timer-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
         .timer-count { font-size: 48px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
         .timer-label { font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
         .rec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); margin-top: 6px; animation: pulse 1s infinite; }
+
+        .recording-indicator { display: flex; align-items: center; gap: 8px; justify-content: center; margin-top: 16px; }
+        .rec-dot-inline { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); animation: pulse 1s infinite; }
+        .recording-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); font-family: 'DM Mono', monospace; }
 
         .duration-wrap { max-width: 240px; margin: 0 auto 24px; }
         .duration-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
@@ -765,11 +863,11 @@ export default function Negotium() {
         .analyzing-msg { font-size: 10px; color: var(--pg-muted); text-align: center; margin-bottom: 20px; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'DM Mono', monospace; animation: blink 1.4s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-        .results-panel { background: var(--pg-card); padding: 32px 28px; overflow-y: auto; }
+        .results-section { padding: 32px 48px; background: var(--pg-bg); animation: fadeUp 0.5s ease; }
         .section-label { font-size: 8px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 12px; display: block; font-family: 'DM Mono', monospace; }
-        .scenarios-wrap { display: flex; flex-direction: column; gap: 0; }
-        .scenarios-list { display: flex; flex-direction: column; gap: 1px; background: var(--pg-border); border: 1px solid var(--pg-border); margin-bottom: 1px; }
-        .scenario-card { width: 100%; background: var(--pg-bg); border: none; padding: 14px 16px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'DM Mono', monospace; transition: background 0.15s; }
+
+        .scenario-card { width: 100%; background: var(--pg-bg); border: none; border-bottom: 1px solid var(--pg-border); padding: 14px 16px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'DM Mono', monospace; transition: background 0.15s; }
+        .scenario-card:last-child { border-bottom: none; }
         .scenario-card:hover { background: var(--pg-accent); }
         .scenario-card.done { opacity: 0.4; }
         .scenario-cat { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
@@ -781,7 +879,6 @@ export default function Negotium() {
         .score-ring { display: flex; flex-direction: column; align-items: center; gap: 6px; }
         .ring-label { font-size: 7px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); font-family: 'DM Mono', monospace; }
 
-        .results-wrap { animation: fadeUp 0.5s ease; }
         .result-section { padding-bottom: 20px; border-bottom: 1px solid var(--pg-border); margin-bottom: 20px; }
 
         .metric-bars { display: grid; gap: 14px; }
@@ -826,15 +923,29 @@ export default function Negotium() {
         .tips-list { display: grid; gap: 6px; }
         .tip-item { border: 1px solid var(--pg-border); padding: 10px 12px; font-size: 11px; color: var(--pg-muted); line-height: 1.7; font-family: 'DM Mono', monospace; }
 
-        .bottom-cards { display: flex; gap: 1px; background: var(--pg-border); padding: 0 0; margin-top: 1px; }
-        .bottom-cards.mobile { flex-direction: column; padding: 0 20px; background: transparent; gap: 12px; }
-        .quote-card { flex: 1; padding: 40px 32px; border: none; background: var(--pg-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; }
-        .quote-text { font-size: 14px; font-family: 'DM Mono', monospace; font-style: italic; color: var(--pg-muted); line-height: 1.8; }
-        .quote-attr { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
-        .custom-card { flex: 1; padding: 40px 32px; background: var(--pg-card); border: none; cursor: pointer; font-family: 'DM Mono', monospace; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s; }
-        .custom-card:hover { background: var(--pg-accent); }
+        /* Below sections: tabbed practice, quick nav, quote */
+        .below-sections { display: flex; flex-direction: column; gap: 48px; padding: 48px 48px 60px; }
+
+        .practice-box { border: 1px solid var(--pg-border); background: var(--pg-card); }
+        .practice-tabs-row { display: flex; border-bottom: 1px solid var(--pg-border); }
+        .practice-tab { flex: 1; padding: 12px 16px; background: transparent; border: none; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pg-muted); cursor: pointer; font-family: 'DM Mono', monospace; transition: all 0.15s; border-bottom: 2px solid transparent; }
+        .practice-tab.active { color: var(--pg-text); border-bottom-color: var(--pg-text); }
+        .practice-tab:hover { color: var(--pg-faint); }
+        .practice-content { }
+        .scenarios-list-inner { display: flex; flex-direction: column; }
+
+        .custom-practice-inner { width: 100%; padding: 40px 32px; background: transparent; border: none; cursor: pointer; font-family: 'DM Mono', monospace; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s; }
+        .custom-practice-inner:hover { background: var(--pg-accent); }
         .custom-card-title { font-size: 13px; font-weight: 600; color: var(--pg-text); letter-spacing: 0.02em; }
         .custom-card-sub { font-size: 9px; color: var(--pg-dim); letter-spacing: 0.1em; }
+
+        .quick-nav { display: flex; gap: 12px; }
+        .quick-nav-btn { flex: 1; padding: 16px; background: var(--pg-card); border: 1px solid var(--pg-border); color: var(--pg-text); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-family: 'DM Mono', monospace; transition: background 0.15s, border-color 0.15s; }
+        .quick-nav-btn:hover { background: var(--pg-accent); border-color: var(--pg-dim); }
+
+        .quote-section { padding: 40px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .quote-text { font-size: 14px; font-family: 'DM Mono', monospace; font-style: italic; color: var(--pg-muted); line-height: 1.8; }
+        .quote-attr { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
 
         .quiz-overlay { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; background: var(--pg-overlay); backdrop-filter: blur(8px); }
         .quiz-modal { width: min(480px, 92vw); background: var(--pg-card); border: 1px solid var(--pg-border); padding: 36px; }
