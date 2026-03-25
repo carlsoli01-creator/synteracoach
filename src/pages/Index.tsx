@@ -1,11 +1,9 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
-import { Mic, MicOff } from "lucide-react";
+import { Mic, MicOff, ArrowLeft, Settings } from "lucide-react";
 import { AILoader } from "@/components/ui/ai-loader";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
-import AppSidebar from "@/components/layout/AppSidebar";
-import { useSidebarState } from "@/contexts/SidebarContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenarios";
 import { useNavigate } from "react-router-dom";
@@ -14,17 +12,18 @@ import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 import SpeakBetterInterstitial from "@/components/onboarding/SpeakBetterInterstitial";
 import { Footer } from "@/components/ui/footer";
 import MobileQuizAndInstall from "@/components/onboarding/MobileQuizAndInstall";
+import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
 
-function getVariance(arr) {
+function getVariance(arr: number[]) {
   if (!arr.length) return 0;
   const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
   return arr.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / arr.length;
 }
 
-function ScoreRing({ score, label, color }) {
+function ScoreRing({ score, label, color }: { score: number; label: string; color: string }) {
   const r = 28;
   const circ = 2 * Math.PI * r;
   const offset = circ * (1 - score / 100);
@@ -76,20 +75,10 @@ const COMMUNICATION_TIPS = [
   "Ask calibrated questions to engage listeners ('How would you...?').",
   "Summarize key points before moving on to new ideas.",
   "Use consistent terminology to reduce ambiguity.",
-  "Record and compare your delivery across sessions.",
 ];
 
-const QUIZ_QUESTIONS = [
-  { id: "goal", q: "What do you most want to improve?", options: ["Pace", "Tone/Authority", "Clarity", "Confidence", "Conciseness"] },
-  { id: "experience", q: "How often do you practice speaking exercises?", options: ["Daily", "Weekly", "Monthly", "Rarely", "Never"] },
-  { id: "audience", q: "Who is your most common audience?", options: ["One person", "Small team", "Large group", "Clients/Customers", "Remote calls"] },
-  { id: "nerves", q: "Do you feel nervous when speaking publicly?", options: ["Always", "Often", "Sometimes", "Rarely", "Never"] },
-  { id: "filler", q: "Do you use filler words (um/like) often?", options: ["Very often", "Sometimes", "Occasionally", "Rarely", "Never"] },
-  { id: "goalType", q: "Which result matters most?", options: ["Close deals", "Appear confident", "Be concise", "Be persuasive", "Improve clarity"] },
-];
-
-function derivePersonalization(answers) {
-  const picksComm = [];
+function derivePersonalization(answers: Record<string, string>) {
+  const picksComm: string[] = [];
   if (answers.goal?.includes("Pace")) picksComm.push(COMMUNICATION_TIPS[6], COMMUNICATION_TIPS[20]);
   if (answers.goal?.includes("Tone")) picksComm.push(COMMUNICATION_TIPS[0], COMMUNICATION_TIPS[21]);
   if (answers.goal?.includes("Clarity")) picksComm.push(COMMUNICATION_TIPS[2], COMMUNICATION_TIPS[22]);
@@ -98,7 +87,7 @@ function derivePersonalization(answers) {
   if (answers.filler?.includes("Very") || answers.filler?.includes("Sometimes")) picksComm.push(COMMUNICATION_TIPS[16]);
   if (answers.nerves?.includes("Always") || answers.nerves?.includes("Often")) picksComm.push(COMMUNICATION_TIPS[10]);
   for (let i = 0; picksComm.length < 6; i++) picksComm.push(COMMUNICATION_TIPS[i % COMMUNICATION_TIPS.length]);
-  const goalMap = {
+  const goalMap: Record<string, string> = {
     "Pace": "Optimized for pace & rhythm mastery",
     "Tone/Authority": "Tuned for tone & authority building",
     "Clarity": "Focused on crystal-clear delivery",
@@ -106,7 +95,7 @@ function derivePersonalization(answers) {
     "Conciseness": "Streamlined for concise impact",
   };
   const subtitle = goalMap[answers.goal] || "Voice Intelligence Platform";
-  const focusMap = {
+  const focusMap: Record<string, string> = {
     "Close deals": "Close Deals.",
     "Appear confident": "Command the Room.",
     "Be concise": "Say More with Less.",
@@ -114,45 +103,10 @@ function derivePersonalization(answers) {
     "Improve clarity": "Speak with Clarity.",
   };
   const heroFocus = focusMap[answers.goalType] || "Be Analyzed.";
-  return { neg: [], comm: picksComm.slice(0, 6), subtitle, heroFocus };
+  return { neg: [] as string[], comm: picksComm.slice(0, 6), subtitle, heroFocus };
 }
 
-function OnboardingQuiz({ onFinish }) {
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const q = QUIZ_QUESTIONS[step];
-  const handleFinish = () => {
-    const { neg, comm } = derivePersonalization(answers);
-    onFinish({ neg, comm, answers });
-    localStorage.setItem("syntera_quiz_completed_at", Date.now().toString());
-  };
-  return (
-    <div className="quiz-overlay">
-      <div className="quiz-modal">
-        <div className="quiz-header">
-          <div className="quiz-title">Welcome — Quick Setup</div>
-          <div className="quiz-step">{step + 1}/{QUIZ_QUESTIONS.length}</div>
-        </div>
-        <div className="quiz-question">{q.q}</div>
-        <div className="quiz-options">
-          {q.options.map((opt) => (
-            <button key={opt} onClick={() => setAnswers((a) => ({ ...a, [q.id]: opt }))}
-              className={`quiz-option${answers[q.id] === opt ? " selected" : ""}`}>{opt}</button>
-          ))}
-        </div>
-        <div className="quiz-actions">
-          <button onClick={() => setStep((s) => Math.max(s - 1, 0))} disabled={step === 0} className="quiz-btn-secondary">Back</button>
-          {step < QUIZ_QUESTIONS.length - 1
-            ? <button onClick={() => answers[q.id] && setStep((s) => s + 1)} disabled={!answers[q.id]} className="quiz-btn-primary">Next</button>
-            : <button onClick={() => answers[q.id] && handleFinish()} disabled={!answers[q.id]} className="quiz-btn-primary">Finish & Start</button>
-          }
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function VoiceMicControl({ onStart, onStop, onStopEarly, phase }) {
+function VoiceMicControl({ onStart, onStop, onStopEarly, phase }: { onStart: () => void; onStop: () => void; onStopEarly: () => void; phase: string }) {
   const isRecording = phase === "recording";
   const isAnalyzing = phase === "analyzing";
 
@@ -173,21 +127,52 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }) {
   );
 }
 
+// Build orbital nodes from scenario categories + extras
+const ORBITAL_NODES = [
+  ...SCENARIO_CATEGORIES.map((cat) => ({
+    id: cat.slug,
+    label: cat.category,
+    icon: cat.icon,
+    description: cat.description,
+    slug: `/scenarios/${cat.slug}`,
+  })),
+  {
+    id: "custom",
+    label: "Custom",
+    icon: "✏️",
+    description: "Create your own practice scenario",
+    slug: "/custom-practice",
+  },
+  {
+    id: "progress",
+    label: "Progress",
+    icon: "📈",
+    description: "Track your improvement over time",
+    slug: "/progress",
+  },
+  {
+    id: "coach",
+    label: "AI Coach",
+    icon: "🧠",
+    description: "Get personalized AI coaching",
+    slug: "/coach",
+  },
+];
+
 export default function Negotium() {
   const { user } = useAuth();
-  const { sidebarWidth } = useSidebarState();
   const isMobile = useIsMobile();
   const [phase, setPhase] = useState("idle");
   const [selectedDuration, setSelectedDuration] = useState(DEFAULT_DURATION);
   const [timeLeft, setTimeLeft] = useState(DEFAULT_DURATION);
-  const [metrics, setMetrics] = useState(null);
-  const [feedback, setFeedback] = useState(null);
-  const [history, setHistory] = useState([]);
+  const [metrics, setMetrics] = useState<any>(null);
+  const [feedback, setFeedback] = useState<any>(null);
+  const [history, setHistory] = useState<any[]>([]);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
-      const { data } = await (supabase).from("voice_sessions").select("*").order("created_at", { ascending: false }).limit(20);
+      const { data } = await (supabase as any).from("voice_sessions").select("*").order("created_at", { ascending: false }).limit(20);
       if (data) setHistory(data);
     })();
   }, [user]);
@@ -195,7 +180,7 @@ export default function Negotium() {
   const navigate = useNavigate();
   const [waveData, setWaveData] = useState(new Array(80).fill(0.5));
   const [micError, setMicError] = useState("");
-  const [recCommTips, setRecCommTips] = useState([]);
+  const [recCommTips, setRecCommTips] = useState<string[]>([]);
   const [userSubtitle, setUserSubtitle] = useState("Voice Intelligence Platform");
   const [heroFocus, setHeroFocus] = useState("Be Analyzed.");
   const [isPremium, setIsPremium] = useState(() => localStorage.getItem("syntera_premium") === "true");
@@ -212,14 +197,6 @@ export default function Negotium() {
   });
   const [livePace, setLivePace] = useState(0);
   const [liveEnergy, setLiveEnergy] = useState(0);
-
-  const completedCategoriesToday = useMemo(() => {
-    const todayStr = new Date().toLocaleDateString();
-    const cats = [];
-    history.filter((s) => s.created_at && new Date(s.created_at).toLocaleDateString() === todayStr)
-      .forEach((s) => { const fb = s.feedback; if (fb?.scenario_category && !cats.includes(fb.scenario_category)) cats.push(fb.scenario_category); });
-    return cats;
-  }, [history]);
 
   useEffect(() => {
     const quizDone = localStorage.getItem("negotium_quiz_v2");
@@ -247,23 +224,22 @@ export default function Negotium() {
     } catch (_) {}
   }, []);
 
-  const analyserRef = useRef(null);
-  const animFrameRef = useRef(null);
-  const timerRef = useRef(null);
-  const analysisTimeoutRef = useRef(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const animFrameRef = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const analysisTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isAnalyzingRef = useRef(false);
-  const mediaRecorderRef = useRef(null);
-  const audioCtxRef = useRef(null);
-  const volumeRef = useRef([]);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const volumeRef = useRef<number[]>([]);
   const silenceRef = useRef(0);
   const framesRef = useRef(0);
   const transcriptRef = useRef("");
-  const recognitionRef = useRef(null);
+  const recognitionRef = useRef<any>(null);
   const recordingStartRef = useRef(0);
   const orbCanvasRef = useRef<HTMLCanvasElement>(null);
   const orbTimeRef = useRef(0);
   const orbAnimRef = useRef<number>(0);
-  const [practiceTab, setPracticeTab] = useState<"today" | "custom">("today");
 
   // Canvas orb drawing effect driven by liveEnergy
   useEffect(() => {
@@ -289,7 +265,7 @@ export default function Negotium() {
 
       if (phase === "recording") {
         orbTimeRef.current += 0.05;
-        const vol = liveEnergy / 100; // 0-1
+        const vol = liveEnergy / 100;
 
         const numBars = 32;
         const angleStep = (Math.PI * 2) / numBars;
@@ -325,7 +301,6 @@ export default function Negotium() {
         ctx.arc(centerX, centerY, baseRadius, 0, Math.PI * 2);
         ctx.fill();
       } else {
-        // Idle / done state - gentle static orb
         const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, baseRadius);
         gradient.addColorStop(0, `rgba(${orbColor}, 0.6)`);
         gradient.addColorStop(0.5, `rgba(${orbColor}, 0.3)`);
@@ -348,8 +323,6 @@ export default function Negotium() {
     draw();
     return () => { if (orbAnimRef.current) cancelAnimationFrame(orbAnimRef.current); };
   }, [phase, liveEnergy]);
-
-  const ringOffset = CIRCUMFERENCE * (timeLeft / selectedDuration);
 
   const stopAll = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -384,12 +357,12 @@ export default function Negotium() {
       });
       if (error) {
         let errorMessage = "AI analysis failed. Please try again.";
-        const responseContext = error?.context;
+        const responseContext = (error as any)?.context;
         if (responseContext && typeof responseContext.text === "function") {
           const responseText = await responseContext.text();
           try { const parsed = JSON.parse(responseText); if (parsed?.error) errorMessage = parsed.error; } catch { if (responseText?.trim()) errorMessage = responseText; }
         }
-        if (error?.message?.includes("402")) errorMessage = "AI credits are exhausted.";
+        if ((error as any)?.message?.includes("402")) errorMessage = "AI credits are exhausted.";
         setMicError(errorMessage); setPhase("idle"); return;
       }
       if (data?.error) { setMicError(data.error); setPhase("idle"); return; }
@@ -397,10 +370,10 @@ export default function Negotium() {
       const finalWpm = durationSeconds > 0 ? transcript.trim().split(/\s+/).filter(Boolean).length / durationSeconds * 60 : 0;
       const measuredPace = finalWpm < 100 ? 20 : finalWpm <= 119 ? 45 : finalWpm <= 139 ? 70 : finalWpm <= 160 ? 100 : finalWpm <= 180 ? 80 : finalWpm <= 200 ? 55 : 30;
       setMetrics({ pace: scores.pace, conf: scores.confidence, clar: scores.clarity, delivery: scores.delivery || scores.overall, overall: scores.overall, measuredPace, wpm: Math.round(finalWpm), wordChoice: wordChoiceScore || 0, persuasion: persuasionScore || 0 });
-      setFeedback({ overallTxt: analysis.overall, paceTxt: analysis.pace, toneTxt: analysis.tone, deliveryTxt: analysis.delivery || "", strengthTxt: analysis.strength, weaknessTxt: analysis.weakness || "", recTxt: analysis.recommendation, clarityTxt: analysis.clarity || "", tags: (tags || []).map((t) => ({ label: t.label, t: t.type })), transcript, techniques: techniques || [], fillerWords: fillerWords || { count: 0, words: [], percentage: 0 }, hedgingInstances: hedgingInstances || [], powerWords: powerWords || [] });
+      setFeedback({ overallTxt: analysis.overall, paceTxt: analysis.pace, toneTxt: analysis.tone, deliveryTxt: analysis.delivery || "", strengthTxt: analysis.strength, weaknessTxt: analysis.weakness || "", recTxt: analysis.recommendation, clarityTxt: analysis.clarity || "", tags: (tags || []).map((t: any) => ({ label: t.label, t: t.type })), transcript, techniques: techniques || [], fillerWords: fillerWords || { count: 0, words: [], percentage: 0 }, hedgingInstances: hedgingInstances || [], powerWords: powerWords || [] });
       setRecCommTips(communicationTips || []);
       const sessionRow = { user_id: user?.id, overall_score: scores.overall, pace_score: scores.pace, confidence_score: scores.confidence, clarity_score: scores.clarity, transcript, feedback: { analysis, tags, scenario_category: localStorage.getItem("syntera_active_scenario_category") || null }, negotiation_tips: [], communication_tips: communicationTips || [], duration_seconds: durationSeconds };
-      const { data: inserted } = await (supabase).from("voice_sessions").insert(sessionRow).select().single();
+      const { data: inserted } = await (supabase as any).from("voice_sessions").insert(sessionRow).select().single();
       if (inserted) setHistory((h) => [inserted, ...h.slice(0, 19)]);
       setPhase("done");
     } catch {
@@ -437,7 +410,7 @@ export default function Negotium() {
         const recognition = new SpeechRecognition();
         recognition.continuous = true; recognition.interimResults = true; recognition.lang = "en-US"; recognition.maxAlternatives = 3;
         let finalTranscript = ""; let isRecognitionActive = true; let isRecognitionRunning = false;
-        recognition.onresult = (event) => {
+        recognition.onresult = (event: any) => {
           let interim = "";
           for (let i = event.resultIndex; i < event.results.length; i++) {
             if (event.results[i].isFinal) { let bestAlt = event.results[i][0]; for (let j = 1; j < event.results[i].length; j++) { if (event.results[i][j].confidence > bestAlt.confidence) bestAlt = event.results[i][j]; } finalTranscript += bestAlt.transcript + " "; } else { interim += event.results[i][0].transcript; }
@@ -445,7 +418,7 @@ export default function Negotium() {
           transcriptRef.current = finalTranscript + interim;
         };
         const safeStart = () => { if (isRecognitionActive && !isRecognitionRunning) { try { isRecognitionRunning = true; recognition.start(); } catch (_) { isRecognitionRunning = false; } } };
-        recognition.onerror = (e) => { isRecognitionRunning = false; if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) { setTimeout(safeStart, 300); } };
+        recognition.onerror = (e: any) => { isRecognitionRunning = false; if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) { setTimeout(safeStart, 300); } };
         recognition.onend = () => { isRecognitionRunning = false; if (isRecognitionActive) { setTimeout(safeStart, 200); } };
         safeStart(); recognitionRef.current = recognition;
         recognitionRef.current._stopAutoRestart = () => { isRecognitionActive = false; isRecognitionRunning = false; };
@@ -479,7 +452,7 @@ export default function Negotium() {
           setWaveData(new Array(80).fill(0.5)); scheduleAnalyze();
         }
       }, 1000);
-    } catch (e) { setMicError(e?.message || "Microphone access denied."); }
+    } catch (e: any) { setMicError(e?.message || "Microphone access denied."); }
   }, [scheduleAnalyze, selectedDuration, isPremium, todaySessionCount]);
 
   const reset = useCallback(() => {
@@ -490,13 +463,17 @@ export default function Negotium() {
     setMetrics(null); setFeedback(null); setWaveData(new Array(80).fill(0.5)); setMicError("");
   }, [stopAll, selectedDuration]);
 
-  const tagColor = (t) => t === "pos" ? "var(--pg-text)" : t === "warn" ? "var(--pg-faint)" : "var(--pg-muted)";
-  const tagBg = (t) => t === "pos" ? "var(--pg-accent)" : t === "warn" ? "var(--pg-surface-alt)" : "var(--pg-bg)";
+  const tagColor = (t: string) => t === "pos" ? "var(--pg-text)" : t === "warn" ? "var(--pg-faint)" : "var(--pg-muted)";
+  const tagBg = (t: string) => t === "pos" ? "var(--pg-accent)" : t === "warn" ? "var(--pg-surface-alt)" : "var(--pg-bg)";
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
   const isOverlay = showIntro || showForcedPaywall || showInterstitial || quizVisible;
 
   const handlePaywallDone = () => { setShowForcedPaywall(false); localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
   const handleInterstitialComplete = () => { setShowInterstitial(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
+
+  // Whether the orbital tree should be visible
+  const showOrbital = phase === "idle" && !metrics && !feedback;
+  const isActive = phase === "recording" || phase === "analyzing" || phase === "done";
 
   return (
     <div className="app-root">
@@ -526,52 +503,76 @@ export default function Negotium() {
       )}
 
       {!isOverlay && (
-        <>
-          <AppSidebar userSubtitle={userSubtitle} onOpenSetup={() => setQuizVisible(true)} />
-          <div className="page-shell" style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4,0,0.2,1)" }}>
-
-            <header className="topbar">
-              <div />
+        <div className="page-shell-orbital">
+          {/* Top bar with back button when active */}
+          <header className="topbar-orbital">
+            <div className="topbar-left">
+              {isActive && (
+                <button className="back-btn" onClick={reset}>
+                  <ArrowLeft size={16} />
+                  <span>Back</span>
+                </button>
+              )}
+              {!isActive && (
+                <div className="topbar-brand">SYNTERICA</div>
+              )}
+            </div>
+            <div className="topbar-right">
               {avgHistory !== null && (
                 <div className="topbar-avg">
-                  <span className="topbar-avg-label">Avg Score</span>
+                  <span className="topbar-avg-label">Avg</span>
                   <span className="topbar-avg-value">{avgHistory}</span>
                 </div>
               )}
-            </header>
+              <button className="settings-btn" onClick={() => navigate("/profile")}>
+                <Settings size={16} />
+              </button>
+            </div>
+          </header>
 
-            <main className="main-single">
-              {/* Recording Area */}
-              <section className="record-panel">
-                <div className="hero-heading">
-                  <h1 className="text-3xl font-serif">Practice.</h1>
-                  <h1 className="hero-sub font-serif font-normal">{heroFocus}</h1>
-                </div>
-
-                {/* Canvas Orb */}
-                <div className="orb-container">
+          {/* Main orbital view */}
+          <main className="orbital-main">
+            {/* The orbital timeline - visible only in idle state */}
+            <RadialOrbitalTimeline
+              nodes={ORBITAL_NODES}
+              onNodeClick={(node) => navigate(node.slug)}
+              visible={showOrbital}
+              centerContent={
+                <div className="orbital-center-recording">
                   <canvas ref={orbCanvasRef} className="orb-canvas" />
                   <div className="orb-overlay">
-                    <div className="timer-count font-serif">{timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}</div>
+                    <div className="timer-count font-serif">
+                      {timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}
+                    </div>
                     <div className="timer-label font-serif">{timeLeft >= 60 ? '' : 'sec'}</div>
-                    {phase === "recording" && <div className="rec-dot" />}
                   </div>
                 </div>
+              }
+            />
 
-                {phase === "idle" && (
-                  <div className="duration-wrap">
-                    <div className="duration-row">
-                      <span className="duration-bound">15s</span>
-                      <span className="duration-current">{selectedDuration >= 60 ? `${Math.floor(selectedDuration / 60)}:${String(selectedDuration % 60).padStart(2, '0')}` : `${selectedDuration}s`}</span>
-                      <span className="duration-bound">5:00</span>
+            {/* Full-screen recording/analyzing/done view */}
+            <div
+              className="active-session-view"
+              style={{
+                opacity: isActive ? 1 : 0,
+                pointerEvents: isActive ? "auto" : "none",
+                transform: isActive ? "scale(1)" : "scale(0.9)",
+              }}
+            >
+              {/* Recording state */}
+              {phase === "recording" && (
+                <div className="recording-fullscreen">
+                  <div className="orb-container-large">
+                    <canvas ref={orbCanvasRef} className="orb-canvas-large" />
+                    <div className="orb-overlay">
+                      <div className="timer-count-large font-serif">
+                        {timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}
+                      </div>
+                      <div className="timer-label font-serif">{timeLeft >= 60 ? '' : 'sec'}</div>
+                      <div className="rec-dot" />
                     </div>
-                    <input type="range" min={15} max={300} step={15} value={selectedDuration}
-                      onChange={(e) => { const v = Number(e.target.value); setSelectedDuration(v); setTimeLeft(v); }}
-                      className="duration-slider" />
                   </div>
-                )}
 
-                {phase === "recording" && (
                   <div className="live-metrics">
                     {[{ label: "Pace", val: livePace }, { label: "Energy", val: liveEnergy }].map(({ label, val }) => (
                       <div key={label} className="live-metric-card">
@@ -581,34 +582,32 @@ export default function Negotium() {
                       </div>
                     ))}
                   </div>
-                )}
 
-                <VoiceMicControl onStart={startRecording} onStop={reset}
-                  onStopEarly={() => { if (phase !== "recording") return; stopAll(); setWaveData(new Array(80).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
-                  phase={phase} />
+                  <VoiceMicControl onStart={startRecording} onStop={reset}
+                    onStopEarly={() => { if (phase !== "recording") return; stopAll(); setWaveData(new Array(80).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
+                    phase={phase} />
 
-                {micError && <p className="mic-error">{micError}</p>}
-                {phase === "analyzing" && (() => {
-                  const recDuration = selectedDuration - timeLeft;
-                  const est = Math.max(3, Math.round(recDuration * 0.12 + 4));
-                  const dark = document.documentElement.classList.contains("dark");
-                  return (
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginTop: 8 }}>
-                      <AILoader text="Analyzing" volume={liveEnergy / 100} estimatedSeconds={est} isDark={dark} size={140} />
-                      <button onClick={reset} className="btn-reset" style={{ marginTop: 8 }}>Cancel</button>
-                    </div>
-                  );
-                })()}
-
-                {phase === "recording" && (
                   <div className="recording-indicator">
                     <span className="rec-dot-inline" />
                     <span className="recording-label">Recording</span>
                   </div>
-                )}
-              </section>
+                </div>
+              )}
 
-              {/* Results below recording when done */}
+              {/* Analyzing state */}
+              {phase === "analyzing" && (() => {
+                const recDuration = selectedDuration - timeLeft;
+                const est = Math.max(3, Math.round(recDuration * 0.12 + 4));
+                const dark = document.documentElement.classList.contains("dark");
+                return (
+                  <div className="analyzing-fullscreen">
+                    <AILoader text="Analyzing" volume={liveEnergy / 100} estimatedSeconds={est} isDark={dark} size={160} />
+                    <button onClick={reset} className="btn-reset" style={{ marginTop: 24 }}>Cancel</button>
+                  </div>
+                );
+              })()}
+
+              {/* Done state — results */}
               {phase === "done" && metrics && feedback && (
                 <section className="results-section">
                   {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
@@ -639,7 +638,7 @@ export default function Negotium() {
                     </div>
 
                     <div className="result-section tags-row">
-                      {feedback.tags.map((tag, i) => (
+                      {feedback.tags.map((tag: any, i: number) => (
                         <span key={i} className="tag" style={{ color: tagColor(tag.t), background: tagBg(tag.t), borderColor: tagColor(tag.t) }}>{tag.label}</span>
                       ))}
                     </div>
@@ -671,7 +670,7 @@ export default function Negotium() {
                       <div className="result-section">
                         <div className="section-label">Techniques Detected ({feedback.techniques.length})</div>
                         <div className="techniques-list">
-                          {feedback.techniques.map((t, i) => (
+                          {feedback.techniques.map((t: any, i: number) => (
                             <div key={i} className={`technique-card impact-${t.impact}`}>
                               <div className="technique-header">
                                 <span className="technique-name">{t.name}</span>
@@ -690,12 +689,12 @@ export default function Negotium() {
                         <div className="section-label">Filler Words</div>
                         <div className="word-stat-num">{feedback.fillerWords?.count || 0}</div>
                         <div className="word-stat-sub">{feedback.fillerWords?.percentage ? `${feedback.fillerWords.percentage.toFixed(1)}% of words` : "Clean speech"}</div>
-                        {feedback.fillerWords?.words?.length > 0 && <div className="word-chips">{feedback.fillerWords.words.map((w, i) => <span key={i} className="chip chip-neutral">{w}</span>)}</div>}
+                        {feedback.fillerWords?.words?.length > 0 && <div className="word-chips">{feedback.fillerWords.words.map((w: string, i: number) => <span key={i} className="chip chip-neutral">{w}</span>)}</div>}
                       </div>
                       <div>
                         <div className="section-label">Power Words</div>
                         <div className="word-stat-num">{feedback.powerWords?.length || 0}</div>
-                        {feedback.powerWords?.length > 0 && <div className="word-chips">{feedback.powerWords.map((w, i) => <span key={i} className="chip chip-strong">{w}</span>)}</div>}
+                        {feedback.powerWords?.length > 0 && <div className="word-chips">{feedback.powerWords.map((w: string, i: number) => <span key={i} className="chip chip-strong">{w}</span>)}</div>}
                       </div>
                     </div>
 
@@ -703,7 +702,7 @@ export default function Negotium() {
                       <div className="result-section">
                         <div className="section-label">Hedging → Stronger Alternatives</div>
                         <div className="hedging-list">
-                          {feedback.hedgingInstances.map((h, i) => (
+                          {feedback.hedgingInstances.map((h: any, i: number) => (
                             <div key={i} className="hedging-row"><span className="hedge-weak">"{h.phrase}"</span><span className="hedge-arrow">→</span><span className="hedge-strong">"{h.suggestion}"</span></div>
                           ))}
                         </div>
@@ -719,60 +718,35 @@ export default function Negotium() {
                   </div>
                 </section>
               )}
-            </main>
+            </div>
 
-            {/* Tabbed Practice + Quote section below */}
-            {phase !== "done" && (
-              <div className="below-sections">
-                {/* Tabbed Practice Box */}
-                <div className="practice-box">
-                  <div className="practice-tabs-row">
-                    <button className={`practice-tab${practiceTab === "today" ? " active" : ""}`} onClick={() => setPracticeTab("today")}>Today's Practice</button>
-                    <button className={`practice-tab${practiceTab === "custom" ? " active" : ""}`} onClick={() => setPracticeTab("custom")}>Custom Practice</button>
+            {/* Idle state controls (below orbital) */}
+            {showOrbital && (
+              <div className="idle-controls">
+                {phase === "idle" && (
+                  <div className="duration-wrap">
+                    <div className="duration-row">
+                      <span className="duration-bound">15s</span>
+                      <span className="duration-current">{selectedDuration >= 60 ? `${Math.floor(selectedDuration / 60)}:${String(selectedDuration % 60).padStart(2, '0')}` : `${selectedDuration}s`}</span>
+                      <span className="duration-bound">5:00</span>
+                    </div>
+                    <input type="range" min={15} max={300} step={15} value={selectedDuration}
+                      onChange={(e) => { const v = Number(e.target.value); setSelectedDuration(v); setTimeLeft(v); }}
+                      className="duration-slider" />
                   </div>
-                  <div className="practice-content">
-                    {practiceTab === "today" ? (
-                      <div className="scenarios-list-inner">
-                        {SCENARIO_CATEGORIES.map((cat) => {
-                          const todayItem = getTodayScenario(cat);
-                          const done = completedCategoriesToday.includes(cat.category);
-                          return (
-                            <button key={cat.slug} onClick={() => navigate(`/scenarios/${cat.slug}`)} className={`scenario-card${done ? " done" : ""}`}>
-                              <div>
-                                <div className="scenario-cat">{cat.category}{done && <span className="scenario-done-badge">✓</span>}</div>
-                                <div className="scenario-title">{todayItem.title}</div>
-                              </div>
-                              <div className="scenario-diff" style={{ color: diffColor(todayItem.difficulty) }}>{todayItem.difficulty}</div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <button className="custom-practice-inner" onClick={() => navigate("/custom-practice")}>
-                        <span className="custom-card-title">+ Create Custom Practice</span>
-                        <span className="custom-card-sub">Choose your own scenario, topic, and goals</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
+                )}
 
-                {/* Quick Nav Buttons */}
-                <div className="quick-nav">
-                  <button className="quick-nav-btn" onClick={() => navigate("/progress")}>View Progress</button>
-                  <button className="quick-nav-btn" onClick={() => navigate("/coach")}>AI Coach</button>
-                </div>
+                <VoiceMicControl onStart={startRecording} onStop={reset}
+                  onStopEarly={() => { stopAll(); setWaveData(new Array(80).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
+                  phase={phase} />
 
-                {/* Quote */}
-                <div className="quote-section">
-                  <p className="quote-text">Great speakers aren't born. They're trained.</p>
-                  <span className="quote-attr">— Unknown</span>
-                </div>
+                {micError && <p className="mic-error">{micError}</p>}
               </div>
             )}
+          </main>
 
-            <div style={{ height: 40 }} />
-          </div>
-        </>
+          <div style={{ height: 40 }} />
+        </div>
       )}
 
       {showPricing && <PricingModal onClose={() => setShowPricing(false)} onSubscribe={() => { localStorage.setItem("syntera_premium", "true"); setIsPremium(true); setShowPricing(false); }} />}
@@ -791,7 +765,6 @@ export default function Negotium() {
           --pg-btn-bg: #1a1a1c; --pg-btn-text: #f8f8f6;
           --pg-btn-stop-bg: rgba(0,0,0,0.06); --pg-btn-stop-text: rgba(0,0,0,0.5); --pg-btn-stop-border: var(--pg-border);
           --pg-hero-sub: rgba(0,0,0,0.28);
-          --pg-wave-active-border: rgba(0,0,0,0.2);
           --pg-bar-fill: rgba(0,0,0,0.4);
           --pg-chip-strong-bg: rgba(0,0,0,0.08); --pg-chip-strong-text: rgba(0,0,0,0.7); --pg-chip-strong-border: rgba(0,0,0,0.15);
           --pg-technique-pos-border: rgba(0,0,0,0.15); --pg-technique-pos-bg: rgba(0,0,0,0.06); --pg-technique-pos-text: rgba(0,0,0,0.7);
@@ -810,7 +783,6 @@ export default function Negotium() {
           --pg-btn-bg: #fff; --pg-btn-text: #060608;
           --pg-btn-stop-bg: rgba(255,255,255,0.08); --pg-btn-stop-text: rgba(255,255,255,0.5); --pg-btn-stop-border: var(--pg-border);
           --pg-hero-sub: rgba(255,255,255,0.28);
-          --pg-wave-active-border: rgba(255,255,255,0.2);
           --pg-bar-fill: rgba(255,255,255,0.5);
           --pg-chip-strong-bg: rgba(255,255,255,0.08); --pg-chip-strong-text: rgba(255,255,255,0.7); --pg-chip-strong-border: rgba(255,255,255,0.15);
           --pg-technique-pos-border: rgba(255,255,255,0.15); --pg-technique-pos-bg: rgba(255,255,255,0.1); --pg-technique-pos-text: rgba(255,255,255,0.7);
@@ -820,53 +792,88 @@ export default function Negotium() {
           --pg-hover-border: rgba(255,255,255,0.15); --pg-hover-text: var(--pg-faint);
         }
 
-        .topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 48px; border-bottom: 1px solid var(--pg-border); background: color-mix(in srgb, var(--pg-bg) 90%, transparent); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 20; }
+        .page-shell-orbital { min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* Top bar */
+        .topbar-orbital { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; border-bottom: 1px solid var(--pg-border); background: color-mix(in srgb, var(--pg-bg) 90%, transparent); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 30; }
+        .topbar-left { display: flex; align-items: center; gap: 12px; }
+        .topbar-right { display: flex; align-items: center; gap: 16px; }
+        .topbar-brand { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pg-text); }
+        .back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; color: var(--pg-text); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; transition: opacity 0.15s; }
+        .back-btn:hover { opacity: 0.6; }
+        .settings-btn { background: none; border: none; color: var(--pg-muted); cursor: pointer; padding: 4px; transition: color 0.15s; }
+        .settings-btn:hover { color: var(--pg-text); }
         .topbar-avg { text-align: right; }
-        .topbar-avg-label { display: block; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 2px; font-family: 'DM Mono', monospace; }
-        .topbar-avg-value { font-size: 28px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+        .topbar-avg-label { display: block; font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 1px; font-family: 'DM Mono', monospace; }
+        .topbar-avg-value { font-size: 20px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
 
-        .main-single { display: flex; flex-direction: column; padding: 0; background: var(--pg-bg); min-height: calc(100vh - 53px); }
+        /* Orbital main area */
+        .orbital-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: calc(100vh - 50px); }
 
-        .record-panel { display: flex; flex-direction: column; align-items: center; padding: 48px 48px 40px; background: var(--pg-bg); }
+        /* Orbital timeline container */
+        .orbital-timeline-container { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: opacity 0.6s ease, transform 0.6s ease; }
 
-        .hero-heading { margin-bottom: 32px; text-align: center; }
-        .hero-heading h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.0; color: var(--pg-text); }
-        .hero-heading h1.hero-sub { color: var(--pg-hero-sub); font-weight: 400; }
+        .orbital-rings { position: absolute; pointer-events: none; }
+        .orbital-ring { border-radius: 50%; border: 1px solid var(--pg-border); position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .orbital-ring.ring-1 { width: min(56vw, 56vh); height: min(56vw, 56vh); opacity: 0.4; }
+        .orbital-ring.ring-2 { width: min(42vw, 42vh); height: min(42vw, 42vh); opacity: 0.25; border-style: dashed; }
+        .orbital-ring.ring-3 { width: min(28vw, 28vh); height: min(28vw, 28vh); opacity: 0.15; }
 
-        .orb-container { position: relative; width: 200px; height: 200px; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; }
-        .orb-canvas { width: 200px; height: 200px; }
+        .orbital-lines { position: absolute; width: 100%; height: 100%; max-width: 800px; max-height: 800px; pointer-events: none; }
+
+        .orbital-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; }
+
+        .orbital-center-recording { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
+
+        .orbital-node { position: absolute; top: 50%; left: 50%; display: flex; flex-direction: column; align-items: center; gap: 6px; background: var(--pg-card); border: 1px solid var(--pg-border); padding: 14px 18px; cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); min-width: 90px; z-index: 10; font-family: 'DM Mono', monospace; }
+        .orbital-node:hover { border-color: var(--pg-text); background: var(--pg-accent); }
+        .orbital-node-icon { font-size: 20px; line-height: 1; }
+        .orbital-node-label { font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pg-text); white-space: nowrap; }
+        .orbital-node-desc { font-size: 8px; color: var(--pg-muted); max-width: 120px; text-align: center; line-height: 1.5; white-space: normal; animation: fadeUp 0.2s ease; }
+
+        /* Active session view */
+        .active-session-view { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease, transform 0.5s ease; z-index: 15; padding: 24px; overflow-y: auto; }
+
+        .recording-fullscreen { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+        .analyzing-fullscreen { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+        .orb-container-large { position: relative; width: 240px; height: 240px; display: flex; align-items: center; justify-content: center; }
+        .orb-canvas, .orb-canvas-large { width: 200px; height: 200px; }
+        .orb-canvas-large { width: 240px; height: 240px; }
         .orb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; pointer-events: none; }
 
-        .timer-count { font-size: 48px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
+        .timer-count, .timer-count-large { font-size: 48px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
+        .timer-count-large { font-size: 56px; }
         .timer-label { font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
         .rec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); margin-top: 6px; animation: pulse 1s infinite; }
 
-        .recording-indicator { display: flex; align-items: center; gap: 8px; justify-content: center; margin-top: 16px; }
+        .recording-indicator { display: flex; align-items: center; gap: 8px; justify-content: center; }
         .rec-dot-inline { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); animation: pulse 1s infinite; }
         .recording-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); font-family: 'DM Mono', monospace; }
 
-        .duration-wrap { max-width: 240px; margin: 0 auto 24px; }
+        /* Idle controls below orbital */
+        .idle-controls { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 16px; z-index: 25; }
+
+        .duration-wrap { width: 240px; }
         .duration-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
         .duration-bound { font-size: 9px; color: var(--pg-dim); letter-spacing: 0.08em; }
         .duration-current { font-size: 12px; font-weight: 500; color: var(--pg-text); }
         .duration-slider { width: 100%; cursor: pointer; }
 
-        .live-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px; }
+        .live-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 280px; }
         .live-metric-card { background: var(--pg-card); border: 1px solid var(--pg-border); padding: 12px 14px; }
         .live-metric-label { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 8px; font-family: 'DM Mono', monospace; }
         .live-bar-track { height: 2px; background: var(--pg-border); margin-bottom: 6px; }
         .live-bar-fill { height: 100%; background: var(--pg-bar-fill); transition: width 0.1s; }
         .live-metric-num { font-size: 10px; color: var(--pg-faint); font-family: 'DM Mono', monospace; }
 
-        .mic-controls { display: flex; gap: 10px; justify-content: center; margin-bottom: 16px; }
+        .mic-controls { display: flex; gap: 10px; justify-content: center; }
 
         .btn-record-toggle { width: 56px; height: 56px; border-radius: 50%; background: var(--pg-btn-bg); color: var(--pg-btn-text); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.15s, transform 0.1s; }
         .btn-record-toggle:hover { opacity: 0.85; }
         .btn-record-toggle:active { transform: scale(0.93); }
-        .btn-record-toggle:disabled { opacity: 0.25; cursor: not-allowed; }
         .btn-record-toggle.recording { background: var(--pg-btn-bg); }
         .stop-square { width: 16px; height: 16px; background: var(--pg-btn-text); animation: rotateSq 3s linear infinite; }
-        .toggle-label { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'DM Mono', monospace; }
         @keyframes rotateSq { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .btn-reset { padding: 13px 18px; background: var(--pg-btn-bg); color: var(--pg-btn-text); border: none; font-size: 11px; letter-spacing: 0.08em; cursor: pointer; font-family: 'DM Mono', monospace; transition: opacity 0.15s; }
         .btn-reset:hover { opacity: 0.75; }
@@ -874,23 +881,11 @@ export default function Negotium() {
         .btn-primary { padding: 13px 32px; background: var(--pg-btn-bg); color: var(--pg-btn-text); border: none; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-family: 'DM Mono', monospace; transition: opacity 0.15s, transform 0.1s; }
         .btn-primary:hover { opacity: 0.85; }
         .btn-primary:active { transform: scale(0.97); }
-        .btn-primary:disabled { opacity: 0.25; cursor: not-allowed; }
 
-        .mic-error { font-size: 11px; color: rgba(255,80,60,0.7); text-align: center; margin-bottom: 12px; line-height: 1.6; font-family: 'DM Mono', monospace; }
-        .analyzing-msg { font-size: 10px; color: var(--pg-muted); text-align: center; margin-bottom: 20px; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'DM Mono', monospace; animation: blink 1.4s infinite; }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        .mic-error { font-size: 11px; color: rgba(255,80,60,0.7); text-align: center; line-height: 1.6; font-family: 'DM Mono', monospace; }
 
-        .results-section { padding: 32px 48px; background: var(--pg-bg); animation: fadeUp 0.5s ease; }
+        .results-section { padding: 32px 48px; width: 100%; max-width: 640px; animation: fadeUp 0.5s ease; }
         .section-label { font-size: 8px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 12px; display: block; font-family: 'DM Mono', monospace; }
-
-        .scenario-card { width: 100%; background: var(--pg-bg); border: none; border-bottom: 1px solid var(--pg-border); padding: 14px 16px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'DM Mono', monospace; transition: background 0.15s; }
-        .scenario-card:last-child { border-bottom: none; }
-        .scenario-card:hover { background: var(--pg-accent); }
-        .scenario-card.done { opacity: 0.4; }
-        .scenario-cat { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-        .scenario-done-badge { font-size: 9px; color: var(--pg-scenario-done); }
-        .scenario-title { font-size: 12px; font-weight: 500; color: var(--pg-text); }
-        .scenario-diff { font-size: 8px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pg-muted); }
 
         .score-rings { display: flex; justify-content: space-around; padding-bottom: 24px; border-bottom: 1px solid var(--pg-border); margin-bottom: 24px; }
         .score-ring { display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -939,46 +934,6 @@ export default function Negotium() {
 
         .tips-list { display: grid; gap: 6px; }
         .tip-item { border: 1px solid var(--pg-border); padding: 10px 12px; font-size: 11px; color: var(--pg-muted); line-height: 1.7; font-family: 'DM Mono', monospace; }
-
-        /* Below sections: tabbed practice, quick nav, quote */
-        .below-sections { display: flex; flex-direction: column; gap: 48px; padding: 48px 48px 60px; }
-
-        .practice-box { border: 1px solid var(--pg-border); background: var(--pg-card); }
-        .practice-tabs-row { display: flex; border-bottom: 1px solid var(--pg-border); }
-        .practice-tab { flex: 1; padding: 12px 16px; background: transparent; border: none; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pg-muted); cursor: pointer; font-family: 'DM Mono', monospace; transition: all 0.15s; border-bottom: 2px solid transparent; }
-        .practice-tab.active { color: var(--pg-text); border-bottom-color: var(--pg-text); }
-        .practice-tab:hover { color: var(--pg-faint); }
-        .practice-content { }
-        .scenarios-list-inner { display: flex; flex-direction: column; }
-
-        .custom-practice-inner { width: 100%; padding: 40px 32px; background: transparent; border: none; cursor: pointer; font-family: 'DM Mono', monospace; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s; }
-        .custom-practice-inner:hover { background: var(--pg-accent); }
-        .custom-card-title { font-size: 13px; font-weight: 600; color: var(--pg-text); letter-spacing: 0.02em; }
-        .custom-card-sub { font-size: 9px; color: var(--pg-dim); letter-spacing: 0.1em; }
-
-        .quick-nav { display: flex; gap: 12px; }
-        .quick-nav-btn { flex: 1; padding: 16px; background: var(--pg-card); border: 1px solid var(--pg-border); color: var(--pg-text); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-family: 'DM Mono', monospace; transition: background 0.15s, border-color 0.15s; }
-        .quick-nav-btn:hover { background: var(--pg-accent); border-color: var(--pg-dim); }
-
-        .quote-section { padding: 40px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .quote-text { font-size: 14px; font-family: 'DM Mono', monospace; font-style: italic; color: var(--pg-muted); line-height: 1.8; }
-        .quote-attr { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
-
-        .quiz-overlay { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; background: var(--pg-overlay); backdrop-filter: blur(8px); }
-        .quiz-modal { width: min(480px, 92vw); background: var(--pg-card); border: 1px solid var(--pg-border); padding: 36px; }
-        .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .quiz-title { font-size: 20px; color: var(--pg-text); font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
-        .quiz-step { font-size: 10px; color: var(--pg-dim); font-family: 'DM Mono', monospace; letter-spacing: 0.1em; }
-        .quiz-question { font-size: 13px; color: var(--pg-text); font-weight: 500; margin-bottom: 16px; line-height: 1.6; font-family: 'DM Mono', monospace; }
-        .quiz-options { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
-        .quiz-option { text-align: left; padding: 11px 14px; border: 1px solid var(--pg-border); background: var(--pg-bg); cursor: pointer; font-size: 12px; color: var(--pg-muted); font-family: 'DM Mono', monospace; transition: all 0.15s; }
-        .quiz-option:hover { border-color: var(--pg-hover-border); color: var(--pg-hover-text); }
-        .quiz-option.selected { border-color: var(--pg-selected-border); background: var(--pg-selected-bg); color: var(--pg-text); }
-        .quiz-actions { display: flex; justify-content: space-between; }
-        .quiz-btn-secondary { padding: 10px 18px; border: 1px solid var(--pg-border); background: transparent; cursor: pointer; color: var(--pg-dim); font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
-        .quiz-btn-secondary:disabled { cursor: not-allowed; opacity: 0.3; }
-        .quiz-btn-primary { padding: 11px 24px; border: none; background: var(--pg-btn-bg); color: var(--pg-btn-text); cursor: pointer; font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; transition: opacity 0.15s; }
-        .quiz-btn-primary:disabled { opacity: 0.3; cursor: not-allowed; }
 
         .tip-overlay { position: fixed; inset: 0; z-index: 55; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 40px; background: var(--pg-overlay); backdrop-filter: blur(6px); }
         .tip-modal { width: min(400px, 90vw); background: var(--pg-card); border: 1px solid var(--pg-border); padding: 28px 24px; position: relative; }
