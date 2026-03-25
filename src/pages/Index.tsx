@@ -748,7 +748,7 @@ export default function Negotium() {
 
 
         /* Recording section */
-        .recording-section { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 24px 24px 48px; width: 100%; }
+        .recording-section { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 80px 24px 48px; width: 100%; }
 
         .orb-container { position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
         .orb-canvas { width: 200px; height: 200px; }
