@@ -676,11 +676,22 @@ export default function Negotium() {
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         .app-root {
-          --pg-bg: #060608; --pg-text: #f0eeea; --pg-card: #0e0e12; --pg-border: #1c1c22;
-          --pg-border-soft: #161619; --pg-muted: #555560; --pg-dim: #44444e; --pg-subtle: #333338;
-          --pg-faint: #888896; --pg-mid: #aaaaб8; --pg-accent: #111116; --pg-surface: #0c0c10;
-          --pg-surface-alt: #0a0a0e; --pg-overlay: rgba(0,0,0,0.75);
-          --pg-green: #ffffff;
+          --pg-bg: #f8f8f6; --pg-text: #1a1a1c; --pg-card: #ffffff; --pg-border: #e2e2e0;
+          --pg-border-soft: #ebebea; --pg-muted: #888890; --pg-dim: #aaaaae; --pg-subtle: #ccccce;
+          --pg-faint: #666670; --pg-mid: #555; --pg-accent: #f0f0ee; --pg-surface: #f4f4f2;
+          --pg-surface-alt: #eaeae8; --pg-overlay: rgba(0,0,0,0.25);
+          --pg-green: #1a1a1c;
+          --pg-btn-bg: #1a1a1c; --pg-btn-text: #f8f8f6;
+          --pg-btn-stop-bg: rgba(0,0,0,0.06); --pg-btn-stop-text: rgba(0,0,0,0.5); --pg-btn-stop-border: var(--pg-border);
+          --pg-hero-sub: rgba(0,0,0,0.28);
+          --pg-wave-active-border: rgba(0,0,0,0.2);
+          --pg-bar-fill: rgba(0,0,0,0.4);
+          --pg-chip-strong-bg: rgba(0,0,0,0.08); --pg-chip-strong-text: rgba(0,0,0,0.7); --pg-chip-strong-border: rgba(0,0,0,0.15);
+          --pg-technique-pos-border: rgba(0,0,0,0.15); --pg-technique-pos-bg: rgba(0,0,0,0.06); --pg-technique-pos-text: rgba(0,0,0,0.7);
+          --pg-hedge-strong: rgba(0,0,0,0.75);
+          --pg-scenario-done: rgba(0,0,0,0.5);
+          --pg-selected-bg: rgba(0,0,0,0.05); --pg-selected-border: rgba(0,0,0,0.3);
+          --pg-hover-border: rgba(0,0,0,0.15); --pg-hover-text: var(--pg-faint);
           min-height: 100vh; background: var(--pg-bg); color: var(--pg-text); font-family: 'DM Mono', monospace;
         }
         .dark .app-root {
@@ -689,6 +700,17 @@ export default function Negotium() {
           --pg-faint: #888896; --pg-mid: #999; --pg-accent: #111116; --pg-surface: #0c0c10;
           --pg-surface-alt: #0a0a0e; --pg-overlay: rgba(0,0,0,0.75);
           --pg-green: #ffffff;
+          --pg-btn-bg: #fff; --pg-btn-text: #060608;
+          --pg-btn-stop-bg: rgba(255,255,255,0.08); --pg-btn-stop-text: rgba(255,255,255,0.5); --pg-btn-stop-border: var(--pg-border);
+          --pg-hero-sub: rgba(255,255,255,0.28);
+          --pg-wave-active-border: rgba(255,255,255,0.2);
+          --pg-bar-fill: rgba(255,255,255,0.5);
+          --pg-chip-strong-bg: rgba(255,255,255,0.08); --pg-chip-strong-text: rgba(255,255,255,0.7); --pg-chip-strong-border: rgba(255,255,255,0.15);
+          --pg-technique-pos-border: rgba(255,255,255,0.15); --pg-technique-pos-bg: rgba(255,255,255,0.1); --pg-technique-pos-text: rgba(255,255,255,0.7);
+          --pg-hedge-strong: rgba(255,255,255,0.75);
+          --pg-scenario-done: rgba(255,255,255,0.5);
+          --pg-selected-bg: rgba(255,255,255,0.05); --pg-selected-border: rgba(255,255,255,0.3);
+          --pg-hover-border: rgba(255,255,255,0.15); --pg-hover-text: var(--pg-faint);
         }
 
         .topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 48px; border-bottom: 1px solid var(--pg-border); background: rgba(6,6,8,0.9); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 20; }
