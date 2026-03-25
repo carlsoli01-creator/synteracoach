@@ -158,12 +158,14 @@ function VoiceMicControl({ onStart, onStop, onStopEarly, phase }) {
   return (
     <div className="mic-controls">
       {isRecording
-        ? <button onClick={onStopEarly} className="btn-primary btn-stop">Stop Recording</button>
-        : <button onClick={!isAnalyzing ? onStart : undefined} disabled={isAnalyzing} className="btn-primary">
-            {phase === "idle" ? "Start Recording" : phase === "analyzing" ? "Analyzing…" : "Record Again"}
+        ? <button onClick={onStopEarly} className="btn-record-toggle recording" aria-label="Stop recording">
+            <span className="stop-square" />
+          </button>
+        : <button onClick={!isAnalyzing ? onStart : undefined} disabled={isAnalyzing} className="btn-record-toggle" aria-label="Start recording">
+            {phase === "analyzing" ? <span className="toggle-label">Analyzing…</span> : <Mic size={20} />}
           </button>
       }
-      <button onClick={onStop} className="btn-ghost">Reset</button>
+      <button onClick={onStop} className="btn-reset">Reset</button>
     </div>
   );
 }
@@ -850,14 +852,21 @@ export default function Negotium() {
 
         .mic-controls { display: flex; gap: 10px; justify-content: center; margin-bottom: 16px; }
 
+        .btn-record-toggle { width: 56px; height: 56px; border-radius: 50%; background: var(--pg-btn-bg); color: var(--pg-btn-text); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.15s, transform 0.1s; }
+        .btn-record-toggle:hover { opacity: 0.85; }
+        .btn-record-toggle:active { transform: scale(0.93); }
+        .btn-record-toggle:disabled { opacity: 0.25; cursor: not-allowed; }
+        .btn-record-toggle.recording { background: var(--pg-btn-bg); }
+        .stop-square { width: 16px; height: 16px; background: var(--pg-btn-text); animation: rotateSq 3s linear infinite; }
+        .toggle-label { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+        @keyframes rotateSq { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .btn-reset { padding: 13px 18px; background: var(--pg-btn-bg); color: var(--pg-btn-text); border: none; font-size: 11px; letter-spacing: 0.08em; cursor: pointer; font-family: 'DM Mono', monospace; transition: opacity 0.15s; }
+        .btn-reset:hover { opacity: 0.75; }
+
         .btn-primary { padding: 13px 32px; background: var(--pg-btn-bg); color: var(--pg-btn-text); border: none; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-family: 'DM Mono', monospace; transition: opacity 0.15s, transform 0.1s; }
         .btn-primary:hover { opacity: 0.85; }
         .btn-primary:active { transform: scale(0.97); }
         .btn-primary:disabled { opacity: 0.25; cursor: not-allowed; }
-        .btn-primary.btn-stop { background: var(--pg-btn-stop-bg); color: var(--pg-btn-stop-text); border: 1px solid var(--pg-btn-stop-border); }
-        .btn-primary.btn-stop:hover { opacity: 1; }
-        .btn-ghost { padding: 13px 18px; background: transparent; border: 1px solid var(--pg-border); color: var(--pg-muted); font-size: 11px; letter-spacing: 0.08em; cursor: pointer; font-family: 'DM Mono', monospace; transition: border-color 0.15s, color 0.15s; }
-        .btn-ghost:hover { border-color: var(--pg-dim); color: var(--pg-faint); }
 
         .mic-error { font-size: 11px; color: rgba(255,80,60,0.7); text-align: center; margin-bottom: 12px; line-height: 1.6; font-family: 'DM Mono', monospace; }
         .analyzing-msg { font-size: 10px; color: var(--pg-muted); text-align: center; margin-bottom: 20px; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'DM Mono', monospace; animation: blink 1.4s infinite; }

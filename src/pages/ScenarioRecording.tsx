@@ -346,23 +346,28 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 16 }}>
+          <div style={{ display: "flex", gap: 10, justifyContent: "center", alignItems: "center", marginBottom: 16 }}>
             {phase === "recording" ? (
               <button onClick={() => { stopAll(); setWaveData(new Array(60).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
-                style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: "pointer", background: text, color: bg, fontWeight: 500, fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
-                STOP RECORDING
+                aria-label="Stop recording"
+                style={{ width: 56, height: 56, borderRadius: "50%", border: "none", cursor: "pointer", background: text, color: bg, display: "flex", alignItems: "center", justifyContent: "center", transition: "opacity 0.15s, transform 0.1s" }}>
+                <span style={{ width: 16, height: 16, background: bg, display: "block", animation: "rotateSq 3s linear infinite" }} />
               </button>
             ) : (
               <button onClick={phase !== "analyzing" ? startRecording : undefined} disabled={phase === "analyzing"}
-                style={{ fontSize: 11, letterSpacing: "0.14em", padding: "14px 36px", border: "none", cursor: phase === "analyzing" ? "not-allowed" : "pointer", background: text, color: bg, fontWeight: 500, opacity: phase === "analyzing" ? 0.6 : 1, fontFamily: "'DM Mono', monospace", textTransform: "uppercase" }}>
-                {phase === "idle" ? "START RECORDING" : phase === "analyzing" ? "ANALYZING..." : "RECORD AGAIN"}
+                aria-label="Start recording"
+                style={{ width: 56, height: 56, borderRadius: "50%", border: "none", cursor: phase === "analyzing" ? "not-allowed" : "pointer", background: text, color: bg, display: "flex", alignItems: "center", justifyContent: "center", opacity: phase === "analyzing" ? 0.6 : 1, transition: "opacity 0.15s, transform 0.1s" }}>
+                {phase === "analyzing"
+                  ? <span style={{ fontSize: 8, letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>…</span>
+                  : <Mic size={20} />}
               </button>
             )}
             <button onClick={reset}
-              style={{ fontSize: 11, padding: "14px 18px", background: "none", border: `1px solid ${border}`, color: muted, cursor: "pointer", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em" }}>
+              style={{ fontSize: 11, padding: "14px 18px", background: text, color: bg, border: "none", cursor: "pointer", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", transition: "opacity 0.15s" }}>
               Reset
             </button>
           </div>
+          <style>{`@keyframes rotateSq { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
 
           {micError && <div style={{ textAlign: "center", fontSize: 11, color: text, marginBottom: 16, lineHeight: 1.6 }}>{micError}</div>}
           {phase === "analyzing" && <AnalyzingWait durationSeconds={duration - timeLeft} isDark={isDark} muted={muted} />}
