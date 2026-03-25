@@ -9,7 +9,7 @@ export default function TermsOfService() {
   const muted = isDark ? "#666" : "#999";
 
   return (
-    <div style={{ minHeight: "100vh", background: bg, color: text, fontFamily: "Inter, sans-serif", padding: "0 20px 60px" }}>
+    <div className="min-h-screen bg-background text-foreground" style={{ fontFamily: "Inter, sans-serif", padding: "0 20px 60px" }}>
       <div style={{ maxWidth: 600, margin: "0 auto" }}>
         <button onClick={() => navigate(-1)} style={{ background: "none", border: "none", color: muted, fontSize: 13, cursor: "pointer", padding: "20px 0" }}>← Back</button>
         <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Terms of Service</h1>
