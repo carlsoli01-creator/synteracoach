@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenarios";
+import AppSidebar from "@/components/layout/AppSidebar";
 import { useNavigate } from "react-router-dom";
 import IntroExperience from "@/components/onboarding/IntroExperience";
 import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
@@ -470,6 +471,7 @@ export default function Negotium() {
 
       {!isOverlay && (
         <div className="page-shell">
+          <AppSidebar onOpenSetup={() => setQuizVisible(true)} />
           <header className="topbar">
             <div className="topbar-left">
               {isActive && (
@@ -496,29 +498,6 @@ export default function Negotium() {
           </header>
 
           <main className="main-content">
-            {/* Navigation links - idle only */}
-            {!isActive && (
-              <nav className="nav-grid">
-                {SCENARIO_CATEGORIES.map((cat) => (
-                  <button key={cat.slug} className="nav-card" onClick={() => navigate(`/scenarios/${cat.slug}`)}>
-                    <span className="nav-card-icon">{cat.icon}</span>
-                    <span className="nav-card-label">{cat.category}</span>
-                  </button>
-                ))}
-                <button className="nav-card" onClick={() => navigate("/custom-practice")}>
-                  <span className="nav-card-icon">✏️</span>
-                  <span className="nav-card-label">Custom</span>
-                </button>
-                <button className="nav-card" onClick={() => navigate("/progress")}>
-                  <span className="nav-card-icon">📈</span>
-                  <span className="nav-card-label">Progress</span>
-                </button>
-                <button className="nav-card" onClick={() => navigate("/coach")}>
-                  <span className="nav-card-icon">🧠</span>
-                  <span className="nav-card-label">AI Coach</span>
-                </button>
-              </nav>
-            )}
 
             {/* Recording section - always visible, separate from orbital */}
             <section className="recording-section">
