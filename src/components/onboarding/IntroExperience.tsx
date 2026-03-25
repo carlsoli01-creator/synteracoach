@@ -463,26 +463,26 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
             </div>
 
             {/* Blurred locked teaser */}
-            <div style={{ position: "relative", borderRadius: 10, overflow: "hidden", marginBottom: 16 }}>
+            <div style={{ position: "relative", overflow: "hidden", marginBottom: 16 }}>
               <div style={{
                 filter: "blur(6px)", opacity: 0.4, pointerEvents: "none",
-                background: "#111", padding: "16px", borderRadius: 10,
+                background: "#0a0a0a", padding: "16px",
                 display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8,
               }}>
                 {["Persuasion", "Word Choice", "Filler Words", "Techniques"].map((l, i) => (
-                  <div key={i} style={{ background: "#0a0a0a", borderRadius: 8, padding: "12px", textAlign: "center" }}>
-                    <div style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>{analysisResult.scores.delivery - 5 + i * 3}</div>
-                    <div style={{ fontSize: 8, color: "#666", textTransform: "uppercase", letterSpacing: "0.15em" }}>{l}</div>
+                  <div key={i} style={{ background: "#111", padding: "12px", textAlign: "center" }}>
+                    <div style={{ fontSize: 18, fontWeight: 400, color: "#fff", fontFamily: "'Bebas Neue', sans-serif" }}>{analysisResult.scores.delivery - 5 + i * 3}</div>
+                    <div style={{ fontSize: 7, color: "#555", textTransform: "uppercase", letterSpacing: "0.3em", fontFamily: "'IBM Plex Mono', monospace" }}>{l}</div>
                   </div>
                 ))}
               </div>
               <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.15em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 6 }}><Lock size={12} /> UNLOCK WITH PREMIUM</span>
+                <span style={{ fontSize: 9, fontWeight: 500, color: "#fff", letterSpacing: "0.3em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 6, fontFamily: "'IBM Plex Mono', monospace" }}><Lock size={10} /> PREMIUM</span>
               </div>
             </div>
 
-            <div style={{ fontSize: 11, color: "#444", textAlign: "center" }}>Loading your upgrade options...</div>
-            <div style={{ marginTop: 16, width: 24, height: 24, border: "2px solid #333", borderTop: "2px solid #fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "16px auto 0" }} />
+            <div style={{ fontSize: 10, color: "#333", textAlign: "center", fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "0.1em" }}>Loading upgrade options…</div>
+            <div style={{ marginTop: 16, width: 20, height: 20, border: "1px solid #333", borderTop: "1px solid #fff", animation: "spin 0.8s linear infinite", margin: "16px auto 0" }} />
           </>
         )}
       </div>
