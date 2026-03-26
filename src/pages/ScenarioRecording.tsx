@@ -122,7 +122,8 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
     const transcript = transcriptRef.current.trim();
     try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
     try { recognitionRef.current?.stop(); } catch (_) {}
-    if (!transcript || transcript.length < 5) {
+    const wordCount = transcript.split(/\s+/).filter(Boolean).length;
+    if (!transcript || wordCount < 1) {
       setMicError("Could not detect speech. Please speak clearly and try again.");
       setPhase("idle");
       isAnalyzingRef.current = false;
