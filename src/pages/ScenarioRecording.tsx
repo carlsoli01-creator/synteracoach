@@ -122,7 +122,8 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
     const transcript = transcriptRef.current.trim();
     try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
     try { recognitionRef.current?.stop(); } catch (_) {}
-    if (!transcript || transcript.length < 5) {
+    const wordCount = transcript.split(/\s+/).filter(Boolean).length;
+    if (!transcript || wordCount < 1) {
       setMicError("Could not detect speech. Please speak clearly and try again.");
       setPhase("idle");
       isAnalyzingRef.current = false;
@@ -214,6 +215,14 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
         recognition.maxAlternatives = 3;
         let finalTranscript = "";
         let isRecognitionActive = true;
+        let isRecognitionRunning = false;
+
+        const safeRestart = () => {
+          if (!isRecognitionActive || isRecognitionRunning) return;
+          try { recognition.start(); } catch (_) {}
+        };
+
+        recognition.onstart = () => { isRecognitionRunning = true; };
         recognition.onresult = (event: any) => {
           let interim = "";
           for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -228,14 +237,14 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
           transcriptRef.current = finalTranscript + interim;
         };
         recognition.onerror = (e: any) => {
-          if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) {
-            try { setTimeout(() => { if (isRecognitionActive) recognition.start(); }, 300); } catch (_) {}
+          isRecognitionRunning = false;
+          if (e.error === "network" || e.error === "aborted" || e.error === "no-speech") {
+            setTimeout(safeRestart, 300);
           }
         };
         recognition.onend = () => {
-          if (isRecognitionActive) {
-            try { setTimeout(() => { if (isRecognitionActive) recognition.start(); }, 200); } catch (_) {}
-          }
+          isRecognitionRunning = false;
+          setTimeout(safeRestart, 200);
         };
         recognition.start();
         recognitionRef.current = recognition;
