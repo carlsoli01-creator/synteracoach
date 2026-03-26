@@ -357,10 +357,11 @@ serve(async (req) => {
     scenarioCategory = body?.scenarioCategory ?? "";
     customNotes = body?.customNotes ?? "";
 
-    if (!transcript || transcript.trim().length < 5) {
+    if (!transcript || transcript.trim().length < 2) {
+      // Return fallback analysis based on audio metrics alone
       return new Response(
-        JSON.stringify({ error: "Could not detect enough speech. Please speak clearly into your microphone and try again." }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        JSON.stringify(buildFallbackAnalysis(transcript || "", audioMetrics, "no_transcript")),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
