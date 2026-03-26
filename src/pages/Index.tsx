@@ -315,9 +315,9 @@ export default function Negotium() {
     const transcript = transcriptRef.current.trim();
     try { recognitionRef.current?._stopAutoRestart?.(); } catch (_) {}
     try { recognitionRef.current?.stop(); } catch (_) {}
-    if (!transcript || transcript.length < 2) {
-      setMicError("We didn't pick up enough speech. Make sure your mic is working and speak clearly.");
-      setPhase("idle"); isAnalyzingRef.current = false; return;
+    // If no transcript captured, still send to backend with audio metrics for fallback analysis
+    if (!transcript) {
+      console.log("[Voice] No transcript captured, sending audio-only analysis");
     }
     setPhase("analyzing");
     try {
@@ -379,6 +379,7 @@ export default function Negotium() {
         const recognition = new SpeechRecognition();
         recognition.continuous = true; recognition.interimResults = true; recognition.lang = "en-US"; recognition.maxAlternatives = 3;
         let finalTranscript = ""; let isRecognitionActive = true; let isRecognitionRunning = false;
+        recognition.onstart = () => { isRecognitionRunning = true; };
         recognition.onresult = (event: any) => {
           let interim = "";
           for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -386,8 +387,8 @@ export default function Negotium() {
           }
           transcriptRef.current = finalTranscript + interim;
         };
-        const safeStart = () => { if (isRecognitionActive && !isRecognitionRunning) { try { isRecognitionRunning = true; recognition.start(); } catch (_) { isRecognitionRunning = false; } } };
-        recognition.onerror = (e: any) => { isRecognitionRunning = false; if (isRecognitionActive && (e.error === "network" || e.error === "aborted" || e.error === "no-speech")) { setTimeout(safeStart, 300); } };
+        const safeStart = () => { if (isRecognitionActive && !isRecognitionRunning) { try { recognition.start(); } catch (_) {} } };
+        recognition.onerror = (e: any) => { isRecognitionRunning = false; if (e.error === "network" || e.error === "aborted" || e.error === "no-speech") { setTimeout(safeStart, 300); } };
         recognition.onend = () => { isRecognitionRunning = false; if (isRecognitionActive) { setTimeout(safeStart, 200); } };
         safeStart(); recognitionRef.current = recognition;
         recognitionRef.current._stopAutoRestart = () => { isRecognitionActive = false; isRecognitionRunning = false; };

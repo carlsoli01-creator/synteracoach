@@ -122,12 +122,9 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
     const transcript = transcriptRef.current.trim();
     try { (recognitionRef.current as any)?._stopAutoRestart?.(); } catch (_) {}
     try { recognitionRef.current?.stop(); } catch (_) {}
-    const wordCount = transcript.split(/\s+/).filter(Boolean).length;
-    if (!transcript || wordCount < 1) {
-      setMicError("Could not detect speech. Please speak clearly and try again.");
-      setPhase("idle");
-      isAnalyzingRef.current = false;
-      return;
+    // Send to backend even without transcript — fallback analysis uses audio metrics
+    if (!transcript) {
+      console.log("[Voice] No transcript captured, sending audio-only analysis");
     }
     setPhase("analyzing");
     try {
