@@ -65,7 +65,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
         transition: "transform 0.25s cubic-bezier(0.4,0,0.2,1)",
       }}>
         <div style={{ padding: "32px 28px 24px" }}>
-          <div className="text-primary-foreground" style={{ fontSize: 22, letterSpacing: "0.08em", fontFamily: "'Bebas Neue', sans-serif", whiteSpace: "nowrap" }}>
+          <div className="text-foreground" style={{ fontSize: 22, letterSpacing: "0.08em", fontFamily: "'Bebas Neue', sans-serif", whiteSpace: "nowrap" }}>
             SYNTERICA
           </div>
         </div>
