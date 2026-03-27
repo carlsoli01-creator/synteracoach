@@ -570,7 +570,7 @@ export default function Landing() {
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: 14 }}>
                   <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "0.65rem", color: "var(--lp-muted)" }}>This week</span>
-                  <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "0.65rem", color: "rgba(255,255,255,0.4)" }}>+12 pts avg →</span>
+                  <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "0.65rem", color: "rgba(255,255,255,0.4)" }}>79% avg →</span>
                 </div>
               </div>
             </div>
