@@ -15,7 +15,7 @@ const INTRO_STEPS = [
     icon: "chart",
     title: "Speak. Get Scored.",
     subtitle: "7-DIMENSION ANALYSIS",
-    body: "Record 15–45 seconds on any topic. Our AI scores your delivery across 7 dimensions and generates a comprehensive coaching report.",
+    body: "Record 15 seconds to 5 minutes on any topic. Our AI scores your delivery across 7 dimensions and generates a comprehensive coaching report.",
     cta: "Try it now",
   },
 ];

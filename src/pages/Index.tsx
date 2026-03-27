@@ -569,6 +569,16 @@ export default function Negotium() {
               })()}
             </section>
 
+            {/* Custom Practice button - idle only */}
+            {phase === "idle" && (
+              <button
+                onClick={() => navigate("/custom-practice")}
+                className="custom-practice-btn"
+              >
+                Custom Practice
+              </button>
+            )}
+
             {/* Done state — results below */}
             {phase === "done" && metrics && feedback && (
               <section className="results-section">

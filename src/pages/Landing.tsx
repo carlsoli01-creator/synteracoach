@@ -482,7 +482,7 @@ export default function Landing() {
           <div className="lp-steps lp-reveal">
             <div className="lp-step">
               <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" /></svg>
-              <h3>Record 15–45s</h3>
+              <h3>Record 15s – 5min</h3>
               <p>Hit record and speak on any topic — a pitch, a presentation, a job interview answer. No script required.</p>
             </div>
             <div className="lp-step">
