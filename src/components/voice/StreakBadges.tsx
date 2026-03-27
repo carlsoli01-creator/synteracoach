@@ -75,7 +75,7 @@ export default function StreakBadges({ history, colors: c, isDark = true }: Prop
 
   const earned = badges.filter(b => b.earned).length;
   const streakDots = Array.from({ length: 7 }, (_, i) => i < streak);
-  const accent = isDark ? "#c8ff00" : "#6b9900";
+  const accent = isDark ? "#ffffff" : "#0c0c0e";
   const earnedCardBg = isDark ? "#111113" : "#f4f4f2";
   const unearnedText = isDark ? "#333" : "#ccc";
   const unearnedDescColor = isDark ? "#333" : "#bbb";

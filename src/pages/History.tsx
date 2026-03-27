@@ -72,7 +72,7 @@ export default function History() {
   const text = isDark ? "#e6e6e0" : "#1a1a1c";
   const muted = isDark ? "#555" : "#888";
   const border = isDark ? "#1a1a1c" : "#e2e2e0";
-  const accent = isDark ? "#c8ff00" : "#6b9900";
+  const accent = isDark ? "#ffffff" : "#0c0c0e";
 
   useEffect(() => {
     if (!user) return;

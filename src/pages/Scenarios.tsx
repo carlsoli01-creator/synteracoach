@@ -26,7 +26,7 @@ export default function Scenarios() {
   const cardDone = isDark ? "#0a0a0c" : "#f0f0ee";
   const numColor = isDark ? "#333" : "#ccc";
   const descColor = isDark ? "#888" : "#666";
-  const accent = isDark ? "#c8ff00" : "#6b9900";
+  const accent = isDark ? "#ffffff" : "#0c0c0e";
 
   useEffect(() => {
     if (!user) return;

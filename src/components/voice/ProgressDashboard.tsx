@@ -45,7 +45,7 @@ function ScoreRingSmall({ score, label, color, textColor, borderColor }: { score
 
 export default function ProgressDashboard({ history, colors: c }: Props) {
   const sessions = useMemo(() => [...history].reverse(), [history]);
-  const accent = c.accent || "#c8ff00";
+  const accent = c.accent || "#ffffff";
 
   const stats = useMemo(() => {
     if (!sessions.length) return null;
