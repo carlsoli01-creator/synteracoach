@@ -32,7 +32,7 @@ export default function Progress() {
     border: isDark ? "#1a1a1c" : "#e2e2e0",
     text, muted,
     card: isDark ? "#111113" : "#ffffff",
-    accent: isDark ? "#c8ff00" : "#6b9900",
+    accent: isDark ? "#ffffff" : "#0c0c0e",
   };
 
   return (

@@ -31,7 +31,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
   const bg = isDark ? "hsl(var(--background))" : "hsl(var(--background))";
   const borderColor = isDark ? "hsl(var(--border))" : "hsl(var(--border))";
   const text = isDark ? "hsl(var(--foreground))" : "hsl(var(--foreground))";
-  const accent = isDark ? "#c8ff00" : "#6b9900";
+  const accent = isDark ? "#ffffff" : "#0c0c0e";
   const inactiveColor = isDark ? "hsl(var(--muted-foreground))" : "hsl(var(--muted-foreground))";
   const dimColor = isDark ? "hsl(var(--muted-foreground))" : "hsl(var(--muted-foreground))";
   const overlayBg = isDark ? "rgba(0,0,0,0.4)" : "rgba(0,0,0,0.15)";
