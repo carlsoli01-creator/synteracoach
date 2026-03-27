@@ -569,6 +569,16 @@ export default function Negotium() {
               })()}
             </section>
 
+            {/* Custom Practice button - idle only */}
+            {phase === "idle" && (
+              <button
+                onClick={() => navigate("/custom-practice")}
+                className="custom-practice-btn"
+              >
+                Custom Practice
+              </button>
+            )}
+
             {/* Done state — results below */}
             {phase === "done" && metrics && feedback && (
               <section className="results-section">
@@ -792,6 +802,10 @@ export default function Negotium() {
         .btn-primary { padding: 13px 32px; background: var(--pg-btn-bg); color: var(--pg-btn-text); border: none; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-family: 'DM Mono', monospace; transition: opacity 0.15s, transform 0.1s; }
         .btn-primary:hover { opacity: 0.85; }
         .btn-primary:active { transform: scale(0.97); }
+
+        .custom-practice-btn { width: 100%; max-width: 320px; padding: 14px 24px; background: var(--pg-btn-bg); color: var(--pg-btn-text); border: none; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; font-family: 'DM Mono', monospace; transition: opacity 0.15s, transform 0.1s; margin-top: 12px; }
+        .custom-practice-btn:hover { opacity: 0.8; }
+        .custom-practice-btn:active { transform: scale(0.97); }
 
         .mic-error { font-size: 11px; color: rgba(255,80,60,0.7); text-align: center; line-height: 1.6; font-family: 'DM Mono', monospace; }
 
