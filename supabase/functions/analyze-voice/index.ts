@@ -1,10 +1,71 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+const MAX_PAYLOAD_BYTES = 50_000; // 50KB max
+const MAX_TRANSCRIPT_LENGTH = 10_000;
+const ENDPOINT_NAME = "analyze-voice";
+
+// ─── AUTH + QUOTA HELPERS ───────────────────────────────────────────
+
+async function authenticateRequest(req: Request) {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return { error: "Unauthorized", status: 401, userId: null };
+  }
+
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_ANON_KEY")!,
+    { global: { headers: { Authorization: authHeader } } }
+  );
+
+  const token = authHeader.replace("Bearer ", "");
+  const { data, error } = await supabase.auth.getClaims(token);
+  if (error || !data?.claims) {
+    return { error: "Invalid token", status: 401, userId: null };
+  }
+
+  return { error: null, status: 200, userId: data.claims.sub as string };
+}
+
+async function checkQuotaAndLog(userId: string, ip: string, statusCode: number, metadata?: Record<string, unknown>) {
+  const serviceClient = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+  );
+
+  // Check quota before proceeding
+  const { data: quota } = await serviceClient.rpc("check_user_quota", {
+    _user_id: userId,
+    _endpoint: ENDPOINT_NAME,
+  });
+
+  if (quota && !quota.allowed) {
+    return { allowed: false, reason: quota.reason };
+  }
+
+  // Log usage
+  await serviceClient.from("api_usage_log").insert({
+    user_id: userId,
+    endpoint: ENDPOINT_NAME,
+    ip_address: ip,
+    status_code: statusCode,
+    metadata: metadata || {},
+  });
+
+  return { allowed: true, reason: null };
+}
+
+function getClientIp(req: Request): string {
+  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") || "unknown";
+}
 
 // ─── HARDCODED WORD LISTS ────────────────────────────────────────────
 
@@ -91,7 +152,6 @@ function computeSilenceAdjustment(silenceRatio: number, wpm: number): { confiden
   else if (silenceRatio <= 0.40) deliveryAdj = -10;
   else deliveryAdj = -25;
 
-  // Extra penalty when high silence + low word count
   let confidenceAdj = deliveryAdj;
   if (silenceRatio > 0.25 && wpm < 80) {
     confidenceAdj -= 10;
@@ -102,16 +162,14 @@ function computeSilenceAdjustment(silenceRatio: number, wpm: number): { confiden
 function computeClarityScore(transcript: string, words: string[], sentences: string[]): number {
   if (words.length < 3) return 5;
 
-  // 1. Sentence length variance (30%) — harsher brackets
   const sentenceWordCounts = sentences.map(s => s.split(/\s+/).filter(Boolean).length);
   const avgSentLen = sentenceWordCounts.reduce((a, b) => a + b, 0) / (sentenceWordCounts.length || 1);
-  let sentLenScore = 85; // cap baseline lower
+  let sentLenScore = 85;
   if (avgSentLen < 5) sentLenScore = 20;
   else if (avgSentLen > 25) sentLenScore = 15;
   else if (avgSentLen < 8) sentLenScore = 45;
   else if (avgSentLen > 18) sentLenScore = 40;
-  else if (avgSentLen >= 12 && avgSentLen <= 16) sentLenScore = 85; // tight ideal window
-  // Variance penalty — steeper
+  else if (avgSentLen >= 12 && avgSentLen <= 16) sentLenScore = 85;
   if (sentenceWordCounts.length > 1) {
     const variance = sentenceWordCounts.reduce((a, b) => a + Math.pow(b - avgSentLen, 2), 0) / sentenceWordCounts.length;
     const stdDev = Math.sqrt(variance);
@@ -120,7 +178,6 @@ function computeClarityScore(transcript: string, words: string[], sentences: str
     else if (stdDev > 3) sentLenScore = Math.max(25, sentLenScore - 12);
   }
 
-  // 2. Hedging language rate (40%) — much harsher penalty per hedge
   const lowerTranscript = transcript.toLowerCase();
   let hedgeCount = 0;
   HEDGING_PHRASES.forEach(h => { hedgeCount += countSubstring(lowerTranscript, h.phrase); });
@@ -128,7 +185,6 @@ function computeClarityScore(transcript: string, words: string[], sentences: str
   const hedgesPerFiveSentences = (hedgeCount / sentenceCount) * 5;
   const hedgingScore = clamp(Math.round(100 - hedgesPerFiveSentences * 20), 0, 100);
 
-  // 3. Vocabulary repetition (30%) — tighter thresholds
   const uniqueWords = new Set(words);
   const uniqueRatio = uniqueWords.size / words.length;
   let vocabScore: number;
@@ -138,38 +194,27 @@ function computeClarityScore(transcript: string, words: string[], sentences: str
   else if (uniqueRatio <= 0.60) vocabScore = 35;
   else vocabScore = Math.round(35 + ((uniqueRatio - 0.60) / (0.72 - 0.60)) * 40);
 
-  // Fewer sentences = lower ceiling (short recordings shouldn't get high clarity)
   const sentencePenalty = sentences.length < 3 ? -15 : sentences.length < 5 ? -8 : 0;
 
   return clamp(Math.round(sentLenScore * 0.30 + hedgingScore * 0.40 + vocabScore * 0.30) + sentencePenalty, 0, 100);
 }
 
 function computeConfidenceScore(
-  fillerRate: number,
-  silenceRatio: number,
-  wpm: number,
-  volumeVariance: number,
-  hedgeCount: number,
-  sentenceCount: number,
+  fillerRate: number, silenceRatio: number, wpm: number,
+  volumeVariance: number, hedgeCount: number, sentenceCount: number,
 ): number {
   const fillerAdj = computeFillerAdjustment(fillerRate);
   const silenceAdj = computeSilenceAdjustment(silenceRatio, wpm).confidence;
-
-  // Hedging adjustment: each hedge per 5 sentences = -6
   const hedgesPerFive = (hedgeCount / Math.max(sentenceCount, 1)) * 5;
   const hedgingAdj = clamp(Math.round(-hedgesPerFive * 6), -30, 0);
-
-  // Volume variance: low = flat = -10, high = dynamic = +10
   let volVarAdj = 0;
   if (volumeVariance < 2) volVarAdj = -10;
   else if (volumeVariance > 8) volVarAdj = 10;
   else volVarAdj = Math.round(((volumeVariance - 2) / 6) * 20 - 10);
-
   return clamp(50 + fillerAdj + silenceAdj + hedgingAdj + volVarAdj, 10, 100);
 }
 
 function computeDeliveryScore(paceScore: number, clarityScore: number, silenceDeliveryAdj: number): number {
-  // Normalize silence adjustment to 0-100 scale: -25 → 0, +10 → 100
   const silenceNormalized = clamp(Math.round(((silenceDeliveryAdj + 25) / 35) * 100), 0, 100);
   return clamp(Math.round(paceScore * 0.30 + clarityScore * 0.40 + silenceNormalized * 0.30), 0, 100);
 }
@@ -184,7 +229,6 @@ function computeWordChoiceScore(words: string[], transcript: string): { score: n
   const lowerTranscript = transcript.toLowerCase();
   let passiveCount = 0;
   PASSIVE_CONSTRUCTIONS.forEach(p => { passiveCount += countSubstring(lowerTranscript, p); });
-
   const score = clamp(40 + (powerWordsFound.length * 8) - (passiveCount * 12), 0, 100);
   return { score, powerWordsFound, passiveCount };
 }
@@ -200,7 +244,6 @@ function computeAllScores(
   const durationSeconds = Math.max(1, Number(audioMetrics.durationSeconds || 1));
   const wpm = Math.round((wordCount / durationSeconds) * 60);
 
-  // Filler counting (multi-word fillers first)
   const lowerTranscript = cleanTranscript.toLowerCase();
   let fillerCount = 0;
   const fillerWordsFound: string[] = [];
@@ -210,7 +253,6 @@ function computeAllScores(
   });
   const fillerRate = (fillerCount / Math.max(wordCount, 1)) * 100;
 
-  // Hedging count
   let hedgeCount = 0;
   const hedgingInstances: Array<{ phrase: string; suggestion: string }> = [];
   HEDGING_PHRASES.forEach(h => {
@@ -243,16 +285,12 @@ function computeAllScores(
   };
 }
 
-// ─── GRADE ───────────────────────────────────────────────────────────
-
 function getGrade(score: number): string {
   if (score >= 80) return "A";
   if (score >= 65) return "B";
   if (score >= 50) return "C";
   return "D";
 }
-
-// ─── FALLBACK (no AI) ────────────────────────────────────────────────
 
 function buildFallbackAnalysis(
   transcript: string,
@@ -325,13 +363,28 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // ── AUTHENTICATION ──
+  const { error: authError, status: authStatus, userId } = await authenticateRequest(req);
+  if (authError || !userId) {
+    return new Response(JSON.stringify({ error: authError || "Unauthorized" }), {
+      status: authStatus, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const clientIp = getClientIp(req);
+
+  // ── PAYLOAD SIZE CHECK ──
+  const contentLength = parseInt(req.headers.get("content-length") || "0");
+  if (contentLength > MAX_PAYLOAD_BYTES) {
+    return new Response(JSON.stringify({ error: "Payload too large. Max 50KB." }), {
+      status: 413, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   let transcript = "";
   let audioMetrics: {
-    averageVolume?: number;
-    silenceRatio?: number;
-    volumeVariance?: number;
-    totalFrames?: number;
-    durationSeconds?: number;
+    averageVolume?: number; silenceRatio?: number; volumeVariance?: number;
+    totalFrames?: number; durationSeconds?: number;
   } = {};
   let sessionGoal = "";
   let sessionType = "";
@@ -345,24 +398,52 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    transcript = body?.transcript ?? "";
-    audioMetrics = body?.audioMetrics ?? {};
-    sessionGoal = body?.sessionGoal ?? "";
-    sessionType = body?.sessionType ?? "";
-    eventContext = body?.eventContext ?? "";
-    scenarioMode = body?.scenarioMode ?? false;
-    scenarioTitle = body?.scenarioTitle ?? "";
-    scenarioGoal = body?.scenarioGoal ?? "";
-    scenarioSubGoals = body?.scenarioSubGoals ?? [];
-    scenarioCategory = body?.scenarioCategory ?? "";
-    customNotes = body?.customNotes ?? "";
+
+    // ── INPUT VALIDATION ──
+    transcript = typeof body?.transcript === "string" ? body.transcript.slice(0, MAX_TRANSCRIPT_LENGTH) : "";
+    audioMetrics = body?.audioMetrics && typeof body.audioMetrics === "object" ? body.audioMetrics : {};
+    sessionGoal = typeof body?.sessionGoal === "string" ? body.sessionGoal.slice(0, 500) : "";
+    sessionType = typeof body?.sessionType === "string" ? body.sessionType.slice(0, 100) : "";
+    eventContext = typeof body?.eventContext === "string" ? body.eventContext.slice(0, 500) : "";
+    scenarioMode = body?.scenarioMode === true;
+    scenarioTitle = typeof body?.scenarioTitle === "string" ? body.scenarioTitle.slice(0, 200) : "";
+    scenarioGoal = typeof body?.scenarioGoal === "string" ? body.scenarioGoal.slice(0, 500) : "";
+    scenarioSubGoals = Array.isArray(body?.scenarioSubGoals)
+      ? body.scenarioSubGoals.filter((s: unknown) => typeof s === "string").slice(0, 5).map((s: string) => s.slice(0, 200))
+      : [];
+    scenarioCategory = typeof body?.scenarioCategory === "string" ? body.scenarioCategory.slice(0, 100) : "";
+    customNotes = typeof body?.customNotes === "string" ? body.customNotes.slice(0, 1000) : "";
+
+    // Validate numeric audio metrics
+    if (audioMetrics.durationSeconds !== undefined) {
+      audioMetrics.durationSeconds = Math.max(0, Math.min(600, Number(audioMetrics.durationSeconds) || 0));
+    }
+    if (audioMetrics.silenceRatio !== undefined) {
+      audioMetrics.silenceRatio = Math.max(0, Math.min(1, Number(audioMetrics.silenceRatio) || 0));
+    }
+    if (audioMetrics.volumeVariance !== undefined) {
+      audioMetrics.volumeVariance = Math.max(0, Math.min(100, Number(audioMetrics.volumeVariance) || 0));
+    }
 
     if (!transcript || transcript.trim().length < 2) {
-      // Return fallback analysis based on audio metrics alone
       return new Response(
         JSON.stringify(buildFallbackAnalysis(transcript || "", audioMetrics, "no_transcript")),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
+    }
+
+    // ── QUOTA CHECK ──
+    const quotaResult = await checkQuotaAndLog(userId, clientIp, 200, {
+      transcript_length: transcript.length,
+      scenario_mode: scenarioMode,
+    });
+    if (!quotaResult.allowed) {
+      const msg = quotaResult.reason === "circuit_breaker_tripped"
+        ? "Service temporarily disabled. Please try again later."
+        : "Daily usage limit reached. Try again tomorrow.";
+      return new Response(JSON.stringify({ error: msg }), {
+        status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -374,7 +455,6 @@ serve(async (req) => {
     }
 
     // Step 1: AI-powered transcript cleanup
-    console.log("Raw transcript:", transcript);
     try {
       const cleanupResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
@@ -405,7 +485,6 @@ Rules:
         const cleanupResult = await cleanupResponse.json();
         const cleaned = cleanupResult.choices?.[0]?.message?.content?.trim();
         if (cleaned && cleaned.length >= 5) {
-          console.log("Cleaned transcript:", cleaned);
           transcript = cleaned;
         }
       }
@@ -509,7 +588,6 @@ Transcript (${scores.wordCount} words, ${scores.wpm} WPM over ${audioMetrics.dur
     const aiResponse = await response.json();
     const content = aiResponse.choices?.[0]?.message?.content || "";
 
-    // Parse AI response
     let jsonStr = content;
     const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (jsonMatch) jsonStr = jsonMatch[1];
@@ -528,7 +606,6 @@ Transcript (${scores.wordCount} words, ${scores.wpm} WPM over ${audioMetrics.dur
           throw new Error("No JSON found");
         }
       } catch {
-        console.error("Failed to parse AI response:", content);
         return new Response(
           JSON.stringify(buildFallbackAnalysis(transcript, audioMetrics, "parse_failure")),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } },
@@ -536,10 +613,9 @@ Transcript (${scores.wordCount} words, ${scores.wpm} WPM over ${audioMetrics.dur
       }
     }
 
-    // Persuasion score is the ONLY AI-generated score — clamp it
     const persuasionScore = clamp(Number(parsed.persuasionScore) || 30, 0, 100);
 
-    // ─── SCENARIO MODE: Goal-focused analysis ─────────────────────────
+    // ─── SCENARIO MODE ─────────────────────────────────────────────
     let goalAnalysis: any = null;
     if (scenarioMode && scenarioGoal) {
       try {
@@ -597,7 +673,6 @@ Return ONLY raw JSON:
               goalAnalysis = JSON.parse(goalJson.substring(fb, lb + 1));
             }
           }
-          // Clamp scores
           if (goalAnalysis) {
             goalAnalysis.goalScore = clamp(Number(goalAnalysis.goalScore) || 50, 0, 100);
             if (goalAnalysis.subGoalScores) {
@@ -613,7 +688,6 @@ Return ONLY raw JSON:
       }
     }
 
-    // Build final response with deterministic scores + AI qualitative text
     const result: any = {
       scores: {
         pace: scores.paceScore,
@@ -668,7 +742,7 @@ Return ONLY raw JSON:
     }
 
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
+      JSON.stringify({ error: "An error occurred processing your request." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
