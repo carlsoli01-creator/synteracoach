@@ -3,13 +3,13 @@ import { Mic, MicOff, ArrowLeft, Settings } from "lucide-react";
 import { AILoader } from "@/components/ui/ai-loader";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { PaywallCTA, PricingModal } from "@/components/paywall/PaywallOverlay";
+
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SCENARIO_CATEGORIES, getTodayScenario, diffColor } from "@/data/scenarios";
 import AppSidebar from "@/components/layout/AppSidebar";
 import { useNavigate } from "react-router-dom";
 import IntroExperience from "@/components/onboarding/IntroExperience";
-import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
+
 import SpeakBetterInterstitial from "@/components/onboarding/SpeakBetterInterstitial";
 import { Footer } from "@/components/ui/footer";
 import MobileQuizAndInstall from "@/components/onboarding/MobileQuizAndInstall";
@@ -152,12 +152,10 @@ export default function Negotium() {
   const [recCommTips, setRecCommTips] = useState<string[]>([]);
   const [userSubtitle, setUserSubtitle] = useState("Voice Intelligence Platform");
   const [heroFocus, setHeroFocus] = useState("Be Analyzed.");
-  const [isPremium, setIsPremium] = useState(() => localStorage.getItem("syntera_premium") === "true");
-  const [showPricing, setShowPricing] = useState(false);
+  const isPremium = true;
   const [showTipPopup, setShowTipPopup] = useState(false);
   const [tipText, setTipText] = useState("");
-  const [showIntro, setShowIntro] = useState(() => localStorage.getItem("syntera_premium") === "true" ? false : !localStorage.getItem("syntera_intro_done_v2"));
-  const [showForcedPaywall, setShowForcedPaywall] = useState(false);
+  const [showIntro, setShowIntro] = useState(() => !localStorage.getItem("syntera_intro_done_v2"));
   const [showInterstitial, setShowInterstitial] = useState(false);
   const [quizVisible, setQuizVisible] = useState(() => {
     if (localStorage.getItem("syntera_premium") === "true") return false;
@@ -364,7 +362,7 @@ export default function Negotium() {
   }, [history]);
 
   const startRecording = useCallback(async () => {
-    if (!isPremium && todaySessionCount >= 1) { setShowPricing(true); return; }
+    
     setMicError(""); transcriptRef.current = "";
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -436,19 +434,18 @@ export default function Negotium() {
   const tagColor = (t: string) => t === "pos" ? "var(--pg-text)" : t === "warn" ? "var(--pg-faint)" : "var(--pg-muted)";
   const tagBg = (t: string) => t === "pos" ? "var(--pg-accent)" : t === "warn" ? "var(--pg-surface-alt)" : "var(--pg-bg)";
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
-  const isOverlay = showIntro || showForcedPaywall || showInterstitial || quizVisible;
+  const isOverlay = showIntro || showInterstitial || quizVisible;
 
-  const handlePaywallDone = () => { setShowForcedPaywall(false); localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
+  
   const handleInterstitialComplete = () => { setShowInterstitial(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
 
   const isActive = phase === "recording" || phase === "analyzing" || phase === "done";
 
   return (
     <div className="app-root">
-      {showIntro && !isPremium && <IntroExperience onComplete={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }} onForcePaywall={() => setShowForcedPaywall(true)} />}
-      {showForcedPaywall && !isPremium && <ForcedPaywall onSubscribe={() => { localStorage.setItem("syntera_premium", "true"); setIsPremium(true); handlePaywallDone(); }} onSkip={handlePaywallDone} />}
+      {showIntro && <IntroExperience onComplete={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }} onForcePaywall={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }} />}
       {showInterstitial && <SpeakBetterInterstitial onComplete={handleInterstitialComplete} />}
-      {!showIntro && !showForcedPaywall && !showInterstitial && quizVisible && (
+      {!showIntro && !showInterstitial && quizVisible && (
         <MobileQuizAndInstall onFinish={(answers) => {
           localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers }));
           const p = derivePersonalization(answers);
@@ -582,8 +579,7 @@ export default function Negotium() {
             {/* Done state — results below */}
             {phase === "done" && metrics && feedback && (
               <section className="results-section">
-                {!isPremium && <PaywallCTA onUpgrade={() => setShowPricing(true)} />}
-                <div style={!isPremium ? { filter: "blur(8px)", pointerEvents: "none", userSelect: "none" } : {}}>
+                <div>
                   <div className="score-rings">
                     <ScoreRing score={metrics.overall} label="Overall" color="var(--pg-text)" />
                     <ScoreRing score={metrics.delivery} label="Delivery" color="var(--pg-subtle)" />
@@ -696,7 +692,7 @@ export default function Negotium() {
         </div>
       )}
 
-      {showPricing && <PricingModal onClose={() => setShowPricing(false)} onSubscribe={() => { localStorage.setItem("syntera_premium", "true"); setIsPremium(true); setShowPricing(false); }} />}
+      
       <Footer />
 
       <style>{`
