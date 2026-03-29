@@ -445,7 +445,7 @@ export default function Negotium() {
     <div className="app-root">
       {showIntro && <IntroExperience onComplete={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }} onForcePaywall={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }} />}
       {showInterstitial && <SpeakBetterInterstitial onComplete={handleInterstitialComplete} />}
-      {!showIntro && !showForcedPaywall && !showInterstitial && quizVisible && (
+      {!showIntro && !showInterstitial && quizVisible && (
         <MobileQuizAndInstall onFinish={(answers) => {
           localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers }));
           const p = derivePersonalization(answers);
