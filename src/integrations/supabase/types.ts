@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      api_usage_log: {
+        Row: {
+          created_at: string
+          endpoint: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          status_code: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          endpoint: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          status_code?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          endpoint?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          status_code?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      circuit_breaker_state: {
+        Row: {
+          daily_global_limit: number
+          id: number
+          is_tripped: boolean
+          per_user_daily_limit: number
+          reason: string | null
+          tripped_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          daily_global_limit?: number
+          id?: number
+          is_tripped?: boolean
+          per_user_daily_limit?: number
+          reason?: string | null
+          tripped_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          daily_global_limit?: number
+          id?: number
+          is_tripped?: boolean
+          per_user_daily_limit?: number
+          reason?: string | null
+          tripped_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           company: string | null
@@ -303,6 +363,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_user_quota: {
+        Args: { _endpoint: string; _user_id: string }
+        Returns: Json
+      }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
