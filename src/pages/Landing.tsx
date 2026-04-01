@@ -404,20 +404,19 @@ export default function Landing() {
 
       {/* HERO */}
       <div className="lp-hero">
-        <div className="lp-colorbends-bg">
-          <ColorBends
-            colors={["#ff5c7a", "#8a5cff", "#00ffd1"]}
-            rotation={0}
-            speed={0.2}
-            scale={1}
-            frequency={1}
-            warpStrength={1}
-            mouseInfluence={1}
-            parallax={0.5}
-            noise={0.1}
-            transparent
-            autoRotate={0}
-            color=""
+        <div className="lp-particles-bg">
+          <Particles
+            particleCount={350}
+            particleSpread={16}
+            speed={0.07}
+            particleColors={["#ffffff", "#ffffff", "#ffffff"]}
+            moveParticlesOnHover={false}
+            particleHoverFactor={2}
+            alphaParticles={false}
+            particleBaseSize={90}
+            sizeRandomness={1}
+            cameraDistance={66}
+            disableRotation={false}
           />
         </div>
         <svg ref={svgRef} className="lp-paths-canvas" viewBox="0 0 696 316" fill="none" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
