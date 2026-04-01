@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import ColorBends from "@/components/ColorBends";
+import Particles from "@/components/Particles";
 
 const TYPEWRITER_PHRASES = [
   "Speak Better. Be Heard.",
