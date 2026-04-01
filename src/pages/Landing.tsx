@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import ColorBends from "@/components/ColorBends";
 
 const TYPEWRITER_PHRASES = [
   "Speak Better. Be Heard.",
@@ -243,7 +244,8 @@ export default function Landing() {
 
         /* HERO */
         .lp-hero { position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:130px 24px 100px; overflow:hidden; }
-        .lp-paths-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; transition:opacity 0.3s ease; }
+        .lp-paths-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; transition:opacity 0.3s ease; display:none; }
+        .lp-colorbends-bg { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:0.35; }
         .lp-hero-content { position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; }
         .lp-hero-content, .lp-section, .lp-footer { position:relative; z-index:1; }
         .lp-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:2px; margin-bottom:40px; animation:lpFadeUp 0.7s ease both; }
@@ -402,6 +404,22 @@ export default function Landing() {
 
       {/* HERO */}
       <div className="lp-hero">
+        <div className="lp-colorbends-bg">
+          <ColorBends
+            colors={["#ff5c7a", "#8a5cff", "#00ffd1"]}
+            rotation={0}
+            speed={0.2}
+            scale={1}
+            frequency={1}
+            warpStrength={1}
+            mouseInfluence={1}
+            parallax={0.5}
+            noise={0.1}
+            transparent
+            autoRotate={0}
+            color=""
+          />
+        </div>
         <svg ref={svgRef} className="lp-paths-canvas" viewBox="0 0 696 316" fill="none" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
           <title>Background Paths</title>
         </svg>
