@@ -404,19 +404,13 @@ export default function Landing() {
 
       {/* HERO */}
       <div className="lp-hero">
-        <div className="lp-particles-bg">
-          <Particles
-            particleCount={350}
-            particleSpread={16}
-            speed={0.07}
-            particleColors={["#ffffff", "#ffffff", "#ffffff"]}
-            moveParticlesOnHover={false}
-            particleHoverFactor={2}
-            alphaParticles={false}
-            particleBaseSize={90}
-            sizeRandomness={1}
-            cameraDistance={66}
-            disableRotation={false}
+        <div className="lp-chrome-bg">
+          <LiquidChrome
+            speed={0.25}
+            amplitude={0.3}
+            frequencyX={3}
+            frequencyY={3}
+            interactive={false}
           />
         </div>
         <svg ref={svgRef} className="lp-paths-canvas" viewBox="0 0 696 316" fill="none" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
