@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import Particles from "@/components/Particles";
+import LiquidChrome from "@/components/LiquidChrome";
 
 const TYPEWRITER_PHRASES = [
   "Speak Better. Be Heard.",
