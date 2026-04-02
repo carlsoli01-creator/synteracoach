@@ -447,6 +447,7 @@ export default function Negotium() {
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none', filter: 'grayscale(1)' }}>
         <LiquidChrome speed={0.25} amplitude={0.3} frequencyX={3} frequencyY={3} interactive={false} />
       </div>
+      <div style={{ position: 'relative', zIndex: 1, minHeight: '100%' }}>
       {showIntro && <IntroExperience onComplete={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }} onForcePaywall={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }} />}
       {showInterstitial && <SpeakBetterInterstitial onComplete={handleInterstitialComplete} />}
       {!showIntro && !showInterstitial && quizVisible && (
@@ -869,6 +870,7 @@ export default function Negotium() {
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
       `}</style>
+    </div>
     </div>
   );
 }
