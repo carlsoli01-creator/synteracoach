@@ -12,6 +12,7 @@ import IntroExperience from "@/components/onboarding/IntroExperience";
 
 import SpeakBetterInterstitial from "@/components/onboarding/SpeakBetterInterstitial";
 import { Footer } from "@/components/ui/footer";
+import LiquidChrome from "@/components/LiquidChrome";
 import MobileQuizAndInstall from "@/components/onboarding/MobileQuizAndInstall";
 
 const DEFAULT_DURATION = 15;
