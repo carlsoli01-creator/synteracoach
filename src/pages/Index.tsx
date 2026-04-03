@@ -506,7 +506,7 @@ export default function Negotium() {
             <section className="recording-section">
               {/* Orb + timer */}
               <div className="orb-container">
-                <canvas ref={orbCanvasRef} className="orb-canvas" />
+                <canvas ref={orbCanvasRef} className="orb-canvas text-slate-600" />
                 <div className="orb-overlay">
                   <div className="timer-count font-serif">
                     {timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}
@@ -520,9 +520,9 @@ export default function Negotium() {
               {phase === "idle" && (
                 <div className="duration-wrap">
                   <div className="duration-row">
-                    <span className="duration-bound">15s</span>
+                    <span className="duration-bound text-slate-800">15s</span>
                     <span className="duration-current">{selectedDuration >= 60 ? `${Math.floor(selectedDuration / 60)}:${String(selectedDuration % 60).padStart(2, '0')}` : `${selectedDuration}s`}</span>
-                    <span className="duration-bound">5:00</span>
+                    <span className="duration-bound text-slate-800">5:00</span>
                   </div>
                   <input type="range" min={15} max={300} step={15} value={selectedDuration}
                     onChange={(e) => { const v = Number(e.target.value); setSelectedDuration(v); setTimeLeft(v); }}
