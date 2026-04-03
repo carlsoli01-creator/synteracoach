@@ -506,7 +506,7 @@ export default function Negotium() {
             <section className="recording-section">
               {/* Orb + timer */}
               <div className="orb-container">
-                <canvas ref={orbCanvasRef} className="orb-canvas" />
+                <canvas ref={orbCanvasRef} className="orb-canvas text-slate-600" />
                 <div className="orb-overlay">
                   <div className="timer-count font-serif">
                     {timeLeft >= 60 ? `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}` : timeLeft}
