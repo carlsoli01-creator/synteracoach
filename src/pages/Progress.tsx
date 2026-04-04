@@ -39,13 +39,13 @@ export default function Progress() {
     <div style={{ minHeight: "100vh", background: bg, fontFamily: "'IBM Plex Mono', monospace" }}>
       <AppSidebar />
       <div style={{ paddingLeft: sidebarWidth, transition: "padding-left 0.25s cubic-bezier(0.4,0,0.2,1)" }}>
-        <div style={{ padding: "48px 48px 24px" }}>
-          <h1 style={{ fontSize: 48, fontFamily: "'Bebas Neue', sans-serif", color: text, letterSpacing: "0.06em", lineHeight: 1, margin: 0 }}>
+        <div style={{ padding: "32px 16px 16px" }}>
+          <h1 style={{ fontSize: 40, fontFamily: "'Bebas Neue', sans-serif", color: text, letterSpacing: "0.06em", lineHeight: 1, margin: 0 }}>
             PROGRESS
           </h1>
           <div style={{ fontSize: 10, color: muted, marginTop: 8, letterSpacing: "0.12em", textTransform: "uppercase" }}>Track your improvement over time</div>
         </div>
-        <div style={{ maxWidth: 900, padding: "0 48px", paddingBottom: 80 }}>
+        <div style={{ maxWidth: 900, padding: "0 16px", paddingBottom: 80 }}>
           <ProgressDashboard history={history} colors={c} />
         </div>
       </div>
