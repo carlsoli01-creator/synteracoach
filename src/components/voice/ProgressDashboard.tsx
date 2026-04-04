@@ -271,7 +271,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
 
       {/* Average Scores */}
       {stats && (
-        <div style={{ background: c.card, padding: 28 }}>
+        <div style={{ background: c.card, padding: "20px 16px" }}>
           <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'IBM Plex Mono', monospace" }}>
             Average Scores
           </div>
