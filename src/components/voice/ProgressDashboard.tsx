@@ -214,7 +214,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 1, background: c.border }}>
       {/* Stat Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 1 }}>
         {statCards.map(({ label, value }) => (
           <div key={label} style={{ background: c.card, padding: "20px 24px" }}>
             <div style={{ fontSize: 36, color: c.text, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em" }}>{value}</div>
@@ -224,18 +224,17 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
       </div>
 
       {/* Streak Info */}
-      <div style={{ background: c.card, padding: 28, display: "flex", gap: 32, alignItems: "center" }}>
+      <div style={{ background: c.card, padding: "20px 20px", display: "flex", flexWrap: "wrap", gap: "16px 32px", alignItems: "center" }}>
         <div>
-          <div style={{ fontSize: 64, color: c.text, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em", lineHeight: 1 }}>{streak.current}</div>
+          <div style={{ fontSize: 48, color: c.text, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em", lineHeight: 1 }}>{streak.current}</div>
           <div style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase", fontFamily: "'IBM Plex Mono', monospace", marginTop: 4 }}>Day Streak</div>
         </div>
-        <div style={{ height: 48, width: 1, background: c.border }} />
+        <div style={{ height: 40, width: 1, background: c.border }} />
         <div>
-          <div style={{ fontSize: 36, color: c.text, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em", lineHeight: 1 }}>{streak.longest}</div>
+          <div style={{ fontSize: 28, color: c.text, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em", lineHeight: 1 }}>{streak.longest}</div>
           <div style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase", fontFamily: "'IBM Plex Mono', monospace", marginTop: 4 }}>Longest Streak</div>
         </div>
-        <div style={{ flex: 1 }} />
-        <div style={{ fontSize: 10, color: c.muted, fontFamily: "'IBM Plex Mono', monospace", lineHeight: 1.6, maxWidth: 200 }}>
+        <div style={{ flex: "1 1 100%", fontSize: 10, color: c.muted, fontFamily: "'IBM Plex Mono', monospace", lineHeight: 1.6 }}>
           {streak.current >= 7 ? "🔥 Incredible consistency! Keep it going." :
            streak.current >= 3 ? "💪 Building momentum. Don't break the chain!" :
            streak.current >= 1 ? "✓ You practiced today. Come back tomorrow!" :
@@ -244,7 +243,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
       </div>
 
       {/* Score Trends Chart */}
-      <div style={{ background: c.card, padding: 28 }}>
+      <div style={{ background: c.card, padding: "20px 16px" }}>
         <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 12, fontFamily: "'IBM Plex Mono', monospace" }}>
           Score Trends
         </div>
@@ -272,7 +271,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
 
       {/* Average Scores */}
       {stats && (
-        <div style={{ background: c.card, padding: 28 }}>
+        <div style={{ background: c.card, padding: "20px 16px" }}>
           <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'IBM Plex Mono', monospace" }}>
             Average Scores
           </div>
@@ -299,11 +298,11 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
 
       {/* Personal Bests */}
       {personalBests && (
-        <div style={{ background: c.card, padding: 28 }}>
+        <div style={{ background: c.card, padding: "20px 16px" }}>
           <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'IBM Plex Mono', monospace" }}>
             Personal Bests
           </div>
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
+          <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: 12 }}>
             <ScoreRingSmall score={personalBests.overall} label="Overall" color={accent} textColor={c.text} borderColor={c.border} />
             <ScoreRingSmall score={personalBests.pace} label="Pace" color={c.muted} textColor={c.text} borderColor={c.border} />
             <ScoreRingSmall score={personalBests.confidence} label="Confidence" color={c.muted} textColor={c.text} borderColor={c.border} />
