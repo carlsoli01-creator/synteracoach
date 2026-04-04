@@ -224,18 +224,17 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
       </div>
 
       {/* Streak Info */}
-      <div style={{ background: c.card, padding: 28, display: "flex", gap: 32, alignItems: "center" }}>
+      <div style={{ background: c.card, padding: "20px 20px", display: "flex", flexWrap: "wrap", gap: "16px 32px", alignItems: "center" }}>
         <div>
-          <div style={{ fontSize: 64, color: c.text, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em", lineHeight: 1 }}>{streak.current}</div>
+          <div style={{ fontSize: 48, color: c.text, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em", lineHeight: 1 }}>{streak.current}</div>
           <div style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase", fontFamily: "'IBM Plex Mono', monospace", marginTop: 4 }}>Day Streak</div>
         </div>
-        <div style={{ height: 48, width: 1, background: c.border }} />
+        <div style={{ height: 40, width: 1, background: c.border }} />
         <div>
-          <div style={{ fontSize: 36, color: c.text, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em", lineHeight: 1 }}>{streak.longest}</div>
+          <div style={{ fontSize: 28, color: c.text, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em", lineHeight: 1 }}>{streak.longest}</div>
           <div style={{ fontSize: 9, letterSpacing: "0.2em", color: c.muted, textTransform: "uppercase", fontFamily: "'IBM Plex Mono', monospace", marginTop: 4 }}>Longest Streak</div>
         </div>
-        <div style={{ flex: 1 }} />
-        <div style={{ fontSize: 10, color: c.muted, fontFamily: "'IBM Plex Mono', monospace", lineHeight: 1.6, maxWidth: 200 }}>
+        <div style={{ flex: "1 1 100%", fontSize: 10, color: c.muted, fontFamily: "'IBM Plex Mono', monospace", lineHeight: 1.6 }}>
           {streak.current >= 7 ? "🔥 Incredible consistency! Keep it going." :
            streak.current >= 3 ? "💪 Building momentum. Don't break the chain!" :
            streak.current >= 1 ? "✓ You practiced today. Come back tomorrow!" :
