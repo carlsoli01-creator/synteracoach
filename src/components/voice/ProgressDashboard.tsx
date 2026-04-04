@@ -302,7 +302,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
           <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'IBM Plex Mono', monospace" }}>
             Personal Bests
           </div>
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
+          <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: 12 }}>
             <ScoreRingSmall score={personalBests.overall} label="Overall" color={accent} textColor={c.text} borderColor={c.border} />
             <ScoreRingSmall score={personalBests.pace} label="Pace" color={c.muted} textColor={c.text} borderColor={c.border} />
             <ScoreRingSmall score={personalBests.confidence} label="Confidence" color={c.muted} textColor={c.text} borderColor={c.border} />
