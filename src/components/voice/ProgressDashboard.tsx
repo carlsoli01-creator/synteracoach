@@ -214,7 +214,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 1, background: c.border }}>
       {/* Stat Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 1 }}>
         {statCards.map(({ label, value }) => (
           <div key={label} style={{ background: c.card, padding: "20px 24px" }}>
             <div style={{ fontSize: 36, color: c.text, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em" }}>{value}</div>

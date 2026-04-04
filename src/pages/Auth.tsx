@@ -84,6 +84,8 @@ export default function Auth() {
         toast.error(error.message);
       }
     } else {
+      // Sign-in: skip intro, go straight to app
+      localStorage.setItem("syntera_intro_done_v2", "true");
       toast.success("Welcome back!");
       navigate("/");
     }

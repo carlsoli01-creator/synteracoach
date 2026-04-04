@@ -25,7 +25,7 @@ export default function Progress() {
 
   const bg = isDark ? "#0c0c0e" : "#f8f8f6";
   const text = isDark ? "#e6e6e0" : "#1a1a1c";
-  const muted = isDark ? "#555" : "#888";
+  const muted = isDark ? "#999" : "#444";
 
   const c = {
     bg, panel: isDark ? "#111113" : "#ffffff",
