@@ -44,6 +44,8 @@ export default function MobileQuizAndInstall({ onFinish }: Props) {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [installed, setInstalled] = useState(false);
   const mobile = isMobileDevice();
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+    || (navigator as any).standalone === true;
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Capture the PWA install prompt
@@ -68,7 +70,7 @@ export default function MobileQuizAndInstall({ onFinish }: Props) {
         setAnimIn(true);
       } else {
         // quiz done
-        if (mobile) {
+        if (mobile && !isStandalone) {
           setPhase("install");
           setAnimIn(true);
         } else {
