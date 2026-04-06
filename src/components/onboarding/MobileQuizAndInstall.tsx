@@ -70,7 +70,7 @@ export default function MobileQuizAndInstall({ onFinish }: Props) {
         setAnimIn(true);
       } else {
         // quiz done
-        if (mobile) {
+        if (mobile && !isStandalone) {
           setPhase("install");
           setAnimIn(true);
         } else {
