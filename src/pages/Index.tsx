@@ -449,8 +449,15 @@ export default function Negotium() {
         <LiquidChrome speed={0.25} amplitude={0.3} frequencyX={3} frequencyY={3} interactive={false} />
       </div>
       <div style={{ position: 'relative', zIndex: 1, minHeight: '100%' }}>
-      {showIntro && <IntroExperience onComplete={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }} onForcePaywall={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); }} />}
+      {showIntro && <IntroExperience onComplete={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) { setBlackFade(true); setTimeout(() => setQuizVisible(true), 600); setTimeout(() => setBlackFade(false), 1200); } }} onForcePaywall={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) { setBlackFade(true); setTimeout(() => setQuizVisible(true), 600); setTimeout(() => setBlackFade(false), 1200); } }} />}
       {showInterstitial && <SpeakBetterInterstitial onComplete={handleInterstitialComplete} />}
+      {blackFade && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 90, background: "#000",
+          animation: "blackFadeInOut 1.2s ease-in-out forwards",
+          pointerEvents: "all",
+        }} />
+      )}
       {!showIntro && !showInterstitial && quizVisible && (
         <MobileQuizAndInstall onFinish={(answers) => {
           localStorage.setItem("negotium_quiz_v2", JSON.stringify({ answers }));
@@ -458,7 +465,9 @@ export default function Negotium() {
           setRecCommTips([...new Set([...(p.comm || [])].slice(0, 6))]);
           setUserSubtitle(p.subtitle);
           setHeroFocus(p.heroFocus);
-          setQuizVisible(false);
+          setBlackFade(true);
+          setTimeout(() => { setQuizVisible(false); }, 600);
+          setTimeout(() => { setBlackFade(false); }, 1200);
         }} />
       )}
 
