@@ -14,6 +14,7 @@ import SpeakBetterInterstitial from "@/components/onboarding/SpeakBetterIntersti
 import { Footer } from "@/components/ui/footer";
 import LiquidChrome from "@/components/LiquidChrome";
 import MobileQuizAndInstall from "@/components/onboarding/MobileQuizAndInstall";
+import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
