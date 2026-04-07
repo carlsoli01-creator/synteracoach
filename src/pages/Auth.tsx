@@ -111,12 +111,34 @@ export default function Auth() {
 
   const handleOAuth = async (provider: "google" | "apple") => {
     setIsSubmitting(true);
-    const { error } = await lovable.auth.signInWithOAuth(provider, {
-      redirect_uri: window.location.origin,
-    });
-    setIsSubmitting(false);
-    if (error) {
-      toast.error(`Failed to sign in with ${provider === "google" ? "Google" : "Apple"}.`);
+    try {
+      // Try Lovable managed OAuth first (works in Lovable preview)
+      const result = await lovable.auth.signInWithOAuth(provider, {
+        redirect_uri: window.location.origin,
+      });
+      if (result.redirected) {
+        return; // Browser is redirecting
+      }
+      if (result.error) {
+        throw result.error;
+      }
+      // Success - session already set by lovable auth
+      localStorage.setItem("syntera_intro_done_v2", "true");
+      toast.success("Welcome back!");
+      navigate("/");
+    } catch {
+      // Fallback to native Supabase OAuth (works on published domains with own credentials)
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
+      if (error) {
+        toast.error(`Failed to sign in with ${provider === "google" ? "Google" : "Apple"}.`);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
