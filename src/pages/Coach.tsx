@@ -17,6 +17,7 @@ async function streamChat({
 }: {messages: Msg[];onDelta: (t: string) => void;onDone: () => void;onError: (msg: string) => void;}) {
   const { data: { session } } = await supabase.auth.getSession();
   const token = session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const userName = session?.user?.user_metadata?.full_name || "";
 
   const resp = await fetch(CHAT_URL, {
     method: "POST",
@@ -24,7 +25,7 @@ async function streamChat({
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
     },
-    body: JSON.stringify({ messages })
+    body: JSON.stringify({ messages, userName })
   });
 
   if (resp.status === 429) {onError("Rate limited — please wait a moment.");return;}

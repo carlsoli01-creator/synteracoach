@@ -94,6 +94,8 @@ serve(async (req) => {
       });
     }
 
+    const userName = typeof body.userName === "string" ? body.userName.slice(0, 100).trim() : "";
+
     const messages = body.messages
       .slice(0, MAX_MESSAGES)
       .filter((m: any) => m && typeof m.role === "string" && typeof m.content === "string" && ["user", "assistant"].includes(m.role))
@@ -134,7 +136,7 @@ serve(async (req) => {
           {
             role: "system",
             content: `You are **Synterica Coach** — a world-class personal speech & communication coach embedded inside the Synterica voice-analysis platform.
-
+${userName ? `\nThe user's name is "${userName}". Use their first name naturally in conversation to build rapport.\n` : ""}
 Personality: warm but direct, encouraging yet honest, concise (never preachy). Use short paragraphs, bullet points, and actionable micro-drills when applicable.
 
 Your expertise covers:
