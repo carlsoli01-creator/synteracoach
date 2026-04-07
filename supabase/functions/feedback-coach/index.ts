@@ -94,6 +94,8 @@ serve(async (req) => {
       });
     }
 
+    const userName = typeof body.userName === "string" ? body.userName.slice(0, 100).trim() : "";
+
     const messages = body.messages
       .slice(0, MAX_MESSAGES)
       .filter((m: any) => m && typeof m.role === "string" && typeof m.content === "string" && ["user", "assistant"].includes(m.role))
