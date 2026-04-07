@@ -160,6 +160,7 @@ export default function Negotium() {
   const [showIntro, setShowIntro] = useState(() => !localStorage.getItem("syntera_intro_done_v2"));
   const [showInterstitial, setShowInterstitial] = useState(false);
   const [blackFade, setBlackFade] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
   const [quizVisible, setQuizVisible] = useState(() => {
     if (localStorage.getItem("syntera_premium") === "true") return false;
     try { if (localStorage.getItem("negotium_quiz_v2")) return false; } catch (_) {}
