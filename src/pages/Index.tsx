@@ -14,6 +14,7 @@ import SpeakBetterInterstitial from "@/components/onboarding/SpeakBetterIntersti
 import { Footer } from "@/components/ui/footer";
 import LiquidChrome from "@/components/LiquidChrome";
 import MobileQuizAndInstall from "@/components/onboarding/MobileQuizAndInstall";
+import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
 
 const DEFAULT_DURATION = 15;
 const CIRCUMFERENCE = 2 * Math.PI * 70;
@@ -159,6 +160,7 @@ export default function Negotium() {
   const [showIntro, setShowIntro] = useState(() => !localStorage.getItem("syntera_intro_done_v2"));
   const [showInterstitial, setShowInterstitial] = useState(false);
   const [blackFade, setBlackFade] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
   const [quizVisible, setQuizVisible] = useState(() => {
     if (localStorage.getItem("syntera_premium") === "true") return false;
     try { if (localStorage.getItem("negotium_quiz_v2")) return false; } catch (_) {}
@@ -436,7 +438,7 @@ export default function Negotium() {
   const tagColor = (t: string) => t === "pos" ? "var(--pg-text)" : t === "warn" ? "var(--pg-faint)" : "var(--pg-muted)";
   const tagBg = (t: string) => t === "pos" ? "var(--pg-accent)" : t === "warn" ? "var(--pg-surface-alt)" : "var(--pg-bg)";
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
-  const isOverlay = showIntro || showInterstitial || quizVisible;
+  const isOverlay = showIntro || showInterstitial || quizVisible || showPaywall;
 
   
   const handleInterstitialComplete = () => { setShowInterstitial(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
@@ -466,9 +468,21 @@ export default function Negotium() {
           setUserSubtitle(p.subtitle);
           setHeroFocus(p.heroFocus);
           setBlackFade(true);
-          setTimeout(() => { setQuizVisible(false); }, 600);
+          setTimeout(() => { setQuizVisible(false); setShowPaywall(true); }, 600);
           setTimeout(() => { setBlackFade(false); }, 1200);
         }} />
+      )}
+
+      {showPaywall && (
+        <ForcedPaywall
+          onSubscribe={() => {
+            localStorage.setItem("syntera_premium", "true");
+            setShowPaywall(false);
+          }}
+          onSkip={() => {
+            setShowPaywall(false);
+          }}
+        />
       )}
 
       {showTipPopup && (
