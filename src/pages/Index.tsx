@@ -468,9 +468,21 @@ export default function Negotium() {
           setUserSubtitle(p.subtitle);
           setHeroFocus(p.heroFocus);
           setBlackFade(true);
-          setTimeout(() => { setQuizVisible(false); }, 600);
+          setTimeout(() => { setQuizVisible(false); setShowPaywall(true); }, 600);
           setTimeout(() => { setBlackFade(false); }, 1200);
         }} />
+      )}
+
+      {showPaywall && (
+        <ForcedPaywall
+          onSubscribe={() => {
+            localStorage.setItem("syntera_premium", "true");
+            setShowPaywall(false);
+          }}
+          onSkip={() => {
+            setShowPaywall(false);
+          }}
+        />
       )}
 
       {showTipPopup && (
