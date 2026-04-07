@@ -438,7 +438,7 @@ export default function Negotium() {
   const tagColor = (t: string) => t === "pos" ? "var(--pg-text)" : t === "warn" ? "var(--pg-faint)" : "var(--pg-muted)";
   const tagBg = (t: string) => t === "pos" ? "var(--pg-accent)" : t === "warn" ? "var(--pg-surface-alt)" : "var(--pg-bg)";
   const avgHistory = history.length ? Math.round(history.reduce((a, b) => a + (b.overall_score ?? b.overall ?? 0), 0) / history.length) : null;
-  const isOverlay = showIntro || showInterstitial || quizVisible;
+  const isOverlay = showIntro || showInterstitial || quizVisible || showPaywall;
 
   
   const handleInterstitialComplete = () => { setShowInterstitial(false); if (!localStorage.getItem("negotium_quiz_v2")) setQuizVisible(true); };
