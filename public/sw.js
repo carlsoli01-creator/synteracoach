@@ -30,6 +30,10 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   if (!event.request.url.startsWith(self.location.origin)) return;
 
+  // Never intercept OAuth callback routes
+  const url = new URL(event.request.url);
+  if (url.pathname.startsWith('/~oauth')) return;
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
