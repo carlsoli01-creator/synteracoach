@@ -431,7 +431,7 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
                   <div style={{ height: "100%", width: `${feedback.goalAnalysis.goalScore ?? 0}%`, background: text, transition: "width 0.5s ease" }} />
                 </div>
                 {feedback.goalAnalysis.goalFeedback && (
-                  <div style={{ fontSize: 12, color: text, lineHeight: 1.7, marginTop: 8 }}>{feedback.goalAnalysis.goalFeedback}</div>
+                  <div style={{ fontSize: 13, color: text, lineHeight: 1.7, marginTop: 8 }}>{feedback.goalAnalysis.goalFeedback}</div>
                 )}
               </div>
               {feedback.goalAnalysis.subGoalScores && (
@@ -439,13 +439,13 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
                   {feedback.goalAnalysis.subGoalScores.map((sg: any) => (
                     <div key={sg.name}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
-                        <span style={{ fontSize: 10, color: muted, fontFamily: "'DM Mono', monospace" }}>{sg.name}</span>
+                        <span style={{ fontSize: 12, color: text, fontFamily: "'DM Mono', monospace" }}>{sg.name}</span>
                         <span style={{ fontSize: 14, fontWeight: 300, color: text, fontFamily: "'DM Mono', monospace" }}>{sg.score}</span>
                       </div>
                       <div style={{ height: 2, background: border }}>
                         <div style={{ height: "100%", width: `${sg.score}%`, background: muted, transition: "width 0.5s ease" }} />
                       </div>
-                      {sg.feedback && <div style={{ fontSize: 11, color: muted, lineHeight: 1.5, marginTop: 4 }}>{sg.feedback}</div>}
+                      {sg.feedback && <div style={{ fontSize: 12, color: text, lineHeight: 1.6, marginTop: 4 }}>{sg.feedback}</div>}
                     </div>
                   ))}
                 </div>
@@ -475,7 +475,7 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
               ].filter(s => s.text).map(s => (
                 <div key={s.title} style={{ marginBottom: 16 }}>
                   <div style={{ fontSize: 9, letterSpacing: "0.25em", color: muted, textTransform: "uppercase", marginBottom: 4, fontFamily: "'DM Mono', monospace" }}>{s.title}</div>
-                  <div style={{ fontSize: 13, lineHeight: 1.8, color: text }}>{s.text}</div>
+                  <div style={{ fontSize: 14, lineHeight: 1.8, color: text }}>{s.text}</div>
                 </div>
               ))}
             </div>
