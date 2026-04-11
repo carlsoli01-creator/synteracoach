@@ -601,9 +601,9 @@ export default function Landing() {
           <div className="lp-sec-label">What people say</div>
           <div className="lp-sec-title">Used by speakers <span className="wh">who mean business</span></div>
           <div className="lp-testi-grid lp-reveal">
-            {[{ text: "I used to say 'um' constantly in presentations. After two weeks with Synterica, my filler word count dropped from 18 to 4 per minute. My manager noticed.", initials: "JK", name: "Jordan K.", role: "Product Manager · Series B Startup" }, { text: "The 7-dimension breakdown is insane. I always knew I spoke fast, but seeing my confidence score jump from 64 to 89 after 10 sessions? That's real data.", initials: "RL", name: "Rachel L.", role: "Sales Director · Fortune 500" }, { text: "Pitched to investors last month. Used Synterica to practice 20+ times beforehand. Got the term sheet. Probably a coincidence, but probably not.", initials: "MT", name: "Marcus T.", role: "Founder · YC W25" }].map((t) =>
+            {[{ text: "I used to say 'um' constantly in presentations. After two weeks with Synterica, my filler word count dropped from 18 to 4 per minute. My manager noticed.", initials: "JK", name: "Jordan K.", role: "Product Manager · Series B Startup" }, { text: "The 7-dimension breakdown is insane. I always knew I spoke fast, but seeing my confidence score jump from 64 to 89 after 10 sessions? That's real data.", initials: "RL", name: "Rachel L.", role: "Business Student - Harvard School of Business " }, { text: "Pitched to investors last month. Used Synterica to practice 20+ times beforehand. Got the term sheet. Probably a coincidence, but probably not.", initials: "MT", name: "Marcus T.", role: "Founder · YC W25" }].map((t) =>
             <div className="lp-testi" key={t.initials}>
-                <div className="lp-stars">★★★★★</div>
+                <div className="lp-stars text-primary-foreground">★★★★★</div>
                 <p className="lp-testi-text">"{t.text}"</p>
                 <div className="lp-testi-author">
                   <div className="lp-testi-avatar">{t.initials}</div>
