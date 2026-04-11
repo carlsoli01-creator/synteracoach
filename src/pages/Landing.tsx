@@ -456,7 +456,7 @@ export default function Landing() {
               </div>
               <div className="lp-score-body">
                 <div className="lp-waveform-area">
-                  <div className="lp-wave-label">Recording · 0:32</div>
+                  <div className="lp-wave-label text-primary-foreground">Recording · 0:32</div>
                   <div className="lp-waveform" ref={waveRef} />
                   <div className="lp-transcript-box">
                     "So <span className="fil">um</span> the main thing I wanted to highlight is that <span className="hl">our Q3 results exceeded</span> expectations by <span className="hl">23%</span>, and <span className="fil">like</span> the team really <span className="hl">delivered on every front</span>."
@@ -523,7 +523,7 @@ export default function Landing() {
           <div className="lp-sec-title">Every layer of <span className="wh">your voice, scored</span></div>
           <div className="lp-dims-grid lp-reveal">
             {dimLabels.map((label, i) => <div className="lp-dim-card" key={label}>
-                <div className="lp-dim-label">{label}</div>
+                <div className="lp-dim-label text-primary-foreground">{label}</div>
                 <div className="lp-dim-bar" ref={(el) => {dimRefs.current[i] = el;}} />
               </div>)}
           </div>
