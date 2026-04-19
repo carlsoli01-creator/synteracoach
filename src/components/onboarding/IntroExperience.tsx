@@ -366,6 +366,8 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       position: "fixed", inset: 0, zIndex: 70,
       display: "flex", alignItems: "center", justifyContent: "center",
       background: "#000",
+      opacity: exiting ? 0 : 1,
+      transition: "opacity 0.7s ease",
     }}>
       <div style={{
         width: "min(520px, 92vw)", padding: "60px 40px", textAlign: "center",
