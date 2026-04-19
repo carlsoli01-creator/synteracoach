@@ -290,11 +290,13 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
     scheduleAnalyze();
   }, [testPhase, stopAll, scheduleAnalyze]);
 
-  // When done, trigger paywall after a brief moment
+  // When done, fade out cleanly then trigger paywall
+  const [exiting, setExiting] = useState(false);
   useEffect(() => {
     if (testPhase === "done" && analysisResult) {
-      const timer = setTimeout(() => onForcePaywall(), 4000);
-      return () => clearTimeout(timer);
+      const fadeTimer = setTimeout(() => setExiting(true), 3500);
+      const doneTimer = setTimeout(() => onForcePaywall(), 4200);
+      return () => { clearTimeout(fadeTimer); clearTimeout(doneTimer); };
     }
   }, [testPhase, analysisResult, onForcePaywall]);
 
