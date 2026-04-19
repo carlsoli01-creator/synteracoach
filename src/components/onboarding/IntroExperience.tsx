@@ -290,11 +290,13 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
     scheduleAnalyze();
   }, [testPhase, stopAll, scheduleAnalyze]);
 
-  // When done, trigger paywall after a brief moment
+  // When done, fade out cleanly then trigger paywall
+  const [exiting, setExiting] = useState(false);
   useEffect(() => {
     if (testPhase === "done" && analysisResult) {
-      const timer = setTimeout(() => onForcePaywall(), 4000);
-      return () => clearTimeout(timer);
+      const fadeTimer = setTimeout(() => setExiting(true), 3500);
+      const doneTimer = setTimeout(() => onForcePaywall(), 4200);
+      return () => { clearTimeout(fadeTimer); clearTimeout(doneTimer); };
     }
   }, [testPhase, analysisResult, onForcePaywall]);
 
@@ -364,6 +366,8 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       position: "fixed", inset: 0, zIndex: 70,
       display: "flex", alignItems: "center", justifyContent: "center",
       background: "#000",
+      opacity: exiting ? 0 : 1,
+      transition: "opacity 0.7s ease",
     }}>
       <div style={{
         width: "min(520px, 92vw)", padding: "60px 40px", textAlign: "center",
