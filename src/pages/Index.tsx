@@ -747,7 +747,7 @@ export default function Negotium() {
           min-height: 100vh; background: var(--pg-bg); color: var(--pg-text); font-family: 'DM Mono', monospace;
         }
         .dark .app-root {
-          --pg-bg: #060608; --pg-text: #f0eeea; --pg-card: #0e0e12; --pg-border: #1c1c22;
+          --pg-bg: #14141a; --pg-text: #f0eeea; --pg-card: #1a1a20; --pg-border: #1c1c22;
           --pg-border-soft: #161619; --pg-muted: #555560; --pg-dim: #44444e; --pg-subtle: #333338;
           --pg-faint: #888896; --pg-mid: #999; --pg-accent: #111116; --pg-surface: #0c0c10;
           --pg-surface-alt: #0a0a0e; --pg-overlay: rgba(0,0,0,0.75);
