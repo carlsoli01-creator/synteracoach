@@ -545,7 +545,7 @@ export default function Negotium() {
                 <div className="duration-wrap">
                   <div className="duration-row">
                     <span className="duration-bound" style={{ color: "#000" }}>15s</span>
-                    <span className="duration-current">{selectedDuration >= 60 ? `${Math.floor(selectedDuration / 60)}:${String(selectedDuration % 60).padStart(2, '0')}` : `${selectedDuration}s`}</span>
+                    <span className="duration-current" style={{ color: "#000" }}>{selectedDuration >= 60 ? `${Math.floor(selectedDuration / 60)}:${String(selectedDuration % 60).padStart(2, '0')}` : `${selectedDuration}s`}</span>
                     <span className="duration-bound" style={{ color: "#000" }}>5:00</span>
                   </div>
                   <input type="range" min={15} max={300} step={15} value={selectedDuration}
