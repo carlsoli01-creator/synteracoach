@@ -391,7 +391,7 @@ export default function Landing() {
 
       {/* NAV */}
       <nav className="lp-nav">
-        <span className="lp-logo">SYNTERICA</span>
+        <span className="lp-logo font-serif">SYNTERICA</span>
         <ul className="lp-nav-links">
           <li><a href="#how">How it works</a></li>
           <li><a href="#features">Features</a></li>
@@ -429,7 +429,7 @@ export default function Landing() {
             AI Voice Coach — Now in Beta
           </div>
 
-          <h1 className="lp-hero-title">
+          <h1 className="lp-hero-title text-6xl font-extrabold font-serif">
             {["Speak", "with", "conviction.", "Not", "guesswork."].map((_, i) =>
             <span key={i}>
                 <span className="lp-word" ref={(el) => {titleRefs.current[i] = el;}} />
@@ -495,7 +495,7 @@ export default function Landing() {
       <section className="lp-section" id="how">
         <div className="lp-container">
           <div className="lp-sec-label">How it works</div>
-          <div className="lp-sec-title">Three steps to <span className="wh">a better speaker</span></div>
+          <div className="lp-sec-title">Three steps to <span className="wh font-serif">a better speaker</span></div>
           <div className="lp-steps lp-reveal">
             <div className="lp-step">
               <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" /></svg>
@@ -520,7 +520,7 @@ export default function Landing() {
       <section className="lp-section">
         <div className="lp-container">
           <div className="lp-sec-label">7 Dimensions</div>
-          <div className="lp-sec-title">Every layer of <span className="wh">your voice, scored</span></div>
+          <div className="lp-sec-title">Every layer of <span className="wh font-serif">your voice, scored</span></div>
           <div className="lp-dims-grid lp-reveal">
             {dimLabels.map((label, i) => <div className="lp-dim-card" key={label}>
                 <div className="lp-dim-label text-primary-foreground">{label}</div>
@@ -534,7 +534,7 @@ export default function Landing() {
       <section className="lp-section" id="features">
         <div className="lp-container">
           <div className="lp-sec-label">Features</div>
-          <div className="lp-sec-title">Everything you need to <span className="wh">master your voice</span></div>
+          <div className="lp-sec-title">Everything you need to <span className="wh font-serif">master your voice</span></div>
           <div className="lp-features-bento">
             {/* AI Coach - wide */}
             <div className="lp-feat wide lp-reveal">
