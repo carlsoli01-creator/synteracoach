@@ -391,7 +391,7 @@ export default function Landing() {
 
       {/* NAV */}
       <nav className="lp-nav">
-        <span className="lp-logo font-serif">SYNTERICA</span>
+        <span className="lp-logo">SYNTERICA</span>
         <ul className="lp-nav-links">
           <li><a href="#how">How it works</a></li>
           <li><a href="#features">Features</a></li>
@@ -429,7 +429,7 @@ export default function Landing() {
             AI Voice Coach — Now in Beta
           </div>
 
-          <h1 className="lp-hero-title text-6xl font-extrabold font-serif">
+          <h1 className="lp-hero-title">
             {["Speak", "with", "conviction.", "Not", "guesswork."].map((_, i) =>
             <span key={i}>
                 <span className="lp-word" ref={(el) => {titleRefs.current[i] = el;}} />
@@ -495,22 +495,22 @@ export default function Landing() {
       <section className="lp-section" id="how">
         <div className="lp-container">
           <div className="lp-sec-label">How it works</div>
-          <div className="lp-sec-title">Three steps to <span className="wh font-serif">a better speaker</span></div>
+          <div className="lp-sec-title">Three steps to <span className="wh">a better speaker</span></div>
           <div className="lp-steps lp-reveal">
             <div className="lp-step">
               <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" /></svg>
               <h3>Record 15s – 5min</h3>
-              <p className="font-mono">Hit record and speak on any topic — a pitch, a presentation, a job interview answer. No script required.</p>
+              <p>Hit record and speak on any topic — a pitch, a presentation, a job interview answer. No script required.</p>
             </div>
             <div className="lp-step">
               <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18" /><path d="m7 16 4-4 4 4 4-6" /></svg>
               <h3>AI Scores Your Delivery</h3>
-              <p className="font-mono">Our model analyzes 7 dimensions of your speech in real time — not just what you said, but how you said it.</p>
+              <p>Our model analyzes 7 dimensions of your speech in real time — not just what you said, but how you said it.</p>
             </div>
             <div className="lp-step">
               <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
               <h3>Get Coached & Improve</h3>
-              <p className="font-mono">Receive specific, actionable feedback and track your progress across sessions with streaks, badges, and scores.</p>
+              <p>Receive specific, actionable feedback and track your progress across sessions with streaks, badges, and scores.</p>
             </div>
           </div>
         </div>
@@ -520,7 +520,7 @@ export default function Landing() {
       <section className="lp-section">
         <div className="lp-container">
           <div className="lp-sec-label">7 Dimensions</div>
-          <div className="lp-sec-title">Every layer of <span className="wh font-serif">your voice, scored</span></div>
+          <div className="lp-sec-title">Every layer of <span className="wh">your voice, scored</span></div>
           <div className="lp-dims-grid lp-reveal">
             {dimLabels.map((label, i) => <div className="lp-dim-card" key={label}>
                 <div className="lp-dim-label text-primary-foreground">{label}</div>
@@ -534,14 +534,14 @@ export default function Landing() {
       <section className="lp-section" id="features">
         <div className="lp-container">
           <div className="lp-sec-label">Features</div>
-          <div className="lp-sec-title">Everything you need to <span className="wh font-serif">master your voice</span></div>
+          <div className="lp-sec-title">Everything you need to <span className="wh">master your voice</span></div>
           <div className="lp-features-bento">
             {/* AI Coach - wide */}
             <div className="lp-feat wide lp-reveal">
               <div>
                 <div className="lp-feat-label">AI Coach</div>
                 <h3>Your personal voice<br />coach, always on</h3>
-                <p className="font-serif">Chat with your AI coach after every session. Ask why you scored low on clarity and get a specific, honest answer with drills to fix it.</p>
+                <p>Chat with your AI coach after every session. Ask why you scored low on clarity and get a specific, honest answer with drills to fix it.</p>
               </div>
               <div className="lp-feat-visual">
                 <div className="lp-chat-msg">
@@ -563,7 +563,7 @@ export default function Landing() {
             <div className="lp-feat lp-reveal">
               <div className="lp-feat-label">Practice</div>
               <h3>Real-world scenarios</h3>
-              <p className="font-serif">Practice job interviews, sales pitches, TEDx-style talks, and client presentations — all with instant AI scoring.</p>
+              <p>Practice job interviews, sales pitches, TEDx-style talks, and client presentations — all with instant AI scoring.</p>
               <div className="lp-scenario-list">
                 {[{ name: "Job Interview Answer", icon: <><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></>, go: true }, { name: "Investor Pitch (60s)", icon: <><path d="M5 12h14M12 5l7 7-7 7" /></> }, { name: "TEDx-style Talk", icon: <><circle cx="12" cy="12" r="10" /><path d="M12 8v8M8 12h8" /></> }, { name: "Sales Call Opener", icon: <><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.13 12 19.79 19.79 0 0 1 1.08 3.24 2 2 0 0 1 3.05 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91" /></> }].map((s) => <div className="lp-scenario-item" key={s.name}>
                     <svg className="lp-sc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">{s.icon}</svg>
@@ -577,7 +577,7 @@ export default function Landing() {
             <div className="lp-feat lp-reveal">
               <div className="lp-feat-label">Progress</div>
               <h3>Track every session</h3>
-              <p className="font-serif">See your scores trend over days and weeks. Streaks, badges, and history keep you accountable and motivated to improve.</p>
+              <p>See your scores trend over days and weeks. Streaks, badges, and history keep you accountable and motivated to improve.</p>
               <div className="lp-feat-visual" style={{ marginTop: 28 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 6, height: 80, paddingBottom: 10, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
                   {[{ h: 28, d: "M" }, { h: 38, d: "T" }, { h: 44, d: "W", o: 0.1 }, { h: 34, d: "T" }, { h: 52, d: "F", o: 0.16 }, { h: 60, d: "S", o: 0.24 }, { h: 72, d: "S", o: 0.38, tc: "rgba(255,255,255,0.45)" }].map((bar, i) => <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, flex: 1 }}>
