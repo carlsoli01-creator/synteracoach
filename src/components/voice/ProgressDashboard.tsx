@@ -211,8 +211,18 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
+  const SectionHeader = ({ label }: { label: string }) => (
+    <div style={{ background: c.bg, padding: "32px 4px 12px", display: "flex", alignItems: "center", gap: 12 }}>
+      <div style={{ fontSize: 10, letterSpacing: "0.3em", color: c.text, textTransform: "uppercase", fontFamily: "'IBM Plex Mono', monospace", fontWeight: 500 }}>
+        {label}
+      </div>
+      <div style={{ flex: 1, height: 1, background: c.border }} />
+    </div>
+  );
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 1, background: c.border }}>
+      <SectionHeader label="Overview" />
       {/* Stat Cards */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 1 }}>
         {statCards.map(({ label, value }) => (
@@ -242,6 +252,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
         </div>
       </div>
 
+      <SectionHeader label="Performance" />
       {/* Score Trends Chart */}
       <div style={{ background: c.card, padding: "20px 16px" }}>
         <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 12, fontFamily: "'IBM Plex Mono', monospace" }}>
@@ -311,6 +322,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
         </div>
       )}
 
+      <SectionHeader label="Activity" />
       {/* Score Distribution */}
       <div style={{ background: c.card, padding: 28 }}>
         <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'IBM Plex Mono', monospace" }}>
@@ -356,6 +368,7 @@ export default function ProgressDashboard({ history, colors: c }: Props) {
         </div>
       </div>
 
+      <SectionHeader label="History" />
       {/* Recent Sessions */}
       <div style={{ background: c.card, padding: 28 }}>
         <div style={{ fontSize: 9, letterSpacing: "0.25em", color: c.muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'IBM Plex Mono', monospace" }}>
