@@ -253,7 +253,7 @@ export default function Auth() {
                   type="email"
                   placeholder="you@example.com"
                   value={loginEmail}
-                  onChange={e => setLoginEmail(e.target.value)}
+                  onChange={e => { setLoginEmail(e.target.value); if (loginErrors.email) setLoginErrors(p => ({ ...p, email: undefined })); }}
                   disabled={isSubmitting}
                   style={inputStyle(!!loginErrors.email)}
                 />
@@ -269,7 +269,7 @@ export default function Auth() {
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     value={loginPassword}
-                    onChange={e => setLoginPassword(e.target.value)}
+                    onChange={e => { setLoginPassword(e.target.value); if (loginErrors.password) setLoginErrors(p => ({ ...p, password: undefined })); }}
                     disabled={isSubmitting}
                     style={{ ...inputStyle(!!loginErrors.password), paddingRight: 44 }}
                   />
@@ -312,18 +312,18 @@ export default function Auth() {
             <form onSubmit={handleSignup} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
               <div>
                 <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>Full Name</label>
-                <input type="text" placeholder="Jane Smith" value={signupName} onChange={e => setSignupName(e.target.value)} disabled={isSubmitting} style={inputStyle(!!signupErrors.name)} />
+                <input type="text" placeholder="Jane Smith" value={signupName} onChange={e => { setSignupName(e.target.value); if (signupErrors.name) setSignupErrors(p => ({ ...p, name: undefined })); }} disabled={isSubmitting} maxLength={100} style={inputStyle(!!signupErrors.name)} />
                 {signupErrors.name && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{signupErrors.name}</p>}
               </div>
               <div>
                 <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>Email</label>
-                <input type="email" placeholder="you@example.com" value={signupEmail} onChange={e => setSignupEmail(e.target.value)} disabled={isSubmitting} style={inputStyle(!!signupErrors.email)} />
+                <input type="email" placeholder="you@example.com" value={signupEmail} onChange={e => { setSignupEmail(e.target.value); if (signupErrors.email) setSignupErrors(p => ({ ...p, email: undefined })); }} disabled={isSubmitting} style={inputStyle(!!signupErrors.email)} />
                 {signupErrors.email && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{signupErrors.email}</p>}
               </div>
               <div>
                 <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>Password</label>
                 <div style={{ position: "relative" }}>
-                  <input type={showPassword ? "text" : "password"} placeholder="••••••••" value={signupPassword} onChange={e => setSignupPassword(e.target.value)} disabled={isSubmitting} style={{ ...inputStyle(!!signupErrors.password), paddingRight: 44 }} />
+                  <input type={showPassword ? "text" : "password"} placeholder="••••••••" value={signupPassword} onChange={e => { setSignupPassword(e.target.value); if (signupErrors.password) setSignupErrors(p => ({ ...p, password: undefined })); }} disabled={isSubmitting} style={{ ...inputStyle(!!signupErrors.password), paddingRight: 44 }} />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer" }}>
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -332,7 +332,7 @@ export default function Auth() {
               </div>
               <div>
                 <label style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, display: "block" }}>Confirm Password</label>
-                <input type={showPassword ? "text" : "password"} placeholder="••••••••" value={signupConfirmPassword} onChange={e => setSignupConfirmPassword(e.target.value)} disabled={isSubmitting} style={inputStyle(!!signupErrors.confirmPassword)} />
+                <input type={showPassword ? "text" : "password"} placeholder="••••••••" value={signupConfirmPassword} onChange={e => { setSignupConfirmPassword(e.target.value); if (signupErrors.confirmPassword) setSignupErrors(p => ({ ...p, confirmPassword: undefined })); }} disabled={isSubmitting} style={inputStyle(!!signupErrors.confirmPassword)} />
                 {signupErrors.confirmPassword && <p style={{ fontSize: 11, color: "#c04a2a", marginTop: 4 }}>{signupErrors.confirmPassword}</p>}
               </div>
               <button type="submit" disabled={isSubmitting} style={{
