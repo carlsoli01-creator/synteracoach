@@ -198,8 +198,10 @@ export default function Coach() {
           )}
 
           {loading && messages[messages.length - 1]?.role !== "assistant" &&
-          <div className="self-start px-4 py-3 bg-muted border border-border text-sm text-muted-foreground rounded-2xl rounded-bl-sm">
-              <span className="animate-pulse">Thinking…</span>
+          <div className="self-start px-4 py-3 bg-muted border border-border text-sm text-muted-foreground rounded-2xl rounded-bl-sm flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+              <span className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+              <span className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
             </div>
           }
 
