@@ -191,6 +191,11 @@ export default function CustomPractice() {
             }}>
             START SESSION
           </button>
+          {!canStart && (
+            <div style={{ marginTop: 10, fontSize: 10, color: muted, textAlign: "center", fontFamily: "'DM Mono', monospace", letterSpacing: "0.05em" }}>
+              {!selectedGoal ? "Pick a primary goal to continue" : "Select at least one sub-goal"}
+            </div>
+          )}
         </div>
       </div>
     </div>
