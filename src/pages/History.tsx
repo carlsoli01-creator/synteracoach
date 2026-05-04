@@ -5,6 +5,7 @@ import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { toast } from "@/hooks/use-toast";
+import SkeletonBlock from "@/components/voice/SkeletonBlock";
 
 function HistoryRow({ entry, index, onDelete, isDark }: { entry: any; index: number; onDelete: (id: string) => void; isDark: boolean }) {
   const score = entry.overall_score ?? entry.overall;
@@ -67,6 +68,7 @@ export default function History() {
   const { sidebarWidth } = useSidebarState();
   const { isDark } = useTheme();
   const [history, setHistory] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const bg = isDark ? "#0c0c0e" : "#f8f8f6";
   const text = isDark ? "#e6e6e0" : "#1a1a1c";
@@ -81,6 +83,7 @@ export default function History() {
         .from("voice_sessions").select("*")
         .order("created_at", { ascending: false }).limit(50);
       if (data) setHistory(data);
+      setLoading(false);
     };
     load();
   }, [user]);
@@ -108,7 +111,20 @@ export default function History() {
           </div>
         </div>
         <div style={{ maxWidth: 900, padding: "0 48px", paddingBottom: 80 }}>
-          {history.length === 0 ? (
+          {loading ? (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              {[0, 1, 2, 3, 4].map((i) => (
+                <div key={i} style={{ width: "100%", padding: "18px 0", borderBottom: `1px solid ${border}`, display: "flex", alignItems: "center", gap: 24 }}>
+                  <SkeletonBlock width={32} height={28} />
+                  <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
+                    <SkeletonBlock width="40%" height={11} />
+                    <SkeletonBlock width="55%" height={9} />
+                  </div>
+                  <SkeletonBlock width={60} height={20} />
+                </div>
+              ))}
+            </div>
+          ) : history.length === 0 ? (
             <div style={{ color: muted, fontSize: 12, padding: "60px 0" }}>
               No sessions yet. Record your first session to see history.
             </div>
