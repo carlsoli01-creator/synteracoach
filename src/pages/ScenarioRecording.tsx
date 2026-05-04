@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { SCENARIO_CATEGORIES, getTodayScenario, type Scenario, type GoalOption, type SubgoalOption } from "@/data/scenarios";
 
 const CIRCUMFERENCE = 2 * Math.PI * 70;
@@ -66,6 +67,7 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
   const navigate = useNavigate();
   const [showFirstPracticePopup, setShowFirstPracticePopup] = useState(false);
   const { isDark } = useTheme();
+  const isMobile = useIsMobile();
   const goal = customGoal || scenario.goal;
   const subGoals = customSubGoals || scenario.subGoals;
   const duration = scenario.durationSeconds;
@@ -302,17 +304,17 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
   }, [stopAll, duration]);
 
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto", padding: "0 24px 80px" }}>
+    <div style={{ maxWidth: 800, margin: "0 auto", padding: isMobile ? "0 20px 80px" : "0 24px 80px" }}>
       <div style={{ marginBottom: 32 }}>
         <div style={{ fontSize: 9, letterSpacing: "0.25em", color: muted, textTransform: "uppercase", marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>
           {isCustom ? "Custom Practice" : categoryName}
         </div>
-        <div style={{ fontSize: 24, fontWeight: 700, color: text, fontFamily: "'Syne', sans-serif", marginBottom: 8 }}>
+        <div style={{ fontSize: isMobile ? 20 : 24, fontWeight: 700, color: text, fontFamily: "'Syne', sans-serif", marginBottom: 8 }}>
           {scenario.title}
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 220px", gap: 32 }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 220px", gap: isMobile ? 20 : 32 }}>
         <div>
           {phase === "idle" && (
             <div style={{
@@ -353,24 +355,24 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: 10, justifyContent: "center", alignItems: "center", marginBottom: 16 }}>
+          <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: isMobile ? 14 : 10, justifyContent: "center", alignItems: "center", marginBottom: 16 }}>
             {phase === "recording" ? (
               <button onClick={() => { stopAll(); setWaveData(new Array(60).fill(0.5)); setPhase("analyzing"); scheduleAnalyze(); }}
                 aria-label="Stop recording"
-                style={{ width: 56, height: 56, borderRadius: "50%", border: "none", cursor: "pointer", background: text, color: bg, display: "flex", alignItems: "center", justifyContent: "center", transition: "opacity 0.15s, transform 0.1s" }}>
-                <span style={{ width: 16, height: 16, background: bg, display: "block", animation: "rotateSq 3s linear infinite" }} />
+                style={{ width: isMobile ? 72 : 56, height: isMobile ? 72 : 56, borderRadius: "50%", border: "none", cursor: "pointer", background: text, color: bg, display: "flex", alignItems: "center", justifyContent: "center", transition: "opacity 0.15s, transform 0.1s" }}>
+                <span style={{ width: isMobile ? 22 : 16, height: isMobile ? 22 : 16, background: bg, display: "block", animation: "rotateSq 3s linear infinite" }} />
               </button>
             ) : (
               <button onClick={phase !== "analyzing" ? startRecording : undefined} disabled={phase === "analyzing"}
                 aria-label="Start recording"
-                style={{ width: 56, height: 56, borderRadius: "50%", border: "none", cursor: phase === "analyzing" ? "not-allowed" : "pointer", background: text, color: bg, display: "flex", alignItems: "center", justifyContent: "center", opacity: phase === "analyzing" ? 0.6 : 1, transition: "opacity 0.15s, transform 0.1s" }}>
+                style={{ width: isMobile ? 72 : 56, height: isMobile ? 72 : 56, borderRadius: "50%", border: "none", cursor: phase === "analyzing" ? "not-allowed" : "pointer", background: text, color: bg, display: "flex", alignItems: "center", justifyContent: "center", opacity: phase === "analyzing" ? 0.6 : 1, transition: "opacity 0.15s, transform 0.1s" }}>
                 {phase === "analyzing"
                   ? <span style={{ fontSize: 8, letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>…</span>
-                  : <Mic size={20} />}
+                  : <Mic size={isMobile ? 26 : 20} />}
               </button>
             )}
             <button onClick={reset}
-              style={{ fontSize: 11, padding: "14px 18px", background: text, color: bg, border: "none", cursor: "pointer", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", transition: "opacity 0.15s" }}>
+              style={{ fontSize: 11, padding: isMobile ? "14px 0" : "14px 18px", width: isMobile ? "100%" : "auto", minHeight: 44, background: text, color: bg, border: "none", cursor: "pointer", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", transition: "opacity 0.15s" }}>
               Reset
             </button>
           </div>
@@ -457,7 +459,7 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
             <div style={{ fontSize: 9, letterSpacing: "0.25em", color: muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'DM Mono', monospace" }}>
               Performance Overview
             </div>
-            <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-around", gap: isMobile ? 16 : 0 }}>
               <ScoreRing score={metrics.overall} label="Overall" color={text} isDark={isDark} />
               <ScoreRing score={metrics.pace} label="Pace" color={muted} isDark={isDark} />
               <ScoreRing score={metrics.confidence} label="Confidence" color={muted} isDark={isDark} />

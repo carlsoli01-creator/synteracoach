@@ -309,13 +309,18 @@ export default function Profile() {
               </div>
 
               <div style={{ marginBottom: 20 }}>
-                <label style={{ fontSize: 10, letterSpacing: "0.15em", color: c.sectionLabel, fontWeight: 700, display: "block", marginBottom: 8, textTransform: "uppercase" }}>
-                  FULL NAME
-                </label>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+                  <label style={{ fontSize: 10, letterSpacing: "0.15em", color: c.sectionLabel, fontWeight: 700, textTransform: "uppercase" }}>
+                    FULL NAME
+                  </label>
+                  <span style={{ fontSize: 10, color: c.muted, fontFamily: "'IBM Plex Mono', monospace" }}>
+                    {fullName.length}/100
+                  </span>
+                </div>
                 <input
                   type="text" value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Enter your name" disabled={saving}
+                  onChange={(e) => { setFullName(e.target.value); if (error) setError(null); }}
+                  placeholder="Enter your name" disabled={saving} maxLength={100}
                   style={{
                     width: "100%", padding: "13px 16px", borderRadius: 10,
                     background: c.inputBg, border: `1px solid ${error ? "#c04a2a" : c.inputBorder}`,

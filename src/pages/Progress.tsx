@@ -5,12 +5,14 @@ import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import ProgressDashboard from "@/components/voice/ProgressDashboard";
+import SkeletonBlock from "@/components/voice/SkeletonBlock";
 
 export default function Progress() {
   const { user } = useAuth();
   const { sidebarWidth } = useSidebarState();
   const { isDark } = useTheme();
   const [history, setHistory] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
@@ -19,6 +21,7 @@ export default function Progress() {
         .from("voice_sessions").select("*")
         .order("created_at", { ascending: false }).limit(100);
       if (data) setHistory(data);
+      setLoading(false);
     };
     load();
   }, [user]);
@@ -46,7 +49,19 @@ export default function Progress() {
           <div style={{ fontSize: 10, color: muted, marginTop: 8, letterSpacing: "0.12em", textTransform: "uppercase" }}>Track your improvement over time</div>
         </div>
         <div style={{ maxWidth: 900, padding: "0 16px", paddingBottom: 80 }}>
-          <ProgressDashboard history={history} colors={c} />
+          {loading ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 24 }}>
+              {[0, 1, 2].map((i) => (
+                <div key={i} style={{ background: c.card, border: `1px solid ${c.border}`, padding: 20, display: "flex", flexDirection: "column", gap: 12 }}>
+                  <SkeletonBlock width={120} height={10} />
+                  <SkeletonBlock width="60%" height={28} />
+                  <SkeletonBlock width="100%" height={64} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <ProgressDashboard history={history} colors={c} />
+          )}
         </div>
       </div>
     </div>

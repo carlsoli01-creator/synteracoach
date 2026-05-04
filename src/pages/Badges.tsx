@@ -5,12 +5,14 @@ import AppSidebar from "@/components/layout/AppSidebar";
 import { useSidebarState } from "@/contexts/SidebarContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import StreakBadges from "@/components/voice/StreakBadges";
+import SkeletonBlock from "@/components/voice/SkeletonBlock";
 
 export default function Badges() {
   const { user } = useAuth();
   const { sidebarWidth } = useSidebarState();
   const { isDark } = useTheme();
   const [history, setHistory] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
@@ -19,6 +21,7 @@ export default function Badges() {
         .from("voice_sessions").select("*")
         .order("created_at", { ascending: false }).limit(20);
       if (data) setHistory(data);
+      setLoading(false);
     };
     load();
   }, [user]);
@@ -45,7 +48,19 @@ export default function Badges() {
           <div style={{ fontSize: 10, color: muted, marginTop: 8, letterSpacing: "0.12em", textTransform: "uppercase" }}>Earn badges by building streaks and hitting milestones</div>
         </div>
         <div style={{ padding: "0 48px", paddingBottom: 80 }}>
-          <StreakBadges history={history} colors={c} isDark={isDark} />
+          {loading ? (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 16, marginTop: 24 }}>
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} style={{ background: c.card, border: `1px solid ${c.border}`, padding: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+                  <SkeletonBlock width={48} height={48} style={{ borderRadius: "50%" }} />
+                  <SkeletonBlock width="80%" height={10} />
+                  <SkeletonBlock width="60%" height={8} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <StreakBadges history={history} colors={c} isDark={isDark} />
+          )}
         </div>
       </div>
     </div>
