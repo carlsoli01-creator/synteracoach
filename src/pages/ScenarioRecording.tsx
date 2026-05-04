@@ -459,7 +459,7 @@ function ScenarioRecordingInner({ scenario, categoryName, isCustom, customGoal, 
             <div style={{ fontSize: 9, letterSpacing: "0.25em", color: muted, textTransform: "uppercase", marginBottom: 16, fontFamily: "'DM Mono', monospace" }}>
               Performance Overview
             </div>
-            <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-around", gap: isMobile ? 16 : 0 }}>
               <ScoreRing score={metrics.overall} label="Overall" color={text} isDark={isDark} />
               <ScoreRing score={metrics.pace} label="Pace" color={muted} isDark={isDark} />
               <ScoreRing score={metrics.confidence} label="Confidence" color={muted} isDark={isDark} />
