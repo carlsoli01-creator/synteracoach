@@ -73,8 +73,8 @@ export default function Scenarios() {
             </div>
           </div>
         )}
-
-
+        <div style={{
+          margin: "0 48px 80px", background: border,
           display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 1,
         }}>
           {SCENARIO_CATEGORIES.map((cat, idx) => {
