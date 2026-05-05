@@ -172,14 +172,27 @@ export default function Coach() {
         <div className="flex-1 overflow-y-auto px-7 py-5 flex flex-col gap-4">
           {messages.length === 0 &&
           <div className="text-center text-muted-foreground mt-16 text-sm">
-              <div className="text-3xl mb-3">​</div>
-              <div className="font-medium text-muted-foreground/80 mb-1.5">
-                Ask me anything about speaking
+              <div className="font-medium text-muted-foreground/80 mb-2 text-base">
+                Ask me anything about your speaking!
               </div>
-              <div className="text-xs leading-relaxed text-muted-foreground/60">
-                "How do I reduce filler words?"<br />
-                "Give me a 2-minute warm-up routine"<br />
-                "My pace score is 62 — what should I work on?"
+              <div className="text-xs leading-relaxed text-muted-foreground/60 mb-5">
+                Personalized coaching based on your recent sessions.
+              </div>
+              <div className="flex flex-wrap gap-2 justify-center max-w-md mx-auto">
+                {[
+                  "What are my filler words?",
+                  "How's my pacing?",
+                  "Give me a 2-min warm-up",
+                  "Tips to sound more confident",
+                ].map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => send(p)}
+                    className="text-xs px-3 py-2 border border-border bg-muted/30 hover:bg-muted text-foreground/80 transition-colors rounded-md"
+                  >
+                    {p}
+                  </button>
+                ))}
               </div>
             </div>
           }
