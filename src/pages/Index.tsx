@@ -853,8 +853,8 @@ export default function Negotium() {
         .tags-row { display: flex; flex-wrap: wrap; gap: 6px; }
         .tag { font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; padding: 4px 10px; border: 1px solid; font-family: 'DM Mono', monospace; }
 
-        .transcript-text { font-size: 14px; line-height: 1.85; color: var(--pg-faint); font-family: 'DM Mono', monospace; font-style: italic; }
-        .feedback-text { font-size: 12px; line-height: 1.8; color: var(--pg-faint); font-family: 'DM Mono', monospace; }
+        .transcript-text { font-size: 14px; line-height: 1.85; color: var(--pg-text); font-family: 'DM Mono', monospace; font-style: italic; }
+        .feedback-text { font-size: 12px; line-height: 1.8; color: var(--pg-text); font-family: 'DM Mono', monospace; }
 
         .techniques-list { display: grid; gap: 8px; }
         .technique-card { border: 1px solid var(--pg-border); padding: 14px; }
@@ -862,11 +862,11 @@ export default function Negotium() {
         .technique-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .technique-name { font-size: 11px; font-weight: 600; color: var(--pg-text); font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
         .technique-badge { font-size: 7px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; font-family: 'DM Mono', monospace; }
-        .technique-badge.impact-pos { background: var(--pg-technique-pos-bg); color: var(--pg-technique-pos-text); border: 1px solid var(--pg-technique-pos-border); }
-        .technique-badge.impact-neg { background: var(--pg-btn-stop-bg); color: var(--pg-muted); border: 1px solid var(--pg-border); }
-        .technique-badge.impact-neutral { background: transparent; color: var(--pg-dim); border: 1px solid var(--pg-border); }
-        .technique-quote { font-size: 12px; font-family: 'DM Mono', monospace; font-style: italic; color: var(--pg-muted); margin-bottom: 6px; }
-        .technique-explanation { font-size: 10px; line-height: 1.7; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
+        .technique-badge.impact-pos { background: var(--pg-technique-pos-bg); color: var(--pg-text); border: 1px solid var(--pg-technique-pos-border); }
+        .technique-badge.impact-neg { background: var(--pg-btn-stop-bg); color: var(--pg-text); border: 1px solid var(--pg-border); }
+        .technique-badge.impact-neutral { background: transparent; color: var(--pg-text); border: 1px solid var(--pg-border); }
+        .technique-quote { font-size: 12px; font-family: 'DM Mono', monospace; font-style: italic; color: var(--pg-text); margin-bottom: 6px; }
+        .technique-explanation { font-size: 10px; line-height: 1.7; color: var(--pg-text); font-family: 'DM Mono', monospace; }
 
         .word-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         .word-stat-num { font-size: 36px; color: var(--pg-text); margin: 4px 0; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
