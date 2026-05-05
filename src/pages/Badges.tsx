@@ -58,6 +58,31 @@ export default function Badges() {
                 </div>
               ))}
             </div>
+          ) : history.length === 0 ? (
+            <div style={{
+              border: `1px solid ${c.border}`, padding: "56px 32px", marginTop: 24,
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 18, textAlign: "center",
+            }}>
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke={muted} strokeWidth="1.5">
+                <polygon points="24,6 30,18 42,20 33,29 36,42 24,36 12,42 15,29 6,20 18,18" />
+              </svg>
+              <div>
+                <div style={{ fontSize: 24, fontFamily: "'Bebas Neue', sans-serif", color: text, letterSpacing: "0.04em" }}>
+                  NO BADGES YET
+                </div>
+                <div style={{ fontSize: 11, color: muted, marginTop: 8, lineHeight: 1.6, maxWidth: 380 }}>
+                  Keep practicing to unlock badges. Complete your first session to earn the First Steps badge.
+                </div>
+              </div>
+              <a href="/scenarios" style={{
+                display: "inline-block", padding: "12px 28px",
+                background: isDark ? "#ffffff" : "#0c0c0e", color: bg, fontSize: 10,
+                letterSpacing: "0.18em", textTransform: "uppercase", textDecoration: "none",
+                fontFamily: "'IBM Plex Mono', monospace", marginTop: 6,
+              }}>
+                Start Practicing →
+              </a>
+            </div>
           ) : (
             <StreakBadges history={history} colors={c} isDark={isDark} />
           )}
