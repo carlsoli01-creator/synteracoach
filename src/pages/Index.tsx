@@ -870,20 +870,20 @@ export default function Negotium() {
 
         .word-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         .word-stat-num { font-size: 36px; color: var(--pg-text); margin: 4px 0; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
-        .word-stat-sub { font-size: 9px; color: var(--pg-dim); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
+        .word-stat-sub { font-size: 9px; color: var(--pg-text); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
         .word-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
         .chip { font-size: 8px; padding: 3px 8px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; }
-        .chip-neutral { background: var(--pg-accent); color: var(--pg-faint); border: 1px solid var(--pg-border); }
-        .chip-strong { background: var(--pg-chip-strong-bg); color: var(--pg-chip-strong-text); border: 1px solid var(--pg-chip-strong-border); }
+        .chip-neutral { background: var(--pg-accent); color: var(--pg-text); border: 1px solid var(--pg-border); }
+        .chip-strong { background: var(--pg-chip-strong-bg); color: var(--pg-text); border: 1px solid var(--pg-chip-strong-border); }
 
         .hedging-list { display: grid; gap: 8px; }
         .hedging-row { display: flex; align-items: center; gap: 8px; font-size: 11px; flex-wrap: wrap; font-family: 'DM Mono', monospace; }
-        .hedge-weak { color: var(--pg-dim); text-decoration: line-through; }
-        .hedge-arrow { color: var(--pg-subtle); }
-        .hedge-strong { color: var(--pg-hedge-strong); font-weight: 600; }
+        .hedge-weak { color: var(--pg-text); text-decoration: line-through; opacity: 0.55; }
+        .hedge-arrow { color: var(--pg-text); }
+        .hedge-strong { color: var(--pg-text); font-weight: 600; }
 
         .tips-list { display: grid; gap: 6px; }
-        .tip-item { border: 1px solid var(--pg-border); padding: 10px 12px; font-size: 11px; color: var(--pg-muted); line-height: 1.7; font-family: 'DM Mono', monospace; }
+        .tip-item { border: 1px solid var(--pg-border); padding: 10px 12px; font-size: 11px; color: var(--pg-text); line-height: 1.7; font-family: 'DM Mono', monospace; }
 
         .tip-overlay { position: fixed; inset: 0; z-index: 55; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 40px; background: var(--pg-overlay); backdrop-filter: blur(6px); }
         .tip-modal { width: min(400px, 90vw); background: var(--pg-card); border: 1px solid var(--pg-border); padding: 28px 24px; position: relative; }
