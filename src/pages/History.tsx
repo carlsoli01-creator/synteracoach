@@ -125,8 +125,31 @@ export default function History() {
               ))}
             </div>
           ) : history.length === 0 ? (
-            <div style={{ color: muted, fontSize: 12, padding: "60px 0" }}>
-              No sessions yet. Record your first session to see history.
+            <div style={{
+              border: `1px solid ${border}`, padding: "56px 32px",
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 18, textAlign: "center",
+            }}>
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke={muted} strokeWidth="1.5">
+                <rect x="6" y="6" width="36" height="36" />
+                <line x1="14" y1="18" x2="34" y2="18" />
+                <line x1="14" y1="26" x2="28" y2="26" />
+                <line x1="14" y1="34" x2="22" y2="34" />
+              </svg>
+              <div>
+                <div style={{ fontSize: 24, fontFamily: "'Bebas Neue', sans-serif", color: text, letterSpacing: "0.04em" }}>
+                  NO PRACTICE SESSIONS YET
+                </div>
+                <div style={{ fontSize: 11, color: muted, marginTop: 8, lineHeight: 1.6, maxWidth: 380 }}>
+                  Start with a scenario to record your voice and get instant AI feedback.
+                </div>
+              </div>
+              <a href="/scenarios" style={{
+                display: "inline-block", padding: "12px 28px", background: accent,
+                color: bg, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase",
+                textDecoration: "none", fontFamily: "'IBM Plex Mono', monospace", marginTop: 6,
+              }}>
+                Browse Scenarios →
+              </a>
             </div>
           ) : (
             <>
