@@ -61,8 +61,20 @@ export default function Scenarios() {
           </div>
         </div>
 
-        <div style={{
-          margin: "0 48px 80px", background: border,
+        {completedCategoriesToday.length > 0 && completedCategoriesToday.length >= SCENARIO_CATEGORIES.length && (
+          <div style={{
+            margin: "0 48px 24px", padding: "20px 24px", border: `1px solid ${border}`,
+            background: card, display: "flex", alignItems: "center", gap: 16,
+          }}>
+            <div style={{ fontSize: 28, fontFamily: "'Bebas Neue', sans-serif", color: accent, letterSpacing: "0.04em" }}>✓</div>
+            <div>
+              <div style={{ fontSize: 14, color: text, fontWeight: 500 }}>All scenarios completed today</div>
+              <div style={{ fontSize: 11, color: muted, marginTop: 2 }}>Redo any scenario to keep improving — new ones rotate tomorrow.</div>
+            </div>
+          </div>
+        )}
+
+
           display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 1,
         }}>
           {SCENARIO_CATEGORIES.map((cat, idx) => {
