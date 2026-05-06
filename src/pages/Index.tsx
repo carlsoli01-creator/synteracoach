@@ -173,14 +173,16 @@ export default function Negotium() {
     const quizDone = localStorage.getItem("negotium_quiz_v2");
     const tipShownToday = localStorage.getItem("syntera_tip_shown_date") === new Date().toDateString();
     if (!quizDone || tipShownToday || quizVisible) return;
+    if (phase === "recording" || phase === "analyzing") return;
     const delay = 5000 + Math.random() * 10000;
     const timer = setTimeout(() => {
+      if (phase === "recording" || phase === "analyzing") return;
       setTipText(COMMUNICATION_TIPS[Math.floor(Math.random() * COMMUNICATION_TIPS.length)]);
       setShowTipPopup(true);
       localStorage.setItem("syntera_tip_shown_date", new Date().toDateString());
     }, delay);
     return () => clearTimeout(timer);
-  }, [quizVisible]);
+  }, [quizVisible, phase]);
 
   useEffect(() => {
     try {
