@@ -773,13 +773,13 @@ export default function Negotium() {
         .topbar-left { display: flex; align-items: center; gap: 12px; }
         .topbar-right { display: flex; align-items: center; gap: 16px; }
         .topbar-brand { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pg-text); }
-        .back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; color: var(--pg-text); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; transition: opacity 0.15s; }
+        .back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; color: #000; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em; transition: opacity 0.15s; }
         .back-btn:hover { opacity: 0.6; }
         .settings-btn { background: none; border: none; color: var(--pg-muted); cursor: pointer; padding: 4px; transition: color 0.15s; }
         .settings-btn:hover { color: var(--pg-text); }
         .topbar-avg { text-align: right; }
-        .topbar-avg-label { display: block; font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pg-muted); margin-bottom: 1px; font-family: 'DM Mono', monospace; }
-        .topbar-avg-value { font-size: 20px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+        .topbar-avg-label { display: block; font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; color: #000; margin-bottom: 1px; font-family: 'DM Mono', monospace; }
+        .topbar-avg-value { font-size: 20px; color: #000; line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
 
         /* Main content */
         .main-content { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 24px; overflow-y: auto; }
@@ -792,15 +792,15 @@ export default function Negotium() {
         .orb-canvas { width: 200px; height: 200px; }
         .orb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; pointer-events: none; }
 
-        .timer-count { font-size: 48px; color: var(--pg-text); line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
-        .timer-label { font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--pg-dim); font-family: 'DM Mono', monospace; }
+        .timer-count { font-size: 48px; color: #000; line-height: 1; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
+        .timer-label { font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase; color: #000; font-family: 'DM Mono', monospace; }
         .rec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); margin-top: 6px; animation: pulse 1s infinite; }
 
         .analyzing-inline { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 
         .recording-indicator { display: flex; align-items: center; gap: 8px; justify-content: center; }
         .rec-dot-inline { width: 6px; height: 6px; border-radius: 50%; background: var(--pg-text); animation: pulse 1s infinite; }
-        .recording-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pg-muted); font-family: 'DM Mono', monospace; }
+        .recording-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #000; font-family: 'DM Mono', monospace; }
 
         .duration-wrap { width: 240px; }
         .duration-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
