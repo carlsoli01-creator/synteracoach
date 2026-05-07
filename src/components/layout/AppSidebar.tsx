@@ -83,7 +83,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
                   border: "none", borderRadius: 0,
                   borderLeft: "2px solid transparent",
                   background: "transparent",
-                  color: inactiveColor,
+                  color: active ? text : "#000",
                   userSelect: "none" as const,
                   fontSize: 11, fontWeight: 400,
                   letterSpacing: "0.12em", textTransform: "uppercase" as const,
@@ -107,7 +107,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
               style={{
                 display: "block", width: "100%", padding: "11px 24px",
                 border: "none", borderRadius: 0, background: "transparent",
-                color: dimColor, fontSize: 10, letterSpacing: "0.12em",
+                color: "#000", fontSize: 10, letterSpacing: "0.12em",
                 textTransform: "uppercase" as const, textAlign: "left" as const, cursor: "pointer",
                 fontFamily: "'IBM Plex Mono', monospace", whiteSpace: "nowrap" as const,
               }}
@@ -120,7 +120,7 @@ export default function AppSidebar({ userSubtitle, onOpenSetup }: Props) {
             style={{
               display: "block", width: "100%", padding: "11px 24px",
               border: "none", borderRadius: 0, background: "transparent",
-              color: dimColor, fontSize: 10, letterSpacing: "0.12em",
+              color: "#000", fontSize: 10, letterSpacing: "0.12em",
               textAlign: "left" as const, cursor: "pointer",
               fontFamily: "'IBM Plex Mono', monospace", whiteSpace: "nowrap" as const,
             }}
