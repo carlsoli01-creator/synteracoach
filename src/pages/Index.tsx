@@ -895,6 +895,22 @@ export default function Negotium() {
 
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+        /* Analysis report: black + larger text */
+        .results-section .section-label { color: #000 !important; font-size: 11px !important; }
+        .results-section .feedback-text { color: #000 !important; font-size: 15px !important; line-height: 1.75 !important; }
+        .results-section .transcript-text { color: #000 !important; font-size: 16px !important; }
+        .results-section .bar-hint { color: #000 !important; font-size: 11px !important; }
+        .results-section .metric-bar-num { color: #000 !important; }
+        .results-section .tip-item { color: #000 !important; font-size: 14px !important; line-height: 1.7 !important; }
+        .results-section .word-stat-num { color: #000 !important; }
+        .results-section .word-stat-sub { color: #000 !important; font-size: 12px !important; }
+        .results-section .technique-name,
+        .results-section .technique-quote,
+        .results-section .technique-explanation { color: #000 !important; font-size: 13px !important; }
+        .results-section .hedge-weak,
+        .results-section .hedge-strong,
+        .results-section .hedge-arrow { color: #000 !important; font-size: 14px !important; }
       `}</style>
     </div>
     </div>
