@@ -163,7 +163,7 @@ export default function Landing() {
         el.appendChild(b);
       }
     }
-  }, []);
+  }, [tab]);
 
   // Scroll reveal + counter
   useEffect(() => {
