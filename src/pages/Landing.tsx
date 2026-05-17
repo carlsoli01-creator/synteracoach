@@ -237,11 +237,12 @@ export default function Landing() {
         .lp-logo { font-family:'Syne',sans-serif; font-size:1.15rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--lp-text); text-decoration:none; cursor:pointer; }
         .lp-logo span { color:var(--lp-white); }
         .lp-nav-links { display:flex; gap:36px; list-style:none; padding:0; margin:0; }
-        .lp-nav-links a { color:var(--lp-muted); text-decoration:none; font-size:0.85rem; transition:color 0.2s; }
-        .lp-nav-links a:hover { color:var(--lp-text); }
+        .lp-nav-links button { color:#ffffff; background:none; border:none; padding:0; font-size:0.85rem; cursor:pointer; font-family:inherit; transition:opacity 0.2s; opacity:0.7; }
+        .lp-nav-links button:hover { opacity:1; }
+        .lp-nav-links button.active { opacity:1; border-bottom:1px solid #ffffff; padding-bottom:4px; }
         .lp-nav-right { display:flex; align-items:center; gap:20px; }
-        .lp-btn-ghost { color:var(--lp-muted); text-decoration:none; font-size:0.85rem; transition:color 0.2s; cursor:pointer; background:none; border:none; }
-        .lp-btn-ghost:hover { color:var(--lp-text); }
+        .lp-btn-ghost { color:#ffffff; text-decoration:none; font-size:0.85rem; transition:opacity 0.2s; cursor:pointer; background:none; border:none; opacity:0.8; }
+        .lp-btn-ghost:hover { opacity:1; }
         .lp-btn-nav { background:var(--lp-white); color:#050507; font-family:'DM Mono',monospace; font-size:0.72rem; font-weight:500; letter-spacing:0.06em; padding:9px 22px; border-radius:3px; text-decoration:none; border:none; cursor:pointer; transition:opacity 0.2s,transform 0.15s; }
         .lp-btn-nav:hover { opacity:0.85; transform:translateY(-1px); }
 
