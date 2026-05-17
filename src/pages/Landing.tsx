@@ -148,7 +148,7 @@ export default function Landing() {
       b.style.cssText = `--dur:${(0.4 + Math.random() * 0.7).toFixed(2)}s;--delay:${(Math.random() * 0.65).toFixed(2)}s`;
       wf.appendChild(b);
     }
-  }, []);
+  }, [tab]);
 
   // Dimension mini bars
   useEffect(() => {
