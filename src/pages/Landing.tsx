@@ -539,6 +539,7 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </>}
 
       {/* FEATURES */}
       <section className="lp-section" id="features">
