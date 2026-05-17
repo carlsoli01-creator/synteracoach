@@ -43,9 +43,12 @@ function HeroTypewriter() {
   );
 }
 
+type LandingTab = "home" | "how" | "dimensions" | "features" | "reviews";
+
 export default function Landing() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const [tab, setTab] = useState<LandingTab>("home");
   const svgRef = useRef<SVGSVGElement>(null);
   const titleRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const waveRef = useRef<HTMLDivElement>(null);
