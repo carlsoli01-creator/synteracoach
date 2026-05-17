@@ -525,6 +525,7 @@ export default function Landing() {
       </section>
       </>}
 
+      {tab === "dimensions" && <>
       {/* 7 DIMENSIONS */}
       <section className="lp-section">
         <div className="lp-container">
