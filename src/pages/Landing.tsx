@@ -135,7 +135,7 @@ export default function Landing() {
       }
       delay += 0.04;
     });
-  }, []);
+  }, [tab]);
 
   // Waveform bars
   useEffect(() => {
