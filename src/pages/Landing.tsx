@@ -631,6 +631,7 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </>}
 
       {/* FOOTER */}
       <footer className="lp-footer">
