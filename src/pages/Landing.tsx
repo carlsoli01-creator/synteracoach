@@ -397,7 +397,7 @@ export default function Landing() {
           <li><a href="#features">Features</a></li>
         </ul>
         <div className="lp-nav-right">
-          <button className="lp-btn-ghost" onClick={goAuth}>Sign in</button>
+          <button className="lp-btn-ghost text-slate-100" onClick={goAuth}>Sign in</button>
           <button className="lp-btn-nav" onClick={goAuth}>Start free →</button>
         </div>
       </nav>
