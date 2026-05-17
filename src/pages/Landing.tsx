@@ -523,6 +523,7 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </>}
 
       {/* 7 DIMENSIONS */}
       <section className="lp-section">
