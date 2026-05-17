@@ -496,7 +496,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* HOW IT WORKS */}
       <section className="lp-section" id="how">
