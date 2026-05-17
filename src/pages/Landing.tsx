@@ -498,6 +498,7 @@ export default function Landing() {
         </div>
       </div>}
 
+      {tab === "how" && <>
       {/* HOW IT WORKS */}
       <section className="lp-section" id="how">
         <div className="lp-container">
