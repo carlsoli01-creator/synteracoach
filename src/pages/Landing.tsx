@@ -606,7 +606,9 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </>}
 
+      {tab === "reviews" && <>
       {/* TESTIMONIALS */}
       <section className="lp-section">
         <div className="lp-container">
