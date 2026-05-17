@@ -410,7 +410,7 @@ export default function Landing() {
       </nav>
 
       {/* HERO */}
-      <div className="lp-hero">
+      {tab === "home" && <div className="lp-hero">
         <div className="lp-chrome-bg">
           <Particles
             particleCount={350}
