@@ -43,9 +43,12 @@ function HeroTypewriter() {
   );
 }
 
+type LandingTab = "home" | "how" | "dimensions" | "features" | "reviews";
+
 export default function Landing() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const [tab, setTab] = useState<LandingTab>("home");
   const svgRef = useRef<SVGSVGElement>(null);
   const titleRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const waveRef = useRef<HTMLDivElement>(null);
@@ -132,7 +135,7 @@ export default function Landing() {
       }
       delay += 0.04;
     });
-  }, []);
+  }, [tab]);
 
   // Waveform bars
   useEffect(() => {
@@ -145,7 +148,7 @@ export default function Landing() {
       b.style.cssText = `--dur:${(0.4 + Math.random() * 0.7).toFixed(2)}s;--delay:${(Math.random() * 0.65).toFixed(2)}s`;
       wf.appendChild(b);
     }
-  }, []);
+  }, [tab]);
 
   // Dimension mini bars
   useEffect(() => {
@@ -160,7 +163,7 @@ export default function Landing() {
         el.appendChild(b);
       }
     }
-  }, []);
+  }, [tab]);
 
   // Scroll reveal + counter
   useEffect(() => {
@@ -207,7 +210,7 @@ export default function Landing() {
       return () => {obs.disconnect();co.disconnect();};
     }
     return () => obs.disconnect();
-  }, []);
+  }, [tab]);
 
   const dimLabels = ["Overall Score", "Pace & Rhythm", "Confidence", "Clarity", "Filler Words", "Power Words", "Persuasion"];
 
@@ -234,11 +237,12 @@ export default function Landing() {
         .lp-logo { font-family:'Syne',sans-serif; font-size:1.15rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--lp-text); text-decoration:none; cursor:pointer; }
         .lp-logo span { color:var(--lp-white); }
         .lp-nav-links { display:flex; gap:36px; list-style:none; padding:0; margin:0; }
-        .lp-nav-links a { color:var(--lp-muted); text-decoration:none; font-size:0.85rem; transition:color 0.2s; }
-        .lp-nav-links a:hover { color:var(--lp-text); }
+        .lp-nav-links button { color:#ffffff; background:none; border:none; padding:0; font-size:0.85rem; cursor:pointer; font-family:inherit; transition:opacity 0.2s; opacity:0.7; }
+        .lp-nav-links button:hover { opacity:1; }
+        .lp-nav-links button.active { opacity:1; border-bottom:1px solid #ffffff; padding-bottom:4px; }
         .lp-nav-right { display:flex; align-items:center; gap:20px; }
-        .lp-btn-ghost { color:var(--lp-muted); text-decoration:none; font-size:0.85rem; transition:color 0.2s; cursor:pointer; background:none; border:none; }
-        .lp-btn-ghost:hover { color:var(--lp-text); }
+        .lp-btn-ghost { color:#ffffff; text-decoration:none; font-size:0.85rem; transition:opacity 0.2s; cursor:pointer; background:none; border:none; opacity:0.8; }
+        .lp-btn-ghost:hover { opacity:1; }
         .lp-btn-nav { background:var(--lp-white); color:#050507; font-family:'DM Mono',monospace; font-size:0.72rem; font-weight:500; letter-spacing:0.06em; padding:9px 22px; border-radius:3px; text-decoration:none; border:none; cursor:pointer; transition:opacity 0.2s,transform 0.15s; }
         .lp-btn-nav:hover { opacity:0.85; transform:translateY(-1px); }
 
@@ -391,19 +395,22 @@ export default function Landing() {
 
       {/* NAV */}
       <nav className="lp-nav">
-        <span className="lp-logo font-serif">SYNTERICA</span>
+        <span className="lp-logo font-serif" onClick={() => setTab("home")} style={{ cursor: "pointer" }}>SYNTERICA</span>
         <ul className="lp-nav-links">
-          <li><a href="#how">How it works</a></li>
-          <li><a href="#features">Features</a></li>
+          <li><button className={tab === "home" ? "active" : ""} onClick={() => setTab("home")}>Home</button></li>
+          <li><button className={tab === "how" ? "active" : ""} onClick={() => setTab("how")}>How it works</button></li>
+          <li><button className={tab === "dimensions" ? "active" : ""} onClick={() => setTab("dimensions")}>Dimensions</button></li>
+          <li><button className={tab === "features" ? "active" : ""} onClick={() => setTab("features")}>Features</button></li>
+          <li><button className={tab === "reviews" ? "active" : ""} onClick={() => setTab("reviews")}>Reviews</button></li>
         </ul>
         <div className="lp-nav-right">
-          <button className="lp-btn-ghost text-slate-100" onClick={goAuth}>Sign in</button>
+          <button className="lp-btn-ghost" onClick={goAuth}>Sign in</button>
           <button className="lp-btn-nav" onClick={goAuth}>Start free →</button>
         </div>
       </nav>
 
       {/* HERO */}
-      <div className="lp-hero">
+      {tab === "home" && <div className="lp-hero">
         <div className="lp-chrome-bg">
           <Particles
             particleCount={350}
@@ -489,8 +496,9 @@ export default function Landing() {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
+      {tab === "how" && <>
       {/* HOW IT WORKS */}
       <section className="lp-section" id="how">
         <div className="lp-container">
@@ -515,7 +523,9 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </>}
 
+      {tab === "dimensions" && <>
       {/* 7 DIMENSIONS */}
       <section className="lp-section">
         <div className="lp-container">
@@ -529,7 +539,9 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </>}
 
+      {tab === "features" && <>
       {/* FEATURES */}
       <section className="lp-section" id="features">
         <div className="lp-container">
@@ -594,7 +606,9 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </>}
 
+      {tab === "reviews" && <>
       {/* TESTIMONIALS */}
       <section className="lp-section">
         <div className="lp-container">
@@ -617,6 +631,7 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </>}
 
       {/* FOOTER */}
       <footer className="lp-footer">

@@ -48,7 +48,7 @@ export default function Progress() {
           </h1>
           <div style={{ fontSize: 10, color: muted, marginTop: 8, letterSpacing: "0.12em", textTransform: "uppercase" }}>Track your improvement over time</div>
         </div>
-        <div style={{ maxWidth: 900, padding: "0 16px", paddingBottom: 80 }}>
+        <div style={{ maxWidth: "100%", width: "100%", padding: "0 32px", paddingBottom: 80 }}>
           {loading ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 24 }}>
               {[0, 1, 2].map((i) => (
