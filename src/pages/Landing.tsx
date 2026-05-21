@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Particles from "@/components/Particles";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const TYPEWRITER_PHRASES = [
   "Speak Better. Be Heard.",
@@ -49,6 +50,8 @@ export default function Landing() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [tab, setTab] = useState<LandingTab>("home");
+  const isMobile = useIsMobile();
+  const showAll = isMobile;
   const svgRef = useRef<SVGSVGElement>(null);
   const titleRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const waveRef = useRef<HTMLDivElement>(null);
@@ -410,7 +413,7 @@ export default function Landing() {
       </nav>
 
       {/* HERO */}
-      {tab === "home" && <div className="lp-hero">
+      {(showAll || tab === "home") && <div className="lp-hero">
         <div className="lp-chrome-bg">
           <Particles
             particleCount={350}
@@ -498,7 +501,7 @@ export default function Landing() {
         </div>
       </div>}
 
-      {tab === "how" && <>
+      {(showAll || tab === "how") && <>
       {/* HOW IT WORKS */}
       <section className="lp-section" id="how">
         <div className="lp-container">
@@ -525,7 +528,7 @@ export default function Landing() {
       </section>
       </>}
 
-      {tab === "dimensions" && <>
+      {(showAll || tab === "dimensions") && <>
       {/* 7 DIMENSIONS */}
       <section className="lp-section">
         <div className="lp-container">
@@ -541,7 +544,7 @@ export default function Landing() {
       </section>
       </>}
 
-      {tab === "features" && <>
+      {(showAll || tab === "features") && <>
       {/* FEATURES */}
       <section className="lp-section" id="features">
         <div className="lp-container">
@@ -608,7 +611,7 @@ export default function Landing() {
       </section>
       </>}
 
-      {tab === "reviews" && <>
+      {(showAll || tab === "reviews") && <>
       {/* TESTIMONIALS */}
       <section className="lp-section">
         <div className="lp-container">
