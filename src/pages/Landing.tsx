@@ -413,7 +413,7 @@ export default function Landing() {
       </nav>
 
       {/* HERO */}
-      {tab === "home" && <div className="lp-hero">
+      {(showAll || tab === "home") && <div className="lp-hero">
         <div className="lp-chrome-bg">
           <Particles
             particleCount={350}
@@ -501,7 +501,7 @@ export default function Landing() {
         </div>
       </div>}
 
-      {tab === "how" && <>
+      {(showAll || tab === "how") && <>
       {/* HOW IT WORKS */}
       <section className="lp-section" id="how">
         <div className="lp-container">
@@ -528,7 +528,7 @@ export default function Landing() {
       </section>
       </>}
 
-      {tab === "dimensions" && <>
+      {(showAll || tab === "dimensions") && <>
       {/* 7 DIMENSIONS */}
       <section className="lp-section">
         <div className="lp-container">
@@ -544,7 +544,7 @@ export default function Landing() {
       </section>
       </>}
 
-      {tab === "features" && <>
+      {(showAll || tab === "features") && <>
       {/* FEATURES */}
       <section className="lp-section" id="features">
         <div className="lp-container">
@@ -611,7 +611,7 @@ export default function Landing() {
       </section>
       </>}
 
-      {tab === "reviews" && <>
+      {(showAll || tab === "reviews") && <>
       {/* TESTIMONIALS */}
       <section className="lp-section">
         <div className="lp-container">
