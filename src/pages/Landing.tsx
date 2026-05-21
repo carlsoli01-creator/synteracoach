@@ -50,6 +50,8 @@ export default function Landing() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [tab, setTab] = useState<LandingTab>("home");
+  const isMobile = useIsMobile();
+  const showAll = isMobile;
   const svgRef = useRef<SVGSVGElement>(null);
   const titleRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const waveRef = useRef<HTMLDivElement>(null);
