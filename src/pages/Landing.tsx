@@ -434,10 +434,6 @@ export default function Landing() {
         </svg>
 
         <div className="lp-hero-content">
-          <div className="lp-hero-eyebrow">
-            
-            NOW IN BETA
-          </div>
 
           <h1 className="lp-hero-title text-6xl font-extrabold font-serif">
             {["Speak", "with", "conviction.", "Not", "guesswork."].map((_, i) =>
