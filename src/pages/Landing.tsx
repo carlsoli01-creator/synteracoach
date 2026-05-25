@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Particles from "@/components/Particles";
 import { useIsMobile } from "@/hooks/use-mobile";
+import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
+
 
 const TYPEWRITER_PHRASES = [
   "Speak Better. Be Heard.",
