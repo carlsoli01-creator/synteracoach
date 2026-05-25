@@ -913,6 +913,27 @@ export default function Negotium() {
         .results-section .hedge-weak,
         .results-section .hedge-strong,
         .results-section .hedge-arrow { color: #000 !important; font-size: 14px !important; }
+
+        /* Score ring labels - black + slightly larger */
+        .results-section .ring-label { color: #000 !important; font-size: 10px !important; font-weight: 600; }
+
+        /* Report view: white background + full-width report */
+        .report-view { background: #ffffff !important; }
+        .report-view .page-shell { background: #ffffff; }
+        .report-view .main-content { background: #ffffff; padding: 24px 0; }
+        .report-view .topbar { background: #ffffff; }
+        .report-view .results-section {
+          max-width: 1200px;
+          width: 100%;
+          padding: 32px 48px;
+          margin: 0 auto;
+        }
+        @media (max-width: 768px) {
+          .report-view .results-section {
+            max-width: 100%;
+            padding: 24px 16px;
+          }
+        }
       `}</style>
     </div>
     </div>
