@@ -436,7 +436,7 @@ export default function Landing() {
         <div className="lp-hero-content">
           <div className="lp-hero-eyebrow">
             <div className="lp-live-dot" />
-            AI Voice Coach — Now in Beta
+            NOW IN BETA
           </div>
 
           <h1 className="lp-hero-title text-6xl font-extrabold font-serif">
