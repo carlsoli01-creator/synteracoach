@@ -448,10 +448,12 @@ export default function Negotium() {
   const isActive = phase === "recording" || phase === "analyzing" || phase === "done";
 
    return (
-    <div className="app-root" style={{ position: 'relative' }}>
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none', filter: 'grayscale(1)' }}>
-        <LiquidChrome speed={0.25} amplitude={0.3} frequencyX={3} frequencyY={3} interactive={false} />
-      </div>
+    <div className={`app-root${phase === "done" ? " report-view" : ""}`} style={{ position: 'relative' }}>
+      {phase !== "done" && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none', filter: 'grayscale(1)' }}>
+          <LiquidChrome speed={0.25} amplitude={0.3} frequencyX={3} frequencyY={3} interactive={false} />
+        </div>
+      )}
       <div style={{ position: 'relative', zIndex: 1, minHeight: '100%' }}>
       {showIntro && <IntroExperience onComplete={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) { setBlackFade(true); setTimeout(() => setQuizVisible(true), 600); setTimeout(() => setBlackFade(false), 1200); } }} onForcePaywall={() => { localStorage.setItem("syntera_intro_done_v2", "true"); setShowIntro(false); if (!localStorage.getItem("negotium_quiz_v2")) { setBlackFade(true); setTimeout(() => setQuizVisible(true), 600); setTimeout(() => setBlackFade(false), 1200); } }} />}
       {showInterstitial && <SpeakBetterInterstitial onComplete={handleInterstitialComplete} />}
