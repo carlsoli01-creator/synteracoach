@@ -36,8 +36,8 @@ function ScoreRing({ score, label, color }: { score: number; label: string; colo
         <circle cx={36} cy={36} r={r} fill="none" stroke={color} strokeWidth={4}
           strokeLinecap="square" strokeDasharray={circ} strokeDashoffset={offset}
           style={{ transform: "rotate(-90deg)", transformOrigin: "center", transition: "stroke-dashoffset 1s ease" }} />
-        <text x={36} y={40} textAnchor="middle" fontSize={16}
-          fontFamily="'Bebas Neue', sans-serif" fontWeight="400" letterSpacing="0.04em" style={{ fill: 'var(--pg-text)' }}>{score}</text>
+        <text x={36} y={42} textAnchor="middle" fontSize={22}
+          fontFamily="'Bebas Neue', sans-serif" fontWeight="400" letterSpacing="0.04em" style={{ fill: '#000' }}>{score}</text>
       </svg>
       <span className="ring-label">{label}</span>
     </div>
