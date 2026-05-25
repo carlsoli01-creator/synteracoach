@@ -389,7 +389,7 @@ export default function Landing() {
         .lp-reveal { opacity:0; transform:translateY(24px); transition:opacity 0.7s ease,transform 0.7s ease; }
         .lp-visible { opacity:1; transform:translateY(0); }
 
-        @media (max-width:900px) {
+        @media (max-width:1023px) {
           .lp-nav { padding:0 24px; }
           .lp-nav-links { display:none; }
           .lp-container { padding:80px 24px; }
