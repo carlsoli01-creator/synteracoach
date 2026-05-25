@@ -50,8 +50,17 @@ export default function Landing() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [tab, setTab] = useState<LandingTab>("home");
-  const isMobile = useIsMobile();
-  const showAll = isMobile;
+  const [isTabletOrBelow, setIsTabletOrBelow] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 1023px)");
+    const update = () => setIsTabletOrBelow(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+  const showAll = isTabletOrBelow;
+
   const svgRef = useRef<SVGSVGElement>(null);
   const titleRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const waveRef = useRef<HTMLDivElement>(null);
