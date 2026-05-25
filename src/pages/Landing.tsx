@@ -651,6 +651,8 @@ export default function Landing() {
         </div>
         <div className="lp-footer-copy">© 2026 Synterica. All rights reserved.</div>
       </footer>
+      {showPaywall && <ForcedPaywall onSubscribe={goAuth} onSkip={() => setShowPaywall(false)} />}
     </div>);
+
 
 }
