@@ -416,9 +416,9 @@ export default function Landing() {
           <li><button className={tab === "reviews" ? "active" : ""} onClick={() => setTab("reviews")}>Reviews</button></li>
         </ul>
         <div className="lp-nav-right">
-          <button className="lp-btn-ghost" onClick={goAuth}>Sign in</button>
-          <button className="lp-btn-nav" onClick={goAuth}>Start free →</button>
+          <button className="lp-btn-nav" onClick={() => setShowPaywall(true)}>Start free →</button>
         </div>
+
       </nav>
 
       {/* HERO */}
