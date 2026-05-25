@@ -435,7 +435,7 @@ export default function Landing() {
 
         <div className="lp-hero-content">
           <div className="lp-hero-eyebrow">
-            <div className="lp-live-dot" />
+            
             NOW IN BETA
           </div>
 
