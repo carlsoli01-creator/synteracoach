@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Particles from "@/components/Particles";
 import { useIsMobile } from "@/hooks/use-mobile";
+import ForcedPaywall from "@/components/onboarding/ForcedPaywall";
+
 
 const TYPEWRITER_PHRASES = [
   "Speak Better. Be Heard.",
@@ -50,8 +52,17 @@ export default function Landing() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [tab, setTab] = useState<LandingTab>("home");
-  const isMobile = useIsMobile();
-  const showAll = isMobile;
+  const [isTabletOrBelow, setIsTabletOrBelow] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 1023px)");
+    const update = () => setIsTabletOrBelow(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+  const showAll = isTabletOrBelow;
+
   const svgRef = useRef<SVGSVGElement>(null);
   const titleRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const waveRef = useRef<HTMLDivElement>(null);
@@ -380,7 +391,7 @@ export default function Landing() {
         .lp-reveal { opacity:0; transform:translateY(24px); transition:opacity 0.7s ease,transform 0.7s ease; }
         .lp-visible { opacity:1; transform:translateY(0); }
 
-        @media (max-width:900px) {
+        @media (max-width:1023px) {
           .lp-nav { padding:0 24px; }
           .lp-nav-links { display:none; }
           .lp-container { padding:80px 24px; }
@@ -407,9 +418,9 @@ export default function Landing() {
           <li><button className={tab === "reviews" ? "active" : ""} onClick={() => setTab("reviews")}>Reviews</button></li>
         </ul>
         <div className="lp-nav-right">
-          <button className="lp-btn-ghost" onClick={goAuth}>Sign in</button>
-          <button className="lp-btn-nav" onClick={goAuth}>Start free →</button>
+          <button className="lp-btn-nav" onClick={() => setShowPaywall(true)}>Start free →</button>
         </div>
+
       </nav>
 
       {/* HERO */}
@@ -642,6 +653,8 @@ export default function Landing() {
         </div>
         <div className="lp-footer-copy">© 2026 Synterica. All rights reserved.</div>
       </footer>
+      {showPaywall && <ForcedPaywall onSubscribe={goAuth} onSkip={() => setShowPaywall(false)} />}
     </div>);
+
 
 }
