@@ -248,7 +248,7 @@ export default function Landing() {
 
         /* NAV */
         .lp-nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 56px; height:68px; background:rgba(5,5,7,0.8); backdrop-filter:blur(28px); border-bottom:1px solid var(--lp-border); }
-        .lp-logo { font-family:'Syne',sans-serif; font-size:1.15rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--lp-text); text-decoration:none; cursor:pointer; }
+        .lp-logo { font-family:'Instrument Serif',serif; font-size:1.55rem; font-weight:400; letter-spacing:0.04em; color:var(--lp-text); text-decoration:none; cursor:pointer; }
         .lp-logo span { color:var(--lp-white); }
         .lp-nav-links { display:flex; gap:36px; list-style:none; padding:0; margin:0; }
         .lp-nav-links button { color:#ffffff; background:none; border:none; padding:0; font-size:0.85rem; cursor:pointer; font-family:inherit; transition:opacity 0.2s; opacity:0.7; }
@@ -269,7 +269,7 @@ export default function Landing() {
         .lp-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:2px; margin-bottom:40px; animation:lpFadeUp 0.7s ease both; }
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(2.4rem,6.5vw,5.4rem); font-weight:600; line-height:0.98; letter-spacing:-0.01em; max-width:900px; }
+        .lp-hero-title { font-family:'Instrument Serif',serif; font-size:clamp(2.8rem,7.2vw,6rem); font-weight:400; line-height:1.02; letter-spacing:-0.015em; max-width:960px; }
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
 .lp-letter { display:inline-block; color:var(--lp-white); animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
@@ -388,8 +388,13 @@ export default function Landing() {
         .lp-footer-copy { font-family:'DM Mono',monospace; font-size:0.62rem; color:var(--lp-muted2); }
 
         @keyframes lpFadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        .lp-reveal { opacity:0; transform:translateY(24px); transition:opacity 0.7s ease,transform 0.7s ease; }
+        .lp-reveal { opacity:1; transform:translateY(24px); transition:opacity 0.7s ease,transform 0.7s ease; }
         .lp-visible { opacity:1; transform:translateY(0); }
+
+        /* Scroll-down chevron */
+        .lp-scroll-down { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; background:none; border:none; color:rgba(255,255,255,0.35); cursor:pointer; text-decoration:none; transition:color 0.2s, transform 0.4s ease; animation:lpChevBob 2.2s ease-in-out infinite; }
+        .lp-scroll-down:hover { color:rgba(255,255,255,0.7); transform:translateY(4px); }
+        @keyframes lpChevBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
 
         @media (max-width:1023px) {
           .lp-nav { padding:0 24px; }
@@ -409,7 +414,7 @@ export default function Landing() {
 
       {/* NAV */}
       <nav className="lp-nav">
-        <span className="lp-logo font-serif" onClick={() => setTab("home")} style={{ cursor: "pointer" }}>SYNTERICA</span>
+        <span className="lp-logo" onClick={() => setTab("home")} style={{ cursor: "pointer" }}>Synterica</span>
         <ul className="lp-nav-links">
           <li><button className={tab === "home" ? "active" : ""} onClick={() => setTab("home")}>Home</button></li>
           <li><button className={tab === "how" ? "active" : ""} onClick={() => setTab("how")}>How it works</button></li>
@@ -446,7 +451,7 @@ export default function Landing() {
 
         <div className="lp-hero-content">
 
-          <h1 className="lp-hero-title text-6xl font-extrabold font-serif">
+          <h1 className="lp-hero-title">
             {["Speak", "with", "conviction.", "Not", "guesswork."].map((_, i) =>
             <span key={i}>
                 <span className="lp-word" ref={(el) => {titleRefs.current[i] = el;}} />
@@ -462,7 +467,11 @@ export default function Landing() {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" /></svg>
               Start coaching — it's free
             </button>
-            <a href="#how" className="lp-btn-secondary bg-secondary-foreground text-primary-foreground">See how it works ↓</a>
+            <a href="#how" className="lp-scroll-down" aria-label="See how it works">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </a>
           </div>
 
           <div className="lp-hero-visual">
