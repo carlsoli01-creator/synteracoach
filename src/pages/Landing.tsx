@@ -553,8 +553,10 @@ export default function Landing() {
       {/* 7 DIMENSIONS */}
       <section className="lp-section">
         <div className="lp-container">
-          <div className="lp-sec-label">7 Dimensions</div>
-          <div className="lp-sec-title">Every layer of <span className="wh font-serif">your voice, scored</span></div>
+          <div className="lp-reveal-head">
+            <div className="lp-sec-label">7 Dimensions</div>
+            <div className="lp-sec-title">Every layer of <span className="wh font-serif">your voice, scored</span></div>
+          </div>
           <div className="lp-dims-grid lp-reveal">
             {dimLabels.map((label, i) => <div className="lp-dim-card" key={label}>
                 <div className="lp-dim-label text-primary-foreground">{label}</div>
