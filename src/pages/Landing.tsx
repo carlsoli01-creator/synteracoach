@@ -571,8 +571,10 @@ export default function Landing() {
       {/* FEATURES */}
       <section className="lp-section" id="features">
         <div className="lp-container">
-          <div className="lp-sec-label">Features</div>
-          <div className="lp-sec-title">Everything you need to <span className="wh font-serif">master your voice</span></div>
+          <div className="lp-reveal-head">
+            <div className="lp-sec-label">Features</div>
+            <div className="lp-sec-title">Everything you need to <span className="wh font-serif">master your voice</span></div>
+          </div>
           <div className="lp-features-bento">
             {/* AI Coach - wide */}
             <div className="lp-feat wide lp-reveal">
