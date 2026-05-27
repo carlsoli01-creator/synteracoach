@@ -417,7 +417,7 @@ export default function Landing() {
 
       {/* NAV */}
       <nav className="lp-nav">
-        <span className="lp-logo" onClick={() => setTab("home")} style={{ cursor: "pointer" }}>Synterica</span>
+        <span className="lp-logo custom-cursor-on-hover font-serif" onClick={() => setTab("home")} style={{ cursor: "pointer" }}>Synterica</span>
         <ul className="lp-nav-links">
           <li><button className={tab === "home" ? "active" : ""} onClick={() => setTab("home")}>Home</button></li>
           <li><button className={tab === "how" ? "active" : ""} onClick={() => setTab("how")}>How it works</button></li>
