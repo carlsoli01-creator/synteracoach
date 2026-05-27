@@ -248,7 +248,7 @@ export default function Landing() {
 
         /* NAV */
         .lp-nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 56px; height:68px; background:rgba(5,5,7,0.8); backdrop-filter:blur(28px); border-bottom:1px solid var(--lp-border); }
-        .lp-logo { font-family:'Instrument Serif',serif; font-size:1.55rem; font-weight:400; letter-spacing:0.04em; color:var(--lp-text); text-decoration:none; cursor:pointer; }
+        .lp-logo { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; letter-spacing:-0.02em; color:var(--lp-white); text-decoration:none; cursor:pointer; text-transform:none; }
         .lp-logo span { color:var(--lp-white); }
         .lp-nav-links { display:flex; gap:36px; list-style:none; padding:0; margin:0; }
         .lp-nav-links button { color:#ffffff; background:none; border:none; padding:0; font-size:0.85rem; cursor:pointer; font-family:inherit; transition:opacity 0.2s; opacity:0.7; }
