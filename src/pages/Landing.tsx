@@ -388,8 +388,11 @@ export default function Landing() {
         .lp-footer-copy { font-family:'DM Mono',monospace; font-size:0.62rem; color:var(--lp-muted2); }
 
         @keyframes lpFadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        .lp-reveal { opacity:1; transform:translateY(24px); transition:opacity 0.7s ease,transform 0.7s ease; }
+        .lp-reveal { opacity:0; transform:translateY(28px); transition:opacity 0.8s ease, transform 0.8s ease; }
         .lp-visible { opacity:1; transform:translateY(0); }
+        .lp-sec-label { transition:opacity 0.7s ease, transform 0.7s ease; }
+        .lp-reveal-head { opacity:0; transform:translateY(20px); transition:opacity 0.7s ease, transform 0.7s ease; }
+        .lp-reveal-head.lp-visible { opacity:1; transform:translateY(0); }
 
         /* Scroll-down chevron */
         .lp-scroll-down { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; background:none; border:none; color:rgba(255,255,255,0.35); cursor:pointer; text-decoration:none; transition:color 0.2s, transform 0.4s ease; animation:lpChevBob 2.2s ease-in-out infinite; }
