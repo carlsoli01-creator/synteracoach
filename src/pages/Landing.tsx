@@ -665,7 +665,7 @@ export default function Landing() {
 
       {/* FOOTER */}
       <footer className="lp-footer">
-        <div className="lp-footer-logo lp-logo font-serif">Synterica</div>
+        <div className="lp-footer-logo lp-logo font-serif text-xl">Synterica</div>
         <div className="lp-footer-links">
           <a href="/privacy">Privacy</a>
           <a href="/terms">Terms</a>
