@@ -40,7 +40,7 @@ function HeroTypewriter() {
   const text = TYPEWRITER_PHRASES[phraseIdx].slice(0, charIdx);
 
   return (
-    <p className="lp-hero-sub">
+    <p className="lp-hero-sub font-serif">
       {text}<span className="lp-typewriter-cursor" />
     </p>
   );
@@ -417,7 +417,7 @@ export default function Landing() {
 
       {/* NAV */}
       <nav className="lp-nav">
-        <span className="lp-logo custom-cursor-on-hover font-serif" onClick={() => setTab("home")} style={{ cursor: "pointer" }}>Synterica</span>
+        <span className="lp-logo custom-cursor-on-hover font-serif text-xl" onClick={() => setTab("home")} style={{ cursor: "pointer" }}>Synterica</span>
         <ul className="lp-nav-links">
           <li><button className={tab === "home" ? "active" : ""} onClick={() => setTab("home")}>Home</button></li>
           <li><button className={tab === "how" ? "active" : ""} onClick={() => setTab("how")}>How it works</button></li>
@@ -454,7 +454,7 @@ export default function Landing() {
 
         <div className="lp-hero-content">
 
-          <h1 className="lp-hero-title">
+          <h1 className="lp-hero-title text-6xl font-serif">
             {["Speak", "with", "conviction.", "Not", "guesswork."].map((_, i) =>
             <span key={i}>
                 <span className="lp-word" ref={(el) => {titleRefs.current[i] = el;}} />
@@ -665,7 +665,7 @@ export default function Landing() {
 
       {/* FOOTER */}
       <footer className="lp-footer">
-        <div className="lp-footer-logo lp-logo font-serif">Synterica</div>
+        <div className="lp-footer-logo lp-logo font-serif text-xl">Synterica</div>
         <div className="lp-footer-links">
           <a href="/privacy">Privacy</a>
           <a href="/terms">Terms</a>
