@@ -524,8 +524,10 @@ export default function Landing() {
       {/* HOW IT WORKS */}
       <section className="lp-section" id="how">
         <div className="lp-container">
-          <div className="lp-sec-label">How it works</div>
-          <div className="lp-sec-title">Three steps to <span className="wh font-serif">a better speaker</span></div>
+          <div className="lp-reveal-head">
+            <div className="lp-sec-label">How it works</div>
+            <div className="lp-sec-title">Three steps to <span className="wh font-serif">a better speaker</span></div>
+          </div>
           <div className="lp-steps lp-reveal">
             <div className="lp-step">
               <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" /></svg>
