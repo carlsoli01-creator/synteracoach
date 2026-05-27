@@ -181,7 +181,7 @@ export default function Landing() {
 
   // Scroll reveal + counter
   useEffect(() => {
-    const reveals = document.querySelectorAll(".lp-reveal");
+    const reveals = document.querySelectorAll(".lp-reveal, .lp-reveal-head");
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
