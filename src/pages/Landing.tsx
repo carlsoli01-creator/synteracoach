@@ -61,7 +61,7 @@ export default function Landing() {
     mql.addEventListener("change", update);
     return () => mql.removeEventListener("change", update);
   }, []);
-  const showAll = true;
+  const showAll = isTabletOrBelow;
 
   const svgRef = useRef<SVGSVGElement>(null);
   const titleRefs = useRef<(HTMLSpanElement | null)[]>([]);
