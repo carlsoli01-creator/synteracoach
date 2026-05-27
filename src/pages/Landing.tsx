@@ -181,7 +181,7 @@ export default function Landing() {
 
   // Scroll reveal + counter
   useEffect(() => {
-    const reveals = document.querySelectorAll(".lp-reveal");
+    const reveals = document.querySelectorAll(".lp-reveal, .lp-reveal-head");
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -248,7 +248,7 @@ export default function Landing() {
 
         /* NAV */
         .lp-nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 56px; height:68px; background:rgba(5,5,7,0.8); backdrop-filter:blur(28px); border-bottom:1px solid var(--lp-border); }
-        .lp-logo { font-family:'Instrument Serif',serif; font-size:1.55rem; font-weight:400; letter-spacing:0.04em; color:var(--lp-text); text-decoration:none; cursor:pointer; }
+        .lp-logo { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; letter-spacing:-0.02em; color:var(--lp-white); text-decoration:none; cursor:pointer; text-transform:none; }
         .lp-logo span { color:var(--lp-white); }
         .lp-nav-links { display:flex; gap:36px; list-style:none; padding:0; margin:0; }
         .lp-nav-links button { color:#ffffff; background:none; border:none; padding:0; font-size:0.85rem; cursor:pointer; font-family:inherit; transition:opacity 0.2s; opacity:0.7; }
@@ -269,7 +269,7 @@ export default function Landing() {
         .lp-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:2px; margin-bottom:40px; animation:lpFadeUp 0.7s ease both; }
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .lp-hero-title { font-family:'Instrument Serif',serif; font-size:clamp(2.8rem,7.2vw,6rem); font-weight:400; line-height:1.02; letter-spacing:-0.015em; max-width:960px; }
+        .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(3.2rem,8.4vw,7rem); font-weight:800; line-height:0.98; letter-spacing:-0.035em; max-width:1040px; }
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
 .lp-letter { display:inline-block; color:var(--lp-white); animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
@@ -388,8 +388,11 @@ export default function Landing() {
         .lp-footer-copy { font-family:'DM Mono',monospace; font-size:0.62rem; color:var(--lp-muted2); }
 
         @keyframes lpFadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        .lp-reveal { opacity:1; transform:translateY(24px); transition:opacity 0.7s ease,transform 0.7s ease; }
+        .lp-reveal { opacity:0; transform:translateY(28px); transition:opacity 0.8s ease, transform 0.8s ease; }
         .lp-visible { opacity:1; transform:translateY(0); }
+        .lp-sec-label { transition:opacity 0.7s ease, transform 0.7s ease; }
+        .lp-reveal-head { opacity:0; transform:translateY(20px); transition:opacity 0.7s ease, transform 0.7s ease; }
+        .lp-reveal-head.lp-visible { opacity:1; transform:translateY(0); }
 
         /* Scroll-down chevron */
         .lp-scroll-down { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; background:none; border:none; color:rgba(255,255,255,0.35); cursor:pointer; text-decoration:none; transition:color 0.2s, transform 0.4s ease; animation:lpChevBob 2.2s ease-in-out infinite; }
@@ -521,8 +524,10 @@ export default function Landing() {
       {/* HOW IT WORKS */}
       <section className="lp-section" id="how">
         <div className="lp-container">
-          <div className="lp-sec-label">How it works</div>
-          <div className="lp-sec-title">Three steps to <span className="wh font-serif">a better speaker</span></div>
+          <div className="lp-reveal-head">
+            <div className="lp-sec-label">How it works</div>
+            <div className="lp-sec-title">Three steps to <span className="wh font-serif">a better speaker</span></div>
+          </div>
           <div className="lp-steps lp-reveal">
             <div className="lp-step">
               <svg className="lp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" /></svg>
@@ -548,8 +553,10 @@ export default function Landing() {
       {/* 7 DIMENSIONS */}
       <section className="lp-section">
         <div className="lp-container">
-          <div className="lp-sec-label">7 Dimensions</div>
-          <div className="lp-sec-title">Every layer of <span className="wh font-serif">your voice, scored</span></div>
+          <div className="lp-reveal-head">
+            <div className="lp-sec-label">7 Dimensions</div>
+            <div className="lp-sec-title">Every layer of <span className="wh font-serif">your voice, scored</span></div>
+          </div>
           <div className="lp-dims-grid lp-reveal">
             {dimLabels.map((label, i) => <div className="lp-dim-card" key={label}>
                 <div className="lp-dim-label text-primary-foreground">{label}</div>
@@ -564,8 +571,10 @@ export default function Landing() {
       {/* FEATURES */}
       <section className="lp-section" id="features">
         <div className="lp-container">
-          <div className="lp-sec-label">Features</div>
-          <div className="lp-sec-title">Everything you need to <span className="wh font-serif">master your voice</span></div>
+          <div className="lp-reveal-head">
+            <div className="lp-sec-label">Features</div>
+            <div className="lp-sec-title">Everything you need to <span className="wh font-serif">master your voice</span></div>
+          </div>
           <div className="lp-features-bento">
             {/* AI Coach - wide */}
             <div className="lp-feat wide lp-reveal">
@@ -631,8 +640,10 @@ export default function Landing() {
       {/* TESTIMONIALS */}
       <section className="lp-section">
         <div className="lp-container">
-          <div className="lp-sec-label">What people say</div>
-          <div className="lp-sec-title">Used by speakers <span className="wh">who mean business</span></div>
+          <div className="lp-reveal-head">
+            <div className="lp-sec-label">What people say</div>
+            <div className="lp-sec-title">Used by speakers <span className="wh">who mean business</span></div>
+          </div>
           <div className="lp-testi-grid lp-reveal">
             {[{ text: "I used to say 'um' constantly in presentations. After two weeks with Synterica, my filler word count dropped from 18 to 4 per minute. My manager noticed.", initials: "JK", name: "Jordan K.", role: "Product Manager · Series B Startup" }, { text: "The 7-dimension breakdown is insane. I always knew I spoke fast, but seeing my confidence score jump from 64 to 89 after 10 sessions? That's real data.", initials: "RL", name: "Rachel L.", role: "Business Student - Harvard School of Business " }, { text: "Pitched to investors last month. Used Synterica to practice 20+ times beforehand. Got the term sheet. Probably a coincidence, but probably not.", initials: "MT", name: "Marcus T.", role: "Founder · YC W25" }].map((t) =>
             <div className="lp-testi" key={t.initials}>
