@@ -193,7 +193,7 @@ export default function Landing() {
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.02, rootMargin: "0px 0px -5% 0px" }
     );
     reveals.forEach((el) => obs.observe(el));
 
@@ -412,6 +412,10 @@ export default function Landing() {
           .lp-score-body { grid-template-columns:1fr; }
           .lp-footer { flex-direction:column; gap:20px; text-align:center; }
           .lp-footer-links { flex-wrap:wrap; justify-content:center; }
+          .lp-hero-title.text-7xl { font-size:2.2rem !important; line-height:1.05; }
+        }
+        @media (max-width:480px) {
+          .lp-hero-title.text-7xl { font-size:1.9rem !important; }
         }
       `}</style>
 
