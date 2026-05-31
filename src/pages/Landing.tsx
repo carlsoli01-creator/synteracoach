@@ -224,7 +224,7 @@ export default function Landing() {
       return () => {obs.disconnect();co.disconnect();};
     }
     return () => obs.disconnect();
-  }, [tab]);
+  }, [tab, showAll]);
 
   const dimLabels = ["Overall Score", "Pace & Rhythm", "Confidence", "Clarity", "Filler Words", "Power Words", "Persuasion"];
 
