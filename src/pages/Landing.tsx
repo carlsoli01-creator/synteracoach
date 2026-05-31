@@ -417,7 +417,7 @@ export default function Landing() {
 
       {/* NAV */}
       <nav className="lp-nav">
-        <span className="lp-logo custom-cursor-on-hover font-serif text-xl" onClick={() => setTab("home")} style={{ cursor: "pointer" }}>Synterica</span>
+        <span className="lp-logo custom-cursor-on-hover text-xl font-serif" onClick={() => setTab("home")} style={{ cursor: "pointer" }}>Synterica</span>
         <ul className="lp-nav-links">
           <li><button className={tab === "home" ? "active" : ""} onClick={() => setTab("home")}>Home</button></li>
           <li><button className={tab === "how" ? "active" : ""} onClick={() => setTab("how")}>How it works</button></li>
@@ -454,7 +454,7 @@ export default function Landing() {
 
         <div className="lp-hero-content">
 
-          <h1 className="lp-hero-title text-6xl font-serif">
+          <h1 className="lp-hero-title font-serif text-7xl">
             {["Speak", "with", "conviction.", "Not", "guesswork."].map((_, i) =>
             <span key={i}>
                 <span className="lp-word" ref={(el) => {titleRefs.current[i] = el;}} />
@@ -665,7 +665,7 @@ export default function Landing() {
 
       {/* FOOTER */}
       <footer className="lp-footer">
-        <div className="lp-footer-logo lp-logo font-serif text-xl">Synterica</div>
+        <div className="lp-footer-logo lp-logo text-xl font-serif">Synterica</div>
         <div className="lp-footer-links">
           <a href="/privacy">Privacy</a>
           <a href="/terms">Terms</a>
