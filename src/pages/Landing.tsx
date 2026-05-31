@@ -149,7 +149,7 @@ export default function Landing() {
       }
       delay += 0.04;
     });
-  }, [tab]);
+  }, [tab, showAll]);
 
   // Waveform bars
   useEffect(() => {
@@ -162,7 +162,7 @@ export default function Landing() {
       b.style.cssText = `--dur:${(0.4 + Math.random() * 0.7).toFixed(2)}s;--delay:${(Math.random() * 0.65).toFixed(2)}s`;
       wf.appendChild(b);
     }
-  }, [tab]);
+  }, [tab, showAll]);
 
   // Dimension mini bars
   useEffect(() => {
@@ -177,7 +177,7 @@ export default function Landing() {
         el.appendChild(b);
       }
     }
-  }, [tab]);
+  }, [tab, showAll]);
 
   // Scroll reveal + counter
   useEffect(() => {
