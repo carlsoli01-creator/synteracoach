@@ -308,7 +308,7 @@ export default function Landing() {
         .lp-tag.warn { border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.3); }
         .lp-scores-area { display:flex; flex-direction:column; gap:16px; }
         .lp-overall-score { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
-        .lp-overall-num { font-family:'Syne',sans-serif; font-size:5.5rem; font-weight:800; line-height:1; color:var(--lp-white); }
+        .lp-overall-num { font-family:'Syne',sans-serif; font-size:4.4rem; font-weight:800; line-height:1; color:var(--lp-white); }
         .lp-overall-sub { display:flex; flex-direction:column; }
         .lp-overall-denom { font-family:'DM Mono',monospace; font-size:1rem; color:var(--lp-muted); }
         .lp-overall-label { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--lp-muted); letter-spacing:0.12em; text-transform:uppercase; margin-top:2px; }
