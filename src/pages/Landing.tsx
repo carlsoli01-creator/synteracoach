@@ -334,8 +334,9 @@ export default function Landing() {
         .lp-step:hover { background:var(--lp-surface2); }
         .lp-step + .lp-step { border-left:1px solid var(--lp-border); }
         .lp-step-icon { width:28px; height:28px; margin-bottom:32px; color:rgba(255,255,255,0.2); }
-        .lp-step h3 { font-family:'Syne',sans-serif; font-size:1.25rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:14px; color:var(--lp-white); }
-        .lp-step p { font-size:0.95rem; color:var(--lp-muted); line-height:1.8; }
+        .lp-step h3 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:14px; color:var(--lp-white); }
+        .lp-step p { font-size:0.85rem; color:var(--lp-muted); line-height:1.8; }
+
 
         /* DIMS */
         .lp-dims-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:14px; margin-top:100px; }
