@@ -537,11 +537,6 @@ export default function Landing() {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" /></svg>
               Start coaching — it's free
             </button>
-            <a href="#how" className="lp-scroll-down" aria-label="See how it works">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </a>
           </div>
 
           <div className="lp-hero-visual">
