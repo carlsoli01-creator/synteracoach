@@ -54,6 +54,7 @@ export default function Landing() {
   const [tab, setTab] = useState<LandingTab>("home");
   const [isTabletOrBelow, setIsTabletOrBelow] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     const mql = window.matchMedia("(max-width: 1023px)");
     const update = () => setIsTabletOrBelow(mql.matches);
@@ -61,7 +62,9 @@ export default function Landing() {
     mql.addEventListener("change", update);
     return () => mql.removeEventListener("change", update);
   }, []);
-  const showAll = isTabletOrBelow;
+  // On desktop show only selected tab; on mobile also show one section at a time (via hamburger menu)
+  const showAll = false;
+
 
   const svgRef = useRef<SVGSVGElement>(null);
   const titleRefs = useRef<(HTMLSpanElement | null)[]>([]);
