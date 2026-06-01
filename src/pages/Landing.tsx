@@ -458,7 +458,14 @@ export default function Landing() {
 
       {/* NAV */}
       <nav className="lp-nav">
-        <span className="lp-logo custom-cursor-on-hover text-xl font-serif" onClick={() => setTab("home")} style={{ cursor: "pointer" }}>Synterica</span>
+        <button
+          className={`lp-hamburger ${menuOpen ? "open" : ""}`}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          <span /><span /><span />
+        </button>
+        <span className="lp-logo custom-cursor-on-hover text-xl font-serif" onClick={() => { setTab("home"); setMenuOpen(false); }} style={{ cursor: "pointer" }}>Synterica</span>
         <ul className="lp-nav-links">
           <li><button className={tab === "home" ? "active" : ""} onClick={() => setTab("home")}>Home</button></li>
           <li><button className={tab === "how" ? "active" : ""} onClick={() => setTab("how")}>How it works</button></li>
@@ -469,8 +476,27 @@ export default function Landing() {
         <div className="lp-nav-right">
           <button className="lp-btn-nav" onClick={() => setShowPaywall(true)}>Start free →</button>
         </div>
-
       </nav>
+
+      {/* Mobile fullscreen menu */}
+      <div className={`lp-mobile-menu ${menuOpen ? "open" : ""}`}>
+        {([
+          ["home", "Home"],
+          ["how", "How it works"],
+          ["dimensions", "Dimensions"],
+          ["features", "Features"],
+          ["reviews", "Reviews"],
+        ] as [LandingTab, string][]).map(([key, label]) => (
+          <button
+            key={key}
+            className={tab === key ? "active" : ""}
+            onClick={() => { setTab(key); setMenuOpen(false); }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
 
       {/* HERO */}
       {(showAll || tab === "home") && <div className="lp-hero">
