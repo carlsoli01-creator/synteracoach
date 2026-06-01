@@ -305,7 +305,7 @@ export default function Landing() {
         .lp-tag.warn { border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.3); }
         .lp-scores-area { display:flex; flex-direction:column; gap:16px; }
         .lp-overall-score { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
-        .lp-overall-num { font-family:'Syne',sans-serif; font-size:4.2rem; font-weight:800; line-height:1; color:var(--lp-white); }
+        .lp-overall-num { font-family:'Syne',sans-serif; font-size:5.5rem; font-weight:800; line-height:1; color:var(--lp-white); }
         .lp-overall-sub { display:flex; flex-direction:column; }
         .lp-overall-denom { font-family:'DM Mono',monospace; font-size:1rem; color:var(--lp-muted); }
         .lp-overall-label { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--lp-muted); letter-spacing:0.12em; text-transform:uppercase; margin-top:2px; }
@@ -349,8 +349,8 @@ export default function Landing() {
         .lp-feat:hover { border-color:var(--lp-border2); }
         .lp-feat.wide { grid-column:span 2; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
         .lp-feat-label { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.18); margin-bottom:18px; }
-        .lp-feat h3 { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:700; letter-spacing:-0.025em; line-height:1.25; margin-bottom:14px; color:var(--lp-white); }
-        .lp-feat p { font-size:0.9rem; color:var(--lp-muted); line-height:1.8; }
+        .lp-feat h3 { font-family:'Syne',sans-serif; font-size:1.7rem; font-weight:700; letter-spacing:-0.025em; line-height:1.2; margin-bottom:14px; color:var(--lp-white); }
+        .lp-feat p { font-size:0.95rem; color:var(--lp-muted); line-height:1.8; }
         .lp-feat-visual { background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:10px; padding:24px; }
         .lp-chat-msg { display:flex; gap:10px; margin-bottom:16px; }
         .lp-chat-msg:last-child { margin-bottom:0; }
