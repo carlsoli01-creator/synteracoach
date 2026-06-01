@@ -269,11 +269,11 @@ export default function Landing() {
         .lp-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:2px; margin-bottom:40px; animation:lpFadeUp 0.7s ease both; }
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(2.2rem,7vw,8rem); font-weight:800; line-height:1.02; letter-spacing:-0.03em; max-width:1100px; }
+        .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(2.2rem,6.5vw,6.5rem); font-weight:800; line-height:1.02; letter-spacing:-0.03em; max-width:980px; }
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
 .lp-letter { display:inline-block; color:var(--lp-white); animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
-        .lp-hero-sub { margin-top:32px; color:#ffffff; font-size:1.3rem; max-width:580px; line-height:1.8; animation:lpFadeUp 0.75s 0.6s ease both; }
+        .lp-hero-sub { margin-top:32px; color:#ffffff; font-size:1.15rem; max-width:520px; line-height:1.8; animation:lpFadeUp 0.75s 0.6s ease both; }
         .lp-typewriter-cursor { display:inline-block; width:2px; height:1em; background:rgba(255,255,255,0.6); margin-left:2px; animation:lpBlink 1s step-end infinite; vertical-align:text-bottom; }
         @keyframes lpBlink { 0%,100%{opacity:1} 50%{opacity:0} }
         .lp-hero-actions { margin-top:48px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
@@ -305,7 +305,7 @@ export default function Landing() {
         .lp-tag.warn { border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.3); }
         .lp-scores-area { display:flex; flex-direction:column; gap:16px; }
         .lp-overall-score { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
-        .lp-overall-num { font-family:'Syne',sans-serif; font-size:6.5rem; font-weight:800; line-height:1; color:var(--lp-white); }
+        .lp-overall-num { font-family:'Syne',sans-serif; font-size:5.5rem; font-weight:800; line-height:1; color:var(--lp-white); }
         .lp-overall-sub { display:flex; flex-direction:column; }
         .lp-overall-denom { font-family:'DM Mono',monospace; font-size:1rem; color:var(--lp-muted); }
         .lp-overall-label { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--lp-muted); letter-spacing:0.12em; text-transform:uppercase; margin-top:2px; }
@@ -322,7 +322,7 @@ export default function Landing() {
         .lp-section { border-top:1px solid var(--lp-border); }
         .lp-container { max-width:1100px; margin:0 auto; padding:180px 56px; }
         .lp-sec-label { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.22); margin-bottom:20px; }
-        .lp-sec-title { font-family:'Syne',sans-serif; font-size:clamp(2rem,5.5vw,5rem); font-weight:700; letter-spacing:-0.03em; line-height:1.1; max-width:780px; color:var(--lp-muted); }
+        .lp-sec-title { font-family:'Syne',sans-serif; font-size:clamp(2rem,4.5vw,4.2rem); font-weight:700; letter-spacing:-0.03em; line-height:1.1; max-width:720px; color:var(--lp-muted); }
         .lp-sec-title .wh { color:var(--lp-white); }
 
         /* STEPS */
@@ -331,7 +331,7 @@ export default function Landing() {
         .lp-step:hover { background:var(--lp-surface2); }
         .lp-step + .lp-step { border-left:1px solid var(--lp-border); }
         .lp-step-icon { width:28px; height:28px; margin-bottom:32px; color:rgba(255,255,255,0.2); }
-        .lp-step h3 { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:14px; color:var(--lp-white); }
+        .lp-step h3 { font-family:'Syne',sans-serif; font-size:1.25rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:14px; color:var(--lp-white); }
         .lp-step p { font-size:0.95rem; color:var(--lp-muted); line-height:1.8; }
 
         /* DIMS */
@@ -349,7 +349,7 @@ export default function Landing() {
         .lp-feat:hover { border-color:var(--lp-border2); }
         .lp-feat.wide { grid-column:span 2; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
         .lp-feat-label { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.18); margin-bottom:18px; }
-        .lp-feat h3 { font-family:'Syne',sans-serif; font-size:2rem; font-weight:700; letter-spacing:-0.025em; line-height:1.2; margin-bottom:14px; color:var(--lp-white); }
+        .lp-feat h3 { font-family:'Syne',sans-serif; font-size:1.7rem; font-weight:700; letter-spacing:-0.025em; line-height:1.2; margin-bottom:14px; color:var(--lp-white); }
         .lp-feat p { font-size:0.95rem; color:var(--lp-muted); line-height:1.8; }
         .lp-feat-visual { background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:10px; padding:24px; }
         .lp-chat-msg { display:flex; gap:10px; margin-bottom:16px; }
@@ -646,7 +646,7 @@ export default function Landing() {
         <div className="lp-container">
           <div className="lp-reveal-head">
             <div className="lp-sec-label">What people say</div>
-            <div className="lp-sec-title">Used by speakers <span className="wh font-serif">who mean business</span></div>
+            <div className="lp-sec-title">Used by speakers <span className="wh">who mean business</span></div>
           </div>
           <div className="lp-testi-grid lp-reveal">
             {[{ text: "I used to say 'um' constantly in presentations. After two weeks with Synterica, my filler word count dropped from 18 to 4 per minute. My manager noticed.", initials: "JK", name: "Jordan K.", role: "Product Manager · Series B Startup" }, { text: "The 7-dimension breakdown is insane. I always knew I spoke fast, but seeing my confidence score jump from 64 to 89 after 10 sessions? That's real data.", initials: "RL", name: "Rachel L.", role: "Business Student - Harvard School of Business " }, { text: "Pitched to investors last month. Used Synterica to practice 20+ times beforehand. Got the term sheet. Probably a coincidence, but probably not.", initials: "MT", name: "Marcus T.", role: "Founder · YC W25" }].map((t) =>
