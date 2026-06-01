@@ -54,6 +54,7 @@ export default function Landing() {
   const [tab, setTab] = useState<LandingTab>("home");
   const [isTabletOrBelow, setIsTabletOrBelow] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     const mql = window.matchMedia("(max-width: 1023px)");
     const update = () => setIsTabletOrBelow(mql.matches);
@@ -61,7 +62,9 @@ export default function Landing() {
     mql.addEventListener("change", update);
     return () => mql.removeEventListener("change", update);
   }, []);
-  const showAll = isTabletOrBelow;
+  // On desktop show only selected tab; on mobile also show one section at a time (via hamburger menu)
+  const showAll = false;
+
 
   const svgRef = useRef<SVGSVGElement>(null);
   const titleRefs = useRef<(HTMLSpanElement | null)[]>([]);
@@ -269,11 +272,11 @@ export default function Landing() {
         .lp-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:2px; margin-bottom:40px; animation:lpFadeUp 0.7s ease both; }
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(2.2rem,6.5vw,6.5rem); font-weight:800; line-height:1.02; letter-spacing:-0.03em; max-width:980px; }
+        .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(2rem,5.4vw,5.4rem); font-weight:800; line-height:1.02; letter-spacing:-0.03em; max-width:900px; }
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
 .lp-letter { display:inline-block; color:var(--lp-white); animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
-        .lp-hero-sub { margin-top:32px; color:#ffffff; font-size:1.15rem; max-width:520px; line-height:1.8; animation:lpFadeUp 0.75s 0.6s ease both; }
+        .lp-hero-sub { margin-top:32px; color:#ffffff; font-size:1rem; max-width:480px; line-height:1.8; animation:lpFadeUp 0.75s 0.6s ease both; }
         .lp-typewriter-cursor { display:inline-block; width:2px; height:1em; background:rgba(255,255,255,0.6); margin-left:2px; animation:lpBlink 1s step-end infinite; vertical-align:text-bottom; }
         @keyframes lpBlink { 0%,100%{opacity:1} 50%{opacity:0} }
         .lp-hero-actions { margin-top:48px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
@@ -305,7 +308,7 @@ export default function Landing() {
         .lp-tag.warn { border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.3); }
         .lp-scores-area { display:flex; flex-direction:column; gap:16px; }
         .lp-overall-score { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
-        .lp-overall-num { font-family:'Syne',sans-serif; font-size:5.5rem; font-weight:800; line-height:1; color:var(--lp-white); }
+        .lp-overall-num { font-family:'Syne',sans-serif; font-size:4.4rem; font-weight:800; line-height:1; color:var(--lp-white); }
         .lp-overall-sub { display:flex; flex-direction:column; }
         .lp-overall-denom { font-family:'DM Mono',monospace; font-size:1rem; color:var(--lp-muted); }
         .lp-overall-label { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--lp-muted); letter-spacing:0.12em; text-transform:uppercase; margin-top:2px; }
@@ -322,7 +325,7 @@ export default function Landing() {
         .lp-section { border-top:1px solid var(--lp-border); }
         .lp-container { max-width:1100px; margin:0 auto; padding:180px 56px; }
         .lp-sec-label { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.22); margin-bottom:20px; }
-        .lp-sec-title { font-family:'Syne',sans-serif; font-size:clamp(2rem,4.5vw,4.2rem); font-weight:700; letter-spacing:-0.03em; line-height:1.1; max-width:720px; color:var(--lp-muted); }
+        .lp-sec-title { font-family:'Syne',sans-serif; font-size:clamp(1.8rem,3.8vw,3.4rem); font-weight:700; letter-spacing:-0.03em; line-height:1.1; max-width:680px; color:var(--lp-muted); }
         .lp-sec-title .wh { color:var(--lp-white); }
 
         /* STEPS */
@@ -331,8 +334,9 @@ export default function Landing() {
         .lp-step:hover { background:var(--lp-surface2); }
         .lp-step + .lp-step { border-left:1px solid var(--lp-border); }
         .lp-step-icon { width:28px; height:28px; margin-bottom:32px; color:rgba(255,255,255,0.2); }
-        .lp-step h3 { font-family:'Syne',sans-serif; font-size:1.25rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:14px; color:var(--lp-white); }
-        .lp-step p { font-size:0.95rem; color:var(--lp-muted); line-height:1.8; }
+        .lp-step h3 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:14px; color:var(--lp-white); }
+        .lp-step p { font-size:0.85rem; color:var(--lp-muted); line-height:1.8; }
+
 
         /* DIMS */
         .lp-dims-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:14px; margin-top:100px; }
@@ -349,8 +353,9 @@ export default function Landing() {
         .lp-feat:hover { border-color:var(--lp-border2); }
         .lp-feat.wide { grid-column:span 2; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
         .lp-feat-label { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.18); margin-bottom:18px; }
-        .lp-feat h3 { font-family:'Syne',sans-serif; font-size:1.7rem; font-weight:700; letter-spacing:-0.025em; line-height:1.2; margin-bottom:14px; color:var(--lp-white); }
-        .lp-feat p { font-size:0.95rem; color:var(--lp-muted); line-height:1.8; }
+        .lp-feat h3 { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:700; letter-spacing:-0.025em; line-height:1.2; margin-bottom:14px; color:var(--lp-white); }
+        .lp-feat p { font-size:0.85rem; color:var(--lp-muted); line-height:1.8; }
+
         .lp-feat-visual { background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:10px; padding:24px; }
         .lp-chat-msg { display:flex; gap:10px; margin-bottom:16px; }
         .lp-chat-msg:last-child { margin-bottom:0; }
@@ -399,9 +404,29 @@ export default function Landing() {
         .lp-scroll-down:hover { color:rgba(255,255,255,0.7); transform:translateY(4px); }
         @keyframes lpChevBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
 
+        /* Hamburger */
+        .lp-hamburger { display:none; position:relative; width:34px; height:34px; background:none; border:none; cursor:pointer; padding:0; z-index:120; }
+        .lp-hamburger span { position:absolute; left:7px; right:7px; height:1.5px; background:#fff; border-radius:2px; transition:transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease, top 0.35s cubic-bezier(0.4,0,0.2,1); }
+        .lp-hamburger span:nth-child(1) { top:11px; }
+        .lp-hamburger span:nth-child(2) { top:16.25px; }
+        .lp-hamburger span:nth-child(3) { top:21.5px; }
+        .lp-hamburger.open span:nth-child(1) { top:16.25px; transform:rotate(45deg); }
+        .lp-hamburger.open span:nth-child(2) { opacity:0; }
+        .lp-hamburger.open span:nth-child(3) { top:16.25px; transform:rotate(-45deg); }
+
+        /* Mobile menu overlay */
+        .lp-mobile-menu { position:fixed; inset:0; z-index:110; background:rgba(5,5,7,0.97); backdrop-filter:blur(20px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px; opacity:0; pointer-events:none; transition:opacity 0.35s ease; }
+        .lp-mobile-menu.open { opacity:1; pointer-events:auto; }
+        .lp-mobile-menu button { background:none; border:none; color:#fff; font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:600; letter-spacing:-0.02em; cursor:pointer; opacity:0.55; transition:opacity 0.2s; padding:6px 12px; }
+        .lp-mobile-menu button:hover, .lp-mobile-menu button.active { opacity:1; }
+
         @media (max-width:1023px) {
-          .lp-nav { padding:0 24px; }
+          .lp-nav { padding:0 18px; }
           .lp-nav-links { display:none; }
+          .lp-hamburger { display:block; }
+          .lp-nav { justify-content:flex-start; gap:16px; }
+          .lp-nav-right { display:none; }
+          .lp-logo { margin-left:4px; }
           .lp-container { padding:80px 24px; }
           .lp-steps { grid-template-columns:1fr; }
           .lp-step + .lp-step { border-left:none; border-top:1px solid var(--lp-border); }
@@ -412,16 +437,35 @@ export default function Landing() {
           .lp-score-body { grid-template-columns:1fr; }
           .lp-footer { flex-direction:column; gap:20px; text-align:center; }
           .lp-footer-links { flex-wrap:wrap; justify-content:center; }
-          .lp-hero-title.text-7xl { font-size:2.2rem !important; line-height:1.05; }
+          /* Mobile font reduction ~33% */
+          .lp-hero-title.text-7xl { font-size:1.5rem !important; line-height:1.1; }
+          .lp-hero-sub { font-size:0.7rem; }
+          .lp-sec-title { font-size:1.4rem !important; }
+          .lp-sec-label { font-size:0.55rem; }
+          .lp-step h3, .lp-feat h3 { font-size:0.95rem; }
+          .lp-step p, .lp-feat p { font-size:0.72rem; }
+          .lp-overall-num { font-size:3rem; }
+          .lp-testi-text { font-size:0.75rem; }
+          .lp-btn-primary { font-size:0.65rem; padding:11px 20px; }
+          .lp-hero-eyebrow { font-size:0.55rem; }
+          .lp-dim-label { font-size:0.6rem; }
         }
         @media (max-width:480px) {
-          .lp-hero-title.text-7xl { font-size:1.9rem !important; }
+          .lp-hero-title.text-7xl { font-size:1.3rem !important; }
         }
+
       `}</style>
 
       {/* NAV */}
       <nav className="lp-nav">
-        <span className="lp-logo custom-cursor-on-hover text-xl font-serif" onClick={() => setTab("home")} style={{ cursor: "pointer" }}>Synterica</span>
+        <button
+          className={`lp-hamburger ${menuOpen ? "open" : ""}`}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          <span /><span /><span />
+        </button>
+        <span className="lp-logo custom-cursor-on-hover text-xl font-serif" onClick={() => { setTab("home"); setMenuOpen(false); }} style={{ cursor: "pointer" }}>Synterica</span>
         <ul className="lp-nav-links">
           <li><button className={tab === "home" ? "active" : ""} onClick={() => setTab("home")}>Home</button></li>
           <li><button className={tab === "how" ? "active" : ""} onClick={() => setTab("how")}>How it works</button></li>
@@ -432,8 +476,27 @@ export default function Landing() {
         <div className="lp-nav-right">
           <button className="lp-btn-nav" onClick={() => setShowPaywall(true)}>Start free →</button>
         </div>
-
       </nav>
+
+      {/* Mobile fullscreen menu */}
+      <div className={`lp-mobile-menu ${menuOpen ? "open" : ""}`}>
+        {([
+          ["home", "Home"],
+          ["how", "How it works"],
+          ["dimensions", "Dimensions"],
+          ["features", "Features"],
+          ["reviews", "Reviews"],
+        ] as [LandingTab, string][]).map(([key, label]) => (
+          <button
+            key={key}
+            className={tab === key ? "active" : ""}
+            onClick={() => { setTab(key); setMenuOpen(false); }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
 
       {/* HERO */}
       {(showAll || tab === "home") && <div className="lp-hero">
@@ -474,11 +537,6 @@ export default function Landing() {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" /></svg>
               Start coaching — it's free
             </button>
-            <a href="#how" className="lp-scroll-down" aria-label="See how it works">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </a>
           </div>
 
           <div className="lp-hero-visual">
