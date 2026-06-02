@@ -439,7 +439,7 @@ export default function Landing() {
           .lp-footer { flex-direction:column; gap:20px; text-align:center; }
           .lp-footer-links { flex-wrap:wrap; justify-content:center; }
           /* Mobile font reduction ~33% */
-          .lp-hero-title.text-7xl, .lp-hero-title.text-6xl, .lp-hero-title { font-size:1.9rem !important; line-height:1.05; max-width:100% !important; word-break:normal; overflow-wrap:normal; }
+          .lp-hero-title.text-7xl, .lp-hero-title.text-6xl, .lp-hero-title { font-size:1.9rem !important; line-height:1.05; max-width:16ch !important; word-break:normal; overflow-wrap:normal; }
           .lp-hero-sub { font-size:0.7rem; }
           .lp-sec-title { font-size:1.4rem !important; }
           .lp-sec-label { font-size:0.55rem; }
