@@ -411,13 +411,15 @@ export default function Landing() {
         .lp-hamburger span:nth-child(1) { top:11px; }
         .lp-hamburger span:nth-child(2) { top:16.25px; }
         .lp-hamburger span:nth-child(3) { top:21.5px; }
-        .lp-hamburger.open span:nth-child(1) { top:16.25px; transform:rotate(45deg); }
-        .lp-hamburger.open span:nth-child(2) { opacity:0; }
-        .lp-hamburger.open span:nth-child(3) { top:16.25px; transform:rotate(-45deg); }
+        .lp-hamburger.open { display:none; }
 
         /* Mobile menu overlay */
         .lp-mobile-menu { position:fixed; inset:0; z-index:110; background:rgba(5,5,7,0.97); backdrop-filter:blur(20px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px; opacity:0; pointer-events:none; transition:opacity 0.35s ease; }
         .lp-mobile-menu.open { opacity:1; pointer-events:auto; }
+        .lp-menu-close { position:absolute; top:17px; left:18px; width:34px; height:34px; background:none; border:none; cursor:pointer; padding:0; z-index:121; }
+        .lp-menu-close span { position:absolute; left:7px; right:7px; height:1.5px; background:#fff; border-radius:2px; top:16.25px; }
+        .lp-menu-close span:nth-child(1) { transform:rotate(45deg); }
+        .lp-menu-close span:nth-child(2) { transform:rotate(-45deg); }
         .lp-mobile-menu button { background:none; border:none; color:#fff; font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:600; letter-spacing:-0.02em; cursor:pointer; opacity:0.55; transition:opacity 0.2s; padding:6px 12px; }
         .lp-mobile-menu button:hover, .lp-mobile-menu button.active { opacity:1; }
 
