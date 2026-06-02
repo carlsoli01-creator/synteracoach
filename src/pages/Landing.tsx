@@ -452,7 +452,7 @@ export default function Landing() {
           .lp-dim-label { font-size:0.6rem; }
         }
         @media (max-width:480px) {
-          .lp-hero-title.text-7xl { font-size:1.3rem !important; }
+          .lp-hero-title.text-7xl, .lp-hero-title.text-6xl, .lp-hero-title { font-size:1.3rem !important; max-width:6.5ch !important; }
         }
 
       `}</style>
