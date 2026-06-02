@@ -451,8 +451,17 @@ export default function Landing() {
           .lp-dim-label { font-size:0.6rem; }
         }
         @media (max-width:480px) {
-          .lp-hero-title.text-7xl { font-size:1.3rem !important; }
+          .lp-hero-title.text-7xl, .lp-hero-title.text-6xl { font-size:1.3rem !important; }
         }
+        /* Force ~3 lines on mobile (≤640px) — narrow max-width wraps "Speak with conviction." */
+        @media (max-width:640px) {
+          .lp-hero-title { max-width:230px !important; }
+        }
+        /* Force ~3 lines on desktop (≥1024px) — leave iPad/tablet untouched */
+        @media (min-width:1024px) {
+          .lp-hero-title { max-width:560px !important; }
+        }
+
 
       `}</style>
 
