@@ -273,6 +273,7 @@ export default function Landing() {
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
         .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(2rem,5.4vw,5.4rem); font-weight:800; line-height:1.02; letter-spacing:-0.03em; max-width:900px; }
+        @media (min-width:1024px) { .lp-hero-title { max-width:6.5ch !important; } }
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
 .lp-letter { display:inline-block; color:var(--lp-white); animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
