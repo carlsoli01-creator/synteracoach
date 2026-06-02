@@ -272,8 +272,8 @@ export default function Landing() {
         .lp-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:2px; margin-bottom:40px; animation:lpFadeUp 0.7s ease both; }
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(2rem,5.4vw,5.4rem); font-weight:800; line-height:1.02; letter-spacing:-0.03em; max-width:900px; }
-        @media (min-width:1024px) { .lp-hero-title { max-width:6.5ch !important; } }
+        .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(2rem,5.4vw,5.4rem); font-weight:800; line-height:1.02; letter-spacing:-0.03em; max-width:900px; word-break:normal; overflow-wrap:normal; hyphens:none; }
+        @media (min-width:1024px) { .lp-hero-title { max-width:18ch !important; } }
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
 .lp-letter { display:inline-block; color:var(--lp-white); animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
@@ -439,7 +439,7 @@ export default function Landing() {
           .lp-footer { flex-direction:column; gap:20px; text-align:center; }
           .lp-footer-links { flex-wrap:wrap; justify-content:center; }
           /* Mobile font reduction ~33% */
-          .lp-hero-title.text-7xl, .lp-hero-title.text-6xl, .lp-hero-title { font-size:1.5rem !important; line-height:1.1; max-width:6.5ch !important; }
+          .lp-hero-title.text-7xl, .lp-hero-title.text-6xl, .lp-hero-title { font-size:1.9rem !important; line-height:1.05; max-width:100% !important; word-break:normal; overflow-wrap:normal; }
           .lp-hero-sub { font-size:0.7rem; }
           .lp-sec-title { font-size:1.4rem !important; }
           .lp-sec-label { font-size:0.55rem; }
@@ -452,7 +452,7 @@ export default function Landing() {
           .lp-dim-label { font-size:0.6rem; }
         }
         @media (max-width:480px) {
-          .lp-hero-title.text-7xl, .lp-hero-title.text-6xl, .lp-hero-title { font-size:1.3rem !important; max-width:6.5ch !important; }
+          .lp-hero-title.text-7xl, .lp-hero-title.text-6xl, .lp-hero-title { font-size:1.6rem !important; max-width:100% !important; word-break:normal; overflow-wrap:normal; }
         }
 
       `}</style>
