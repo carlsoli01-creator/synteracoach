@@ -521,7 +521,7 @@ export default function Landing() {
 
         <div className="lp-hero-content">
 
-          <h1 className="lp-hero-title font-serif text-7xl">
+          <h1 className="lp-hero-title font-serif text-6xl">
             {["Speak", "with", "conviction.", "Not", "guesswork."].map((_, i) =>
             <span key={i}>
                 <span className="lp-word" ref={(el) => {titleRefs.current[i] = el;}} />
