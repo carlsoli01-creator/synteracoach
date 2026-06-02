@@ -273,6 +273,7 @@ export default function Landing() {
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
         .lp-hero-title { font-family:'Syne',sans-serif; font-size:clamp(2rem,5.4vw,5.4rem); font-weight:800; line-height:1.02; letter-spacing:-0.03em; max-width:900px; }
+        @media (min-width:1024px) { .lp-hero-title { max-width:6.5ch !important; } }
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
 .lp-letter { display:inline-block; color:var(--lp-white); animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
@@ -438,7 +439,7 @@ export default function Landing() {
           .lp-footer { flex-direction:column; gap:20px; text-align:center; }
           .lp-footer-links { flex-wrap:wrap; justify-content:center; }
           /* Mobile font reduction ~33% */
-          .lp-hero-title.text-7xl { font-size:1.5rem !important; line-height:1.1; }
+          .lp-hero-title.text-7xl, .lp-hero-title.text-6xl, .lp-hero-title { font-size:1.5rem !important; line-height:1.1; max-width:6.5ch !important; }
           .lp-hero-sub { font-size:0.7rem; }
           .lp-sec-title { font-size:1.4rem !important; }
           .lp-sec-label { font-size:0.55rem; }
@@ -451,17 +452,8 @@ export default function Landing() {
           .lp-dim-label { font-size:0.6rem; }
         }
         @media (max-width:480px) {
-          .lp-hero-title.text-7xl, .lp-hero-title.text-6xl { font-size:1.3rem !important; }
+          .lp-hero-title.text-7xl, .lp-hero-title.text-6xl, .lp-hero-title { font-size:1.3rem !important; max-width:6.5ch !important; }
         }
-        /* Force ~3 lines on mobile (≤640px) — narrow max-width wraps "Speak with conviction." */
-        @media (max-width:640px) {
-          .lp-hero-title { max-width:230px !important; }
-        }
-        /* Force ~3 lines on desktop (≥1024px) — leave iPad/tablet untouched */
-        @media (min-width:1024px) {
-          .lp-hero-title { max-width:560px !important; }
-        }
-
 
       `}</style>
 
