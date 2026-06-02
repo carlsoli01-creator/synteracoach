@@ -483,6 +483,13 @@ export default function Landing() {
 
       {/* Mobile fullscreen menu */}
       <div className={`lp-mobile-menu ${menuOpen ? "open" : ""}`}>
+        <button
+          className="lp-menu-close"
+          aria-label="Close menu and go home"
+          onClick={() => { setTab("home"); setMenuOpen(false); }}
+        >
+          <span /><span />
+        </button>
         {([
           ["home", "Home"],
           ["how", "How it works"],
