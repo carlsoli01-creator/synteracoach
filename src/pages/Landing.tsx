@@ -444,7 +444,7 @@ export default function Landing() {
           /* Mobile font reduction ~33% */
           .lp-hero-title.text-7xl, .lp-hero-title.text-6xl, .lp-hero-title { font-size:1.9rem !important; line-height:1.05; max-width:16ch !important; word-break:normal; overflow-wrap:normal; }
           .lp-hero-sub { font-size:0.7rem; }
-          .lp-sec-title { font-size:1.4rem !important; }
+          .lp-sec-title { font-size:1.15rem !important; }
           .lp-sec-label { font-size:0.55rem; }
           .lp-step h3, .lp-feat h3 { font-size:0.95rem; }
           .lp-step p, .lp-feat p { font-size:0.72rem; }
