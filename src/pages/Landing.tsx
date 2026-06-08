@@ -251,8 +251,9 @@ export default function Landing() {
 
         /* NAV */
         .lp-nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 56px; height:68px; background:rgba(5,5,7,0.8); backdrop-filter:blur(28px); border-bottom:1px solid var(--lp-border); }
-        .lp-logo { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; letter-spacing:-0.02em; color:var(--lp-white); text-decoration:none; cursor:pointer; text-transform:none; }
-        .lp-logo span { color:var(--lp-white); }
+        .lp-logo { font-family:'Instrument Serif',serif; font-style:italic; font-size:1.55rem; font-weight:400; letter-spacing:-0.01em; color:var(--lp-white); text-decoration:none; cursor:pointer; text-transform:none; display:inline-flex; align-items:center; gap:8px; line-height:1; transition:opacity 0.25s ease; }
+        .lp-logo:hover { opacity:0.78; }
+        .lp-logo::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--lp-accent); box-shadow:0 0 12px rgba(232,255,71,0.55); display:inline-block; animation:lpPulse 2.4s ease-in-out infinite; }
         .lp-nav-links { display:flex; gap:36px; list-style:none; padding:0; margin:0; }
         .lp-nav-links button { color:#ffffff; background:none; border:none; padding:0; font-size:0.85rem; cursor:pointer; font-family:inherit; transition:opacity 0.2s; opacity:0.7; }
         .lp-nav-links button:hover { opacity:1; }
@@ -277,8 +278,8 @@ export default function Landing() {
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
 .lp-letter { display:inline-block; color:var(--lp-white); animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
-        .lp-hero-sub { margin-top:32px; color:#ffffff; font-size:1rem; max-width:480px; line-height:1.8; animation:lpFadeUp 0.75s 0.6s ease both; }
-        .lp-typewriter-cursor { display:inline-block; width:2px; height:1em; background:rgba(255,255,255,0.6); margin-left:2px; animation:lpBlink 1s step-end infinite; vertical-align:text-bottom; }
+        .lp-hero-sub { margin-top:36px; color:rgba(255,255,255,0.82); font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; font-size:clamp(1.35rem,2.2vw,1.85rem); max-width:560px; line-height:1.35; letter-spacing:-0.005em; animation:lpFadeUp 0.75s 0.6s ease both; display:inline-flex; align-items:baseline; justify-content:center; gap:2px; }
+        .lp-typewriter-cursor { display:inline-block; width:1px; height:0.95em; background:var(--lp-accent); margin-left:3px; animation:lpBlink 1s step-end infinite; vertical-align:baseline; box-shadow:0 0 8px rgba(232,255,71,0.6); }
         @keyframes lpBlink { 0%,100%{opacity:1} 50%{opacity:0} }
         .lp-hero-actions { margin-top:48px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
         .lp-btn-primary { display:inline-flex; align-items:center; gap:10px; background:var(--lp-white); color:#050507; font-family:'DM Mono',monospace; font-size:0.78rem; font-weight:500; letter-spacing:0.06em; padding:14px 28px; border-radius:3px; text-decoration:none; border:none; cursor:pointer; transition:opacity 0.2s,transform 0.2s; }
@@ -468,7 +469,7 @@ export default function Landing() {
         >
           <span /><span /><span />
         </button>
-        <span className="lp-logo custom-cursor-on-hover text-xl font-serif" onClick={() => { setTab("home"); setMenuOpen(false); }} style={{ cursor: "pointer" }}>Synterica</span>
+        <span className="lp-logo custom-cursor-on-hover" onClick={() => { setTab("home"); setMenuOpen(false); }}>Synterica</span>
         <ul className="lp-nav-links">
           <li><button className={tab === "home" ? "active" : ""} onClick={() => setTab("home")}>Home</button></li>
           <li><button className={tab === "how" ? "active" : ""} onClick={() => setTab("how")}>How it works</button></li>
