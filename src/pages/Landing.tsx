@@ -253,7 +253,7 @@ export default function Landing() {
         .lp-nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 56px; height:68px; background:rgba(5,5,7,0.8); backdrop-filter:blur(28px); border-bottom:1px solid var(--lp-border); }
         .lp-logo { font-family:'Instrument Serif',serif; font-style:italic; font-size:1.55rem; font-weight:400; letter-spacing:-0.01em; color:var(--lp-white); text-decoration:none; cursor:pointer; text-transform:none; display:inline-flex; align-items:center; gap:8px; line-height:1; transition:opacity 0.25s ease; }
         .lp-logo:hover { opacity:0.78; }
-        .lp-logo::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--lp-accent); box-shadow:0 0 12px rgba(232,255,71,0.55); display:inline-block; animation:lpPulse 2.4s ease-in-out infinite; }
+        .lp-logo::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--lp-white); opacity:0.9; display:inline-block; }
         .lp-nav-links { display:flex; gap:36px; list-style:none; padding:0; margin:0; }
         .lp-nav-links button { color:#ffffff; background:none; border:none; padding:0; font-size:0.85rem; cursor:pointer; font-family:inherit; transition:opacity 0.2s; opacity:0.7; }
         .lp-nav-links button:hover { opacity:1; }
