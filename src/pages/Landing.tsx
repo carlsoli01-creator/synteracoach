@@ -327,7 +327,7 @@ export default function Landing() {
         .lp-section { border-top:1px solid var(--lp-border); }
         .lp-container { max-width:1100px; margin:0 auto; padding:180px 56px; }
         .lp-sec-label { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.22); margin-bottom:20px; }
-        .lp-sec-title { font-family:'Syne',sans-serif; font-size:clamp(1.8rem,3.8vw,3.4rem); font-weight:700; letter-spacing:-0.03em; line-height:1.1; max-width:680px; color:var(--lp-muted); }
+        .lp-sec-title { font-family:'Syne',sans-serif; font-size:clamp(1.5rem,3vw,2.8rem); font-weight:700; letter-spacing:-0.03em; line-height:1.1; max-width:680px; color:var(--lp-muted); }
         .lp-sec-title .wh { color:var(--lp-white); }
 
         /* STEPS */
