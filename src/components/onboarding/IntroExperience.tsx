@@ -428,13 +428,15 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
 
             </div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 32 }}>
-              <div style={{ width: 6, height: 6, background: "#fff", animation: "pulse 1s infinite" }} />
-              <span style={{ fontSize: 9, letterSpacing: "0.3em", color: "#666", textTransform: "uppercase", fontFamily: "'IBM Plex Mono', monospace" }}>RECORDING</span>
+              <div style={{ width: 6, height: 6, background: "#fff", animation: "pulse 1s infinite", borderRadius: "50%" }} />
+              <span style={{ fontSize: 10, letterSpacing: "0.3em", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>Recording</span>
             </div>
             <button onClick={stopEarly} style={{
-              padding: "10px 28px", fontSize: 10, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase",
-              background: "transparent", color: "#555", border: "1px solid #2a2a2a", borderRadius: 0, cursor: "pointer",
-              transition: "all 0.25s", fontFamily: "'IBM Plex Mono', monospace",
+              padding: "12px 28px", background: "transparent",
+              color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.2)",
+              borderRadius: 3, cursor: "pointer",
+              fontFamily: "'DM Mono', monospace", fontSize: 11, fontWeight: 500,
+              letterSpacing: "0.1em", textTransform: "uppercase",
             }}>Stop</button>
           </>
         )}
@@ -446,8 +448,9 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
         {testPhase === "done" && analysisResult && (
           <>
             <div style={{ marginBottom: 24 }}><CheckCircle size={24} color="#fff" strokeWidth={1.5} /></div>
-            <div style={{ fontSize: 36, fontWeight: 400, color: "#fff", lineHeight: 1.05, letterSpacing: "0.04em", marginBottom: 12, fontFamily: "'Bebas Neue', sans-serif" }}>Your Analysis</div>
-            <div style={{ fontSize: 11, color: "#555", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 28px", fontFamily: "'IBM Plex Mono', monospace" }}>Premium unlocks the full 7-dimension breakdown.</div>
+            <div style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 400, color: "#fff", lineHeight: 1.05, letterSpacing: "-0.02em", marginBottom: 12 }}>Your analysis.</div>
+            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", lineHeight: 1.7, maxWidth: 360, margin: "0 auto 28px", fontFamily: "'DM Mono', monospace" }}>Premium unlocks the full 7-dimension breakdown.</div>
+
 
             {/* Score card */}
             <div style={{ background: "#0a0a0a", border: "1px solid #1a1a1a", borderRadius: 0, padding: "28px 24px", textAlign: "left", marginBottom: 24 }}>
