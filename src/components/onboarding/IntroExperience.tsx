@@ -309,7 +309,8 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       <div style={{
         position: "fixed", inset: 0, zIndex: 70,
         display: "flex", alignItems: "center", justifyContent: "center",
-        background: "#050505",
+        background: "#050507",
+        fontFamily: "'DM Sans', sans-serif",
       }}>
         {/* Subtle grid texture */}
         <div style={{
@@ -318,40 +319,44 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
           backgroundSize: "40px 40px",
         }} />
         <div style={{
-          position: "relative", width: "min(480px, 88vw)", padding: "72px 40px", textAlign: "center",
+          position: "relative", width: "min(520px, 90vw)", padding: "72px 40px", textAlign: "center",
           opacity: transitioning ? 0 : 1,
           transform: transitioning ? "translateY(12px) scale(0.98)" : "translateY(0) scale(1)",
           transition: "opacity 0.5s cubic-bezier(.4,0,.2,1), transform 0.5s cubic-bezier(.4,0,.2,1)",
         }}>
-          <div style={{ marginBottom: 32 }}>
-            {s.icon === "mic"
-              ? <Mic size={28} color="#fff" strokeWidth={1.5} />
-              : <BarChart3 size={28} color="#fff" strokeWidth={1.5} />
-            }
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: "0.18em",
+            textTransform: "uppercase", color: "rgba(255,255,255,0.5)",
+            border: "1px solid rgba(255,255,255,0.1)", padding: "6px 16px",
+            borderRadius: 2, marginBottom: 32,
+          }}>
+            <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#fff", opacity: 0.9 }} />
+            {s.subtitle}
           </div>
           <div style={{
-            fontSize: 9, letterSpacing: "0.5em", color: "#555", textTransform: "uppercase",
-            marginBottom: 20, fontFamily: "'IBM Plex Mono', monospace", fontWeight: 500,
-          }}>{s.subtitle}</div>
-          <div style={{
-            fontSize: 48, fontWeight: 400, color: "#fff", lineHeight: 1.05,
-            letterSpacing: "0.04em", marginBottom: 24,
-            fontFamily: "'Bebas Neue', sans-serif",
+            fontFamily: "'Instrument Serif', serif", fontStyle: "italic",
+            fontSize: "clamp(2.4rem, 5vw, 3.6rem)", fontWeight: 400,
+            color: "#fff", lineHeight: 1.05, letterSpacing: "-0.02em",
+            marginBottom: 24,
           }}>{s.title}</div>
           <div style={{
-            fontSize: 13, color: "#777", lineHeight: 1.9, maxWidth: 360, margin: "0 auto 48px",
-            fontFamily: "'IBM Plex Mono', monospace", fontWeight: 400,
+            fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 400,
+            color: "rgba(255,255,255,0.6)", lineHeight: 1.8,
+            maxWidth: 400, margin: "0 auto 48px",
           }}>{s.body}</div>
           <button onClick={goNext} style={{
-            padding: "14px 44px", fontSize: 11, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase",
-            background: "#fff", color: "#000", border: "none", borderRadius: 0, cursor: "pointer",
-            transition: "all 0.25s", fontFamily: "'IBM Plex Mono', monospace",
+            padding: "14px 28px", background: "#fff", color: "#050507",
+            border: "none", borderRadius: 3, cursor: "pointer",
+            fontFamily: "'DM Mono', monospace", fontSize: 12, fontWeight: 500,
+            letterSpacing: "0.1em", textTransform: "uppercase",
+            transition: "opacity 0.2s, transform 0.15s",
           }}>{s.cta}</button>
           <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 40 }}>
             {INTRO_STEPS.map((_, i) => (
               <div key={i} style={{
                 width: i === step ? 28 : 6, height: 2,
-                background: i === step ? "#fff" : "#333", transition: "all 0.4s",
+                background: i === step ? "#fff" : "#2a2a2f", transition: "all 0.4s",
               }} />
             ))}
           </div>
@@ -359,6 +364,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
       </div>
     );
   }
+
 
   // Test recording step
   return (
