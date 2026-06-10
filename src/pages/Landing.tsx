@@ -40,7 +40,7 @@ function HeroTypewriter() {
   const text = TYPEWRITER_PHRASES[phraseIdx].slice(0, charIdx);
 
   return (
-    <p className="lp-hero-sub font-serif">
+    <p className="lp-hero-sub font-mono">
       {text}<span className="lp-typewriter-cursor" />
     </p>
   );
