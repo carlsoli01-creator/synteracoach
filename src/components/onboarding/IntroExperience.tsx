@@ -371,33 +371,52 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
     <div style={{
       position: "fixed", inset: 0, zIndex: 70,
       display: "flex", alignItems: "center", justifyContent: "center",
-      background: "#000",
+      background: "#050507",
+      fontFamily: "'DM Sans', sans-serif",
       opacity: exiting ? 0 : 1,
       transition: "opacity 0.7s ease",
     }}>
       <div style={{
-        width: "min(520px, 92vw)", padding: "60px 40px", textAlign: "center",
+        width: "min(560px, 92vw)", padding: "60px 40px", textAlign: "center",
         maxHeight: "90vh", overflowY: "auto",
       }}>
         {testPhase === "idle" && (
           <>
-            <div style={{ marginBottom: 32 }}><Mic size={28} color="#fff" strokeWidth={1.5} /></div>
-            <div style={{ fontSize: 9, letterSpacing: "0.5em", color: "#555", textTransform: "uppercase", marginBottom: 20, fontFamily: "'IBM Plex Mono', monospace", fontWeight: 500 }}>VOICE TEST</div>
-            <div style={{ fontSize: 44, fontWeight: 400, color: "#fff", lineHeight: 1.05, letterSpacing: "0.04em", marginBottom: 20, fontFamily: "'Bebas Neue', sans-serif" }}>Say Anything.</div>
-            <div style={{ fontSize: 13, color: "#666", lineHeight: 1.8, maxWidth: 340, margin: "0 auto 40px", fontFamily: "'IBM Plex Mono', monospace" }}>10 seconds. Any topic. We'll show you what our analysis looks like.</div>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: "0.18em",
+              textTransform: "uppercase", color: "rgba(255,255,255,0.5)",
+              border: "1px solid rgba(255,255,255,0.1)", padding: "6px 16px",
+              borderRadius: 2, marginBottom: 32,
+            }}>
+              <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#fff", opacity: 0.9 }} />
+              Voice Test
+            </div>
+            <div style={{
+              fontFamily: "'Instrument Serif', serif", fontStyle: "italic",
+              fontSize: "clamp(2.4rem, 5vw, 3.6rem)", fontWeight: 400,
+              color: "#fff", lineHeight: 1.05, letterSpacing: "-0.02em",
+              marginBottom: 20,
+            }}>Say anything.</div>
+            <div style={{
+              fontFamily: "'DM Mono', monospace", fontSize: 13,
+              color: "rgba(255,255,255,0.6)", lineHeight: 1.8,
+              maxWidth: 380, margin: "0 auto 40px",
+            }}>10 seconds. Any topic. We'll show you what our analysis looks like.</div>
             <button onClick={startTest} style={{
-              padding: "14px 44px", fontSize: 11, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase",
-              background: "#fff", color: "#000", border: "none", borderRadius: 0, cursor: "pointer",
-              transition: "all 0.25s", fontFamily: "'IBM Plex Mono', monospace",
+              padding: "14px 28px", background: "#fff", color: "#050507",
+              border: "none", borderRadius: 3, cursor: "pointer",
+              fontFamily: "'DM Mono', monospace", fontSize: 12, fontWeight: 500,
+              letterSpacing: "0.1em", textTransform: "uppercase",
             }}>Begin Recording</button>
-            {micError && <div style={{ marginTop: 16, fontSize: 11, color: "#c04a2a", fontFamily: "'IBM Plex Mono', monospace" }}>{micError}</div>}
+            {micError && <div style={{ marginTop: 16, fontSize: 11, color: "#c04a2a", fontFamily: "'DM Mono', monospace" }}>{micError}</div>}
           </>
         )}
 
         {testPhase === "recording" && (
           <>
-            <div style={{ fontSize: 72, fontWeight: 400, color: "#fff", fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em", marginBottom: 4 }}>{timeLeft}</div>
-            <div style={{ fontSize: 9, letterSpacing: "0.5em", color: "#555", textTransform: "uppercase", marginBottom: 36, fontFamily: "'IBM Plex Mono', monospace" }}>SECONDS</div>
+            <div style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic", fontSize: 88, fontWeight: 400, color: "#fff", letterSpacing: "-0.02em", lineHeight: 1, marginBottom: 8 }}>{timeLeft}</div>
+            <div style={{ fontSize: 10, letterSpacing: "0.3em", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", marginBottom: 36, fontFamily: "'DM Mono', monospace" }}>Seconds</div>
             <div style={{ height: 48, display: "flex", alignItems: "center", gap: 2, justifyContent: "center", marginBottom: 36 }}>
               {waveData.map((v, i) => (
                 <div key={i} style={{
@@ -406,6 +425,7 @@ export default function IntroExperience({ onComplete, onForcePaywall }: IntroExp
                   opacity: 0.3 + Math.abs(v - 0.5) * 0.7, transition: "height 0.05s",
                 }} />
               ))}
+
             </div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 32 }}>
               <div style={{ width: 6, height: 6, background: "#fff", animation: "pulse 1s infinite" }} />
