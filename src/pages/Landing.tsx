@@ -129,29 +129,12 @@ export default function Landing() {
     };
   }, []);
 
-  // Letter-by-letter title
+  // Title fade-in
   useEffect(() => {
-    const words = ["Speak", "with", "conviction.", "Not", "guesswork."];
-    let delay = 0.25;
-    words.forEach((word, wi) => {
-      const el = titleRefs.current[wi];
-      if (!el) return;
-      el.innerHTML = "";
-      word.split("").forEach((ch) => {
-        const s = document.createElement("span");
-        s.className = "lp-letter";
-        s.style.setProperty("--d", delay.toFixed(2) + "s");
-        s.textContent = ch;
-        el.appendChild(s);
-        delay += 0.028;
-      });
-      if (wi < words.length - 1) {
-        const sp = document.createElement("span");
-        sp.style.cssText = "display:inline-block;width:0.18em";
-        el.appendChild(sp);
-      }
-      delay += 0.04;
-    });
+    const el = titleRefs.current[0];
+    if (!el) return;
+    el.textContent = "Synterica";
+    el.style.animation = "lpFadeUp 0.7s ease both";
   }, [tab, showAll]);
 
   // Waveform bars
@@ -534,12 +517,7 @@ export default function Landing() {
         <div className="lp-hero-content">
 
           <h1 className="lp-hero-title font-serif text-6xl">
-            {["Speak", "with", "conviction.", "Not", "guesswork."].map((_, i) =>
-            <span key={i}>
-                <span className="lp-word" ref={(el) => {titleRefs.current[i] = el;}} />
-                {i === 2 && <br />}
-              </span>
-            )}
+            <span className="lp-word" ref={(el) => {titleRefs.current[0] = el;}} />
           </h1>
 
           <HeroTypewriter />
