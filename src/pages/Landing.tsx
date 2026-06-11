@@ -253,6 +253,8 @@ export default function Landing() {
 
 .lp-letter { display:inline-block; color:var(--lp-white); animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
+        .lp-hero-typewriter-title { animation:lpFadeUp 0.7s ease both; }
+        .lp-hero-typewriter { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--lp-white); }
         .lp-hero-sub { margin-top:36px; color:rgba(255,255,255,0.7); font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; font-size:clamp(1.15rem,1.8vw,1.55rem); max-width:560px; line-height:1.45; letter-spacing:0.02em; animation:lpFadeUp 0.75s 0.6s ease both; display:inline-flex; align-items:baseline; justify-content:center; gap:2px; }
         .lp-typewriter-cursor { display:inline-block; width:1px; height:0.95em; background:var(--lp-white); margin-left:3px; animation:lpBlink 1s step-end infinite; vertical-align:baseline; opacity:0.9; }
         @keyframes lpBlink { 0%,100%{opacity:1} 50%{opacity:0} }
