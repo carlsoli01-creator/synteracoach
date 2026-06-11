@@ -273,13 +273,13 @@ export default function Landing() {
         .lp-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:2px; margin-bottom:40px; animation:lpFadeUp 0.7s ease both; }
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .lp-hero-title { font-family:'Instrument Serif',serif; font-style:italic; font-size:clamp(2.2rem,5.8vw,5.8rem); font-weight:400; line-height:1.02; letter-spacing:-0.02em; max-width:780px; word-break:normal; overflow-wrap:normal; hyphens:none; }
+        .lp-hero-title { font-family:'DM Mono',monospace; font-size:clamp(2.2rem,5.8vw,5.8rem); font-weight:400; line-height:1.02; letter-spacing:-0.02em; max-width:780px; word-break:normal; overflow-wrap:normal; hyphens:none; }
         @media (min-width:1024px) { .lp-hero-title { max-width:15ch !important; } }
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
 
 .lp-letter { display:inline-block; color:var(--lp-white); animation:lpLetterUp 0.55s ease both; animation-delay:var(--d,0s); }
         @keyframes lpLetterUp { from{opacity:0;transform:translateY(55px)} to{opacity:1;transform:translateY(0)} }
-        .lp-hero-sub { margin-top:36px; color:rgba(255,255,255,0.7); font-family:'DM Mono',monospace; font-weight:400; font-size:clamp(1.15rem,1.8vw,1.55rem); max-width:560px; line-height:1.45; letter-spacing:0.02em; animation:lpFadeUp 0.75s 0.6s ease both; display:inline-flex; align-items:baseline; justify-content:center; gap:2px; }
+        .lp-hero-sub { margin-top:36px; color:rgba(255,255,255,0.7); font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; font-size:clamp(1.15rem,1.8vw,1.55rem); max-width:560px; line-height:1.45; letter-spacing:0.02em; animation:lpFadeUp 0.75s 0.6s ease both; display:inline-flex; align-items:baseline; justify-content:center; gap:2px; }
         .lp-typewriter-cursor { display:inline-block; width:1px; height:0.95em; background:var(--lp-white); margin-left:3px; animation:lpBlink 1s step-end infinite; vertical-align:baseline; opacity:0.9; }
         @keyframes lpBlink { 0%,100%{opacity:1} 50%{opacity:0} }
         .lp-hero-actions { margin-top:48px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
