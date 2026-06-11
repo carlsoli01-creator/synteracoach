@@ -67,7 +67,7 @@ export default function Landing() {
 
 
   const svgRef = useRef<SVGSVGElement>(null);
-  const titleRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  
   const waveRef = useRef<HTMLDivElement>(null);
   const dimRefs = useRef<(HTMLDivElement | null)[]>([]);
   const counterRef = useRef<HTMLDivElement>(null);
