@@ -129,15 +129,6 @@ export default function Landing() {
     };
   }, []);
 
-  // Title fade-in
-  useEffect(() => {
-    const el = titleRefs.current[0];
-    if (!el) return;
-    el.textContent = "Synterica";
-    el.style.animation = "lpFadeUp 0.7s ease both";
-  }, [tab, showAll]);
-
-  // Waveform bars
   useEffect(() => {
     const wf = waveRef.current;
     if (!wf) return;
@@ -516,11 +507,9 @@ export default function Landing() {
 
         <div className="lp-hero-content">
 
-          <h1 className="lp-hero-title font-serif text-6xl">
-            <span className="lp-word" ref={(el) => {titleRefs.current[0] = el;}} />
+          <h1 className="lp-hero-title lp-hero-typewriter-title">
+            <HeroTypewriter />
           </h1>
-
-          <HeroTypewriter />
 
           <div className="lp-hero-actions">
             <button className="lp-btn-primary" onClick={goAuth}>
