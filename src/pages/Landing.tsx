@@ -265,8 +265,8 @@ export default function Landing() {
         .lp-btn-secondary:hover { border-color:rgba(255,255,255,0.18); color:var(--lp-text); }
 
         /* HERO SAMPLE INTRO */
-        .lp-sample-intro { margin-top:220px; display:flex; flex-direction:column; align-items:center; gap:44px; animation:lpFadeUp 0.8s 0.85s ease both; }
-        .lp-sample-intro-text { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--lp-white); font-size:clamp(1.35rem,2.2vw,2rem); letter-spacing:0.01em; text-align:center; line-height:1.3; max-width:640px; }
+        .lp-sample-intro { margin-top:280px; display:flex; flex-direction:column; align-items:center; gap:56px; animation:lpFadeUp 0.8s 0.85s ease both; }
+        .lp-sample-intro-text { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--lp-white); font-size:clamp(1.8rem,3.4vw,3rem); letter-spacing:0.01em; text-align:center; line-height:1.25; max-width:780px; }
         .lp-sample-arrow { background:none; border:none; cursor:pointer; color:rgba(255,255,255,0.55); padding:8px; transition:color 0.2s; animation:lpArrowBounce 2s ease-in-out infinite; }
         .lp-sample-arrow:hover { color:var(--lp-white); }
         @keyframes lpArrowBounce { 0%,100%{transform:translateY(0);opacity:0.55} 50%{transform:translateY(14px);opacity:1} }
