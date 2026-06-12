@@ -247,7 +247,7 @@ export default function Landing() {
         .lp-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:2px; margin-bottom:40px; animation:lpFadeUp 0.7s ease both; }
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .lp-hero-title { font-family:'DM Mono',monospace; font-size:clamp(2.2rem,5.8vw,5.8rem); font-weight:400; line-height:1.02; letter-spacing:-0.02em; max-width:780px; word-break:normal; overflow-wrap:normal; hyphens:none; }
+        .lp-hero-title { font-family:'DM Mono',monospace; font-size:clamp(2.6rem,8vw,7.5rem); font-weight:400; line-height:1.02; letter-spacing:-0.02em; max-width:980px; word-break:normal; overflow-wrap:normal; hyphens:none; }
         @media (min-width:1024px) { .lp-hero-title { max-width:15ch !important; } }
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
 
