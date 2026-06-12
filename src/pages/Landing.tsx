@@ -258,14 +258,22 @@ export default function Landing() {
         .lp-hero-sub { margin-top:36px; color:rgba(255,255,255,0.7); font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; font-size:clamp(1.15rem,1.8vw,1.55rem); max-width:560px; line-height:1.45; letter-spacing:0.02em; animation:lpFadeUp 0.75s 0.6s ease both; display:inline-flex; align-items:baseline; justify-content:center; gap:2px; }
         .lp-typewriter-cursor { display:inline-block; width:1px; height:0.95em; background:var(--lp-white); margin-left:3px; animation:lpBlink 1s step-end infinite; vertical-align:baseline; opacity:0.9; }
         @keyframes lpBlink { 0%,100%{opacity:1} 50%{opacity:0} }
-        .lp-hero-actions { margin-top:48px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
+        .lp-hero-actions { margin-top:96px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
         .lp-btn-primary { display:inline-flex; align-items:center; gap:10px; background:var(--lp-white); color:#050507; font-family:'DM Mono',monospace; font-size:0.78rem; font-weight:500; letter-spacing:0.06em; padding:14px 28px; border-radius:3px; text-decoration:none; border:none; cursor:pointer; transition:opacity 0.2s,transform 0.2s; }
         .lp-btn-primary:hover { transform:translateY(-2px); opacity:0.88; }
         .lp-btn-secondary { display:inline-flex; align-items:center; gap:8px; background:transparent; border:1px solid var(--lp-border2); color:var(--lp-muted); font-family:'DM Mono',monospace; font-size:0.78rem; letter-spacing:0.06em; padding:14px 28px; border-radius:3px; text-decoration:none; cursor:pointer; transition:border-color 0.2s,color 0.2s; }
         .lp-btn-secondary:hover { border-color:rgba(255,255,255,0.18); color:var(--lp-text); }
 
-        /* HERO VISUAL */
-        .lp-hero-visual { margin-top:100px; width:100%; max-width:860px; animation:lpFadeUp 0.8s 0.8s ease both; }
+        /* HERO SAMPLE INTRO */
+        .lp-sample-intro { margin-top:220px; display:flex; flex-direction:column; align-items:center; gap:44px; animation:lpFadeUp 0.8s 0.85s ease both; }
+        .lp-sample-intro-text { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--lp-white); font-size:clamp(1.35rem,2.2vw,2rem); letter-spacing:0.01em; text-align:center; line-height:1.3; max-width:640px; }
+        .lp-sample-arrow { background:none; border:none; cursor:pointer; color:rgba(255,255,255,0.55); padding:8px; transition:color 0.2s; animation:lpArrowBounce 2s ease-in-out infinite; }
+        .lp-sample-arrow:hover { color:var(--lp-white); }
+        @keyframes lpArrowBounce { 0%,100%{transform:translateY(0);opacity:0.55} 50%{transform:translateY(14px);opacity:1} }
+
+        /* HERO */
+        .lp-hero-eyebrow { margin-bottom:72px !important; }
+        .lp-hero-visual { margin-top:160px; width:100%; max-width:860px; animation:lpFadeUp 0.8s 0.8s ease both; scroll-margin-top:100px; }
         .lp-score-card { background:rgba(12,12,15,0.92); border:1px solid var(--lp-border); border-radius:14px; overflow:hidden; box-shadow:0 48px 100px rgba(0,0,0,0.8),inset 0 1px 0 rgba(255,255,255,0.04); backdrop-filter:blur(16px); }
         .lp-score-topbar { background:rgba(8,8,11,0.9); border-bottom:1px solid var(--lp-border); padding:13px 20px; display:flex; align-items:center; gap:10px; }
         .lp-tl { width:10px; height:10px; border-radius:50%; }
@@ -517,6 +525,18 @@ export default function Landing() {
             <button className="lp-btn-primary" onClick={goAuth}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" /></svg>
               Start coaching — it's free
+            </button>
+          </div>
+
+          <div className="lp-sample-intro">
+            <div className="lp-sample-intro-text">Sample analysis — see how Synterica breaks down a real recording.</div>
+            <button
+              type="button"
+              aria-label="Scroll to sample analysis"
+              className="lp-sample-arrow"
+              onClick={() => scoreCardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+            >
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
             </button>
           </div>
 
