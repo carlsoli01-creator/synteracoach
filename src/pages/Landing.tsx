@@ -528,6 +528,18 @@ export default function Landing() {
             </button>
           </div>
 
+          <div className="lp-sample-intro">
+            <div className="lp-sample-intro-text">Sample analysis — see how Synterica breaks down a real recording.</div>
+            <button
+              type="button"
+              aria-label="Scroll to sample analysis"
+              className="lp-sample-arrow"
+              onClick={() => scoreCardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+            >
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            </button>
+          </div>
+
           <div className="lp-hero-visual">
             <div className="lp-score-card" ref={scoreCardRef}>
               <div className="lp-score-topbar">
