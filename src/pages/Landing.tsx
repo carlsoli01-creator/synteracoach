@@ -247,7 +247,7 @@ export default function Landing() {
         .lp-hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.08); padding:6px 16px; border-radius:2px; margin-bottom:40px; animation:lpFadeUp 0.7s ease both; }
         .lp-live-dot { width:5px; height:5px; border-radius:50%; background:var(--lp-accent); animation:lpPulse 2s infinite; }
         @keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .lp-hero-title { font-family:'DM Mono',monospace; font-size:clamp(2.2rem,5.8vw,5.8rem); font-weight:400; line-height:1.02; letter-spacing:-0.02em; max-width:780px; word-break:normal; overflow-wrap:normal; hyphens:none; }
+        .lp-hero-title { font-family:'DM Mono',monospace; font-size:clamp(2.6rem,8vw,7.5rem); font-weight:400; line-height:1.02; letter-spacing:-0.02em; max-width:980px; word-break:normal; overflow-wrap:normal; hyphens:none; }
         @media (min-width:1024px) { .lp-hero-title { max-width:15ch !important; } }
         .lp-hero-title .lp-word { display:inline-block; margin-right:0.16em; }
 
@@ -258,15 +258,15 @@ export default function Landing() {
         .lp-hero-sub { margin-top:36px; color:rgba(255,255,255,0.7); font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; font-size:clamp(1.15rem,1.8vw,1.55rem); max-width:560px; line-height:1.45; letter-spacing:0.02em; animation:lpFadeUp 0.75s 0.6s ease both; display:inline-flex; align-items:baseline; justify-content:center; gap:2px; }
         .lp-typewriter-cursor { display:inline-block; width:1px; height:0.95em; background:var(--lp-white); margin-left:3px; animation:lpBlink 1s step-end infinite; vertical-align:baseline; opacity:0.9; }
         @keyframes lpBlink { 0%,100%{opacity:1} 50%{opacity:0} }
-        .lp-hero-actions { margin-top:96px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
+        .lp-hero-actions { margin-top:160px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
         .lp-btn-primary { display:inline-flex; align-items:center; gap:10px; background:var(--lp-white); color:#050507; font-family:'DM Mono',monospace; font-size:0.78rem; font-weight:500; letter-spacing:0.06em; padding:14px 28px; border-radius:3px; text-decoration:none; border:none; cursor:pointer; transition:opacity 0.2s,transform 0.2s; }
         .lp-btn-primary:hover { transform:translateY(-2px); opacity:0.88; }
         .lp-btn-secondary { display:inline-flex; align-items:center; gap:8px; background:transparent; border:1px solid var(--lp-border2); color:var(--lp-muted); font-family:'DM Mono',monospace; font-size:0.78rem; letter-spacing:0.06em; padding:14px 28px; border-radius:3px; text-decoration:none; cursor:pointer; transition:border-color 0.2s,color 0.2s; }
         .lp-btn-secondary:hover { border-color:rgba(255,255,255,0.18); color:var(--lp-text); }
 
         /* HERO SAMPLE INTRO */
-        .lp-sample-intro { margin-top:220px; display:flex; flex-direction:column; align-items:center; gap:44px; animation:lpFadeUp 0.8s 0.85s ease both; }
-        .lp-sample-intro-text { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--lp-white); font-size:clamp(1.35rem,2.2vw,2rem); letter-spacing:0.01em; text-align:center; line-height:1.3; max-width:640px; }
+        .lp-sample-intro { margin-top:280px; display:flex; flex-direction:column; align-items:center; gap:56px; animation:lpFadeUp 0.8s 0.85s ease both; }
+        .lp-sample-intro-text { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; color:var(--lp-white); font-size:clamp(1.8rem,3.4vw,3rem); letter-spacing:0.01em; text-align:center; line-height:1.25; max-width:780px; }
         .lp-sample-arrow { background:none; border:none; cursor:pointer; color:rgba(255,255,255,0.55); padding:8px; transition:color 0.2s; animation:lpArrowBounce 2s ease-in-out infinite; }
         .lp-sample-arrow:hover { color:var(--lp-white); }
         @keyframes lpArrowBounce { 0%,100%{transform:translateY(0);opacity:0.55} 50%{transform:translateY(14px);opacity:1} }
