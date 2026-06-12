@@ -174,10 +174,10 @@ export function PricingModal({ onClose, onSubscribe }: { onClose: () => void; on
           }}>
             <div style={{ fontSize: 40, marginBottom: 16 }}>🎉</div>
             <div style={{ fontSize: 20, fontWeight: 800, color: "#111", marginBottom: 12, lineHeight: 1.3, fontFamily: "'Syne', sans-serif" }}>
-              Welcome to the Beta!
+              Special Promotion
             </div>
             <div style={{ fontSize: 13, color: "#888", lineHeight: 1.7, marginBottom: 28, fontFamily: "'DM Mono', monospace" }}>
-              This is a beta test application — you will be receiving the <span style={{ color: "#111", fontWeight: 500 }}>Elite Tier</span> subscription for free.
+              Due to a special promotion, you have received the <span style={{ color: "#111", fontWeight: 500 }}>Elite Tier</span> subscription for free.
             </div>
             <button onClick={() => { setShowBetaPopup(false); onSubscribe(); }} style={{
               padding: "14px 40px", fontSize: 13, fontWeight: 500,
