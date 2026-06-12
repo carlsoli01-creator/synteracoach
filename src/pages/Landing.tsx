@@ -258,7 +258,7 @@ export default function Landing() {
         .lp-hero-sub { margin-top:36px; color:rgba(255,255,255,0.7); font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; font-size:clamp(1.15rem,1.8vw,1.55rem); max-width:560px; line-height:1.45; letter-spacing:0.02em; animation:lpFadeUp 0.75s 0.6s ease both; display:inline-flex; align-items:baseline; justify-content:center; gap:2px; }
         .lp-typewriter-cursor { display:inline-block; width:1px; height:0.95em; background:var(--lp-white); margin-left:3px; animation:lpBlink 1s step-end infinite; vertical-align:baseline; opacity:0.9; }
         @keyframes lpBlink { 0%,100%{opacity:1} 50%{opacity:0} }
-        .lp-hero-actions { margin-top:96px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
+        .lp-hero-actions { margin-top:160px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:lpFadeUp 0.75s 0.7s ease both; }
         .lp-btn-primary { display:inline-flex; align-items:center; gap:10px; background:var(--lp-white); color:#050507; font-family:'DM Mono',monospace; font-size:0.78rem; font-weight:500; letter-spacing:0.06em; padding:14px 28px; border-radius:3px; text-decoration:none; border:none; cursor:pointer; transition:opacity 0.2s,transform 0.2s; }
         .lp-btn-primary:hover { transform:translateY(-2px); opacity:0.88; }
         .lp-btn-secondary { display:inline-flex; align-items:center; gap:8px; background:transparent; border:1px solid var(--lp-border2); color:var(--lp-muted); font-family:'DM Mono',monospace; font-size:0.78rem; letter-spacing:0.06em; padding:14px 28px; border-radius:3px; text-decoration:none; cursor:pointer; transition:border-color 0.2s,color 0.2s; }
