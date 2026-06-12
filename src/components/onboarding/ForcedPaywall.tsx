@@ -245,13 +245,13 @@ export default function ForcedPaywall({ onSubscribe }: ForcedPaywallProps) {
               fontSize: 26, fontWeight: 400, color: "#fff",
               marginBottom: 14, lineHeight: 1.2, letterSpacing: "-0.01em",
             }}>
-              Welcome to the Beta!
+              Special Promotion
             </div>
             <div style={{
               fontFamily: "'DM Mono', monospace", fontSize: 12,
               color: "rgba(255,255,255,0.6)", lineHeight: 1.7, marginBottom: 28,
             }}>
-              This is a beta test application — you'll receive the{" "}
+              Due to a special promotion, you have received the{" "}
               <span style={{ color: "#fff", fontWeight: 500 }}>Elite Tier</span> subscription for free.
             </div>
             <button
